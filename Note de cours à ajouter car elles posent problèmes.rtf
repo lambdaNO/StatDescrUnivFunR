@@ -1,0 +1,1917 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1504\cocoasubrtf600
+{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;\csgray\c100000;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww10800\viewh8400\viewkind0
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 \\part\{Introduction\}\
+\\section\{Introduction\}\
+Ce document constitue une pr\'e9sentation succincte des bases du langage R pour l'analyse statistique interactive de donn\'e9es. En particulier, on s'int\'e9ressera \'e0 la repr\'e9sentation et la manipulation des donn\'e9es num\'e9riques et qualitatives, \'e0 l'importation de source de donn\'e9es externes et \'e0 la sauvegarde d'une session de travail. Un glossaire des principales commandes est \'e9galement fourni en Annexe, ainsi qu'une liste des commandes utiles pour la mod\'e9lisation.\
+\\section\{Interagir avec R\}\
+D\'e9marrer avec R. Quelque soit le syst\'e8me d'exploitation utilis\'e9 (Windows, Mac, Linux), R fonctionne comme tout autre logiciel : il suffit g\'e9n\'e9ralement de double-cliquer sur l'ic\'f4ne de l'application pour d\'e9marrer R. On dispose ensuite d'une console interactive dans laquelle on peut commencer \'e0 saisir des commandes apr\'e8s l'invite R \\textbf\{$>$\}. Les r\'e9sultats seront affich\'e9s aussit\'f4t dans la console.\
+\\subsection\{Interactivit\'e9 et reproductibilit\'e9\}\
+R est avant tout un langage et un interpr\'e9teur de commandes. L'approche est interactive dans la mesure o\'f9 il est possible de taper directement des commandes \'e0 l'invite R et de visualiser le r\'e9sultat dans la m\'eame interface. On parlera de \\textbf\{"console"\} pour d\'e9signer la fen\'eatre interactive dans laquelle on saisit des commandes R et o\'f9 l'on visualise les r\'e9sultats renvoy\'e9s par R. Les graphiques sont g\'e9n\'e9r\'e9s dans une fen\'eatre graphique externe.\\newline\
+\\\\\
+Il est \'e9galement possible d'enregistrer une s\'e9rie de commandes dans un fichier script R, ayant pour extension \\textbf\{.R\} ou \\textbf\{.r\}, et de faire ex\'e9cuter l'int\'e9gralit\'e9 des commandes de ce script par R \'e0 l'aide de la commande \\textbf\{source()\}. Quelle que soit la plateforme, R fournit un \'e9diteur minimal qui offre la possibilit\'e9 d'envoyer interactivement des commandes dans la console, ou l'int\'e9gralit\'e9 des commandes d'un script, \'e0 l'image de \\textbf\{source()\}.\
+\\subsection\{Obtenir de l'aide\}\
+Le syst\'e8me d'aide en ligne fourni avec R est accessible via la commande \\textbf\{help()\}. Lorsque l'on conna\'eet le nom de la commande R, par exemple, \\textbf\{cmd()\}, on peut taper \\textbf\{help(cmd)\} ou \\textbf\{?cmd\} (sauf dans le cas de certains op\'e9rateurs). Sinon, on peut rechercher \'e0 partir de mots-cl\'e9s en tapant help.search(cmd). Une alternative pour la recherche par motif consiste \'e0 utiliser apropos(cmd). Pour conna\'eetre toutes les commandes fournies par un package (\\textit\{e.g., pkg\}), il suffit de taper \\textbf\{help(package=pkg)\}.\
+\
+\\section\{Repr\'e9sentation des donn\'e9es sous R\}\
+\\subsection\{Variables num\'e9riques et cat\'e9gorielles\}\
+Les variables sous R. Formellement, une telle liste de nombres est stock\'e9e dans ce que R appelle un vecteur. Par souci de simplicit\'e9, nous parlerons de variable et d'\'e9l\'e9ments d'une variable. Sur le plan statistique, les \'e9l\'e9ments seraient plut\'f4t consid\'e9r\'e9s comme des observations ou des donn\'e9es collect\'e9es sur chaque unit\'e9 statistique.\\newline\
+\\\\\
+Supposons que l'on ait demand\'e9 \'e0 10 personnes choisies au hasard dans la rue leur \'e2ge. Voici la s\'e9rie de mesures recueillies, arrondies \'e0 l'entier le plus proche, ainsi que le sexe de la personne.\\newline\
+\\begin\{center\}\
+\\begin\{tabular\}\{|c|c|c|c|c|c|c|c|c|c|c|\}\
+\\hline \\textbf\{age\} & 18 & 27 & 34 & 18 & 24 &  & 30 & 28 & 19 & 19 \\\\ \
+\\hline\\textbf\{sexe\} & F & F & M & F & M & M & M & F & M & F \\\\ \
+\\hline \
+\\end\{tabular\} \
+\\end\{center\}\
+Dans l'exemple suivant, on cr\'e9e une variable appel\'e9e \\textit\{age\} (il n'est pas recommand\'e9 d'utiliser des accents ou signes diacritiques) \'e0 laquelle on associe la liste des nombres pr\'e9sent\'e9s dans le tableau pr\'e9c\'e9dent.\\newline\
+\
+\\begin\{lstlisting\}[language=html]\
+age <- c(18, 27, 34, 18, 24, NA, 30, 28, 19, 19)\
+\\end\{lstlisting\}\
+\
+Pour assigner un nom de variable \'e0 une s\'e9rie de valeurs, on utilise le symbole \\textbf\{$<-$\}. Le signe \\textbf\{$=$\} est valide \'e9galement, mais il n'est pas recommand\'e9 de l'utiliser dans ce contexte. Les valeurs sont list\'e9es \'e0 l'int\'e9rieur d'une commande c(), entre parenth\'e8ses. Toutes les commandes R utilisent le m\'eame principe : les donn\'e9es ou les options se trouvent mentionn\'e9es entre parenth\'e8ses. La sixi\'e8me personne interrog\'e9e ayant refus\'e9 de r\'e9pondre, on consid\'e8re qu'il s'agit d'une valeur manquante que nous avons repr\'e9sent\'e9e par un point (.), repr\'e9sent\'e9e sous R par le symbole NA. Pour afficher le contenu de la variable \\textit\{age\}, il suffit de taper son nom :\
+\
+\\begin\{lstlisting\}[language=html]\
+age\
+##  [1] 18 27 34 18 24 NA 30 28 19 19\
+\\end\{lstlisting\}\
+\
+En ce qui concerne le stockage de la deuxi\'e8me s\'e9rie de mesures (variable \\textit\{sexe\}), on notera qu'il \\textbf\{ne s'agit pas d'une variable num\'e9rique, mais d'une s\'e9rie de lettres \{F, M\}\}. Il serait tout \'e0 fait possible de consid\'e9rer un codage num\'e9rique pour cette variable, en d\'e9cidant de repr\'e9senter les femmes par des 0 et les hommes par des 1. On peut toutefois cr\'e9er une variable constitu\'e9e de caract\'e8res de la mani\'e8re suivante :\
+\
+\\begin\{lstlisting\}[language=html]\
+sexe <- c("F", "F", "M", "F", "M", "M", "M", "F", "M", "F")\
+sexe\
+\
+##  [1] "F" "F" "M" "F" "M" "M" "M" "F" "M" "F"\
+\\end\{lstlisting\}\
+Sous R, les caract\'e8res ou cha\'eenes de caract\'e8res sont entour\'e9s de guillemets anglo-saxons, simple ou double "quote".\\newline\
+\\\\\
+Nommage de variables. On retiendra \'e9galement que les noms de variable sont sensible \'e0 la casse : \\textcolor\{red\}\{la variable \\textit\{sexe\} est diff\'e9rente d'une variable qui serait appel\'e9e Sexe\}.\\newline\
+\\\\\
+Par souci de simplicit\'e9, on ne fera pas de distinction entre les variables au sens statistique du terme, et les variables sous R. On consid\'e9rera donc qu'une variable R poss\'e8de un nom et contient une s\'e9rie de valeurs de type num\'e9rique (entier ou nombre r\'e9el) ou caract\'e8re, ce que l'on peut v\'e9rifier g\'e9n\'e9ralement \'e0 l'aide de mode(). Le nombre total d'\'e9l\'e9ments contenus dans une variable, incluant les \'e9ventuelles donn\'e9es manquantes NA, est obtenu avec la commande \\textbf\{length()\}.\
+\\begin\{lstlisting\}[language=html]\
+length(age)\
+\
+## [1] 10\
+\
+length(sexe)\
+\
+## [1] 10\
+\
+mode(age)\
+\
+## [1] "numeric"\
+\
+mode(sexe)\
+\
+## [1] "character"\
+\\end\{lstlisting\}\
+Supposons qu'une autre variable ait \'e9t\'e9 collect\'e9e, \'e0 savoir la r\'e9ponse concernant le degr\'e9 d'accord des r\'e9pondants vis-\'e0-vis d'une certaine assertion (par exemple, \\textit\{"quelle est votre opinion concernant les th\'e9ories selon lesquelles le climat se r\'e9chauffe et entra\'eenera \'e0 terme de grosses difficult\'e9s pour vivre sur Terre"\}). Les 5 modalit\'e9s de r\'e9ponse propos\'e9es aux participants suivent le principe d'une \'e9chelle de Likert\\footnote\{Une \'e9chelle de Likert (du nom du psychologue am\'e9ricain Rensis Likert) est une \'e9chelle de jugement r\'e9pandue dans les questionnaires psychom\'e9triques par laquelle la personne interrog\'e9e exprime son degr\'e9 d'accord ou de d\'e9saccord vis-\'e0-vis d'une affirmation (l'\'e9nonc\'e9). Pour les \'e9chelles impaires, le niveau central permet de n'exprimer aucun avis, tandis que les \'e9chelles paires (par exemple \'e0 quatre modalit\'e9s) sont dites \'ab \'e0 choix forc\'e9 \'bb. \'c0 chaque r\'e9ponse, il est possible d'attribuer une note (positive ou n\'e9gative) qui permet un traitement quantitatif des donn\'e9es, pour calculer par exemple la moyenne (et l'\'e9cart-type) des r\'e9ponses donn\'e9es par l'\'e9chantillon interrog\'e9. L'\'e9chelle de Likert est beaucoup utilis\'e9e en psychologie sociale et clinique, sciences de gestion (notamment en marketing), sondages, etc.\}. Les donn\'e9es ont \'e9t\'e9 recueillies au format num\'e9rique, de \\textcolor\{blue\}\{1="Pas du tout d'accord"\} \'e0 \\textcolor\{red\}\{5="Tout \'e0 fait d'accord"\}. Appelons cette variable \\textbf\{opin\}.\
+\
+\\begin\{lstlisting\}[language=html]\
+opin <- c(1, 3, 2, 1, 4, 1, 5, 3, 2, 2)\
+\\end\{lstlisting\}\
+La commande \\textbf\{factor()\} permet de faire conna\'eetre \'e0 R la nature qualitative de cette variable, et d'associer \'e0 chaque modalit\'e9 ou niveau du facteur (\\textbf\{levels\}) des \'e9tiquettes textuelles plus informatives. Par d\'e9faut, la commande \\textbf\{factor()\} ne fait qu'ajouter des niveaux \'e0 une variable, les niveaux retenus correspondant aux valeurs uniques, tri\'e9es par ordre lexicographique, pr\'e9sentes dans la variable.\
+\
+\\begin\{lstlisting\}[language=html]\
+factor(opin)\
+\
+##  [1] 1 3 2 1 4 1 5 3 2 2\
+## Levels: 1 2 3 4 5\
+\\end\{lstlisting\}\
+\
+Il est possible d'associer des \'e9tiquettes \'e0 chacun de ces niveaux, en respectant l'ordre de pr\'e9sentation des niveaux \'e0 l'aide de l'option \\textbf\{labels=\}. La commande \\textbf\{nlevels()\} renverra le nombre de niveaux d'une variable de type \\textbf\{factor\}.\
+\
+\\begin\{lstlisting\}[language=html]\
+opin <- factor(opin, labels=c("Pas du tout d'accord", "Moyennement d'accord", \
+                         "Sans Opinion", "Assez d'accord", "Tout a fait d'accord"))\
+opin\
+\
+##  [1] Pas du tout d'accord Sans Opinion         Moyennement d'accord\
+##  [4] Pas du tout d'accord Assez d'accord       Pas du tout d'accord\
+##  [7] Tout a fait d'accord Sans Opinion         Moyennement d'accord\
+## [10] Moyennement d'accord\
+## 5 Levels: Pas du tout d'accord Moyennement d'accord ... Tout a fait d'accord\
+\\end\{lstlisting\}\
+\
+\\begin\{lstlisting\}[language=html]\
+nlevels(opin)\
+## [1] 5\
+\\end\{lstlisting\}\
+\
+La commande \\textbf\{levels()\} permet de lister les niveaux d'une variable qualitative, ou d'en modifier les valeurs. L'exemple ci-dessous montre comment il est possible d'agr\'e9ger les deux derni\'e8res modalit\'e9s de la variable.\
+\
+\\begin\{lstlisting\}[language=html]\
+levels(opin)\
+## [1] "Pas du tout d'accord" "Moyennement d'accord" "Sans Opinion"        \
+## [4] "Assez d'accord"       "Tout a fait d'accord"\
+\\end\{lstlisting\}\
+\\begin\{lstlisting\}[language=html]\
+levels(opin)[4:5] <- "Assez ou tout a fait d'accord"\
+opin\
+##  [1] Pas du tout d'accord          Sans Opinion                 \
+##  [3] Moyennement d'accord          Pas du tout d'accord         \
+##  [5] Assez ou tout a fait d'accord Pas du tout d'accord         \
+##  [7] Assez ou tout a fait d'accord Sans Opinion                 \
+##  [9] Moyennement d'accord          Moyennement d'accord         \
+## 4 Levels: Pas du tout d'accord Moyennement d'accord ... Assez ou tout a fait d'accord\
+\\end\{lstlisting\}\
+\
+Il est possible d'indiquer \'e0 R que les niveaux de la variable qualitative sont ordonn\'e9es (on parle parfois de variable ordinale, contrairement aux variables nominales dont les modalit\'e9s ne sont pas ordonn\'e9es, comme la couleur des yeux par exemple).\
+\
+\
+\\begin\{lstlisting\}[language=html]\
+factor(opin, ordered=TRUE)\
+##  [1] Pas du tout d'accord          Sans Opinion                 \
+##  [3] Moyennement d'accord          Pas du tout d'accord         \
+##  [5] Assez ou tout a fait d'accord Pas du tout d'accord         \
+##  [7] Assez ou tout a fait d'accord Sans Opinion                 \
+##  [9] Moyennement d'accord          Moyennement d'accord         \
+## 4 Levels: Pas du tout d'accord < ... < Assez ou tout a fait d'accord\
+\\end\{lstlisting\}\
+\
+La variable \\textit\{sexe\} manipul\'e9e pr\'e9c\'e9demment pourrait tout aussi bien \'eatre convertie en facteur :\
+\
+\\begin\{lstlisting\}[language=html]\
+sexe <- factor(sexe)\
+levels(sexe)\
+\
+## [1] "F" "M"\
+\\end\{lstlisting\}\
+\
+On notera que le premier niveau est \\textbf\{$F$\}. Si l'on souhaite que celui-ci soit \\textbf\{$M$\}, il suffit d'utiliser la commande \\textbf\{relevel()\} et d'indiquer la cat\'e9gorie de r\'e9f\'e9rence en option.\\newline\
+\\\\\
+\
+\\subsubsection\{Les facteurs sous R\}. \
+Les niveaux des facteurs sont d\'e9termin\'e9s \'e0 partir des valeurs uniques identifi\'e9es dans une variable. L'ordre des niveaux d'un facteur suit l'ordre \\textbf\{lexicographique : nombres, lettres en minuscules/majuscules.\} Par exemple, \
+\\begin\{lstlisting\}[language=html]\
+factor(c("1", "oui", "Oui", "Non", "non", "3"))\
+\\end\{lstlisting\}\
+\
+R \\textbf\{supprime automatiquement\} les valeurs manquantes de la liste des niveaux, \\textcolor\{red\}\{sauf si l'on indique l'option exclude=NULL\} ; dans ce cas, les valeurs manquantes figureront comme un niveau \'e0 part.\
+\
+\\begin\{lstlisting\}[language=html]\
+sexe <- relevel(sexe, ref="M")\
+levels(sexe)\
+\
+## [1] "M" "F"\
+\\end\{lstlisting\}\
+\
+\\subsection\{Indexation d'observations\}\
+Il existe deux moyens d'acc\'e9der aux \'e9l\'e9ments d'une variable : \\textbf\{renseigner le ou les num\'e9ros d'observation\} ou utiliser \\textbf\{un filtre ou une condition \'e0 v\'e9rifier\}. On appellera cette derni\'e8re approche l'indexation sur crit\'e8res.\\newline\
+\\\\\
+Pour acc\'e9der individuellement aux \'e9l\'e9ments d'une variable, on \'e9crit le nom de la variable suivi du num\'e9ro d'\'e9l\'e9ment entre crochets. La premi\'e8re observation de la variable \\textit\{age\} vaut ainsi :\
+\
+\\begin\{lstlisting\}[language=html]\
+age[1]\
+\
+## [1] 18\
+\\end\{lstlisting\}\
+\
+Il est possible de d\'e9signer plusieurs \'e9l\'e9ments, en les ins\'e9rant dans une liste via \\textbf\{c()\} :\
+\\begin\{lstlisting\}[language=html]\
+sexe[c(1, 2, 3)]\
+\
+## [1] F F M\
+## Levels: M F\
+\\end\{lstlisting\}\
+\\textcolor\{blue\}\{Lorsque les \'e9l\'e9ments que l'on souhaite afficher sont successifs\} (ici, les observations 1 \'e0 3), L'expression ci-dessus peut se simplifier en utilisant la notation ci-dessous, dans laquelle \\textbf\{on indique l'\'e9l\'e9ment de d\'e9part et l'\'e9l\'e9ment d'arriv\'e9e\}. L'expression ci-dessus est donc strictement \'e9quivalente \'e0 sexe[1:3].\
+\\subsubsection\{Motifs r\'e9guliers\}\
+R dispose de deux commandes, rep() et seq(), qui permettent de g\'e9n\'e9rer des s\'e9quences de nombres suivant un motif particulier. Par exemple, \\textbf\{seq(1, 10, by = 2)\} renvoie la liste des 5 premiers nombres impairs, alors que \\textbf\{rep(c(1, 3), 2)\} r\'e9p\'e8te la liste (1,3) deux fois.\\newline\
+\
+On peut v\'e9rifier la pr\'e9sence de donn\'e9es manquantes gr\'e2ce \'e0 \\textbf\{is.na()\}, ce qui nous permet \'e9galement d'introduire un autre type de donn\'e9es R : \\textbf\{les variables bool\'e9ennes\}, c'est-\'e0-dire des variables ne prenant que deux valeurs, vrai \\textcolor\{blue\}\{(TRUE)\} ou faux \\textcolor\{red\}\{(FALSE)\}, et que l'on retrouvera dans les tests logiques.\
+\\begin\{lstlisting\}[language=html]\
+is.na(age)\
+\
+##  [1] FALSE FALSE FALSE FALSE FALSE  TRUE FALSE FALSE FALSE FALSE\
+\\end\{lstlisting\}\
+\
+Le r\'e9sultat produit par R est de m\'eame longueur que la variable \\textit\{age\} puisque R teste si chaque \'e9l\'e9ment de cette variable est \'e9gal \'e0 \\textbf\{NA\}. L'expression \\textbf\{age == NA\}, o\'f9 le symbole \\textbf\{==\} d\'e9signe le test d'\'e9galit\'e9 logique (\\underline\{\'e0 ne pas confondre avec =\}) produirait le m\'eame r\'e9sultat. \\newline\
+Puisque la commande \\textbf\{which()\} renvoie le num\'e9ro du ou des \'e9l\'e9ments remplissant une certaine condition logique, on peut combiner \\textbf\{is.na() et which()\} pour obtenir le num\'e9ro de l'observation manquante dans la variable \\textit\{age\}\
+\\begin\{lstlisting\}[language=html]\
+which(is.na(age))\
+\
+## [1] 6\
+\\end\{lstlisting\}\
+Les observations disponibles pour ces deux variables ont \'e9t\'e9 recueillies sur la m\'eame unit\'e9 statistique. Il est donc naturel de se demander quel est le sexe de la personne n'ayant pas renseign\'e9 son \'e2ge. Plut\'f4t que \\textit\{sexe[6]\}, on pourra pr\'e9f\'e9rer utiliser l'expression suivante :\
+\
+\\begin\{lstlisting\}[language=html]\
+sexe[which(is.na(age))]\
+\
+## [1] M\
+## Levels: M F\
+\\end\{lstlisting\}\
+\\subsubsection\{Tests logiques sous R\}\
+Les op\'e9rateurs logiques sous R sont les suivants :\
+\\begin\{itemize\}\
+\\item \\textbf\{==\} (\'e9galit\'e9)\
+\\item \\textbf\{!=\} (non \'e9galit\'e9)\
+\\item \\textbf\{!\} (n\'e9gation)\
+\\item \\textbf\{\\&\} (et)\
+\\item \\textbf\{|\} (ou)\
+\\item \\textbf\{>\} (sup\'e9rieur \'e0)\
+\\item \\textbf\{>=\} (sup\'e9rieur ou \'e9gal \'e0)\
+\\item \\textbf\{<\} (inf\'e9rieur \'e0)\
+\\item \\textbf\{<=\} (inf\'e9rieur ou \'e9gal \'e0)\
+\\end\{itemize\}\
+\
+Un autre exemple d'indexation crit\'e9ri\'e9e consisterait \'e0 lister le sexe des individus dont \\underline\{l'\'e2ge est sup\'e9rieur \'e0 25 ans\}, par exemple. Le test logique \'e0 v\'e9rifier est alors : \\textbf\{age > 25, ou age >= 25\} si l'on souhaite inclure la valeur 25 et toutes les observations v\'e9rifiant cette condition seront inclues dans le r\'e9sultat renvoy\'e9 par R. Voici un exemple d'application :\
+\\begin\{lstlisting\}[language=html]\
+sexe[which(age > 25)]\
+\
+## [1] F M M F\
+## Levels: M F\
+\\end\{lstlisting\}\
+\
+\\section\{Commandes R et op\'e9rations sur des variables\}\
+\
+Un aspect important de R est que les commandes op\'e8rent g\'e9n\'e9ralement sur l'ensemble des \'e9l\'e9ments d'une variable. Il n'est pas n\'e9cessaire de construire des boucles pour it\'e9rer une op\'e9ration sur chacun des \'e9l\'e9ments.\\newline\
+\\\\\
+La plupart des op\'e9rations arithm\'e9tiques de base sont disponibles sous R : addition, soustraction, division, etc. Par exemple \\textbf\{1 + 2 renverra 3\}. Il faut toutefois faire attention \'e0 la repr\'e9sentation des nombres r\'e9els en machine\\dots R offre par ailleurs des commandes permettant de travailler avec l'ensemble des \'e9l\'e9ments d'une variable, comme par exemple \\textbf\{sum()\} qui renvoie la somme des valeurs stock\'e9es dans une variable num\'e9rique :\
+\\begin\{lstlisting\}[language=html]\
+sum(age)\
+\
+## [1] NA\
+\\end\{lstlisting\}\
+\
+On voit que le r\'e9sultat renvoy\'e9 ne correspond pas vraiment au r\'e9sultat escompt\'e9, et que R se contente de renvoyer la valeur \\textbf\{NA\}. Comme \\underline\{il y a une valeur\} \\underline\{manquante\}, R ne sait pas comment on doit la traiter et rappelle \'e0 l'utilisateur que la s\'e9rie de valeurs dont on essaye de calculer la somme n'est pas compl\'e8tement observ\'e9e. On peut alors effectuer le calcul \\textbf\{en ignorant la 6eme observation\}.\
+\\begin\{lstlisting\}[language=html]\
+sum(age[-6])\
+\
+## [1] 217\
+\\end\{lstlisting\}\
+\
+Mais en fait la commande \\textbf\{sum()\} dispose d'une option permettant d'effectuer le calcul en ignorant les valeurs manquantes.\
+\\begin\{lstlisting\}[language=html]\
+sum(age, na.rm=TRUE)\
+\
+## [1] 217\
+\\end\{lstlisting\}\
+\
+Il est bien entendu possible d'appliquer des op\'e9rations de mani\'e8re s\'e9quentielle, par exemple calculer le carr\'e9 des \'e2ges des individus, puis la somme de ces carr\'e9s, mais ce type d'op\'e9ration peut \'eatre r\'e9alis\'e9 en une seule fois comme le montre l'exemple suivant :\
+\\begin\{lstlisting\}[language=html]\
+sum(age^2, na.rm=TRUE)\
+\
+## [1] 5515\
+\\end\{lstlisting\}\
+\
+Dans l'exemple suivant, on montre comment, \\textbf\{apr\'e8s avoir remplac\'e9 la donn\'e9e manquante\} pour l'\'e2ge par la moyenne des \'e2ges de l'\'e9chantillon, il est possible de r\'e9aliser des op\'e9rations arithm\'e9tiques simples, qui op\'e8rent toujours sur l'ensemble des \'e9l\'e9ments manipul\'e9s. (Exemple du calcul de l'\'e9cart-type)\
+\
+\\begin\{lstlisting\}[language=html]\
+age[is.na(age)] <- mean(age, na.rm=TRUE)		## affectation\
+n <- length(age)      ## nombre d'observations\
+age - mean(age)       ## \'e9carts \'e0 la moyenne\
+\
+##  [1] -6.1111  2.8889  9.8889 -6.1111 -0.1111  0.0000  5.8889  3.8889\
+##  [9] -5.1111 -5.1111\
+\
+(age - mean(age))^2   ## carr\'e9s des \'e9carts \'e0 la moyenne\
+\
+##  [1] 37.34568  8.34568 97.79012 37.34568  0.01235  0.00000 34.67901\
+##  [8] 15.12346 26.12346 26.12346\
+\
+sum((age - mean(age))^2)/(n-1)\
+\
+## [1] 31.43\
+\
+sqrt(sum((age - mean(age))^2)/(n-1))\
+\
+## [1] 5.606\
+\\end\{lstlisting\}\
+\
+\'c9videmment, inutile de calculer un \\textbf\{\'e9cart-type\} manuellement puisque R dispose d\'e9j\'e0 d'une commande \\textbf\{sd()\} pour r\'e9aliser ce calcul : \
+\
+\\begin\{lstlisting\}[language=html]\
+sd(age)\
+\
+## [1] 5.606\
+\\end\{lstlisting\}\
+\
+Des commandes similaires et tr\'e8s utiles lorsqu'il s'agit de r\'e9sumer la distribution d'une variable num\'e9rique \'e0 l'aide des principaux indicateurs de tendance centrale et de dispersion sont : \\textbf\{range()\\footnote\{Etendue\} (min() et max()), mean(), median(), var(), IQR()\\footnote\{Interquartile Range\}\}. Plus g\'e9n\'e9ralement, la commande \\textbf\{summary()\} fournit de mani\'e8re compacte la plupart de ces indicateurs concernant la distribution d'une variable num\'e9rique, ou un tableau d'effectifs dans le cas d'une variable qualitative. La commande \\textbf\{summary()\} fonctionne avec une ou plusieurs variables (voir section suivante).\\newline\
+\\\\\
+Notons que tous \\textbf\{les r\'e9sultats renvoy\'e9s par R peuvent \'eatre stock\'e9s dans des variables\} \'e9galement, ce qui permet de sauvegarder des r\'e9sultats interm\'e9diaires, ou de les r\'e9utiliser plus tard.\
+\
+\\begin\{lstlisting\}[language=html]\
+res <- sum(age, na.rm=TRUE)\
+res\
+\
+## [1] 241.1\
+\\end\{lstlisting\}\
+\
+On peut visualiser l'ensemble des variables pr\'e9sentes dans l'espace de travail ("workspace") gr\'e2ce \'e0 \\textbf\{ls()\}.\
+\
+\\begin\{lstlisting\}[language=html]\
+ls()\
+\
+## [1] "age"      "d"        "metadata" "n"        "opin"     "res"     \
+## [7] "sexe"\
+\\end\{lstlisting\}\
+\
+\\subsubsection\{Suppression de variables\}\
+On retiendra que toute \\textbf\{alt\'e9ration permanente ou suppression de variables est d\'e9finitive\}. Les donn\'e9es d'origine sont d\'e9finitivement enlev\'e9es de l'espace de travail.\\newline\
+\\\\\
+La commande \\textbf\{rm()\} permet de supprimer une ou plusieurs variables de l'espace de travail.\
+\
+\\begin\{lstlisting\}[language=html]\
+rm(n, res)\
+ls()\
+\
+## [1] "age"      "d"        "metadata" "opin"     "sexe"\
+\\end\{lstlisting\}\
+\
+\\section\{Tableaux de donn\'e9es h\'e9t\'e9rog\'e8nes\}\
+Plut\'f4t que de travailler avec des variables isol\'e9es comme pr\'e9c\'e9demment, lorsque les donn\'e9es ont \'e9t\'e9 collect\'e9es sur les m\'eames unit\'e9s statistiques il est plus int\'e9ressant de constituer une v\'e9ritable structure de donn\'e9es, appel\'e9e \\underline\{data frame\} sous R. Il s'agit d'un tableau rectangulaire dans lequel les variables sont arrang\'e9es en colonnes et les observations en lignes, et les variables peuvent \'eatre de diff\'e9rents types, num\'e9riques ou cat\'e9gorielle, contrairement \'e0 des structures de donn\'e9es plus simples d\'e9finies par la commande \\textbf\{matrix()\}, par exemple.\
+\
+La commande \\textbf\{data.frame()\} s'utilise de mani\'e8re assez simple : on lui fournit la liste des variables \'e0 inclure dans le tableau de donn\'e9es. \'c9ventuellement, les variables peuvent \'eatre renomm\'e9es directement lors de la construction du data frame, comme illustr\'e9 dans l'exemple suivant.\
+\
+\\begin\{lstlisting\}[language=html]\
+d <- data.frame(age, sex=sexe)\
+d\
+\
+##      age sex\
+## 1  18.00   F\
+## 2  27.00   F\
+## 3  34.00   M\
+## 4  18.00   F\
+## 5  24.00   M\
+## 6  24.11   M\
+## 7  30.00   M\
+## 8  28.00   F\
+## 9  19.00   M\
+## 10 19.00   F\
+\\end\{lstlisting\}\
+\
+Un data frame comprend des dimensions (\\textbf\{dim()\} fournit le nombre de lignes et le nombre de colonnes), des noms de variables (\\textbf\{names()\}) et des num\'e9ros d'observations, \\textbf\{rownames()\} (qui servent d'identifiants uniques), et une description du type de variables pr\'e9sentes dans le data frame est obtenue \'e0 l'aide de la commande \\textbf\{str()\}.\
+\
+\\begin\{lstlisting\}[language=html]\
+dim(d)\
+\
+## [1] 10  2 ##Sous entendu, une matrice de 10x2\
+\
+names(d)\
+\
+## [1] "age" "sex"\
+\
+str(d)\
+\
+## 'data.frame':    10 obs. of  2 variables:\
+##  $ age: num  18 27 34 18 24 ...\
+##  $ sex: Factor w/ 2 levels "M","F": 2 2 1 2 1 1 1 2 1 2\
+\
+\\end\{lstlisting\}\
+\
+Pour acc\'e9der \'e0 une variable sp\'e9cifique dans un data frame, on utilisera le nom du data frame, suivi du symbole \\textbf\{\\$\} et du nom de la variable. Ainsi l'expression \\textbf\{d\\$age\} peut se lire comme \\textbf\{"la variable age dans le data frame d"\}. Le principe d'indexation des variables vu \'e0 la section pr\'e9c\'e9dente reste applicable dans le cas des data frame, naturellement. Cependant, comme il s'agit d'un tableau, l'indexation des observations se fait \'e0 partir des lignes du tableau : on notera \\textbf\{[i,j]la ieme observation pour la jeme variable\}. Ainsi, \\textbf\{d[1,1]\} d\'e9signera l'\'e2ge du premier individu, \\textbf\{d[c(1,2,3),1]\} l'\'e2ge des 3 premiers individus, et \\textbf\{d[1:2,1:2]\} renverra toutes les donn\'e9es recueillies sur les deux premiers individus. Dans ce dernier cas, il n'est pas n\'e9cessaire de pr\'e9ciser les num\'e9ros de colonne si elles sont toutes inclues dans la s\'e9lection ; on pourra donc \'e9crire \\textbf\{d[1:2,] au lieu de d[1:2,1:2]\}.\
+\
+\\begin\{lstlisting\}[language=html]\
+d$age\
+\
+##  [1] 18.00 27.00 34.00 18.00 24.00 24.11 30.00 28.00 19.00 19.00\
+\
+d$age[1:2]\
+\
+## [1] 18 27\
+\
+d[1:2, 1]\
+\
+## [1] 18 27\
+\\end\{lstlisting\}\
+\
+Puisque les colonnes d'un data frame sont nomm\'e9es, il est tout \'e0 fait possible de remplacer l'expression \\textbf\{d[1:2,1] par d[1:2,"age"]\}, ce qui facilite la relecture, ou permet de bien travailler sur la variable en cas de changement de position des variables dans le data frame.\\newline\
+\\\\\
+Il est \'e9galement possible d'ajouter ou de supprimer des variables dans un data frame :\
+\
+\\begin\{lstlisting\}[language=html]\
+d$var1 <- 1:10\
+d[1:3,]\
+\
+##   age sex var1\
+## 1  18   F    1\
+## 2  27   F    2\
+## 3  34   M    3\
+\
+d[,3] <- NULL\
+d[1:3,]\
+\
+##   age sex\
+## 1  18   F\
+## 2  27   F\
+## 3  34   M\
+\
+d$opinion <- opin\
+str(d)\
+\
+## 'data.frame':    10 obs. of  3 variables:\
+##  $ age    : num  18 27 34 18 24 ...\
+##  $ sex    : Factor w/ 2 levels "M","F": 2 2 1 2 1 1 1 2 1 2\
+##  $ opinion: Factor w/ 4 levels "Pas du tout d'accord",..: 1 3 2 1 4 1 4 3 2 2\
+\\end\{lstlisting\}\
+\
+Comme on l'a dit plus haut, il est \'e9galement possible d'utiliser \\textbf\{summary()\} pour obtenir un r\'e9sum\'e9 d\'e9taill\'e9 de la distribution de chaque variable d'un data frame.\
+\
+\\begin\{lstlisting\}[language=html]\
+summary(d)\
+\
+##       age       sex                            opinion \
+##  Min.   :18.0   M:5   Pas du tout d'accord         :3  \
+##  1st Qu.:19.0   F:5   Moyennement d'accord         :3  \
+##  Median :24.1         Sans Opinion                 :2  \
+##  Mean   :24.1         Assez ou tout a fait d'accord:2  \
+##  3rd Qu.:27.8                                          \
+##  Max.   :34.0\
+\
+\\end\{lstlisting\}\
+\
+\\section\{Importer des donn\'e9es\}\
+\\subsection\{Donn\'e9es texte simple\}\
+La commande \\textbf\{read.table()\} permet d'\\textbf\{importer sous R des donn\'e9es stock\'e9es dans un format proche de celui du data frame\}, c'est-\'e0-dire o\'f9 les variables sont arrang\'e9es en colonnes et les observations en ligne. Voici un exemple d'aper\'e7u des donn\'e9es pr\'e9c\'e9dentes lorsqu'elles sont sauvegard\'e9es dans un tel format (seules les trois premi\'e8res lignes du fichier sont affich\'e9es). Chaque valeur est s\'e9par\'e9e par un espace : il s'agit du s\'e9parateur de champ. La premi\'e8re ligne du fichier \\underline\{donnees.txt contient le nom des variables\}. Toutes les cha\'eenes de caract\'e8res sont entour\'e9es de \\underline\{quotes anglo-saxonnes\}.\
+\
+\\begin\{lstlisting\}[language=html]\
+"age" "sexe" "opinion"\
+18 "F" "Pas du tout d'accord"\
+27 "F" "Sans Opinion"\
+\\end\{lstlisting\}\
+\
+\\textcolor\{red\}\{Pour importer ce fichier, on utilisera une instruction du type :\}\
+\
+\\begin\{lstlisting\}[language=html]\
+d <- read.table("donnees.txt", header = TRUE, sep = "", dec = ".")\
+\\end\{lstlisting\}\
+\
+\\textbf\{Certaines des options par d\'e9faut ont \'e9t\'e9 renseign\'e9es explicitement\}, comme par exemple \\underline\{le d\'e9limiteur d\'e9cimal\} (\\textbf\{dec=\}). Il est surtout important d'indiquer \'e0 R \\underline\{si le fichier contient une ligne d'en-t\'eate\} ou pas (\\textbf\{header=\}).\\newline\
+\\\\\
+Dans \\underline\{les cas plus simples\} o\'f9 il n'y a qu'une s\'e9rie de valeurs \'e0 importer sous R, la commande \\textbf\{scan()\} fonctionne sur le m\'eame principe.\
+\
+\\subsection\{Donn\'e9es au format CSV\}\
+Les donn\'e9es export\'e9es depuis un tableur de type Excel au format CSV peuvent \'eatre import\'e9es sous R \'e0 l?aide de la commande \\textbf\{read.csv()\}, si le s\'e9parateur de champ est une virgule, ou \\textbf\{read.csv2()\}, si le s\'e9parateur de champ est un point-virgule.\\newline\
+Voici un exemple d?aper\'e7u des donn\'e9es pr\'e9c\'e9dentes lorsqu?elles sont sauvegard\'e9es dans un tel format (seules les trois premi\'e8res lignes du fichier sont affich\'e9es). Ici, le s\'e9parateur de champ est une virgule \\textcolor\{red\}\{dans ce cas, le s\'e9parateur d\'e9cimal est obligatoirement un point\}.\
+\\begin\{lstlisting\}[language=html]\
+"age","sexe","opinion"\
+18,"F","Pas du tout d'accord"\
+27,"F","Sans Opinion"\
+\
+\\end\{lstlisting\}\
+\
+Pour importer ce fichier, on utilisera une instruction du type \
+\\begin\{lstlisting\}[language=html]\
+d <- read.csv("donnees.csv")\
+\\end\{lstlisting\}\
+\
+Que ce soit avec \\textbf\{read.table()\} ou \\textbf\{read.csv()\}, les donn\'e9es manquantes sont g\'e9n\'e9ralement consid\'e9r\'e9es des valeurs absentes dans le fichier. \\textcolor\{blue\}\{Tout autre symbole signalant des valeurs manquantes doit \'eatre explicitement renseign\'e9 dans l'option na.strings=\}.\
+\\subsubsection\{XLS ou CSV ?\} \
+Il est \'e9galement possible de lire directement des fichiers Excel, voire une sous-partie d'une feuille de calcul (par exemple, une zone de plage \\textit\{A2:C5\}, soit 12 cellules au total), \'e0 l'aide de packages sp\'e9cialis\'e9s. Cela dit, comme il est tout aussi simple d'exporter les donn\'e9es au format CSV depuis Excel, et que ce type de format de donn\'e9es pose moins de probl\'e8me de compatibilit\'e9 de version entre les logiciels et les syst\'e8mes d'exploitation, \\textbf\{on pr\'e9f\'e9rera g\'e9n\'e9ralement le format CSV\}.\
+\
+\\subsection\{Donn\'e9es enregistr\'e9es \'e0 partir d'autres logiciels statistiques\}\
+Le package \\textbf\{foreign\} contient des commandes permettant d'importer des sources de donn\'e9es enregistr\'e9es \'e0 partir d'autres logiciels statistiques. \\textit\{En particulier, les donn\'e9es au format SPSS, Stata et SAS\} peuvent charg\'e9es sous R \'e0 l'aide des commandes \\textbf\{read.spss() \}(dans ce cas, il ne faut surtout pas oublier de rajouter l'option \\textbf\{to.data.frame = TRUE\}), \\textbf\{read.dta()\} et \\textbf\{read.xport()\}.\
+\
+\\section\{Installer des packages additionnels\}\
+\\subsubsection*\{Installation de packages :\} Il est \'e9galement possible d'installer des packages en utilisant les menus d\'e9roulant de l'interface R. Il suffit g\'e9n\'e9ralement d'indiquer le nom du ou des packages \'e0 installer, et de choisir un site pour le t\'e9l\'e9chargement des packages (il est conseill\'e9 de choisir un serveur proche de l'endroit o\'f9 l'on se trouve pour am\'e9liorer la rapidit\'e9 de t\'e9l\'e9chargement).\\newline\
+\\\\\
+R offre l'essentiel des commandes permettant de d\'e9crire, mod\'e9liser et repr\'e9senter graphiquement des jeux de donn\'e9es multivariables. Il existe cependant tout un \'e9cosyst\'e8me de commandes additionnelles, regroup\'e9es par th\'e8me dans ce que l'on appelle des packages. La liste compl\'e8te de ces packages est disponible sur le site \\textbf\{CRAN\} (https://cran.r-project.org/, onglet Software/package), mais il existe \'e9galement des lots de packages regroup\'e9s par domaine (graphiques, plans d'exp\'e9rience, sondages, donn\'e9es g\'e9ospatiales, etc.) que l'on trouvera sur la page \\textbf\{Task View\}(https://cran.r-project.org/web/views/).\\newline\
+\\\\\
+Pour installer un package, la commande \'e0 utiliser est \\textbf\{install.packages()\}, et souvent il sera n\'e9cessaire d'ajouter l'option \\textbf\{dependencies = "Depends"\} si le package \'e0 installer d\'e9pend de commandes fournies dans d'autres packages externes. Dans ce cours, par exemple, les packages \\underline\{prettyR\} et \\underline\{gplots\} seront utilis\'e9s et pourront \'eatre install\'e9s de la mani\'e8re suivante.\
+\
+\\begin\{lstlisting\}[language=html]\
+install.packages(c("prettyR", "gplots"), dep = "Depends")\
+\
+\\end\{lstlisting\}\
+\
+Pour conna\'eetre l'ensemble des commandes disponibles dans un package, il suffit de taper l'instruction suivante :\
+\
+\\begin\{lstlisting\}[language=html]\
+help(package=MASS)\
+\\end\{lstlisting\}\
+\
+\\section\{Les fonctionnalit\'e9s graphiques\}\
+R offre trois principaux syst\'e8mes graphiques : le syst\'e8me graphique de base, utilis\'e9 dans le cadre de ce cours, \\textbf\{lattice\} et \\textbf\{ggplot2\}. \\newline\
+\\\\\
+Le chapitre 4 du manuel R pour les d\'e9butants de E. Paradis fournit un aper\'e7u relativement complet des diff\'e9rentes commandes graphiques et des outils de personnalisation et de gestion des fen\'eatres graphiques (https://cran.r-project.org/doc/contrib/Paradis-rdebuts\\_fr.pdf).\
+\
+\\section\{Les outils statistiques\}\
+\
+Ci-dessous figure une liste des principales commandes R pour les mesures et tests d'association entre 2 ou plusieurs variables num\'e9riques et/ou qualitatives. Pour chaque commande, seules les options obligatoires ou essentielles sont pr\'e9sent\'e9es. Les autres sont \'e0 rechercher dans l'aide en ligne. Dans tous les cas, les variables $x$ et $y$ sont \\textbf\{consid\'e9r\'e9es comme des variables num\'e9riques\}, $z$ est une \\textbf\{variable qualitative ou facteur\} (de m\'eame que z1 et z2), $s$ une \\textbf\{variable censur\'e9e\} (\'e0 droite) et \\textbf\{construite \'e0 l'aide de la commande Surv()\}, et $cmd$ d\'e9signe \\textbf\{n'importe quelle commande R permettant d'op\'e9rer sur une variable num\'e9rique\}, \\underline\{par exemple mean\}. Enfin, \\textbf\{mod\} et \\textbf\{tab\} d\'e9signent \\textbf\{respectivement le r\'e9sultat d'un mod\'e8le lin\'e9aire ou d'un tableau de contingence\} stock\'e9 dans une variable auxiliaire.\
+\
+\\subsection\{Comparaison de moyennes\}\
+\
+\
+\\begin\{center\}\
+\\begin\{tabular\}\{|l|l|\}\
+\\hline\
+\\textbf\{Commande\} & \\textbf\{Description\} \\\\ \\hline\
+\\textbf\{tapply(x, z, cmd, ...)\} & Application d'une commande cmd \'e0 une variable num\'e9rique x pour chacun des niveaux du facteur z.\\\\ \\hline\
+\\textbf\{aggregate(y ~ z, data=, cmd, ...) \} & Application d'une commande cmd \'e0 une variable num\'e9rique x pour chacun des niveaux du facteur z.\\\\ \\hline\
+\\textbf\{t.test(x, y, ...) \} &Test de Student en supposant l'\'e9galit\'e9 des variances (option var.equal = TRUE) ou non, pour \'e9chantillons ind\'e9pendants ou appari\'e9s (option paired = TRUE).\\\\ \\hline\
+\\textbf\{wilcox.test(x, y, ...)\} &Test de Wilcoxon pour \'e9chantillons ind\'e9pendants ou appari\'e9s (option paired = TRUE).\\\\ \\hline\
+\\textbf\{lm(y ~ z, data=, subset=, ...)\} & Mod\'e8le lin\'e9aire (analyse de variance \'e0 un ou plusieurs facteurs \'e0 effets fixes). Cette commande permet d'estimer les param\'e8tres du mod\'e8le.\\\\ \\hline\
+\\textbf\{drop1(mod, test=, ...)\} & Comparaison de mod\'e8les embo\'eet\'e9s, permettant de construire les tests de Fisher-Sndecor (option test = "F") pour les effets principaux.\\\\ \\hline\
+\\textbf\{aov(y ~ z, data=, subset=, ...)\} & ANOVA \'e0 un ou plusieurs facteurs \'e0 effets fixes, avec ou sans mesures r\'e9p\'e9t\'e9es (option Error=).\\\\ \\hline\
+\\textbf\{model.tables(mod, ...)\} & R\'e9sum\'e9 de synth\'e8se des effets (\'e9carts des moyennes de groupe \'e0 la moyenne g\'e9n\'e9rale) sous forme de tableau.\\\\ \\hline\
+\\textbf\{plot.design(y ~ z, data=, fun=)\} & R\'e9sum\'e9 de synth\'e8se des effets (\'e9carts des moyennes de groupe \'e0 la moyenne g\'e9n\'e9rale) sous forme de graphique.\\\\ \\hline\
+\\textbf\{replications(y ~ z, data=) \} & Nombre d'unit\'e9s statistiques allou\'e9es dans chaque traitement (croisement des niveaux de deux ou plusieurs facteurs), incluant les interactions.\\\\ \\hline\
+\\textbf\{pairwise.t.test(x, z, ...) \} & Tests de Student pour des paires de moyenne (cas ind\'e9pendants ou appari\'e9s), avec correction des degr\'e9s de significativit\'e9 (option p.adjust.method=).\\\\ \\hline\
+\\textbf\{pairwise.wilcox.test(x, z, ...)\} & Tests de Wilcoxon simultan\'e9s pour des paires de moyenne (cas ind\'e9pendants ou appari\'e9s), avec correction des degr\'e9s de significativit\'e9.\\\\ \\hline\
+\\end\{tabular\}\
+\\end\{center\}\
+\
+\\subsection\{Tableaux de contingence\}\
+\
+\\begin\{center\}\
+\\begin\{tabular\}\{|l|l|\}\
+\\hline\
+\\textbf\{Commande\} & \\textbf\{Description\} \\\\ \\hline\
+\\textbf\{table(z1, z2, useNA=, ...) \} & Tableau d'effectifs pour une ou deux variables. L'affichage des valeurs manquantes est g\'e9r\'e9 par l'option useNA = "always".\\\\ \\hline\
+\\textbf\{prop.table(tab, margin=) \} & Fr\'e9quences relatives d'un tableau cr\'e9\'e9 par table() par rapport \'e0 l'effectif total, ou aux totaux lignes (margin = 1) ou colonnes (margin = 2).\\\\ \\hline\
+\\textbf\{margin.table(tab, margin=) \} & Calcul des totaux lignes (margin = 1) ou colonnes (margin = 2) d'un tableau de contingence construit \'e0 l'aide de table().\\\\ \\hline\
+\\textbf\{chisq.test(tab, ...) \} & Test du chi-deux pour un tableau de contingence construit \'e0 l'aide de table().\\\\ \\hline\
+\\textbf\{fisher.test(tab, ...) \} &Test exact de Fisher pour un tableau de contingence construit \'e0 l'aide de table(). Usage alternatif : fisher.test(z1, z2, ...).\\\\ \\hline\
+\\textbf\{mcnemar.test(z1, z2, ...) \} & Test de McNemar pour un tableau de contingence construit \'e0 l'aide de table(), dans le cas de deux \'e9chantillons appari\'e9s.\\\\ \\hline\
+\\textbf\{pairwise.prop.test(tab, ...) \} & Tests multiples de deux proportions, avec correction des degr\'e9s de significativit\'e9 (option p.adjust.method=, par d\'e9faut m\'e9thode de Bonferroni).\\\\ \\hline\
+\\end\{tabular\}\
+\\end\{center\}\
+\
+\
+\\subsection\{Corr\'e9lation et r\'e9gression lin\'e9aire\}\
+\
+\\begin\{center\}\
+\\begin\{tabular\}\{|l|l|\}\
+\\hline\
+\\textbf\{Commande\} & \\textbf\{Description\} \\\\ \\hline\
+\\textbf\{cor(x, y, method=, use=, ...) \} & Calcul du coefficient de corr\'e9lation de Pearson (ou Spearman, avec method = "spearman"). L'option use = "pairwise" est utile en cas de donn\'e9es manquantes.\\\\ \\hline\
+\\textbf\{cor.test(x, y, method=, use=, ...)\} & Test de significativit\'e9 du coefficient de corr\'e9lation lin\'e9aire de Pearson (ou Spearman, avec method = "spearman").\\\\ \\hline\
+\\textbf\{lm(y ~ x, data=, subset=, ...) \} & Mod\'e8le lin\'e9aire (r\'e9gression lin\'e9aire simple et multiple). Cette commande permet d'estimer les param\'e8tres du mod\'e8le.\\\\ \\hline\
+\\textbf\{summary(mod) \} & Tableau des coefficients de r\'e9gression et test de Student associ\'e9s pour un mod\'e8le de r\'e9gression lin\'e9aire \'e0 un ou plusieurs facteurs.\\\\ \\hline\
+\\textbf\{anova(mod, ...)\} & Tableau d'analyse de variance associ\'e9 \'e0 un mod\'e8le de r\'e9gression lin\'e9aire \'e0 un ou plusieurs facteurs.\\\\ \\hline\
+\\textbf\{coef(mod) \} & Valeurs des coefficients de r\'e9gression pour un mod\'e8le de r\'e9gression lin\'e9aire \'e0 un ou plusieurs facteurs.\\\\ \\hline\
+\\textbf\{fitted(mod, ...)\} & Valeurs pr\'e9dites pour l'ensemble des observations utilis\'e9es lors de la construction du mod\'e8le de r\'e9gression.\\\\ \\hline\
+\\textbf\{resid(mod, ...) \} & Valeurs r\'e9siduelles (diff\'e9rence entre valeurs observ\'e9es et valeurs pr\'e9dites) d'un mod\'e8le de r\'e9gression lin\'e9aire.\\\\ \\hline\
+\\textbf\{predict(mod, newdata=, ...) \} & Valeurs pr\'e9dites pour un mod\'e8le de r\'e9gression \'e0 partir de donn\'e9es non n\'e9cessairement observ\'e9es. Par d\'e9faut, cette commande renvoie les valeurs ajust\'e9es.\\\\ \\hline\
+\\end\{tabular\}\
+\\end\{center\}\
+\\subsection\{R\'e9gression logistique\}\
+\
+\\begin\{center\}\
+\\begin\{tabular\}\{|l|l|\}\
+\\hline\
+\\textbf\{Commande\} & \\textbf\{Description\} \\\\ \\hline\
+\\textbf\{glm(y ~ x, data=, subset=, family=, ...) \} & Mod\'e8le lin\'e9aire g\'e9n\'e9ralis\'e9 (p. ex., r\'e9gression logistique, family = binomial(logit)). Cette commande permet d'estimer les param\'e8tres du mod\'e8le.\\\\ \\hline\
+\\textbf\{summary(mod), anova(mod, test=, ...) \} & Identique au cas de la r\'e9gression lin\'e9aire simple ou multiple (tableau d'analyse de d\'e9viance au lieu de variance).\\\\ \\hline\
+\\textbf\{coef(mod), predict(mod, newdata=, type=, ...) \} & Coefficients de r\'e9gression et valeurs pr\'e9dites sur l'\'e9chelle du log-odds ou sous forme de probabilit\'e9s individuelles (type = "response").\\\\ \\hline\
+\\end\{tabular\}\
+\\end\{center\}\
+\
+\\subsection\{Donn\'e9es de survie\}\
+\
+\\begin\{center\}\
+\\begin\{tabular\}\{|l|l|\}\
+\\hline\
+\\textbf\{Commande\} & \\textbf\{Description\} \\\\ \\hline\
+\\textbf\{Surv(time=, event=, ...) \} & Construction d'une variable censur\'e9e associant un temps d'observation () \'e0 un statut relatif \'e0 l'\'e9v\'e9nement d'int\'e9r\'eat.\\\\ \\hline\
+\\textbf\{survfit(s ~ 1, ...) \} & M\'e9diane de survie et intervalle de confiance \'e0 95~\\% dans le cas d'un (s ~ 1) ou plusieurs (s ~ z) \'e9chantillons.\\\\ \\hline\
+\\textbf\{summary(s, times=, ...) \} & Tableau des valeurs de la fonction de survie (l'option times= permet de limiter l'affichage \'e0 certaines valeurs de temps).\\\\ \\hline\
+\\textbf\{survdiff(s ~ z, data=, ...) \} & Test d'\'e9galit\'e9 de 2 ou plusieurs fonctions de survie par le test du log-rank (par d\'e9faut) ou de Gehan-Wilcoxon (rho = 1).\\\\ \\hline\
+\\textbf\{plot(s, conf.int=, fun=, ...) \} & Courbe de Kaplan-Meier pour un ou plusieurs \'e9chantillons, avec IC \'e0 95 \\% (utiliser conf.int = 0 pour les supprimer).\\\\ \\hline\
+\\textbf\{coxph(s ~ z, data=, subset=, strata=, ...) \} & Mod\'e8le de r\'e9gression de Cox (risques proportionnels), \'e9ventuellement stratifi\'e9 sur une variable de type facteur (strata=).\\\\ \\hline\
+\\textbf\{summary(mod), anova(mod), coef(mod) \} & Tableau des coefficients de r\'e9gression avec tests de Wald associ\'e9s et tableau d'analyse de d\'e9viance (statistique du chi-deux).\\\\ \\hline\
+\\end\{tabular\}\
+\\end\{center\}\
+\
+\\section\{Gestion des donn\'e9es avec R\}\
+\
+La gestion des donn\'e9es sous R n'est pas aussi \'e9vidente qu'il n'y para\'eet au premier abord. C'est essentiellement d\'fb au fait que l'on ne ?voit pas? les donn\'e9es comme sur un tableur de type Excel. Toutefois, R offre des outils puissants de recodage des variables et de reformatage des tableaux de donn\'e9es, et permet de lire quasiment tous les formats de fichiers de donn\'e9es utilis\'e9s dans le domaine statistique.\
+\
+\\subsection\{Importation de fichiers CSV\}\
+\\subsubsection\{Structure du fichier de donn\'e9es\}\
+\
+Consid\'e9rons le fichier de donn\'e9es \\textbf\{smp2.csv\} qui regroupe les donn\'e9es sur l'\'e9tude de sant\'e9 mentale en prison. Ce fichier comporte \\textbf\{26 variables et 799 observations\} (individus ou unit\'e9s statistiques). Il s'agit d'un fichier de type CSV (comma separated values) que l'on peut ouvrir avec un tableur de type Excel ou n'importe quel \'e9diteur de texte. Souvent d'ailleurs, lorsque l'on double-clique sur un fichier portant cette extension \\textbf\{(.csv)\}, c'est l'application Excel (ou Open Office, par exemple) qui est propos\'e9e pour lire ce fichier. Voici \'e0 quoi ressemble ce fichier en mode texte :\
+\
+\\begin\{figure\}[H]\\begin\{center\}\\includegraphics[scale=0.85]\{ilu/1.png\}\\caption\{Contenu du fichier smp2.csv en vue texte\}\\end\{center\}\\end\{figure\}\
+\
+Ce fichier est structur\'e9 de la mani\'e8re suivante : sur la premi\'e8re ligne figure le nom des variables. Les donn\'e9es de chaque individu pour chacune de ces variables sont report\'e9es sur une ligne s\'e9par\'e9e. Les donn\'e9es (nom de variable sur la premi\'e8re ligne, ou valeur prise par une variable pour un individu sur les lignes suivantes), appel\'e9 ?champ?, sont s\'e9par\'e9es par un m\'eame symbole, appel\'e9 s\'e9parateur de champ, ici un point-virgule. D'autres s\'e9parateurs de champ peuvent \'eatre utilis\'e9s, par exemple des virgules, des taquets de tabulation ou de simples espaces.\\newline\
+\\\\\
+Le s\'e9parateur d\'e9cimal quant \'e0 lui permet d'indiquer \'e0 R comment sont repr\'e9sent\'e9s les nombres \'e0 virgules. Par d\'e9faut, R utilise la notation anglo-saxonne (le s\'e9parateur d\'e9cimal est alors un point, par exemple 9.2), sauf dans le cas de la commande \\textbf\{read.csv2()\} o\'f9 l'on consid\'e8re que le s\'e9parateur d\'e9cimal suit la notation fran\'e7aise (une virgule, comme dans 9,2). \'c9videmment, il y a des situations impossibles : utiliser comme s\'e9parateur de champs des virgules imposera le point comme s\'e9parateur d\'e9cimal, autrement R n'a aucun moyen d'identifier correctement le nombre de champs pr\'e9sents sur chaque ligne du fichier.\\newline\
+\\\\\
+Si aucune ligne d'en-t\'eate n'est pr\'e9sente, il faudra pr\'e9ciser l'option \\textbf\{header = FALSE\}, et \'e9ventuellement fournir le nom des variables sous forme de liste via l'option \\textbf\{col.names =\}. Cela dit il est tout aussi simple d'utiliser la commande \\textbf\{colnames()\} apr\'e8s avoir import\'e9 le fichier.\\newline\
+\\\\\
+Pour importer des fichiers CSV sous R, on utilise la commande \\textbf\{read.csv() ou read.csv2()\}, qui reposent en fait sur la commande \\textbf\{read.table()\}, mais avec des options par d\'e9faut : \\textcolor\{red\}\{\\textbf\{sep = ;/dec = \}, dans le cas de \\textbf\{read.csv2()\}\}, et \\textcolor\{blue\}\{\\textbf\{sep = ,/dec = .\} dans le cas de  \\textbf\{read.csv()\}\}. Dans tous les cas, on suppose que \\textbf\{header = TRUE\}, c'est-\'e0-dire que le fichier comporte bien une ligne d'en-t\'eate.\\newline\
+\\\\\
+Avant d'importer un fichier, il faut s'assurer que R conna\'eet l'endroit o\'f9 ce fichier a \'e9t\'e9 enregistr\'e9. Pour cela, deux solutions : soit l'on indique le chemin d'acc\'e8s complet au fichier, soit on change le r\'e9pertoire de travail courant pour indiquer le r\'e9pertoire dans lequel le fichier a \'e9t\'e9 enregistr\'e9. Dans le premier cas, on aura donc une instruction du style :\
+\
+\\begin\{lstlisting\}[language=html]\
+smp <- read.csv2("/Users/chl/mooc/smp2.csv")\
+\\end\{lstlisting\}\
+\
+qui signifie que sur un Mac, le fichier \\textbf\{smp2.csv se trouve dans le sous-r\'e9pertoire mooc du r\'e9pertoire Documents du compte utilisateur\}. Sous Windows, on utilisera par exemple C:/utilisateur/chl/mooc/smp2.csv. Dans le second cas, on utilisera soit la commande \\textbf\{setwd()\} pour d\'e9finir le r\'e9pertoire de travail, soit le menu disponible dans le gestionnaire de fichiers de RStudio, comme l'illustre la figure suivante.\
+\
+\\begin\{figure\}[H]\\begin\{center\}\\includegraphics[scale=1]\{ilu/2.png\}\\caption\{D\'e9finir le r\'e9pertoire courant comme r\'e9pertoire de travail\}\\end\{center\}\\end\{figure\}\
+\
+En supposant que le r\'e9pertoire de travail ait correctement \'e9t\'e9 indiqu\'e9, voici comment l'on peut charger les donn\'e9es \\textbf\{smp2.csv\} :\
+\
+\\begin\{lstlisting\}[language=html]\
+\
+smp <- read.csv2("smp2.csv")\
+\
+\\end\{lstlisting\}\
+\
+Concernant la structure du fichier de donn\'e9es une fois qu'il a \'e9t\'e9 import\'e9, il est conseill\'e9 de taper syst\'e9matiquement ces 3 commandes qui permettent de v\'e9rifier la taille du tableau de donn\'e9es (nombre de lignes et nombre de colonnes, correspondant, respectivement, au nombre d'individus et de variables), le nom des variables (ce qui permet, entre autres, de s'assurer que la ligne d'en-t\'eate a bien \'e9t\'e9 lue correctement), et le type de repr\'e9sentation des variables (int ou double pour les variables num\'e9riques, char ou factor pour les variables qualitatives). Voici ce que donnent ces commandes pour le fichier \\textbf\{smp2.csv\}.\
+\
+\\begin\{lstlisting\}[language=html]\
+\
+dim(smp)\
+\
+## [1] 799  26\
+\
+names(smp)\
+\
+##  [1] "age"          "prof"         "duree"        "discip"      \
+##  [5] "n.enfant"     "n.fratrie"    "ecole"        "separation"  \
+##  [9] "juge.enfant"  "place"        "abus"         "grav.cons"   \
+## [13] "dep.cons"     "ago.cons"     "ptsd.cons"    "alc.cons"    \
+## [17] "subst.cons"   "scz.cons"     "char"         "rs"          \
+## [21] "ed"           "dr"           "suicide.s"    "suicide.hr"  \
+## [25] "suicide.past" "dur.interv"\
+\
+str(smp)\
+\
+## 'data.frame':    799 obs. of  26 variables:\
+##  $ age         : int  31 49 50 47 23 34 24 52 42 45 ...\
+##  $ prof        : Factor w/ 8 levels "agriculteur",..: 3 NA 7 6 8 6 3 2 6 6 ...\
+##  $ duree       : int  4 NA 5 NA 4 NA NA 5 4 NA ...\
+##  $ discip      : int  0 0 0 0 1 0 0 0 1 0 ...\
+##  $ n.enfant    : int  2 7 2 0 1 3 5 2 1 2 ...\
+##  $ n.fratrie   : int  4 3 2 6 6 2 3 9 12 5 ...\
+##  $ ecole       : int  1 2 2 1 1 2 1 2 1 2 ...\
+##  $ separation  : int  0 1 0 1 1 0 1 0 1 0 ...\
+##  $ juge.enfant : int  0 0 0 0 NA 0 1 0 1 0 ...\
+##  $ place       : int  0 0 0 1 1 0 1 0 0 0 ...\
+##  $ abus        : int  0 0 0 0 0 0 0 0 1 1 ...\
+##  $ grav.cons   : int  1 2 2 1 2 1 5 1 5 5 ...\
+##  $ dep.cons    : int  0 0 0 0 1 0 1 0 1 0 ...\
+##  $ ago.cons    : int  1 0 0 0 0 0 0 0 0 0 ...\
+##  $ ptsd.cons   : int  0 0 0 0 0 0 0 0 0 0 ...\
+##  $ alc.cons    : int  0 0 0 0 0 0 0 0 1 1 ...\
+##  $ subst.cons  : int  0 0 0 0 0 0 1 0 1 0 ...\
+##  $ scz.cons    : int  0 0 0 0 0 0 0 0 0 0 ...\
+##  $ char        : int  1 1 1 1 1 1 1 1 4 1 ...\
+##  $ rs          : int  2 2 2 2 2 1 3 2 3 2 ...\
+##  $ ed          : int  1 2 3 2 2 2 3 2 3 2 ...\
+##  $ dr          : int  1 1 2 2 2 1 2 2 1 2 ...\
+##  $ suicide.s   : int  0 0 0 1 0 0 3 0 4 0 ...\
+##  $ suicide.hr  : int  0 0 0 0 0 0 1 0 1 0 ...\
+##  $ suicide.past: int  0 0 0 0 1 0 1 0 1 0 ...\
+##  $ dur.interv  : int  NA 70 NA 105 NA NA 105 84 78 60 ...\
+\
+\\end\{lstlisting\}\
+\
+\\subsubsection*\{XLS ou CSV\} \
+Il est \'e9galement possible de lire directement des fichiers Excel, voire une sous-partie d'une feuille de calcul (par exemple, une zone de plage A2:C5, soit 12 cellules au total), \'e0 l'aide de packages sp\'e9cialis\'e9s. Cela dit, comme il est tout aussi simple d'exporter les donn\'e9es au format CSV depuis Excel, et que ce type de format de donn\'e9es pose moins de probl\'e8me de compatibilit\'e9 de version entre les logiciels et les syst\'e8mes d'exploitation, on pr\'e9f\'e9rera g\'e9n\'e9ralement le format CSV.\
+\\subsection\{Le concept data frame\}\
+Une fois import\'e9 dans R, le fichier de donn\'e9es devient un tableau rectangulaire appel\'e9 \\textbf\{?data frame?\} dans le jargon technique R. Ici, notre tableau de donn\'e9es est accessible via le data frame \\textbf\{smp\}, qui est le nom de variable \'e0 laquelle nous avons associ\'e9 les donn\'e9es lors de la lecture avec \\textbf\{read.csv2()\}.\
+\
+\\begin\{lstlisting\}[language=html]\
+\
+class(smp)\
+\
+## [1] "data.frame"\
+\
+\\end\{lstlisting\}\
+\
+Il s'agit en fait d'une structure de \\textbf\{donn\'e9es \'e0 deux dimensions\} (lignes = observations, colonnes = variables) contenant des donn\'e9es potentiellement de type mixte (nombres et cha\'eenes de caract\'e8res). Une colonne comprendra ainsi toujours des objets du m\'eame type (par exemple des nombres pour d\'e9noter les valeurs prises par une variable num\'e9rique), mais les diff\'e9rentes colonnes pourront contenir des objets de type diff\'e9rents (des nombres dans l'une, des caract\'e8res dans l'autre). Qui plus est, \\textbf\{chaque ligne est identifi\'e9e par un identificateur unique, appel\'e9 ?rowname?\}.\
+\
+\\begin\{lstlisting\}[language=html]\
+\
+rownames(smp)[1:10]\
+\
+##  [1] "1"  "2"  "3"  "4"  "5"  "6"  "7"  "8"  "9"  "10"\
+\
+\\end\{lstlisting\}\
+\
+Il est important de s'assurer que les donn\'e9es sont bien repr\'e9sent\'e9es comme on le souhaite, en particulier que les variables qualitatives avec un d\'e9termin\'e9 de modalit\'e9s (ou niveaux) sont bien trait\'e9es comme telle par R. En l'occurence, leur type doit \'eatre \\textbf\{factor\}. C'est le cas de la variable \\textbf\{prof\} dans le data frame smp.\
+\
+\\begin\{lstlisting\}[language=html]\
+\
+summary(smp)\
+\
+##       age                       prof         duree         discip     \
+##  Min.   :19.0   ouvrier           :227   Min.   :1.0   Min.   :0.000  \
+##  1st Qu.:28.0   sans emploi       :222   1st Qu.:4.0   1st Qu.:0.000  \
+##  Median :37.0   employe           :135   Median :5.0   Median :0.000  \
+##  Mean   :38.9   artisan           : 90   Mean   :4.3   Mean   :0.232  \
+##  3rd Qu.:48.0   prof.intermediaire: 58   3rd Qu.:5.0   3rd Qu.:0.000  \
+##  Max.   :83.0   (Other)           : 61   Max.   :5.0   Max.   :1.000  \
+##  NA's   :2      NA's              :  6   NA's   :223   NA's   :6      \
+##     n.enfant       n.fratrie         ecole        separation   \
+##  Min.   : 0.00   Min.   : 0.00   Min.   :1.00   Min.   :0.000  \
+##  1st Qu.: 0.00   1st Qu.: 2.00   1st Qu.:1.00   1st Qu.:0.000  \
+##  Median : 1.00   Median : 3.00   Median :2.00   Median :0.000  \
+##  Mean   : 1.75   Mean   : 4.29   Mean   :1.87   Mean   :0.423  \
+##  3rd Qu.: 3.00   3rd Qu.: 6.00   3rd Qu.:2.00   3rd Qu.:1.000  \
+##  Max.   :13.00   Max.   :21.00   Max.   :5.00   Max.   :1.000  \
+##  NA's   :26                      NA's   :5      NA's   :11     \
+##   juge.enfant        place            abus         grav.cons   \
+##  Min.   :0.000   Min.   :0.000   Min.   :0.000   Min.   :1.00  \
+##  1st Qu.:0.000   1st Qu.:0.000   1st Qu.:0.000   1st Qu.:2.00  \
+##  Median :0.000   Median :0.000   Median :0.000   Median :4.00  \
+##  Mean   :0.277   Mean   :0.229   Mean   :0.278   Mean   :3.64  \
+##  3rd Qu.:1.000   3rd Qu.:0.000   3rd Qu.:1.000   3rd Qu.:5.00  \
+##  Max.   :1.000   Max.   :1.000   Max.   :1.000   Max.   :7.00  \
+##  NA's   :5       NA's   :7       NA's   :7       NA's   :4     \
+##     dep.cons        ago.cons       ptsd.cons        alc.cons    \
+##  Min.   :0.000   Min.   :0.000   Min.   :0.000   Min.   :0.000  \
+##  1st Qu.:0.000   1st Qu.:0.000   1st Qu.:0.000   1st Qu.:0.000  \
+##  Median :0.000   Median :0.000   Median :0.000   Median :0.000  \
+##  Mean   :0.397   Mean   :0.167   Mean   :0.216   Mean   :0.186  \
+##  3rd Qu.:1.000   3rd Qu.:0.000   3rd Qu.:0.000   3rd Qu.:0.000  \
+##  Max.   :1.000   Max.   :1.000   Max.   :1.000   Max.   :1.000  \
+##                                                                 \
+##    subst.cons       scz.cons           char            rs      \
+##  Min.   :0.000   Min.   :0.0000   Min.   :1.00   Min.   :1.00  \
+##  1st Qu.:0.000   1st Qu.:0.0000   1st Qu.:1.00   1st Qu.:1.00  \
+##  Median :0.000   Median :0.0000   Median :1.00   Median :2.00  \
+##  Mean   :0.265   Mean   :0.0826   Mean   :1.51   Mean   :2.06  \
+##  3rd Qu.:1.000   3rd Qu.:0.0000   3rd Qu.:2.00   3rd Qu.:3.00  \
+##  Max.   :1.000   Max.   :1.0000   Max.   :4.00   Max.   :3.00  \
+##                                   NA's   :96     NA's   :103   \
+##        ed             dr         suicide.s      suicide.hr \
+##  Min.   :1.00   Min.   :1.00   Min.   :0.00   Min.   :0.0  \
+##  1st Qu.:1.00   1st Qu.:1.00   1st Qu.:0.00   1st Qu.:0.0  \
+##  Median :2.00   Median :2.00   Median :0.00   Median :0.0  \
+##  Mean   :1.87   Mean   :2.15   Mean   :0.79   Mean   :0.2  \
+##  3rd Qu.:3.00   3rd Qu.:3.00   3rd Qu.:1.00   3rd Qu.:0.0  \
+##  Max.   :3.00   Max.   :3.00   Max.   :5.00   Max.   :1.0  \
+##  NA's   :107    NA's   :111    NA's   :41     NA's   :39   \
+##   suicide.past     dur.interv   \
+##  Min.   :0.000   Min.   :  0.0  \
+##  1st Qu.:0.000   1st Qu.: 48.0  \
+##  Median :0.000   Median : 60.0  \
+##  Mean   :0.284   Mean   : 61.9  \
+##  3rd Qu.:1.000   3rd Qu.: 75.0  \
+##  Max.   :1.000   Max.   :120.0  \
+##  NA's   :14      NA's   :50\
+\
+\\end\{lstlisting\}\
+\
+Par contre, la variable \\textbf\{abus\} est une variable binaire, qui prend les valeurs 0 et 1, et on pourrait dans certains cas vouloir la traiter comme un facteur en \\textit\{associant les modalit\'e9s 0 et 1 aux \'e9tiquettes ?Non? et ?Oui?\} afin de faciliter la lecture des tableaux et des graphiques. Ceci peut se r\'e9aliser \'e0 l'aide de la commande \\textbf\{factor()\}, comme dans l'exemple ci-dessous.\
+\
+\\begin\{lstlisting\}[language=html]\
+\
+smp$abus <- factor(smp$abus, levels = c(0,1), labels = c("Non", "Oui"))\
+\\end\{lstlisting\}\
+\
+\
+\\subsubsection*\{Autre approche pour la gestion des data frame\}\
+Les packages \\textbf\{data.table et dplyr\} offrent des commandes sp\'e9cifiques pour lire des fichiers de donn\'e9es de type CSV et les repr\'e9senter dans des structures identiques aux data frame standard de R, mais en apportant des petites am\'e9liorations pour leur manipulation.\
+\
+\\subsection\{Indexation d'\'e9l\'e9ments dans un data frame\}\
+On peut d\'e9signer n'importe quel objet dans un data frame par sa position en termes de n\'b0 de ligne et de n\'b0 de colonne.\\newline Par exemple, la profession (colonne n\'b02) du 3\'e8me individu (ligne n\'b03) s'obtiendra ainsi :\
+\
+\\begin\{lstlisting\}[language=html]\
+smp[3,2]\
+\
+## [1] prof.intermediaire\
+## 8 Levels: agriculteur artisan autre cadre employe ... sans emploi\
+\\end\{lstlisting\}\
+\
+\
+\
+Il est \'e9galement possible d'utiliser le nom des variables, \'e0 la place de leur num\'e9ro, par exemple \\textbf\{smp[3,"prof"]\}, voire m\'eame le ?rowname? de l'unit\'e9 statistique d'int\'e9r\'eat, soit ici \\textbf\{smp["3","prof"]\} puisque les ?rowname? sont simplement constitu\'e9s des num\'e9ros de rang des observations dans le data frame.\
+\
+En d'autres termes, un data frame n'est rien d'autre qu'une structure tabulaire contenant des variables arrang\'e9es en colonnes qui portent des noms (\\textbf\{names()\}, ou plus g\'e9n\'e9ralement \\textbf\{colnames()\}) et des observations en lignes, elles-m\'eame nomm\'e9es (\\textbf\{rownames()\}). Consid\'e9rons l'illustration ci-dessous (\'e0 gauche) :\
+\
+\\begin\{figure\}[H]\\begin\{center\}\\includegraphics[scale=1]\{ilu/3.png\}\\caption\{Repr\'e9sentation sch\'e9matique d'un data frame\}\\end\{center\}\\end\{figure\}\
+\
+\
+La variable \\textbf\{a\} est le nom d?un data frame contenant 4 variables : \\textbf\{score\} (un score num\'e9rique sur une \'e9chelle allant de 1 \'e0 5), \\textbf\{gender\} (le sexe de l?individu, o\'f9 M = homme et F = femme), \\textbf\{IQ\} (le quotient intellectuel de l?individuel) et \\textbf\{SES\} (le statut socio-\'e9conomique de l?individu, cod\'e9 en trois classes, A, B et C). \\textit\{le premier individu est donc un homme (M) de QI global 92 (IQ), dont la classe socio-\'e9conomique (SES) est C et ayant un score de 1 point\}. Comme illustr\'e9 dans la figure de droite, cette organisation par ligne/colonne permet d?associer \'e0 chaque individu l?ensemble des valeurs observ\'e9es pour cet individu sur chaque variable. Qui plus est, il est possible de retourner les valeurs prises par une variable selon les valeurs observ\'e9es sur une ou plusieurs autres variables. Par exemple, il est tr\'e8s simple de retourner une liste des scores de tous les individus dont le \\textbf\{sexe vaut M\} en tapant simplement une instruction du type\
+\
+\\begin\{lstlisting\}[language=html]\
+ls()\
+a[a$gender == "M", "score"]\
+\\end\{lstlisting\}\
+\
+L?expression \\textbf\{a\\$gender == "M"\} correspond \'e0 un \\underline\{test logique\}, et le r\'e9sultat renvoy\'e9, pour chaque \'e9l\'e9ment test\'e9, prend la valeur \\textbf\{TRUE\} (vrai) ou \\textbf\{FALSE\} (faux) selon que la condition est v\'e9rifi\'e9e ou non. Cela permet de retenir dans le data frame a que les lignes pour lesquelles la variable gender prend la valeur M. Ensuite, on filtre les colonnes de a en indiquant \\textbf\{"score"\} comme nom de variable.\\newline\
+\\\\\
+\
+En fait, au lieu d?utiliser des num\'e9ros d?observation comme dans l?exemple pr\'e9c\'e9dent avec le data frame \\textbf\{smp\}, on adresse ici des individus ou des lignes selon les valeurs observ\'e9es pour certaines variables par ces m\'eames individus. Ce principe g\'e9n\'e9ral d?indexation est sch\'e9matis\'e9 ci-dessous :\
+\
+\\begin\{figure\}[H]\\begin\{center\}\\includegraphics[scale=1]\{ilu/4.png\}\\caption\{Principe de la s\'e9lection index\'e9e d?observations\}\\end\{center\}\\end\{figure\}\
+\
+Supposons donc que nous ayons une liste de trois num\'e9ros (1, 3, 4), stock\'e9s dans une variable appel\'e9e \\textbf\{idx\}. Il peut s?agir, par exemple, de trois individus dont on conna\'eet le num\'e9ro de position dans le tableau de donn\'e9es et pour lesquels on aimerait v\'e9rifier les donn\'e9es enregistr\'e9es. Les donn\'e9es qui nous int\'e9ressent sont celles de la variable \\textbf\{x\}, qui contient 5 \'e9l\'e9ments (num\'e9rot\'e9s de 1 \'e0 5, mais \'e9galement nomm\'e9es \\textbf\{a, b, \\dots, e\}, comme dans le cas des ?rowname? d?un data frame). Alors, il est possible d?obtenir directement la 1\'e8re, la 3\'e8me et la 4\'e8me valeur de x en utilisant l?une des notations suivantes : \\textbf\{x[c(1,3,4)]\}, \\textbf\{x[idx]\}, ou enfin \\textbf\{x[g]\}. Dans cette derni\'e8re construction, on utilise une variable auxiliaire \\textbf\{g\} ne contenant que des valeurs bool\'e9ennes \\textbf\{(T pour vrai et F pour faux)\} ; en d?autres termes, on ne demande \'e0 renvoyer les valeurs de \\textbf\{x\} que lorsque \\textbf\{g\} vaut \\textbf\{TRUE\} (abbr\'e9g\'e9 T). Une formulation \'e9quivalente serait : \\textbf\{x[which(g == "T")]\}. Voir l?aide en ligne de la commande which() pour d\'e9cortiquer le r\'e9sultat produit par cette commande.\
+\
+\\subsection\{Autres sources de donn\'e9es\}\
+\\subsubsection\{Fichier binaire RData\}\
+Les fichiers R portent l?extension \\textbf\{.RData\} ou \\textbf\{.rda\} et peuvent \'eatre lus avec la commande \\textbf\{load()\}. Ils sont g\'e9n\'e9ralement utiles pour sauvegarder des fichiers de donn\'e9es dans un format compress\'e9 (prenant moins de place sur le disque), et plus rapides \'e0 charger. On peut \'e9galement utiliser ce format pour enregistrer n?importe quel objet R (une variable ou un tableau par exemple), voire plusieurs variables en m\'eame temps. Lorsque la commande \\textbf\{load()\} a \'e9t\'e9 ex\'e9cut\'e9e, le nom de la ou des variables sauvegard\'e9es dans le fichier apparaissent dans l?espace de travail, ce que l?on peut v\'e9rifier en tapant :\
+\
+\\begin\{lstlisting\}[language=html]\
+ls()\
+\\end\{lstlisting\}\
+\
+C?est le format utilis\'e9 par R pour sauvegard\'e9 l?espace de travail lorsque l?on ferme une sessions R. Dans ce cas, R enregistre toutes les variables contenues dans l?espace de travail dans un fichier nomm\'e9 \\textbf\{.RData\} (c?est donc un fichier masqu\'e9 dans la plupart des explorateurs de fichiers). Lorsque l?on d\'e9marre R dans un certain r\'e9pertoire de travail, si un tel fichier s?y trouve pr\'e9sent, il est automatiquement charg\'e9 par R.\\newline\
+\\\\\
+En fait, plut\'f4t que de laisser R enregistrer l?espace de travail \'e0 la fin de la session, on peut utiliser la commande \\textbf\{save.image() pour sauvegarder l?espace de travail dans un fichier sp\'e9cifique\}.\
+\
+\\subsubsection*\{Historique des commandes\}\
+Il est \'e9galement possible de \\textbf\{sauvegarder l?int\'e9gralit\'e9 des commandes tap\'e9es\} durant une session \'e0 l?aide de la commande \\textbf\{savehistory()\}.\
+\
+\\subsubsection\{Fichier SPSS et Stata\}\
+Le package \\textbf\{foreign\} dispose de deux commandes permettant de charger des fichiers enregistr\'e9s au format SPSS (fichier \\textbf\{.sav\}) ou Stata (fichier \\textbf\{.dta\}) : \\textbf\{read.spss()\} et \\textbf\{read.dta()\}. Il est n\'e9cessaire de \\textit\{?charger le package?\} en tapant :\
+\
+\\begin\{lstlisting\}[language=html]\
+library(foreign)\
+\\end\{lstlisting\}\
+\
+\\textbf\{avant de pouvoir utiliser ces commandes\}. Dans le cas de SPSS, il est n\'e9cessaire de rajouter l?option \\textbf\{to.data.frame = TRUE\} afin d?obtenir un data frame et non pas simplement une liste de variables.\
+\
+\\subsection\{Base de donn\'e9es relationnelles et autres formats\}\
+Certains packages permettent de se connecter directement sur des bases de donn\'e9es de type MySQL ou PostgreSQL (voire m\'eame MongoDB, Redis, ou sqlite). Dans ce cas, le mode d?interaction avec les donn\'e9es est l\'e9g\'e8rement diff\'e9rent car on utilise alors le langage de requ\'eate propre au langage, \'e0 moins d?utiliser des packages qui permettent d?assurer la conversion \'e0 partir des commandes R habituelles telles que \\textbf\{subset()\}.\\newline\
+\\\\\
+Il existe \'e9galement des packages sp\'e9cialis\'e9s dans le chargement et le traitement des fichiers de type XML, JSON, HDF5, etc. G\'e9n\'e9ralement il suffit de chercher sur le site CRAN ou sur \\textit\{http://www.rseek.org\}.\
+\
+\\subsection\{Techniques plus avanc\'e9es\}\
+Il existe bien d?autres m\'e9thodes pour interagir avec des tableaux de donn\'e9es sous R. Citons en particulier trois situations assez fr\'e9quentes :\
+\
+\\begin\{itemize\}	\
+\
+ \\item combiner ensemble diff\'e9rentes sources de donn\'e9es : pour associer deux tableaux de donn\'e9es disposant d?un identificateur commun (par exemple, une colonne avec des identifiants uniques pour les individus, le nom de variable dans chacun des tableaux n?\'e9tant pas n\'e9cessairement le m\'eame), on utilisera la commande \\textbf\{merge()\} qui permet de fusionner deux data frame A et B en un seul et m\'eame data frame. Selon les options choisies, \\textbf\{all.x =   TRUE, all.y = TRUE ou all = TRUE\}, on conservera toutes les lignes du tableau A et les colonnes de B seront ajout\'e9es \'e0 A m\'eame si certaines observations ne sont pas pr\'e9sentes dans B, ou c?est le tableau B qui servira de base de fusion, ou enfin toutes les observations de A et de B seront associ\'e9es, m\'eame si elles ne sont pas en compl\'e8tes correspondance entre les deux tableaux.\
+ \\item aggr\'e9ger des donn\'e9es : \'e0 partir de donn\'e9es individuelles, pour construire des donn\'e9es de synth\'e8se (par exemple des moyennes pour chaque groupe) il est possible d?utiliser la commande \\textbf\{tapply()\} ou \\textbf\{aggregate()\}. Cette derni\'e8re pr\'e9sente l?avantage de retourner ses r\'e9sultats sous forme de data frame, qu?il est possible d?exploiter ensuite pour continuer les analyses statistiques ou faire des repr\'e9sentations graphiques. Le package \\textit\{plyr\} ou sa version plus r\'e9cente, \\textit\{dplyr\}, fournit des options nettement plus am\'e9lior\'e9es pour ce type d?op\'e9rations.\
+ \\item transformer des donn\'e9es : dans ce qui a \'e9t\'e9 pr\'e9sent\'e9 sur les data frame, on consid\'e8re explicitement que les valeurs prises par une variables sont regroup\'e9es dans une m\'eame colonne, et que donc chaque colonne repr\'e9sente des variables bien distinctes. Il arrive parfois que l?on stocke dans chaque colonne d?un tableau les valeurs observ\'e9es pour chaque modalit\'e9 ou niveau pris par une variable qualitative (l?exemple typique est une s\'e9rie de mesures r\'e9p\'e9t\'e9es chez les m\'eames individus \'e0 trois p\'e9riodes diff\'e9rentes, et pour lequel on se retrouve avec un tableau \'e0 4 colonnes, ou en plus d?une colonne d?identifiant unique pour les individus, on dispose de 3 colonnes regroupant les mesures collect\'e9es chez chaque individu pour une m\'eame p\'e9riode). Dans ce cas, le package \\textbf\{reshape2\} permet de transformer ce type de tableau, dit en format ?wide?, en un data frame au format ?long? comprenant trois colonnes : une colonne \\textbf\{id\} d\'e9signant les identifiants individus, une colonne variable contenant les niveaux de la variable manipul\'e9e (par exemple, \\textbf\{p\'e9riode1, p\'e9riode2 et p\'e9riode3\}) et une colonne \\textbf\{value\} contenant les mesures associ\'e9es \'e0 chaque individu pour chacune des trois p\'e9riodes.\
+\\end\{itemize\}\
+\
+\\textit\{A consulter : \}\
+\\begin\{itemize\}\
+\\item https://drive.google.com/file/d/0B4mP5kf41BrmYkxkdmdRdWFibDA/view\
+\\item http://www.cookbook-r.com/Manipulating\\_data/\
+\\end\{itemize\}\
+\
+\\section\{Introduction \'e0 Rcommander\}\
+\\subsection\{Introduction \'e0 Rcmdr sous R\}\
+\
+Ce document constitue une pr\'e9sentation succincte du package Rcommander (\\textbf\{Rcmdr\}), une sur-couche du logiciel R. Il s?agit d?une interface graphique qui facilite l?interactivit\'e9 avec le logiciel R. En particulier, on s?int\'e9ressera \'e0 l?importation et la manipulation des donn\'e9es quantitatives et qualitatives, \'e0 la description d?un jeu de donn\'e9es et \'e0 l?analyse statistique.\\newline\
+\\\\\
+L?interface du package \\textbf\{Rcmdr\} est assez rudimentaire. Elle est compos\'e9e d?un menu avec des listes d\'e9roulantes afin de remplacer les fonctions R \'e0 taper dans un script, d?une fen\'eatre ?script R? avec les commandes R, d?une fen\'eatre ?Sortie? relative aux r\'e9sultats et d?une fen\'eatre ?Message? relative aux messages d?erreur. Les commandes ex\'e9cut\'e9es par le menu sont traduites en script R dans la fen\'eatre script. Il est possible de taper des commandes R directement dans cette fen\'eatre.\
+\
+\\begin\{figure\}[H]\\begin\{center\}\\includegraphics[scale=1]\{ilu/a.png\}\\caption\{Aper\'e7u de l?interface de Rcmdr\}\\end\{center\}\\end\{figure\}\
+\
+\\subsection\{Interagir avec R\}\
+D\'e9marrer avec \\textbf\{R\}. Quelque soit le syst\'e8me d?exploitation utilis\'e9 (Windows, Mac, Linux), R fonctionne comme tout autre logiciel : il suffit g\'e9n\'e9ralement de double-cliquer sur l?ic\'f4ne de l?application pour d\'e9marrer R. On dispose ensuite d?une console interactive dans laquelle on peut commencer \'e0 saisir des commandes apr\'e8s l?invite R \\textbf\{>\}. Les r\'e9sultats seront affich\'e9s aussit\'f4t dans la console.\
+\
+\\subsection\{Installer et charger le package Rcmdr sous R\}\
+Il faut installer le package Rcmdr gr\'e2ce \'e0 la commande \\textbf\{install.packages()\} :\
+\
+\\begin\{lstlisting\}[language=html]\
+install.packages("Rcmdr")\
+\\end\{lstlisting\}\
+\
+On obtient la fen\'eatre suivante :\
+\
+\\begin\{figure\}[H]\\begin\{center\}\\includegraphics[scale=1]\{ilu/b.png\}\\caption\{Message lors de l?installation du package Rcmdr\}\\end\{center\}\\end\{figure\}\
+Cliquer sur Oui pour installer les d\'e9pendances.\\newline\
+\\\\\
+On installera aussi les packages \\textbf\{epicalc, epitools et prettyR\} :\
+\
+\\begin\{lstlisting\}[language=html]\
+install.packages("epicalc")\
+install.packages("epitools")\
+install.packages("prettyR")\
+\\end\{lstlisting\}\
+\
+Les packages sont install\'e9s d\'e9finitivement (tant qu?on ne les d\'e9sinstalle pas).\\newline\
+\\\\\
+Ensuite, il faut \\textbf\{?charger les packages?\} \'e0 chaque session de R pour avoir acc\'e8s aux fonctions qui les composent. On utilise pour cela la commande \\textbf\{library()\} :\
+\
+\\begin\{lstlisting\}[language=html]\
+library(Rcmdr)\
+library(epicalc)\
+library(epitools)\
+library(prettyR)\
+\\end\{lstlisting\}\
+\
+\\subsection\{Importation des donn\'e9es\}\
+Il est possible d?importer un jeu de donn\'e9es \'e0 partir d?un fichier Excel, Access, dBase ou texte mais \'e9galement \'e0 partir d?autres formats comme SAS, SPSS ou STATA. \\textcolor\{red\}\{Sous MAC, il est impossible d?importer un jeu de donn\'e9es \'e0 partir d?un fichier Excel, Access ou dBase\}.\
+\
+\\subsubsection\{Importation \'e0 partir d?un fichier Excel\}\
+Pour importer un jeu de donn\'e9es \'e0 partir d?un fichier Excel, Access ou dBase : \\textbf\{Donn\'e9es > Importer des donn\'e9es > Depuis un fichier Excel, Access ou dBase\} \
+\
+\\begin\{figure\}[H]\\begin\{center\}\\includegraphics[scale=1]\{ilu/c.png\}\\caption\{Importation d?un fichier Excel - Etape 1\}\\end\{center\}\\end\{figure\}\
+\
+Il faut nommer le fichier qui vient d?\'eatre import\'e9, par exemple en \\textbf\{smp2\}, et parcourir vos documents pour chercher le jeu de donn\'e9es \\textbf\{smp2\}.\
+\
+\\begin\{figure\}[H]\\begin\{center\}\\includegraphics[scale=1]\{ilu/d.png\}\\caption\{Importation d?un fichier Excel - Etape 2\}\\end\{center\}\\end\{figure\}\
+\
+\
+\\subsubsection\{Importation \'e0 partir d?un fichier CSV\}\
+\
+Pour importer un jeu de donn\'e9es \'e0 partir d?un fichier csv : \\textbf\{Donn\'e9es > Importer des donn\'e9es > Depuis un fichier texte, le presse-papiers ou URL \}\
+\
+\\begin\{figure\}[H]\\begin\{center\}\\includegraphics[scale=1]\{ilu/e.png\}\\caption\{Importation d?un fichier CSV - Etape 1\}\\end\{center\}\\end\{figure\}\
+\
+Il faut nommer le fichier qui vient d?\'eatre import\'e9, par exemple en \\textbf\{smp2\}, et parcourir vos documents pour chercher le jeu de donn\'e9es \\textbf\{smp2\}.\
+\
+\\begin\{figure\}[H]\\begin\{center\}\\includegraphics[scale=1]\{ilu/f.png\}\\caption\{Importation d?un fichier CSV - Etape 2\}\\end\{center\}\\end\{figure\}\
+\
+Apr\'e8s l?importation du jeu de donn\'e9es dans Rcmdr, il est important de v\'e9rifier le nombre d?observations et de variables, afin de savoir s?il est bien ad\'e9quat avec le fichier initial.\
+\
+\\begin\{figure\}[H]\\begin\{center\}\\includegraphics[scale=1]\{ilu/g.png\}\\caption\{V\'e9rification du nombre d?observations et de variables\}\\end\{center\}\\end\{figure\}\
+\
+En cliquant sur \\textbf\{Visualiser\}, il est possible d?apercevoir le jeu de donn\'e9es \\textbf\{smp2\} :\
+\
+\\begin\{figure\}[H]\\begin\{center\}\\includegraphics[scale=1]\{ilu/h.png\}\\caption\{Visualisation des variables et observations de la table smp2\}\\end\{center\}\\end\{figure\}\
+\
+\\subsection\{Manipulation des donn\'e9es\}\
+\
+\\subsubsection\{Visualisation br\'e8ve au jeu de donn\'e9es\}\
+\
+Une description br\'e8ve du jeu de donn\'e9es import\'e9 peut \'eatre obtenue.\\newline\
+\\\\\
+\\textbf\{Statistiques > R\'e9sum\'e9s > Jeu de donn\'e9es actif\}\
+\\begin\{figure\}[H]\\begin\{center\}\\includegraphics[scale=1]\{ilu/i.png\}\\caption\{Description de l?ensemble des variables du jeu de donn\'e9es smp2\}\\end\{center\}\\end\{figure\}\
+\
+Pour chacune des variables du jeu de donn\'e9es, nous disposons d?indicateurs de positions (moyenne, m\'e9diane, quartiles). Attention, toutes les variables du jeu de donn\'e9es sont par d\'e9faut de type quantitatif. Nous verrons donc dans la partie suivante comment convertir ces variables en variables qualitatives.\
+\
+\\begin\{figure\}[H]\\begin\{center\}\\includegraphics[scale=1]\{ilu/j.png\}\\caption\{R\'e9sultats: description du jeu de donn\'e9es smp2\}\\end\{center\}\\end\{figure\}\
+\
+\\subsection\{Conversion des donn\'e9es quantitatives en qualitatives\}\
+\
+L?ensemble des variables issues du jeu de donn\'e9es import\'e9 sont de type quantitatif par d\'e9faut. Avant d?analyser le jeu de donn\'e9es, il faut donc convertir les variables quantitatives, qui sont suppos\'e9es \'eatre qualitatives, en variables qualitatives.\\newline\
+\\\\\
+\\textbf\{Donn\'e9es > G\'e9rer les variables du jeu de donn\'e9es actifs > Convertir des variables num\'e9riques en facteurs\}\
+\
+\\begin\{figure\}[H]\\begin\{center\}\\includegraphics[scale=1]\{ilu/k.png\}\\caption\{Conversion de variables quantitatives en facteurs\}\\end\{center\}\\end\{figure\}\
+\
+Par exemple, la variable ?ecole? (niveau de formation actuel) est quantitative par d\'e9faut. Nous allons donc la convertir en variable qualitative en 5 classes.\\newline\
+La premi\'e8re possibilit\'e9 est de transformer cette variable avec des modalit\'e9s en chiffre ?1?, ?2?, ?3?, ?4?, ?5? :\
+\
+\\begin\{figure\}[H]\\begin\{center\}\\includegraphics[scale=1]\{ilu/l.png\}\\caption\{Conversion de la variable ecole en facteurs - Etape 1\}\\end\{center\}\\end\{figure\}\
+\
+La seconde possibilit\'e9 est de transformer cette variable avec des modalit\'e9s en texte : ?sans dipl\'f4me?, ?coll\'e8ge?, ?CAP, BEP?, ?Lyc\'e9e?, ?universit\'e9? :\
+\
+\\begin\{figure\}[H]\\begin\{center\}\\includegraphics[scale=1]\{ilu/m.png\}\\caption\{Conversion de la variable ecole en facteurs - Etape 2\}\\end\{center\}\\end\{figure\}\
+\
+\\begin\{figure\}[H]\\begin\{center\}\\includegraphics[scale=1]\{ilu/n.png\}\\caption\{Conversion de la variable ecole en facteurs - Etape 3\}\\end\{center\}\\end\{figure\}\
+\
+\\subsection\{Recodage des donn\'e9es quantitatives en qualitatives\}\
+\
+Certaines analyses demandent de recoder des variables quantitatives en variables qualitatives, \'e0 2 ou plusieurs cat\'e9gories. Lors du recodage, il faut faire attention aux donn\'e9es manquantes.\\newline\
+\\\\\
+\\textbf\{Donn\'e9es > G\'e9rer les variables du jeu de donn\'e9es actifs > Recoder des variables\}\
+\
+\\begin\{figure\}[H]\\begin\{center\}\\includegraphics[scale=1]\{ilu/o.png\}\\caption\{Recodage des variables\}\\end\{center\}\\end\{figure\}\
+\
+Dans cet exemple, nous allons recoder la variable quantitative dur\'e9e d?interview (\\textit\{dur.interv\}) en variable qualitative \'e0 3 classes (\\textit\{dur.interv\\_c2\}). Si dur.interv est compris entre 0 et 60 minutes alors dur.\\textit\{interv\\_c2=?Duree 60-?\}, si \\textit\{dur.interv\} est vide alors \\textit\{dur.interv\\_c2=NA\}, sinon \\textit\{dur.interv\\_c2 = ?Duree 60+?\}.\
+\
+\\begin\{figure\}[H]\\begin\{center\}\\includegraphics[scale=1]\{ilu/p.png\}\\caption\{R\'e9sultats: recodage de la variable dur.interv\}\\end\{center\}\\end\{figure\}\
+\
+\\subsection\{Cr\'e9ation de nouvelles variables\}\
+De nouvelles variables peuvent \'eatre cr\'e9\'e9es \'e0 partir d?autres variables \'e0 l?aide de fonctions math\'e9matiques : des op\'e9rateurs ou des fonctions.\\newline\
+\\\\\
+\\textbf\{Donn\'e9es > G\'e9rer les variables du jeu de donn\'e9es actifs > Calculer une nouvelle variable\}\
+\
+\\begin\{figure\}[H]\\begin\{center\}\\includegraphics[scale=1]\{ilu/q.png\}\\caption\{Cr\'e9ation de variables\}\\end\{center\}\\end\{figure\}\
+\
+Pour exemple, nous allons cr\'e9er la variable \\textbf\{log(duree)\}, qui repr\'e9sente le logarithme de la dur\'e9e d?interview :\
+\
+\\begin\{figure\}[H]\\begin\{center\}\\includegraphics[scale=1]\{ilu/r.png\}\\caption\{R\'e9sultats: cr\'e9ation de la variable log(duree)\}\\end\{center\}\\end\{figure\}\
+\
+\\subsection\{Description des donn\'e9es\}\
+\\subsubsection\{Distribution des variables quantitatives et qualitatives\}\
+Dans une \'e9tude, il est important de d\'e9crire les variables de son jeu de donn\'e9es.\\newline\
+\\\\\
+Pour les variables quantitatives, il est int\'e9ressant d?obtenir des \\textbf\{moyennes, \'e9cart-types, m\'e9diane, \\dots\}\\newline\
+\\\\\
+\\textbf\{Statistiques > R\'e9sum\'e9s > Statistiques descriptives\}\
+\
+\\begin\{figure\}[H]\\begin\{center\}\\includegraphics[scale=1]\{ilu/s.png\}\\caption\{Description des variables quantitatives du jeu de donn\'e9es smp2 - Etape 1\}\\end\{center\}\\end\{figure\}\
+\\begin\{figure\}[H]\\begin\{center\}\\includegraphics[scale=1]\{ilu/t.png\}\\caption\{Description des variables quantitatives du jeu de donn\'e9es smp2 - Etape 2\}\\end\{center\}\\end\{figure\}\
+\
+En moyenne, la dur\'e9e d?interview est de 23.99 minutes ($\\pm$ 10 \'e9cart-types). La m\'e9diane de la dur\'e9e d?interview est de 25 minutes, c?est \'e0 dire que la moiti\'e9 de la population a une dur\'e9e d?interview de 25 minutes.\
+\
+\\begin\{figure\}[H]\\begin\{center\}\\includegraphics[scale=1]\{ilu/u.png\}\\caption\{R\'e9sultats: description de la variable dur.interv issue du jeu de donn\'e9es smp2\}\\end\{center\}\\end\{figure\}\
+\
+Pour les variables qualitatives, il est int\'e9ressant d?obtenir des proportions et des intervalles de confiance.\\newline\
+\\\\\
+\\textbf\{Statistiques > R\'e9sum\'e9s > Distribution de fr\'e9quence\}\
+\
+\\begin\{figure\}[H]\\begin\{center\}\\includegraphics[scale=1]\{ilu/v.png\}\\caption\{Description des variables qualitatives du jeu de donn\'e9es smp2 - Etape 1\}\\end\{center\}\\end\{figure\}\
+\\begin\{figure\}[H]\\begin\{center\}\\includegraphics[scale=1]\{ilu/w.png\}\\caption\{Description des variables qualitatives du jeu de donn\'e9es smp2 - Etape 2\}\\end\{center\}\\end\{figure\}\
+\
+La proportion de d\'e9tenus ayant subi des maltraitances pendant l?enfance est de 27,78\\% (220).\
+\
+\\begin\{figure\}[H]\\begin\{center\}\\includegraphics[scale=1]\{ilu/x.png\}\\caption\{R\'e9sultats: description de la variables abus issue du jeu de donn\'e9es smp2 (proportion)\}\\end\{center\}\\end\{figure\}\
+\
+Pour obtenir l?intervalle de confiance d?une proportion, il n?existe pas de commande sous Rcmdr. Il faut taper et soumettre la proc\'e9dure suivante dans le script: \\textbf\{prop.test(n,t)\} o\'f9 n est le nombre de cas et t est le nombre total d?individus concern\'e9s par la variable test\'e9e.\
+\
+\\dots avec un IC95\\% $[24,71\\% - 31.06\\%]$.\
+\
+\\begin\{figure\}[H]\\begin\{center\}\\includegraphics[scale=1]\{ilu/y.png\}\\caption\{R\'e9sultats: description de la variable abus issue du jeu de donn\'e9es smp2 (IC)\}\\end\{center\}\\end\{figure\}\
+\
+\\subsubsection\{Repr\'e9sentation des variables quantitatives et qualitatives\}\
+\
+La distribution des variables quantitatives va \'eatre illustr\'e9e par des histogrammes ou des boxplots et celle des variables qualitatives par des diagrammes.\
+\
+\\begin\{figure\}[H]\\begin\{center\}\\includegraphics[scale=1]\{ilu/z.png\}\\caption\{R\'e9alisation de graphiques de diff\'e9rents types de variables\}\\end\{center\}\\end\{figure\}\
+\
+\\textbf\{Graphes > Histogramme\} \\newline\
+\\\\\
+Par exemple, la distribution de la dur\'e9e d?interview (\\textbf\{dur.interv\}) est repr\'e9sent\'e9e par un histogramme. Dans les options, il est possible de choisir quel type de donn\'e9es nous int\'e9resse (effectifs, pourcentages, densit\'e9s), de renommer les libell\'e9s des axes et de donner un titre au graphique.\
+\
+\\begin\{figure\}[H]\\begin\{center\}\\includegraphics[scale=1]\{ilu/aa.png\}\\caption\{R\'e9alisation d?un histogramme d?une variable quantitative\}\\end\{center\}\\end\{figure\}\
+\
+\\begin\{figure\}[H]\\begin\{center\}\\includegraphics[scale=1]\{ilu/ab.png\}\\caption\{R\'e9sultats : histogramme de la variable dur.interv\}\\end\{center\}\\end\{figure\}\
+\
+\\textbf\{Graphes > Boite de dispersion\}\\newline\
+\\\\\
+La distribution de la dur\'e9e d?interview peut \'eatre repr\'e9sent\'e9e \'e9galement par un \\textbf\{boxplot\}.\
+\
+\\begin\{figure\}[H]\\begin\{center\}\\includegraphics[scale=1]\{ilu/ac.png\}\\caption\{R\'e9alisation d?un boxplot d?une variable quantitative\}\\end\{center\}\\end\{figure\}\
+\
+\\begin\{figure\}[H]\\begin\{center\}\\includegraphics[scale=1]\{ilu/ad.png\}\\caption\{R\'e9sultats : boxplot de la variable dur.interv\}\\end\{center\}\\end\{figure\}\
+\\textbf\{Graphes > Graphes en barres\}\\newline\
+\\\\\
+Nous allons repr\'e9senter la variable abus (abus) par un diagramme en barres. Il est possible de renommer les libell\'e9s des axes et de donner un titre au graphique.\
+\
+\\begin\{figure\}[H]\\begin\{center\}\\includegraphics[scale=1]\{ilu/ae.png\}\\caption\{R\'e9alisation d?un diagramme d?une variable qualitative\}\\end\{center\}\\end\{figure\}\
+\
+Sur cet exemple, nous constatons que les d\'e9tenus ayant subi des maltraitances pendant l?enfance sont moins nombreux.\
+\
+\\begin\{figure\}[H]\\begin\{center\}\\includegraphics[scale=1]\{ilu/af.png\}\\caption\{R\'e9sultats : diagramme de la variable abus\}\\end\{center\}\\end\{figure\}\
+\
+Pour repr\'e9senter le diagramme en barre en pourcentage, il faut pr\'e9alablement cr\'e9er une variable abus en pourcentage.\
+\
+\\subsubsection\{Repr\'e9sentation des variables quantitatives et qualitatives\}\
+\
+La distribution des variables quantitatives va \'eatre illustr\'e9e par des histogrammes ou des boxplots et celle des variables qualitatives par des diagrammes.\
+\
+\\begin\{figure\}[H]\\begin\{center\}\\includegraphics[scale=1]\{ilu/ag.png\}\\caption\{R\'e9alisation de graphiques de diff\'e9rents types de variables\}\\end\{center\}\\end\{figure\}\
+\
+\\textbf\{Graphes > Histogramme\}\\newline\
+\\\\\
+\
+Par exemple, la distribution de la dur\'e9e d?interview (dur.interv) est repr\'e9sent\'e9e par un histogramme. Dans les options, il est possible de choisir quel type de donn\'e9es nous int\'e9resse (effectifs, pourcentages, densit\'e9s), de renommer les libell\'e9s des axes et de donner un titre au graphique.\
+\
+\\begin\{figure\}[H]\\begin\{center\}\\includegraphics[scale=1]\{ilu/ah.png\}\\caption\{R\'e9alisation d?un histogramme d?une variable quantitative\}\\end\{center\}\\end\{figure\}\
+\
+\\begin\{figure\}[H]\\begin\{center\}\\includegraphics[scale=1]\{ilu/ai.png\}\\caption\{R\'e9sultats : histogramme de la variable dur.interv\}\\end\{center\}\\end\{figure\}\
+\
+\\textbf\{Graphes > Boite de dispersion\}\\newline\
+\\\\\
+La distribution de la dur\'e9e d?interview peut \'eatre repr\'e9sent\'e9e \'e9galement par un boxplot.\
+\
+\\begin\{figure\}[H]\\begin\{center\}\\includegraphics[scale=1]\{ilu/aj.png\}\\caption\{R\'e9alisation d?un boxplot d?une variable quantitative\}\\end\{center\}\\end\{figure\}\
+\
+\\begin\{figure\}[H]\\begin\{center\}\\includegraphics[scale=1]\{ilu/ak.png\}\\caption\{R\'e9sultats : boxplot de la variable dur.interv\}\\end\{center\}\\end\{figure\}\
+\
+\\textbf\{Graphes > Graphes en barres\}\\newline\
+\\\\\
+\
+Nous allons repr\'e9senter la variable abus (abus) par un diagramme en barres. Il est possible de renommer les libell\'e9s des axes et de donner un titre au graphique.\
+\
+\\begin\{figure\}[H]\\begin\{center\}\\includegraphics[scale=1]\{ilu/al.png\}\\caption\{R\'e9alisation d?un diagramme d?une variable qualitative\}\\end\{center\}\\end\{figure\}\
+\
+Sur cet exemple, nous constatons que les d\'e9tenus ayant subi des maltraitances pendant l?enfance sont moins nombreux.\
+\
+\\begin\{figure\}[H]\\begin\{center\}\\includegraphics[scale=1]\{ilu/am.png\}\\caption\{R\'e9sultats : diagramme de la variable abus\}\\end\{center\}\\end\{figure\}\
+\
+Pour repr\'e9senter le diagramme en barre en pourcentage, il faut pr\'e9alablement cr\'e9er une variable abus en pourcentage.\
+\
+\\subsubsection\{Repr\'e9sentation de variables quantitatives en fonction d?une variable qualitative\}\
+\
+Nous pouvons illustrer par un boxplot si le fait d?avoir subi des maltraitances pendant l?enfance pouvait entra\'eener des \'e9carts dans la dur\'e9e de l?interview.\\newline\
+\\\\\
+\\textbf\{Graphes > Boite de dispersion\}\
+\
+\\begin\{figure\}[H]\\begin\{center\}\\includegraphics[scale=1]\{ilu/an.png\}\\caption\{R\'e9alisation d?un diagramme d?une variable quantitative en fonction d?une variable qualitative\}\\end\{center\}\\end\{figure\}\
+\
+La m\'e9diane entre les deux groupes semble identique.\
+\
+\\begin\{figure\}[H]\\begin\{center\}\\includegraphics[scale=1]\{ilu/ao.png\}\\caption\{R\'e9sultats - diagramme de la variable dur.interv en fonction de la variable abus\}\\end\{center\}\\end\{figure\}\
+\
+\\subsection\{Tests statistiques\}\
+\
+\\subsubsection\{Comparaison de moyennes d?une variable quantitative entre deux groupes\}\
+\
+Nous allons comparer statistiquement la diff\'e9rence de dur\'e9e d?interview entre les d\'e9tenus ayant subi des maltraitances pendant l?enfance et ceux n?ayant jamais subi de maltraitance pendant l?enfance.\
+\
+\\paragraph\{Effectifs par groupe (n1 et n2)\}\
+\
+Nous allons regarder la moyenne de dur\'e9e d?interview entre les deux groupes ainsi que les effectifs par groupe\\newline\
+\\\\\
+\\textbf\{Statistiques > R\'e9sum\'e9s > Statistiques descriptives\}\
+\
+\\begin\{figure\}[H]\\begin\{center\}\\includegraphics[scale=1]\{ilu/ap.png\}\\caption\{Calcul des moyennes par groupe\}\\end\{center\}\\end\{figure\}\
+\
+\
+Les effectifs des deux groupes sont sup\'e9rieurs \'e0 30. Nous montrons que la m\'e9diane dans les deux groupes est de 25 minutes, et avec une moyenne de 23.34 minutes ($\\pm$ 10.7) dans le groupe ?non abus? et de 25.75 minutes (+/- 10.2) dans le groupe ?abus?.\
+\
+\\begin\{figure\}[H]\\begin\{center\}\\includegraphics[scale=1]\{ilu/aq.png\}\\caption\{R\'e9sultats: moyenne de la variable dur.interv chez les d\'e9tenus ayant subi des maltraitances et ceux qui n?en ont pas subi\}\\end\{center\}\\end\{figure\}\
+\
+\\paragraph\{Tester la normalit\'e9 de la distribution de la variable quantitative (si n1 et n2 <= 30) - Test de Shapiro-Wilk\}\
+\
+Nous allons tester la normalit\'e9 de la distribution de la dur\'e9e d?interview.\\newline\
+\\\\\
+\\textbf\{Statistiques > R\'e9sum\'e9s > Tests de normalit\'e9 de Shapiro-Wilk\}\
+\
+\\begin\{figure\}[H]\\begin\{center\}\\includegraphics[scale=1]\{ilu/ar.png\}\\caption\{R\'e9alisation d?un test de normalit\'e9 d?une variable quantitative - Etape 1\}\\end\{center\}\\end\{figure\}\
+\
+\\begin\{figure\}[H]\\begin\{center\}\\includegraphics[scale=1]\{ilu/as.png\}\\caption\{R\'e9alisation d?un test de normalit\'e9 d?une variable quantitative - Etape 2\}\\end\{center\}\\end\{figure\}\
+\
+Le test de Shapiro est significatif $(p<0.05)$. Cela signifie que la variable ne suit pas une loi normale.\
+\
+\\begin\{figure\}[H]\\begin\{center\}\\includegraphics[scale=1]\{ilu/at.png\}\\caption\{R\'e9sultats: test de normalit\'e9 de la variable dur.interv\}\\end\{center\}\\end\{figure\}\
+\
+\
+\\paragraph\{Comparaison de moyennes d?une variable quantitative entre deux groupes - Test de Student et de Wilcoxon\}\
+\
+Dans notre exemple, les effectifs dans chaque groupe sont sup\'e9rieurs \'e0 30, donc nous pouvons r\'e9aliser un test de Student.\\newline\
+Si les effectifs \'e9taient inf\'e9rieurs \'e0 30 et que la dur\'e9e d?interview suivait une loi normale, alors le test de Student serait toujours valable (seuls les degr\'e9s de libert\'e9 et la loi seraient modifi\'e9s). Si les effectifs \'e9taient inf\'e9rieurs \'e0 30 et que la dur\'e9e d?interview ne suivait pas suivi une loi normale, alors le test non param\'e9trique de Mann-Whitney serait recommand\'e9.\
+\
+\\subparagraph\{Test de Student\}\
+\\textbf\{Statistiques > Moyennes > t-test ind\'e9pendant\}\
+\
+\\begin\{figure\}[H]\\begin\{center\}\\includegraphics[scale=1]\{ilu/au.png\}\\caption\{R\'e9alisation du test de Student pour comparer les moyennes entre deux groupes - Etape 1\}\\end\{center\}\\end\{figure\}\
+\\begin\{figure\}[H]\\begin\{center\}\\includegraphics[scale=1]\{ilu/av.png\}\\caption\{R\'e9alisation du test de Student pour comparer les moyennes entre deux groupes - Etape 2\}\\end\{center\}\\end\{figure\}\
+\
+Le test indique qu?il y a une diff\'e9rence significative $(p<0.05)$ de la dur\'e9e d?interview entre les deux groupes.\
+\
+\\begin\{figure\}[H]\\begin\{center\}\\includegraphics[scale=1]\{ilu/aw.png\}\\caption\{R\'e9sultats : test de Student pour comparer les moyennes de la variable dur.interv entre les d\'e9tenus ayant subi des maltraitances et ceux qui n?en ont pas subi\}\\end\{center\}\\end\{figure\}\
+\\subparagraph\{Test non param\'e9trique de Wilcoxon\}\
+\\textbf\{Statistiques > Tests non param\'e9triques > Test de Wilcoxon bivari\'e9\}\
+\
+\\begin\{figure\}[H]\\begin\{center\}\\includegraphics[scale=1]\{ilu/ax.png\}\\caption\{R\'e9alisation du test de Wilcoxon pour comparer les moyennes entre deux groupes - Etape 1\}\\end\{center\}\\end\{figure\}\
+\
+\\begin\{figure\}[H]\\begin\{center\}\\includegraphics[scale=1]\{ilu/ay.png\}\\caption\{R\'e9alisation du test de Wilcoxon pour comparer les moyennes entre deux groupes - Etape 2\}\\end\{center\}\\end\{figure\}\
+\
+Le test indique qu?il y a une diff\'e9rence significative $(p<0.05)$ de la dur\'e9e d?interview entre les deux groupes.\
+\
+\\begin\{figure\}[H]\\begin\{center\}\\includegraphics[scale=1]\{ilu/az.png\}\\caption\{R\'e9sultats : r\'e9alisation du test de Wilcoxon pour comparer les moyennes entre deux groupes\}\\end\{center\}\\end\{figure\}\
+\
+\\textbf\{Note : \}Ce test est r\'e9alis\'e9 juste pour l?exemple et n?est pas recevable\
+\
+\\subsubsection\{Comparaison de proportions d?une variable qualitative entre deux groupes\}\
+\
+Nous allons comparer statistiquement l?association entre le fait de subir des maltraitances pendant l?enfance et l?existence d?un trouble d\'e9pressif.\
+\
+\\paragraph\{Comparaison de proportions d?une variable qualitative entre deux groupes\}\
+\
+Dans notre exemple, le test du \\textbf\{khi$^\{2\}$\} est faisable si et seulement si les effectifs esp\'e9r\'e9s sont sup\'e9rieurs \'e0 5, sinon le test de Fisher est recommand\'e9.\
+\
+\\subparagraph\{Test du \\textbf\{khi$^\{2\}$\}\}\
+\\textbf\{Statistiques > Tables de contingences > Tri crois\'e9\}\
+\\begin\{figure\}[H]\\begin\{center\}\\includegraphics[scale=1]\{ilu/ba.png\}\\caption\{R\'e9alisation du test du khi$^\{2\}$ pour comparer les proportions entre deux variables quantitatives - Etape 1\}\\end\{center\}\\end\{figure\}\
+\
+\\begin\{figure\}[H]\\begin\{center\}\\includegraphics[scale=1]\{ilu/bb.png\}\\caption\{R\'e9alisation du test du khi$^\{2\}$ pour comparer les proportions entre deux variables quantitatives - Etape 1\}\\end\{center\}\\end\{figure\}\
+\
+Les effectifs th\'e9oriques sont bien sup\'e9rieurs \'e0 5, le test du khi$^\{2\}$ est donc recevable.\\newline\
+\\\\\
+Ce test indique qu?il n?y a pas d?association entre le fait de subir des maltraitances pendant l?enfance et l?existence d?un trouble d\'e9pressif $(p>0.05)$.\
+\
+\\begin\{figure\}[H]\\begin\{center\}\\includegraphics[scale=1]\{ilu/bc.png\}\\caption\{R\'e9sultats: test du khi$^\{2\}$ pour comparer les proportions entre la variable abus et dep.cons\}\\end\{center\}\\end\{figure\}\
+\
+\\subparagraph\{Test non param\'e9trique de Fisher\}\
+\\textbf\{Statistiques > Tables de contingences > Tri crois\'e9\}\
+\
+\\begin\{figure\}[H]\\begin\{center\}\\includegraphics[scale=1]\{ilu/bd.png\}\\caption\{R\'e9alisation du test de Fisher pour comparer les proportions entre deux variables quantitatives - Etape 1\}\\end\{center\}\\end\{figure\}\
+\\begin\{figure\}[H]\\begin\{center\}\\includegraphics[scale=1]\{ilu/be.png\}\\caption\{R\'e9alisation du test de Fisher pour comparer les proportions entre deux variables quantitatives - Etape 2\}\\end\{center\}\\end\{figure\}\
+\
+Ce test indique qu?il n?y a pas d?association entre le fait de subir des maltraitances pendant l?enfance et l?existence d?un trouble d\'e9pressif $(p>0.05)$.\
+\
+\
+\\begin\{figure\}[H]\\begin\{center\}\\includegraphics[scale=1]\{ilu/bf.png\}\\caption\{R\'e9sultats: test de Fisher\}\\end\{center\}\\end\{figure\}\
+\
+\\textbf\{Note : \}Ce test est r\'e9alis\'e9 juste pour l?exemple et n?est pas recevable\
+\
+\
+\\subsection\{Mod\'e8les statistiques\}\
+\
+\\textbf\{Statistiques > Ajustement de mod\'e8les\}\
+\
+\\begin\{figure\}[H]\\begin\{center\}\\includegraphics[scale=1]\{ilu/bg.png\}\\caption\{Mod\'e8les lin\'e9aires et logistiques\}\\end\{center\}\\end\{figure\}\
+\
+\
+\\subsubsection\{Mod\'e8les lin\'e9aires\}\
+\
+Nous allons \'e9tudier l?association entre la dur\'e9e de l?interview et l?abus, ajust\'e9 sur l?\'e2ge du d\'e9tenu\\newline\
+\\\\\
+\\textbf\{Statistiques > Ajustement de mod\'e8les > Mod\'e8le lin\'e9aire\}\\newline\
+\\\\\
+Il faut double-cliquer sur les variables afin qu?elles s?affichent dans la formule du mod\'e8le.\
+\\begin\{figure\}[H]\\begin\{center\}\\includegraphics[scale=1]\{ilu/bh.png\}\\caption\{R\'e9alisation d?un mod\'e8le lin\'e9aire entre une variable quantitative et une variable qualitative\}\\end\{center\}\\end\{figure\}\
+\
+Le p-value global du mod\'e8le est de $0,0005366$. Cela signifie qu?une des variables (abus ou \'e2ge) est significative.\\newline\
+\\\\\
+Il y a une association significative entre la dur\'e9e d?interview et abus $(p=0,003)$, apr\'e8s ajustement sur l?\'e2ge du d\'e9tenu.\
+\
+\\begin\{figure\}[H]\\begin\{center\}\\includegraphics[scale=1]\{ilu/bi.png\}\\caption\{R\'e9sultats: mod\'e8le lin\'e9aire entre la variable dur.interv et abus\}\\end\{center\}\\end\{figure\}\
+\
+\\subsubsection\{Mod\'e8les logistiques\}\
+\
+Nous allons \'e9tudier entre le fait de subir des maltraitances pendant l?enfance et l?existence d?un trouble d\'e9pressif, ajust\'e9 sur l?\'e2ge du d\'e9tenu\\newline\
+\\\\\
+\\textbf\{Statistiques > Ajustement de mod\'e8les > Mod\'e8le lin\'e9aire g\'e9n\'e9ralis\'e9\}\\newline\
+\\\\\
+Il faut double-cliquer sur les variables afin qu?elles s?affichent dans la formule du mod\'e8le. Pour indiquer qu?il s?agit d?un mod\'e8le logistique, il faut indiquer que la famille est binomiale et la fonction de lien logit.\
+\
+\\begin\{figure\}[H]\\begin\{center\}\\includegraphics[scale=1]\{ilu/bj.png\}\\caption\{R\'e9alisation d?un mod\'e8le lin\'e9aire entre deux variables qualitatives\}\\end\{center\}\\end\{figure\}\
+\
+Il n?y a pas association significative entre le fait de subir des maltraitances pendant l?enfance et l?existence d?un trouble d\'e9pressif, apr\'e8s ajustement sur l?\'e2ge du d\'e9tenu.\
+\\begin\{figure\}[H]\\begin\{center\}\\includegraphics[scale=1]\{ilu/bk.png\}\\caption\{R\'e9sultats: mod\'e8le logistique entre la variable abus et dep.cons\}\\end\{center\}\\end\{figure\}\
+\
+\\section\{Le langage R Markdown\}\
+\\subsection\{Introduction\}\
+\
+R Markdown offre une syntaxe simplifi\'e9e pour mettre en forme des documents contenant \'e0 la fois du texte, des instructions R et le r\'e9sultat fourni par R lors de l?\'e9valuation de ces instructions. En ce sens, il s?agit d?un outil permettant de produire des rapports d?analyse d\'e9taill\'e9s et comment\'e9s, plut\'f4t que de simples scripts R incluant quelques commentaires.\\newline\
+\\\\\
+Ce langage est bas\'e9 sur Markdown. Il s?apprend tr\'e8s rapidement, ne n\'e9cessite rien d?autre qu?un \'e9diteur texte et il peut \'eatre utilis\'e9 sur le forum de discussion pour formater les messages, en particulier les instructions ou les blocs d?instructions R.\\newline\
+\\\\\
+\\textbf\{R Markdown v2\} est la nouvelle impl\'e9mentation disponible depuis 2014 dans le logiciel \\textbf\{RStudio\}. Initialement, la possibilit\'e9 de transformer du texte contenant des instructions R en document HTML ou PDF reposait sur les packages \\textbf\{knitr et markdown\}, mais \'e0 pr\'e9sent il n?existe plus qu?un seul package qui se charge de g\'e9rer la conversion des documents R Markdown (\\textit\{extension .Rmd ou .rmd\}) en documents PDF, HTML ou DOCX.\\newline\
+\\\\\
+Les principales diff\'e9rences et les \'e9ventuels probl\'e8mes de compatibilit\'e9 entre les deux versions sont d\'e9crites sur la page suivante : \\textbf\{Migrating from R Markdown v1 :\} \\underline\{http://rmarkdown.rstudio.com/authoring\\_migrating\\_from\\_v1.html\}.\
+\
+\\subsection\{Les bases du langage\}\
+Markdown est un langage permettant de baliser du texte simple \'e0 l?aide de symboles pr\'e9d\'e9finis, un peu \'e0 l?image des balises HTML, afin de produire une sortie enrichie avec des titres, des paragraphes, etc.\\newline\
+\\\\\
+Il s?agit donc principalement de r\'e9diger un document de type texte, dans un \'e9diteur appropri\'e9 (\'e9viter MS Word), et d?ins\'e9rer des symboles simples afin de signaler les mots \'e0 mettre en surbrillance ou la d\'e9limitation des titres de section, par exemple.\\newline\
+\\\\\
+Par ailleurs, RStudio fournit un petit m\'e9mento des principales commandes, cf. le petit bouton d?aide (?) apparaissant \'e0 c\'f4t\'e9 du bouton de compilation \\textbf\{Knit HTML\} (ou \\textbf\{Knit PDF\} selon l?option activ\'e9e par d\'e9faut).\
+\
+\\begin\{figure\}[H]\\begin\{center\}\\includegraphics[scale=1]\{ilu/bl.png\}\\caption\{Barre d?outils R Markdown\}\\end\{center\}\\end\{figure\}\
+\
+\\subsubsection\{Syntaxe et mise en forme d?un document\}\
+Les titres de sections sont pr\'e9fix\'e9s d?un ou plusieurs \\#, selon le niveau de profondeur du titre. Par exemple, pour un titre de niveau 1, on \'e9crira \\textit\{\\# Titre de niveau 1\}, alors que pour un titre de niveau 2 on \'e9crira \\textit\{\\#\\# Titre de niveau 2\} (\'e0 ne pas confondre avec le symbole de commentaire des scripts R).\\newline\
+\\\\\
+Au niveau des \'e9l\'e9ments de texte, la mise en gras s?effectue en encadrant le texte par \\textbf\{**\} et la mise en italique par \\textit\{*\}. Pour utiliser une police \'e0 espacement fixe (monospace), on encadrera le texte avec des deux quotes simples invers\'e9es (`). Par exemple, pour \'e9crire ce texte en gras et cette instruction R, \\textit\{smp <- read.csv2("smp2.csv")\}, on s?est content\'e9 d?\'e9crire :\
+\
+\\begin\{lstlisting\}[language=html]\
+pour \'e9crire ce texte **en gras** et cette instruction R, `smp <- read.csv2("smp2.csv")`\
+\\end\{lstlisting\}\
+\
+Les instructions R sont encadr\'e9es par '''\\\{r\\\} et ''' (appel\'e9 ?code chunk?), comme ci-dessous :\
+\
+\\begin\{figure\}[H]\\begin\{center\}\\includegraphics[scale=1]\{ilu/bm.png\}\\caption\{Exemple d?instructions R \'e0 \'e9valuer\}\\end\{center\}\\end\{figure\}\
+\
+\\subsection\{G\'e9n\'e9ration du document final\}\
+\
+La g\'e9n\'e9ration du document final se fait en cliquant sur le bouton \\textbf\{Knit HTML\} (ou \\textbf\{Knit PDF\} selon l?option choisie). Dans le cas du format PDF, il est n\'e9cessaire d?avoir un syst\'e8me LaTeX install\'e9 sur le syst\'e8me. Le fichier HTML est sauvegard\'e9 dans le r\'e9pertoire de travail courant et peut \'eatre affich\'e9 dans un navigateur web ou envoy\'e9 par email : les feuilles de style ou les images \'e9tant inclues avec le document HTML, il n?est pas n\'e9cessaire de les sauvegarder ou de les transmettre avec la page HTML.\\newline\
+\\\\\
+Dans le cas o\'f9 l?on souhaiterait g\'e9n\'e9rer le document \'e0 partir de R directement, sans passer par RStudio, il suffit d?utiliser la commande \\textbf\{render()\} du package \\textbf\{rmarkdown\}. Ce package peut \'eatre install\'e9 de la mani\'e8re suivante :\
+\
+\\begin\{lstlisting\}[language=html]\
+install.packages("rmarkdown")\
+\\end\{lstlisting\}\
+\
+\\subsection\{Les options de personnalisation\}\
+Parmi les principales options de personnalisation, on distinguera : \
+\\begin\{itemize\}\
+\\item Pour le format HTML : la possibilit\'e9 d?ins\'e9rer une table des mati\'e8res en d\'e9but de document, utiliser la coloration syntaxique pour l?affichage des commandes R, modifier la feuille de style pour le rendu de la page HTML, modifier la taille des images (hauteur/largeur) et ajouter une l\'e9gende ;\
+\\item Pour le format PDF : la possibilit\'e9 d?ins\'e9rer une table des mati\'e8res en d\'e9but de document et de num\'e9roter les titres de section, modifier la taille des images (hauteur/largeur) et ajouter une l\'e9gende.\
+\\end\{itemize\}\
+\
+Ces options se g\'e8rent directement \'e0 partir du bouton situ\'e9 \'e0 la droite du bouton de compilation \\textbf\{Knit HTML\} (ou \\textbf\{Knit PDF\} selon l?option activ\'e9e par d\'e9faut).\
+\\begin\{figure\}[H]\\begin\{center\}\\includegraphics[scale=1]\{ilu/bn.png\}\\caption\{Panneau de configuration des options de sortie HTML\}\\end\{center\}\\end\{figure\}\
+\
+\\subsection\{Gestion des figures et des tableaux\}\
+Pour ins\'e9rer une image externe, on utilise la construction suivante, en supposant que le fichier image s?appelle \\textbf\{fichier.png\}:\
+\
+\\begin\{lstlisting\}[language=html]\
+![l\'e9gende](fichier.png)\
+\\end\{lstlisting\}\
+\
+La gestion des figures g\'e9n\'e9r\'e9es directement \'e0 partir de commandes R se fait \'e0 l?aide des options dans les ?code chunks?. Souvent, on ajoutera une option \\textbf\{echo = FALSE\} pour ne pas afficher les instructions R et simplement afficher le r\'e9sultat produit par R. Les autres options disponibles sont celles du package \\textbf\{knitr\} (par exemple, \\textbf\{fig.align = TRUE\} pour l?alignement de la figure, seulement dans le cas HTML).\\newline\
+\\\\\
+En ce qui concerne les tableaux, il est possible d?utiliser le package \\textbf\{xtabl\} qui permet de convertir au format HTML des tableaux simples (par exemple, ceux produits \'e0 l?aide de la commande \\textbf\{summary()\} pour des data frame ou des mod\'e8les de r\'e9gression). Voici un \\underline\{exemple d?application\} :\
+\
+\\begin\{lstlisting\}[language=html]\
+n <- 100\
+x <- rnorm(n)\
+y <- 2*x + rnorm(n)\
+out <- lm(y ~ x)\
+library(xtable)\
+tab <- xtable(summary(out)$coef, digits=c(0, 2, 2, 1, 2))\
+print(tab, type="html")\
+\\end\{lstlisting\}\
+\
+Dans ce cas, on prendra soin de rajouter l?option \\textbf\{results = "asis"\} puisque l?on demande explicitement \'e0 la commande \\textbf\{print()\} de fournir un r\'e9sultat de type HTML.\\newline\
+\\\\\
+Il existe d?autres packages permettant des rendus plus \'e9labor\'e9s ou plus complexes, bien que souvent r\'e9serv\'e9s au format PDF, en particulier : \\textbf\{Hmisc, texreg, stargazer, apsrtable, rapport, pander, reporttools, ou brew\}.\
+\
+\\subsection\{Pour aller plus loin\}\
+Il est conseill\'e9 de se familiariser progressivement avec l?usage de la syntaxe Markdown et les \\textbf\{options knitr\}. Un bon tutoriel (en anglais) est disponible sur la page suivante : knitr in a knutshell (\\textit\{http://kbroman.org/knitr\\_knutshell/\}). \\newline\
+Pour des documents plus complexes, il est g\'e9n\'e9ralement n\'e9cessaire de recourir au format PDF et d?exploiter au maximum les possibilit\'e9s du package \\textbf\{knitr\} et des options LaTeX ; voir, par exemple, Data Science with R Documenting with KnitR (\\textit\{http://onepager.togaware.com/KnitRO.pdf\}).\
+\
+\\subsection*\{R\'e9f\'e9rences\}\
+Grandud, C. (2013). \\underline\{Reproducible Research with R and RStudio\}. Chapman \\& Hall/CRC \\textit\{https://github.com/christophergandrud/Rep-Res-Book\}\\newline\
+Xie, Y. (2013). \\underline\{Dynamic documents with R and knitr\}. Chapman \\& Hall/CRC \\textit\{https://github.com/yihui/knitr-book/\}\
+\
+\\subsection\{Markdown Cheatsheet\}\
+\\textit\{https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet\}\
+\\paragraph\{Headers\}\
+\\begin\{lstlisting\}[language=html]\
+# H1\
+## H2\
+### H3\
+#### H4\
+##### H5\
+###### H6\
+\
+Alternatively, for H1 and H2, an underline-ish style:\
+\
+Alt-H1\
+======\
+\
+Alt-H2\
+------\
+\\end\{lstlisting\}\
+\
+\\paragraph\{Emphasis\}\
+\
+\\begin\{lstlisting\}[language=html]\
+Emphasis, aka italics, with *asterisks* or _underscores_.\
+\
+Strong emphasis, aka bold, with **asterisks** or __underscores__.\
+\
+Combined emphasis with **asterisks and _underscores_**.\
+\
+Strikethrough uses two tildes. ~~Scratch this.~~\
+\\end\{lstlisting\}\
+\
+\\paragraph\{Lists\}\
+\
+\\begin\{lstlisting\}[language=html]\
+1. First ordered list item\
+2. Another item\
+??* Unordered sub-list. \
+1. Actual numbers don't matter, just that it's a number\
+??1. Ordered sub-list\
+4. And another item.\
+\
+???You can have properly indented paragraphs within list items. Notice the blank line above, and the leading spaces (at least one, but we'll use three here to also align the raw Markdown).\
+\
+???To have a line break without a paragraph, you will need to use two trailing spaces.??\
+???Note that this line is separate, but within the same paragraph.??\
+???(This is contrary to the typical GFM line break behaviour, where trailing spaces are not required.)\
+\
+* Unordered list can use asterisks\
+- Or minuses\
++ Or pluses\
+\\end\{lstlisting\}\
+\
+\\paragraph\{Links\}\
+\
+\\begin\{lstlisting\}[language=html]\
+[I'm an inline-style link](https://www.google.com)\
+\
+[I'm an inline-style link with title](https://www.google.com "Google's Homepage")\
+\
+[I'm a reference-style link][Arbitrary case-insensitive reference text]\
+\
+[I'm a relative reference to a repository file](../blob/master/LICENSE)\
+\
+[You can use numbers for reference-style link definitions][1]\
+\
+Or leave it empty and use the [link text itself].\
+\
+URLs and URLs in angle brackets will automatically get turned into links. \
+http://www.example.com or <http://www.example.com> and sometimes \
+example.com (but not on Github, for example).\
+\
+Some text to show that the reference links can follow later.\
+\
+[arbitrary case-insensitive reference text]: https://www.mozilla.org\
+[1]: http://slashdot.org\
+[link text itself]: http://www.reddit.com\
+\\end\{lstlisting\}\
+\
+\\paragraph\{Images\}\
+\\begin\{lstlisting\}[language=html]\
+Here's our logo (hover to see the title text):\
+\
+Inline-style: \
+![alt text](https://github.com/adam-p/markdown-here/raw/master/src/common/images/icon48.png "Logo Title Text 1")\
+\
+Reference-style: \
+![alt text][logo]\
+\
+[logo]: https://github.com/adam-p/markdown-here/raw/master/src/common/images/icon48.png "Logo Title Text 2"\
+\
+\
+\\end\{lstlisting\}\
+\
+\\paragraph\{Code and Syntax Highlighting\}\
+Code blocks are part of the Markdown spec, but syntax highlighting isn't. However, many renderers -- like Github's and Markdown Here -- support syntax highlighting. Which languages are supported and how those language names should be written will vary from renderer to renderer. Markdown Here supports highlighting for dozens of languages (and not-really-languages, like diffs and HTTP headers); to see the complete list, and how to write the language names, see the highlight.js demo page (\\textit\{http://softwaremaniacs.org/media/soft/highlight/test.html\}).\
+\
+\\begin\{lstlisting\}[language=html]\
+Inline `code` has `back-ticks around` it.\
+\\end\{lstlisting\}\
+\
+Inline \\textit\{code\} has \\textit\{back-ticks\} around it.\\newline\
+\\\\\
+Blocks of code are either fenced by lines with three back-ticks $```$, or are indented with four spaces. I recommend only using the fenced code blocks -- they're easier and only they support syntax highlighting.\
+\
+\\begin\{lstlisting\}[language=html]\
+```javascript\
+var s = "JavaScript syntax highlighting";\
+alert(s);\
+```\
+ \
+```python\
+s = "Python syntax highlighting"\
+print s\
+```\
+ \
+```\
+No language indicated, so no syntax highlighting. \
+But let's throw in a <b>tag</b>.\
+```\
+\
+var s = "JavaScript syntax highlighting";\
+alert(s);\
+\
+s = "Python syntax highlighting"\
+print s\
+\
+No language indicated, so no syntax highlighting in Markdown Here (varies on Github). \
+But let's throw in a <b>tag</b>.\
+\\end\{lstlisting\}\
+\
+\\paragraph\{Tables\}\
+Tables aren't part of the core Markdown spec, but they are part of GFM and Markdown Here supports them. They are an easy way of adding tables to your email -- a task that would otherwise require copy-pasting from another application.\
+\
+\\begin\{lstlisting\}[language=html]\
+Colons can be used to align columns.\
+\
+| Tables        | Are           | Cool  |\
+| ------------- |:-------------:| -----:|\
+| col 3 is      | right-aligned | $1600 |\
+| col 2 is      | centered      |   $12 |\
+| zebra stripes | are neat      |    $1 |\
+\
+There must be at least 3 dashes separating each header cell.\
+The outer pipes (|) are optional, and you don't need to make the \
+raw Markdown line up prettily. You can also use inline Markdown.\
+\
+Markdown | Less | Pretty\
+--- | --- | ---\
+*Still* | `renders` | **nicely**\
+1 | 2 | 3\
+\\end\{lstlisting\}\
+\
+\\paragraph\{Blockquotes\}\
+\
+\\begin\{lstlisting\}[language=html]\
+> Blockquotes are very handy in email to emulate reply text.\
+> This line is part of the same quote.\
+\
+Quote break.\
+\
+> This is a very long line that will still be quoted properly when it wraps. Oh boy let's keep writing to make sure this is long enough to actually wrap for everyone. Oh, you can *put* **Markdown** into a blockquote. \
+\
+\
+\\end\{lstlisting\}\
+\
+\\paragraph\{Inline HTML\}\
+\
+\\begin\{lstlisting\}[language=html]\
+<dl>\
+  <dt>Definition list</dt>\
+  <dd>Is something people use sometimes.</dd>\
+\
+  <dt>Markdown in HTML</dt>\
+  <dd>Does *not* work **very** well. Use HTML <em>tags</em>.</dd>\
+</dl>\
+\\end\{lstlisting\}\
+\
+\\paragraph\{Horizontal Rule\}\
+\
+\\begin\{lstlisting\}[language=html]\
+Three or more...\
+\
+---\
+\
+Hyphens\
+\
+***\
+\
+Asterisks\
+\
+___\
+\
+Underscores\
+\\end\{lstlisting\}\
+\
+\\paragraph\{Line Breaks\}\
+\
+\\begin\{lstlisting\}[language=html]\
+My basic recommendation for learning how line breaks work is to experiment and discover -- hit <Enter> once (i.e., insert one newline), then hit it twice (i.e., insert two newlines), see what happens. You'll soon learn to get what you want. "Markdown Toggle" is your friend. \
+\\end\{lstlisting\}\
+\
+Here's a line for us to start with.\\newline\
+\\\\\
+This line is separated from the one above by two newlines, so it will be a \\textit\{separate paragraph\}.\\newline\
+\\\\\
+This line is also a separate paragraph, but\\dots\\newline\
+This line is only separated by a single newline, so it's a separate line in the \\textit\{same paragraph\}.\
+\
+\\paragraph\{Youtube videos\}\
+\
+They can't be added directly but you can add an image with a link to the video like this:\
+\
+\\begin\{lstlisting\}[language=html]\
+<a href="http://www.youtube.com/watch?feature=player_embedded&v=YOUTUBE_VIDEO_ID_HERE\
+" target="_blank"><img src="http://img.youtube.com/vi/YOUTUBE_VIDEO_ID_HERE/0.jpg" \
+alt="IMAGE ALT TEXT HERE" width="240" height="180" border="10" /></a>\
+\\end\{lstlisting\}\
+Or, in pure Markdown, but losing the image sizing and border:\
+\\begin\{lstlisting\}[language=html]\
+[![IMAGE ALT TEXT HERE](http://img.youtube.com/vi/YOUTUBE_VIDEO_ID_HERE/0.jpg)](http://www.youtube.com/watch?v=YOUTUBE_VIDEO_ID_HERE)\
+\\end\{lstlisting\}\
+\\newpage\
+\
+\
+\
+\\section*\{Rappels\}\
+\\subsection*\{Importer des fichiers CSV\}\
+\\begin\{enumerate\}\
+\\item D\'e9terminer l'emplacement du fichier .csv sur le disque. \
+\\item Deux possibilit\'e9s :\
+\\begin\{enumerate\}\
+\\item Importer directement le fichier :\
+\\begin\{lstlisting\}[language=html] \
+smp <- read.csv2("D:/mooc/smp1.csv")\
+\\end\{lstlisting\}\
+\\item D\'e9finir un r\'e9pertoire de travail pour pouvoir appeler directement le fichier \
+\\begin\{lstlisting\}[language=html] \
+setwd("D:/mooc")\
+smp <- read.csv2("smp1.csv")\
+\\end\{lstlisting\}\
+Il est aussi possible de d\'e9finir le r\'e9pertoire de travail \'e0 l'aide des menus :\
+\\begin\{lstlisting\}[language=html] \
+sous R : Menu File / Change dir\
+sous RStudio : Menu Session / Set working directory / Choose directory\
+\\end\{lstlisting\}\
+\\end\{enumerate\}\
+\\end\{enumerate\}\
+\\subsubsection*\{Erreur fr\'e9quentes\}\
+\\begin\{itemize\}\
+\\item \\textbf\{Erreur dans file(file, "rt") : impossible d'ouvrir la connexion\}\\newline\
+ V\'e9rifiez l'emplacement du fichier.\
+\\item \\textbf\{Error: \\backslash m used without hex digits in character string starting "C:\\backslash  m"\}\\newline\
+Pensez \'e0 remplacer les antislashs (\\backslash) par des slashs (/) ou doubler les antislashs (\\backslash\\backslash).\
+\
+\\item \
+\
+\\begin\{lstlisting\}[language=html] \
+    Il y a une seule variable dans le fichier import\'e9\
+\
+> str(smp)\
+'data.frame':   799 obs. of  1 variable:\
+ $ age.prof.dep.cons.scz.cons.grav.cons.n.enfant.rs.ed.dr: Factor w/ 793 levels ";NA;0;0;1;;;;",..: 258 616 643 585 81 331 88 658 505 557 ...\
+\\end\{lstlisting\}\
+\
+Soit vous avez utilis\'e9 la fonction read.csv() au lieu de la fonction read.csv2().\\newline\
+Soit vous avez modifi\'e9 le fichier en le t\'e9l\'e9chargeant. T\'e9l\'e9chargez le \'e0 nouveau avec le bouton droit de la souris / "Enregistrer la cible du lien sous".\
+\\end\{itemize\}\
+\
+\
+\\subsection*\{Instaler et utiliser un package\}\
+\
+\
+Pour t\'e9l\'e9charger un package, il faut passer par "Installer un package" ou la ligne de commande correspondante :\
+\\begin\{lstlisting\}[language=html] \
+    install.packages("prettyR", dep=TRUE)\
+\\end\{lstlisting\}\
+    Ensuite, il faut "charger le package" \'e0 chaque session de R pour avoir acc\'e8s aux fonctions qui le composent. Dans la pratique, on le fait par ligne de commande, ce qui permet de l'enregistrer dans un script R.\
+\\begin\{lstlisting\}[language=html] \
+    library(prettyR)\
+\\end\{lstlisting\}\
+Les packages qui apparaissent lorsque vous choisissez "Charger le package" sont les packages d\'e9j\'e0 install\'e9s sur votre ordinateur.\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\\section\{AIDE M\'c9MOIRE R\}\
+\\textbf\{R\'e9f\'e9rence des fonctions de R les plus courantes\}\\newline\
+\\textit\{Mayeul KAUFFMANN - Mars 2009\}\
+\\subsection\{Aide\}\
+La plupart des fonctions de R ont une documentation en ligne\\newline\
+\\\\          \
+\\textbf\{help(sujet)\}: documentation sur un sujet. Fl\'e8ches haut et bas pour se d\'e9placer, touche q pour quitter\\newline\\\\   \
+\\textbf\{?topic\}: idem \\newline\\\\   \
+\\textbf\{help.search("sujet")\} : recherche dans l'aide \\newline\\\\   \
+\\textbf\{apropos("\'a0sujet")\}: le nom de tous les objets dans la liste de recherche qui correspondent \'e0 l'expression r\'e9guli\'e8re  "\'a0sujet\'a0"\\newline\\\\   \
+\\textbf\{help.start()\}: d\'e9marre la version  HTML de l'aide (indispensable; le moteur de recherche int\'e9gr\'e9 n\'e9cessite Java install\'e9 sur votre ordinateur)\\newline\\\\   \
+\\textbf\{example(function)\} : ex\'e9cute l'exemple donn\'e9 en bas de la page d'aide de la function indiqu\'e9e\\newline\
+\
+\\subsection\{Fonctions de base\}\
+\\textbf\{$<-$ et $->$\} : assignation dans le sens de la fl\'e8che ($a <-b$ \'e9quivaut donc \'e0 $b->a$); e.g.: $x<-0$; $x+1->x$ (met $x$ \'e0 $0$, puis additionne $x$ et $1$ pour mettre le r\'e9sultat dans $x$)\\newline\\\\   \
+\\textbf\{NULL\} : l'ensemble vide\\newline\\\\   \
+\\textbf\{NA\}: valeur manquante (Not Available)\\newline\\\\   \
+\\textbf\{"abc"\} : une cha\'eene de 3 caract\'e8res\\newline\\\\   \
+\\textbf\{str(a)\} : affiche la structure d'un objet R\\newline\\\\   \
+\\textbf\{summary(a)\} : donne un "r\'e9sum\'e9\'a0" de a, g\'e9n\'e9ralement un r\'e9sum\'e9 statistique, mais c'est une fonction g\'e9n\'e9rique (fonctionne diff\'e9remment selon la classe de a))\\newline\\\\   \
+\\textbf\{ls()\} : liste les objets de la liste de recherche; sp\'e9cifier e.g.  pat="MonTexte" pour chercher selon un patron\
+\\textbf\{ls.str()\} :  \\textbf\{str()\} pour chaque variable de la liste de recherche)\\newline\\\\   \
+\\textbf\{dir()\} : lister les fichiers dans le dossier (directory) en cours)\\newline\\\\   \
+\\textbf\{methods(a)\} : afficher les m\'e9thodes S3 de a)\\newline\\\\   \
+\\textbf\{methods(class=class(a))\} : lister toutes les m\'e9thodes permettant de traiter les objets de la classe de l'objet a\
+\\textbf\{options(...)\} : d\'e9finit ou examine de nombreuses options globales; options fr\'e9quentes\'a0: width (largeur en nombre de caract\'e8res de la fen\'eatre des r\'e9sultats), digits (nombre de chiffres significatifs \'e0 l'affichage), error (traitement des erreurs))\\newline\\\\   \
+\\textbf\{library(x)  \} : charge des packages additionnels; library(help=x) liste les jeux de donn\'e9es et fonctions du package x.)\\newline\\\\   \
+\\textbf\{attach(x)\} : ajoute le contenu de x dans la liste de recherche de R ; x peut \'eatre une liste, une data frame, ou un fichier de donn\'e9es R cr\'e9\'e9 avec save. Utilisez search() pour montrer la liste de recherche.)\\newline\\\\   \
+\\textbf\{detach(x)\} : enl\'e8ve le contenu de x de la liste de recherche de R; x peut \'eatre un nom ou une cha\'eene de caract\'e8res d\'e9signant un objet pr\'e9alablement attach\'e9 ou un package.)\\newline\\\\   \
+\\textbf\{q()\} : quitter R (r\'e9pondre y (yes) et Entr\'e9e pour confirmer))\\newline\\\\   \
+\
+\
+\
+\\subsection\{Entr\'e9e et sortie\}\
+\\textbf\{load() \}:charge le jeu de donn\'e9es \'e9crit avec  save\\newline\\\\   \
+\\textbf\{data(x)  \}:   charge le jeu de donn\'e9es sp\'e9cifi\'e9\\newline\\\\   \
+\\textbf\{read.table(file)\}:     lit un fichier au format tabulaire et en fait un data frame; le s\'e9parateur de colonne par d\'e9faut sep="" d\'e9signe n'importe quel espacement; utilisez header=TRUE pour prendre la premi\'e8re ligne comme titre (header)   de colonne; utilisez as.is=TRUE pour emp\'eacher les vecteurs de caract\'e8res d'\'eatre transform\'e9s en factors; utilisez skip=n  pour  ignorer les n  premi\'e8res lignes ; consultez l'aide pour les options concernant le nommage des colonnes, le traitement des valeurs manquantes (NA), etc.\\newline\\\\   \
+\\textbf\{read.csv2("filename",header=TRUE) \}:    idem mais avec des options pr\'e9-d\'e9finies pour lire les fichiers CSV\\newline\\\\   \
+\\textbf\{read.delim("filename",header=TRUE)  \}:   idem mais avec des options pr\'e9-d\'e9finies pour lire les fichiers dont les  valeurs sont s\'e9par\'e9es par des tabulations\\newline\\\\   \
+\\textbf\{read.fwf(file,widths,header=FALSE,sep=" ",as.is=FALSE) \}:    lit un tableau dont toutes les colonnes ont la m\'eame largeur (fwf: fixed width format); widths est un vecteur d'entiers donnant la largeur des colonnes dans le fichier\\newline\\\\   \
+\\textbf\{save("fichier", x,y)\}:     enregistre les objets x et y dans le fichier, au format binaire XDR propre \'e0 R\\newline\\\\   \
+\\textbf\{save.image("fichier") \}:    enregistre tous les objets\\newline\\\\   \
+\\textbf\{cat(..., file="", sep=" ")\}:     affiche les arguments apr\'e8s les avoir converti en caract\'e8res; sep est le s\'e9parateur entre les arguments\\newline\\\\   \
+\\textbf\{print(a, ...)  \}:   affiche les arguments; fonction g\'e9n\'e9rique (fonctionne diff\'e9remment selon la classe de a)\\newline\\\\   \
+\\textbf\{format(x,...)  \}:   formate un objet R pour un affichage personnalis\'e9\\newline\\\\   \
+\\textbf\{write.table(x,file="",row.names=TRUE,col.names=TRUE, sep=" ") \}:    affiche  x  apr\'e8s l'avoir converti en data frame; si quote  est TRUE, les colonnes  de caract\'e8res ou de factors sont entour\'e9s par des guillemets; sep  est le s\'e9parateur de colonnes. Avec file= suivi du chemin d'un fichier, \'e9crit sur le disque dur\\newline\\\\   \
+La plupart des fonctions d'entr\'e9e/sortie ont un argument file . Cela peut souvent \'eatre une cha\'eene de caract\'e8res nommant un fichier ou une connexion. Sous Windows, la connexion peut aussi \'eatre utilis\'e9e avec description ="clipboard" pour lire un tableau copi\'e9 d'un tableur par le presse-papier          \\newline\\\\   \
+\\textbf\{x <- read.delim("clipboard")    \}: pour lire un tableau copi\'e9 par le presse-papier depuis un tableur\\newline\\\\   \
+\\textbf\{write.table(x,"clipboard",sep="\\t",col.names=NA)\}:     pour \'e9crire un tableau vers le presse-papier pour un tableur\\newline\\\\   \
+     \
+     \
+     \
+     \
+     \
+     \
+     \
+\\subsection\{Cr\'e9ation de donn\'e9es\}\
+\\textbf\{c(...)   \}:  fonction combinant les arguments pour former un vecteur; avec recursive=TRUE va dans les listes pour combiner leurs \'e9l\'e9ments en un seul vecteur (plut\'f4t qu'en un vecteur de listes)\\newline\\\\  \
+\\textbf\{de:vers  \}:   g\'e9n\'e8re une s\'e9quence d'entiers; ?:? est prioritaire: 1:4 + 1 vaut ?2,3,4,5?\\newline\\\\  \
+\\textbf\{seq(from,to) \}:    g\'e9n\'e8re une s\'e9quence;  by= sp\'e9cifie l'incr\'e9ment; length= sp\'e9cifie la longueur\\newline\\\\  \
+\\textbf\{seq(along=x)  \}:   g\'e9n\'e8re une suite 1, 2, ..., length(x); utile pour les boucles for \\newline\\\\  \
+\\textbf\{rep(x,times)  \}:   r\'e9p\'e8te times fois la valeur x; utilisez  each=n  pour r\'e9p\'e9ter n fois  chaque \'e9l\'e9ment de x; rep(c(1,2,3),2) vaut 1 2 3 1 2 3; rep(c(1,2,3),each=2) vaut  1 1 2 2 3 3\\newline\\\\  \
+\\textbf\{data.frame(...)  \}:   cr\'e9e un data frame avec les  arguments (nomm\'e9s ou non); e.g: data.frame(v=1:4, ch=c("a", "b", "c", "d"), lettre=\'a0"A"); les vecteurs plus courts (ici: "A") sont r\'e9utilis\'e9s (recycl\'e9s) plusieurs fois pour atteindre la longueur du vecteur le plus long\'a0; \'e0 la diff\'e9rence d'une matrix, un data.frame est un tableau dont les colonnes peuvent \'eatre de types diff\'e9rents\\newline\\\\  \
+\\textbf\{list(...) \}:    cr\'e9e une liste avec les  arguments (nomm\'e9s ou non, qui peuvent \'eatre de longueur diff\'e9rente); e.g.: list(a=c(1,2),b="hi",c=3);\\newline\\\\  \
+\\textbf\{matrix(x,nrow=,ncol=)  \}:   cr\'e9e une matrice (tous les \'e9l\'e9ments sont de m\'eame type); les \'e9l\'e9ments se r\'e9p\'e8tent s'ils sont trop courts\\newline\\\\  \
+\\textbf\{factor(x,levels=)  \}:   transforme un vecteur x en factor (les niveaux sont indiqu\'e9s par levels=)\\newline\\\\  \
+\\textbf\{rbind(...)  \}:   combine les arguments par ligne (row)\\newline\\\\  \
+\\textbf\{cbind(...)  \}:   combine les arguments par colonne\\newline\\\\  \
+\
+\
+\\subsection\{Extraction de donn\'e9es\}\
+\\subsubsection\{Indexer des listes\}\
+\\textbf\{x[i]  \}:   le ou les \'e9l\'e9ments i de la liste (renvoy\'e9(s) sous forme de liste, \'e0 la diff\'e9rence des cas suivants; fonctionne comme pour les vecteurs)\\newline\\\\  \
+\\textbf\{x[[n]]   \}:  n i\'e8me \'e9l\'e9ment de la liste\\newline\\\\  \
+\\textbf\{x[["nom"]]   \}:  l'\'e9l\'e9ment nomm\'e9  "nom"\\newline\\\\  \
+\\textbf\{x\\$nom  \}:   l'\'e9l\'e9ment nomm\'e9  "nom"\\newline\\\\  \
+\\subsubsection\{Indexer des vecteurs\}\
+\\textbf\{x[n]   \}:   n i\'e8me \'e9l\'e9ment \\newline\\\\  \
+\\textbf\{x[-n]    \}:  tous sauf le n i\'e8me \'e9l\'e9ment\\newline\\\\  \
+\\textbf\{x[1:n]     \}: les n premier \'e9l\'e9ments\\newline\\\\  \
+\\textbf\{x[-(1:n)]    \}:  les \'e9l\'e9ments de n+1 \'e0 la fin\\newline\\\\  \
+\\textbf\{x[c(1,4,2)]    \}:  des \'e9l\'e9ments sp\'e9cifiques\\newline\\\\  \
+\\textbf\{x["nom"]    \}:  l'\'e9l\'e9ment nomm\'e9  "nom" \\newline\\\\  \
+\\textbf\{x[x > 3]    \}:  tous les \'e9l\'e9ments plus grands que 3\\newline\\\\   \
+\\textbf\{x[x > 3 \\& x < 5]    \}:  tous les \'e9l\'e9ments plus grands que 3 et plus petits que 5 \\newline\\\\  \
+\\textbf\{x[x \\%in\\% c("a","and","the")] \}:     les \'e9l\'e9ments appartenant \'e0 l'ensemble donn\'e9\\newline\\\\  \
+\\subsubsection\{Indexer des matrices\} \
+\\textbf\{x[i,j]  \}:    l'\'e9l\'e9ment de la ligne i, colonne j\\newline\\\\  \
+\\textbf\{x[i,]  \}:    toute la ligne i \\newline\\\\  \
+\\textbf\{x[,j]   \}:   toute la colonne j \\newline\\\\  \
+\\textbf\{x[,c(1,3)]  \}:    les colonnes 1 et 3 \\newline\\\\  \
+\\textbf\{x["nom",]  \}:    la ligne nomm\'e9e "nom" \\newline\\\\  \
+\\subsubsection\{Indexer des data.frame\} (comme pour les matrices plus ce qui suit)          \
+\\textbf\{x[["nom"]]   \}:   la colonne nomm\'e9e "nom"\\newline\\\\  \
+\\textbf\{x\\$nom   \}:  la colonne nomm\'e9e "nom" \\newline\\\\  \
+\
+\
+\\subsection\{Conversion d'objets\}\
+     \\textbf\{as.data.frame(x), as.numeric(x), as.logical(x),  as.character(x), ...\} :    conversion de type, e.g.: as.logical(x) convertit x en TRUE ou FALSE) ; pour la liste compl\'e8te, faites methods(as)\\newline\\\\\
+\\subsection\{Information sur les objets\}\
+      \\textbf\{is.na(x), is.null(x), is.array(x), is.data.frame(x), is.numeric(x), is.complex(x), is.character(x), ...\} :     tests de type; renvoie TRUE ou FALSE; pour une liste compl\'e8te, faites  methods(is)\\newline\\\\  \
+      \\textbf\{length(x)  \} :   nombre d'\'e9l\'e9ments dans x\\newline\\\\  \
+     \\textbf\{ dim(x)    \} : r\'e9cup\'e8re ou d\'e9finit (dim(x) <- c(3,2)) les dimensions d'un objet\\newline\\\\  \
+     \\textbf\{ nrow(x) et NROW(x)\} :     nombre de lignes; NROW(x)  consid\'e8re un vecteur comme une matrice\\newline\\\\  \
+      \\textbf\{ncol(x) et NCOL(x)   \} :  idem pour les colonnes\\newline\\\\  \
+      \\textbf\{class(x) \} :    r\'e9cup\'e8re ou d\'e9finit la classe de x; class(x) <- "maclasse"\\newline\\\\  \
+      \\textbf\{unclass(x)  \} :   enl\'e8ve l'attribut de classe de x\\newline\\\\  \
+      \\textbf\{attr(x,which=) \} :    r\'e9cup\'e8re ou d\'e9finit un attribut de x\\newline\\\\  \
+      \\textbf\{attributes(x) \} :    r\'e9cup\'e8re ou d\'e9finit la liste des attributs de x\\newline\\\\  \
+      \\textbf\{which.max(x)  \} :   trouve l'indice du plus grand \'e9l\'e9ment de x\\newline\\\\  \
+      \\textbf\{which.min(x)  \} :   trouve l'indice du plus petit \'e9l\'e9ment de x\\newline\\\\  \
+      \\textbf\{rev(x)\} :     renverse l'ordre des \'e9l\'e9ments de x\\newline\\\\  \
+      \\textbf\{sort(x)  \} :   trie les \'e9l\'e9ments de x par ordre croissant; pour l'ordre d\'e9croissant: rev(sort(x))\\newline\\\\  \
+      \\textbf\{order()  \} :   renvoie une s\'e9rie d'indices permettant de permuter un tableau afin de le mettre dans l'ordre selon les valeurs de certaines colonnes; e.g.,trier par ordre alphab\'e9tique de pr\'e9nom le tableau suivant:\\newline\\\\   \\textbf\{x<-data.frame(prenom=c("Bernard", "Charles", "Annie"),age=c(10,20,30)); x[order(x\\$prenom),]\}\\newline\\\\  \
+      \\textbf\{cut(x,breaks)\} :     d\'e9coupe x en intervalles (factors); breaks est le nombre de cas ou un vecteur de cloisons\\newline\\\\  \
+      \\textbf\{which(x == a)  \} :   renvoie les indices de x pour lesquels le r\'e9sultat de l'op\'e9ration logique est vrai (TRUE), dans cette exemple les valeurs de i pour lesquelles  x[i]==a (l'argument de cette fonction doit \'eatre une variable de type "\'a0logique\'a0" (vrai ou faux))\\newline\\\\  \
+      \\textbf\{na.omit(x)\} :     supprime les observations avec des valeurs manquantes (NA: not available); supprime les lignes correspondantes si x est une matrice ou un data.frame)\\newline\\\\  \
+      \\textbf\{unique(x) \} :    renvoie  x sans les \'e9l\'e9ments dupliqu\'e9s (pour un data.frame, ne renvoie que des lignes uniques)\\newline\\\\  \
+      \\textbf\{table(x)\} :     renvoie une table avec le d\'e9compte de chaque valeur diff\'e9rente de x; table(x,y) renvoie un tableau de contingence\\newline\\\\  \
+\
+\\subsection\{Math\'e9matiques\}\
+     \\textbf\{sin,cos,tan,log,log10,exp  \} :     fonctions math\'e9matiques\\newline\\\\  \
+    \\textbf\{ max(x)   \} :    maximum des \'e9l\'e9ments de x\\newline\\\\  \
+    \\textbf\{ min(x)   \} :    minimum des \'e9l\'e9ments de x\\newline\\\\  \
+    \\textbf\{ range(x) \} :     mini et maxi: c(min(x), max(x))\\newline\\\\  \
+    \\textbf\{ sum(x)   \} :    somme des \'e9l\'e9ments de x\\newline\\\\  \
+   \\textbf\{  diff(x)  \} :     diff\'e9rence entre chaque \'e9l\'e9ment de x et son pr\'e9d\'e9cesseur\\newline\\\\  \
+   \\textbf\{  prod(x)  \} :     produit des \'e9l\'e9ments de x\\newline\\\\  \
+   \\textbf\{  mean(x)   \} :    moyenne des \'e9l\'e9ments de x\\newline\\\\  \
+    \\textbf\{ median(x) \} :      m\'e9diane des \'e9l\'e9ments de x\\newline\\\\  \
+    \\textbf\{ quantile(x,probs=)    \} :   quantiles correspondant aux probabilit\'e9s donn\'e9es; le param\'e8tre par d\'e9faut\\newline\\\\  \
+    \\textbf\{probs=c(0,.25,.5,.75,1) \} :  donne les quartiles\\newline\\\\  \
+  \\textbf\{   weighted.mean(x, w)  \} :    moyenne pond\'e9r\'e9e de x (pond\'e9ration par w)\\newline\\\\  \
+  \\textbf\{   rank(x)  \} :     rang des \'e9l\'e9ments de x\\newline\\\\  \
+   \\textbf\{  var(x) ou cov(x)  \} :     variance des \'e9l\'e9ments de x (calcul\'e9 avec n-1 au d\'e9nominateur); si x est une matrice ou un data.frame, la matrice de  variance/covariance est calcul\'e9e\\newline\\\\  \
+   \\textbf\{  sd(x)   \} :    \'e9cart-type (standard deviation) de x\\newline\\\\  \
+   \\textbf\{  cor(x)   \} :    matrice de corr\'e9lation de x (pour une matrice ou un data.frame)\\newline\\\\  \
+   \\textbf\{  var(x, y) ou  cov(x, y)    \} :   covariance entre x et y, ou entre les colonnes de x et celles de y si ce sont des matrices ou des data frames.\\newline\\\\  \
+    \\textbf\{ cor(x, y)   \} :    coefficient de corr\'e9lation lin\'e9aire  entre x et y, ou matrice de corr\'e9lation si ce sont des matrices ou des data frames.\\newline\\\\  \
+   \\textbf\{  round(x, n)     \} :  arrondit les \'e9l\'e9ments de x \'e0 n d\'e9cimales\\newline\\\\  \
+    \\textbf\{ pmin(x,y,...)  \} :     un vecteur dont le i\'e8me \'e9l\'e9ment est le minimum  des valeurs x[i], y[i], ...\\newline\\\\  \
+    \\textbf\{ pmax(x,y,...)  \} :     idem pour le maximum\\newline\\\\  \
+    \\textbf\{ union(x,y), intersect(x,y), setdiff(x,y)   \} :    union et intersection d'ensembles; setdiff(x,y) trouve les \'e9l\'e9ments de x qui ne sont pas dans y\\newline\\\\  \
+   \\textbf\{  abs(x)  \} :     valeur absolue\\newline\\\\  \
+  \\textbf\{   filter(x,filter)    \} :   applique un filtre lin\'e9aire \'e0 une s\'e9rie temporelle; e.g., pour une moyenne mobile sur trois p\'e9riodes: filter(x, c(1/3, 1/3, 1/3))\\newline\\\\  \
+  \\textbf\{   na.rm=FALSE   \} :    De nombreuses fonctions math\'e9matiques ont un param\'e8tre  na.rm=TRUE (non available removed) pour enlever les donn\'e9es manquantes (NA) avant le calcul\\newline\\\\  \
+\
+\
+\
+\\subsection\{Matrices\}\
+   \\textbf\{  t(x)    \} :   transpos\'e9e\\newline\\\\  \
+   \\textbf\{  diag(x)    \} :   diagonale\\newline\\\\  \
+    \\textbf\{\\%*\\%\} :     multiplication de matrices\\newline\\\\  \
+   \\textbf\{  solve(a,b)   \} :    trouve  x tel que a \\%*\\% x = b\\newline\\\\  \
+   \\textbf\{  solve(a)   \} :    matrice inverse de a\\newline\\\\  \
+   \\textbf\{  rowsum(x)   \} :    somme par ligne d'une matrice ou d'un objet similaire \\newline\\\\  \
+  \\textbf\{   colsum(x)   \} :    somme par colonne\\newline\\\\  \
+  \\textbf\{   rowMeans(x)    \} :   moyenne des lignes d'une matrice\\newline\\\\  \
+  \\textbf\{   colMeans(x)   \} :    idem pour les colonnes\\newline\\\\  \
+\
+\
+\
+\\subsection\{Traitement avanc\'e9 des donn\'e9es\}\
+ \\textbf\{    apply(X,MARGIN,FUN=, ...)    \} :   applique une fonction FUN aux marges de X (MARGIN=1 pour les lignes, MARGIN=2 pour les colonnes); les param\'e8tres ... sont pass\'e9s \'e0 la fonction FUN.\\newline\\\\  \
+  \\textbf\{   lapply(X,FUN)   \} :    applique une fonction FUN \'e0 chaque \'e9l\'e9ment de X\\newline\\\\  \
+   \\textbf\{  merge(x,y)  \} :     fusionne 2 data frames en utilisant leurs noms de colonnes en commun (ou en les d\'e9signant avec by.x et by.y)\\newline\\\\  \
+  \\textbf\{   aggregate(x,by,FUN)   \} :    divise le data frame x en groupes, calcule la fonction FUN pour chacun; by est une liste d'\'e9l\'e9ments de regroupement, chaque \'e9l\'e9ment aussi long que le nombre de ligne de x\\newline\\\\  \
+  \\textbf\{   stack(x, ...)   \} :    transforme un tableau en plusieurs colonnes en tableau \'e0 1 colonne, en indiquant d'o\'f9 vient chaque valeur; e.g.: stack(data.frame(a=1:3,b=4:6))\\newline\\\\  \
+  \\textbf\{   unstack(x, ...)   \} :   inverse de stack()\\newline\\\\  \
+  \\textbf\{   reshape(x, ...)   \} :    fonction avanc\'e9e (et compliqu\'e9e) r\'e9organisant  en largeur ou en longueur une data.frame (e.g.: un tableau de 2 variables avec 3 ann\'e9es pour 4 pays contient 24 donn\'e9es, organis\'e9es en 2x12 ou 6x4 8x3; reshape convertit entre ces formats)\\newline\\\\  \
+\
+ \\subsection\{Cha\'eenes de caract\'e8res\}\
+  \\textbf\{   paste(...)   \} :    concat\'e8ne des vecteurs apr\'e8s conversion en caract\'e8res ; sep= les s\'e9pare (par d\'e9faut: espace)\\newline\\\\  \
+   \\textbf\{  substr(x,start,stop)    \} :   extrait une sous-cha\'eene de caract\'e8res\
+  \\textbf\{   grep(pattern,x)   \} :    renvoie les indices des \'e9l\'e9ments de x dans lesquels on trouve le patron pattern, e.g.: grep ("b", c("ab", "cd", "bz"))\\newline\\\\  \
+  \\textbf\{   tolower(x)   \} :    met en minuscules\\newline\\\\  \
+  \\textbf\{   toupper(x)   \} :    met en majuscules\\newline\\\\  \
+  \\textbf\{   match(x,table)    \} :   pour chaque \'e9l\'e9ment de x, renvoie NA si l'\'e9l\'e9ment n'est pas trouv\'e9 dans table, sinon renvoie la position o\'f9 il se trouve dans table\\newline\\\\  \
+ \\textbf\{    x \\%in\\% table  \} :     pour chaque \'e9l\'e9ment de x, renvoie TRUE si l'\'e9l\'e9ment est trouv\'e9 dans table, sinon renvoie FALSE\\newline\\\\  \
+   \\textbf\{  nchar(x)   \} :    nombre de caract\'e8res\\newline\\\\  \
+     \
+\
+\\subsection\{Dates et heures\}\
+La classe Date enregistre des dates. POSIXct enregistre date, heure et fuseau horaire. Les comparaisons (>, < ...), seq()ence, et \'e9cart de temps (difftime()) sont utiles. On peut enlever ou ajouter des jours \'e0 un objet Date (+, -).           \
+  \\textbf\{   as.Date(x)  \} :     convertit une cha\'eene de caract\'e8res en date; as.Date("2009-12-31")+1 renvoie le 1er janvier 2010.\\newline\\\\  \
+   \\textbf\{  format(x)   \} :    l'inverse; on peut choisir la repr\'e9sentation voulue (cf. help(strftime))\\newline\\\\  \
+\
+\\subsection\{P\'e9riph\'e9riques graphiques\}\
+  \\textbf\{   windows()   \} :    ouvre une fen\'eatre graphique sous Windows\\newline\\\\  \
+  \\textbf\{   x11()  \} :     idem sous GNU/linux ou MacOSX\\newline\\\\  \
+ \\textbf\{    pdf(file), png(file), jpeg(file), bmp(file), tiff(file)    \} :   se pr\'e9pare \'e0 \'e9crire les instructions graphiques qui suivront dans le fichier file, au format d\'e9sign\'e9 (pdf ou png recommand\'e9s); width= et height= fixent les dimensions\\newline\\\\  \
+  \\textbf\{   dev.off()   \} :    ferme la fen\'eatre graphique ou le fichier graphique sp\'e9cifi\'e9 (par d\'e9faut: celui en cours); cf. aussi  dev.cur, dev.set\\newline\\\\  \
+     \
+\\subsection\{Graphiques\}\
+\\subsubsection\{Commandes principales\}\
+   \\textbf\{  plot(x)   \} :    graphique de x (fonction g\'e9n\'e9rique ayant des effets diff\'e9rents selon l'objet)\\newline\\\\  \
+   \\textbf\{  plot(x, y)    \} :   nuage de points\\newline\\\\  \
+   \\textbf\{  hist(x)  \} :     histogramme des fr\'e9quences de x\\newline\\\\  \
+   \\textbf\{  barplot(x)    \} :   diagramme en barres\\newline\\\\  \
+   \\textbf\{  pie(x)    \} :   diagramme circulaire ("\'a0camembert\'a0")\\newline\\\\  \
+  \\textbf\{   boxplot(x)    \} :   diagramme en bo\'eete [bo\'eete \'e0 moustaches]; la bo\'eete et son milieu montrent les 3 quartiles;\\newline\\\\   les moustaches (whisker) un intervalle de confiance de 95\\% pour la m\'e9diane (s'il y a des valeurs en dehors, elles sont affich\'e9es)\\newline\\\\  \
+  \\textbf\{   sunflowerplot(x, y)    \} :   comme plot(x,y)  mais les points qui se superposent exactement sont repr\'e9sent\'e9s avec des "\'a0fleurs\'a0" (un p\'e9tale par valeur r\'e9p\'e9t\'e9e)\\newline\\\\  \
+  \\textbf\{   stripchart(x, method="stack")   \} :    superpose les valeurs identiques du vecteur x; e.g. stripchart(round(rnorm(30,sd=5)), method="stack")\\newline\\\\  \
+  \\textbf\{   coplot(y?x | a)    \} :   nuage des points de coordonn\'e9es x, y pour chaque valeur ou intervalle de valeur de a\\newline\\\\  \
+  \\textbf\{   mosaicplot(table(x,y))   \} :    version graphique de la table de contin\'adgence (les surfaces des carr\'e9s sont proportionnelles aux effectifs)\\newline\\\\  \
+  \\textbf\{   image(table(x,y))   \} :    similaire mais les effectifs influencent la couleur et non la surface\\newline\\\\  \
+   \\textbf\{  pairs(x)   \} :    tableau des nuages de points entre toutes les paires de colonnes de x\\newline\\\\  \
+  \\textbf\{   plot.ts(x)   \} :    pour une ou des s\'e9rie(s) temporelle(s) (classe "ts"), valeurs de x en fonction du temps\\newline\\\\  \
+  \\textbf\{   ts.plot(x)  \} :     idem mais les s\'e9ries peuvent ne pas commencer ou finir en m\'eame temps\\newline\\\\  \
+  \\textbf\{   qqnorm(x)   \} :    nuage des quantiles observ\'e9s contre quantiles th\'e9oriques; si  x suit une loi normale, une droite; comparer qqnorm(rnorm(100)) et   qqnorm(1:100)\\newline\\\\  \
+   \\textbf\{  qqplot(x, y)  \} :     quantiles de y en fonction des quantiles de x\\newline\\\\  \
+Les param\'e8tres suivants sont communs \'e0 de nombreuses fonctions graphiques\'a0:         \
+  \\textbf\{   add=TRUE      \} :  ajoute sur le graphique pr\'e9c\'e9dent\\newline\\\\  \
+  \\textbf\{   axes=FALSE   \} :    ne trace pas les axes\\newline\\\\  \
+  \\textbf\{   type="p"  \} :     type de repr\'e9sentation des coordonn\'e9es; "p": points, "l": lignes, "b": (both) points et lignes, "o": idem mais lignes sur (over) les points, "h": b\'e2tons, "s": escaliers (donn\'e9es en haut des barres\\newline\\\\   verticales), "S": idem (donn\'e9es en bas des barres), "n": d\'e9finit la zone de coordonn\'e9es mais ne trace rien (utiliser apr\'e8s les commandes graphiques de bas niveau  qui suivent)\\newline\\\\  \
+  \\textbf\{   xlim=, ylim=  \} :     limites des zones du graphique, e.g. xlim=c(1,5)\\newline\\\\  \
+   \\textbf\{  xlab=, ylab=   \} :    titre des axes (caract\'e8res)\\newline\\\\  \
+  \\textbf\{   main=    \} :   titre du graphique (caract\'e8res)\\newline\\\\  \
+  \\textbf\{   sub=   \} :    sous-titre du graphique (caract\'e8res)\\newline\\\\  \
+\
+\
+\
+\\subsubsection\{Commandes graphiques de bas niveau\}\
+Permettent de compl\'e9ter un graphique existant (\'e9ventuellement vide avec plot(..., type="n")          \
+   \\textbf\{  points(x, y)  \} :     ajoute des points (type= peut \'eatre utilis\'e9)\\newline\\\\  \
+   \\textbf\{  lines(x, y)  \} :     ajoute des lignes\\newline\\\\  \
+   \\textbf\{  text(x, y, labels, ...)  \} :     ajoute du texte (labels) aux coordonn\'e9es; e.g.:  plot(x, y, type="n"); text(x, y, names)\\newline\\\\  \
+   \\textbf\{  segments(x0, y0, x1, y1)  \} :     trace des segments de (x0,y0) \'e0 (x1,y1)\\newline\\\\  \
+   \\textbf\{  abline(a,b)   \} :    trace une droite (de forme y=a+b*x)\\newline\\\\  \
+   \\textbf\{  abline(lm.obj)   \} :    trace la droite de r\'e9gression du mod\'e8le lin\'e9aire lm.obj\\newline\\\\  \
+ \\textbf\{    legend(x, y, legend)  \} :     ajoute une l\'e9gende au point (x,y) avec les symboles donn\'e9s par legende\\newline\\\\  \
+  \\textbf\{   axis(side)   \} :    ajoute un axe en bas (side=1), \'e0 gauche (2), en haut (3) ou \'e0 droite (4); optionnels: at= pour les coordonn\'e9es des graduation, labels= pour leur texte\\newline\\\\  \
+  \\textbf\{   box()    \} :   encadre le graphique\\newline\\\\  \
+  \\textbf\{   rug(x)   \} :    ajoute pr\'e8s de l'axe des abscisses une petite barre pour chaque valeur de x\\newline\\\\  \
+  \\textbf\{   locator(n)  \} :     renvoie les coordonn\'e9es des clics de la souris apr\'e8s n clics sur le graphique\\newline\\\\  \
+\
+\\subsubsection\{Param\'e8tres graphiques\}\
+   \\textbf\{  par(...)  \} :     d\'e9finit les param\'e8tres suivants pour les graphiques \'e0 venir, e.g. par(cex=2); nombre de ces param\'e8tres peuvent aussi \'eatre utilis\'e9s directement avec une commande graphique de haut ou bas niveau, e.g. plot(x, cex=2) ; liste compl\'e8te avec help(par)\\newline\\\\  \
+  \\textbf\{   cex  \} :     taille du texte et des symboles par rapport \'e0 la valeur par d\'e9faut (character expansion)\\newline\\\\  \
+   \\textbf\{  col   \} :    couleur(s) des symboles et lignes; e.g. col="red", "blue" cf.  colors(); e.g. pour cr\'e9er des vecteurs de 5 couleurs, faire suivre col= de gray(0:5/5), rainbow(5) ou terrain.colors(5)\\newline\\\\  \
+  \\textbf\{   lty   \} :    type de ligne; 1: pleine, 2: tirets, 3: pointill\'e9s, 4: tirets-points, 5: longs tirets, 6: tiret-court/tiret-long; (configurable)\\newline\\\\  \
+   \\textbf\{  lwd   \} :    largeur des lignes\\newline\\\\  \
+  \\textbf\{   pch  \} :     type de symboles pour les points (code entier de 1 \'e0 25, ou caract\'e8re entre "")\\newline\\\\  \
+  \\textbf\{   xaxt="n"   \} :    ne trace pas l'axe des abscisses\\newline\\\\  \
+  \\textbf\{   yaxt="n"  \} :     ne trace pas l'axe des ordonn\'e9es\\newline\\\\  \
+\\subsubsection\{Groupes de graphiques conditionnels\}\
+Pour acc\'e9der \'e0 ces fonctions, il faut faire avant: library(lattice)\\newline\\\\  \
+La formule y?x trace y en fonction de x. On peut faire un graphique y?x  par sous groupe de donn\'e9es en indiquant l'appartenance \'e0 tel ou tel groupe par le vecteur g1: y?x | g1; pour toutes les combinaisons des s\'e9ries de groupes g1 et g2:  y?x | g1*g2          \
+   \\textbf\{  xyplot(y?x)   \} :    nuages de points\\newline\\\\  \
+   \\textbf\{  barchart(y?x)   \} :    diagrammes en barre\\newline\\\\  \
+   \\textbf\{  histogram(?x)  \} :     histogrammes\\newline\\\\  \
+   \\textbf\{  bwplot(y?x)   \} :    bo\'eetes \'e0 moustache\\newline\\\\  \
+   \\textbf\{  stripplot(y?x)  \} :     graphique \'e0 une dimension, x doit \'eatre un nombre, y peut \'eatre un facteur\\newline\\\\  \
+     \
+     \
+     \
+     \
+\
+\\subsection\{Mod\'e8les et analyses statistiques\}\
+  \\textbf\{   lm(formula)  \} :     estimation d'un mod\'e8le lin\'e9aire; formula=y~a+b estime le mod\'e8le y=ax+by+c (mettre -1 dans la formule pour enlever la constante c); summary(lm(...)) donne des informations utiles\\newline\\\\  \
+   \\textbf\{  glm(formula,family=) \} :      estime un mod\'e8le lin\'e9aire g\'e9n\'e9ralis\'e9; e.g. family= binomial(link = "logit") pour un mod\'e8le logit (cf.  ?family)\\newline\\\\  \
+Apr\'e8s la formule, on peut en g\'e9n\'e9ral pr\'e9ciser le nom du data.frame (data=) et le sous-ensemble de donn\'e9es (subset= suivi d'un vecteur de valeurs logiques)          \
+  \\textbf\{   predict(fit,...)   \} :    fait une pr\'e9diction \'e0 partir du mod\'e8le estim\'e9 fit et de nouvelles donn\'e9es\\newline\\\\  \
+  \\textbf\{   coef(fit)  \} :     coefficients du mod\'e8le estim\'e9\\newline\\\\  \
+  \\textbf\{   residuals(fit)  \} :     r\'e9sidus du mod\'e8le\\newline\\\\  \
+  \\textbf\{   fitted(fit)  \} :     valeurs pr\'e9dites par le mod\'e8le   \\newline\\\\   \
+   \\textbf\{  rnorm(n, mean=0, sd=1)   \} :    distribution gaussienne (normale)\\newline\\\\  \
+  \\textbf\{   rt(n, df)  \} :     distribution de Student (t)\\newline\\\\  \
+  \\textbf\{   rf(n, df1, df2)   \} :    distribution de Fisher?Snedecor (F)\\newline\\\\  \
+Ces fonctions de distribution peuvent \'eatre modifi\'e9es en changeant la premi\'e8re lettre pour avoir: r (random) pour tirer des nombres au hasard; d: densit\'e9 de probabilit\'e9; p: idem cumul\'e9e; q: la valeur du quantile (avec le param\'e8tre p:    0\'a0<\'a0\'a0p\'a0< 1)          \
+\
+\\subsection\{Programmation\}\
+Fonctions permettant d'encha\'eener des op\'e9rations de mani\'e8re structur\'e9e. Pour avoir de l'aide sur ces fonctions, saisir leur nom entre guillemets; e.g. help("if")      \\newline\\\\       \
+  \\textbf\{  function( arglist ) \{expr\}   \} :    d\'e9finition de fonction; arglist est une liste d'arguments, expr est une expression ex\'e9cut\'e9e; e.g.: mafonction$<-$function( a, b ) \{a+2*b\}; mafonction(1,2) \\#renvoie 5\\newline\\\\  \
+  \\textbf\{   return(value)  \} :     mis dans expr lors d'une d\'e9finition de fonction, indique que la fonction doit renvoyer ce r\'e9sultat (si return est absent, la fonction renvoie la derni\'e8re valeur calcul\'e9e dans expr)\\newline\\\\  \
+  \\textbf\{   if(cond) \{expr\}    \} :   si cond est vrai (TRUE), \'e9valuer expr\\newline\\\\  \
+  \\textbf\{  ==  !=  <  >  <=  >=    \} :   op\'e9rateurs de comparaison, dans l'ordre: \'e9gal, diff\'e9rent, inf\'e9rieur, sup\'e9rieur, inf\'e9rieur ou \'e9gal, sup\'e9rieur ou \'e9gal; e.g. 1==1 vaut TRUE ou  T; 1!=1 vaut FALSE ou F; dans les op\'e9rations avec des nombres, T est converti en 1 et F en 0 (T-1==0 est vrai)\\newline\\\\  \
+  \\textbf\{   if(cond) \\\{cons.expr\\\} else \\\{alt.expr\\\} \}    si cond est vrai \'e9valuer  cons.expr sinon  \'e9valuer alt.expr\\newline\\\\  \
+    \\textbf\{for(var in seq) \\\{expr\\\} \} :      ex\'e9cute l'expression pour chaque valeur de var prises dans une sequence\\newline\\\\  \
+ \\textbf\{    while(cond) \\\{expr\\\}  \} :     ex\'e9cute l'expression tant que la condition est vraie\\newline\\\\  \
+ \\textbf\{    repeat \\\{expr\\\}  \} :     r\'e9p\'e8te expr en boucle; penser \'e0 l'arr\'eater avec if(...) \{break\} (ou avec les touches Ctrl+C)\\newline\\\\  \
+ \\textbf\{break \} :      arr\'eate une boucle for, while ou repeat\\newline\\\\  \
+  \\textbf\{   next   \} :    arr\'eate l'it\'e9ration en cours et reprend la boucle (dans le cas de for, avec la valeur suivante de la sequence)\\newline\\\\  \
+  \\textbf\{   ifelse(test, yes, no)  \} :     pour chaque ligne/cellule de test, renvoie la valeur yes si le test est TRUE, no s'il est FALSE, NA s'il est ind\'e9termin\'e9\\newline\\\\  \
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+}

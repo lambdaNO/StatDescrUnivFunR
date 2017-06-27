@@ -1,0 +1,922 @@
+
+
+
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 00000000001000011111000010000000000000000000000
+% 00000000001000010000000010000000000000000000000
+% 00000000001000010000000010000000000000000000000
+% 00000000001000011111000010000000000000000000000
+% 00000000000000000000000000000000000000000000000
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Complément sur les données de survie}
+\subsection{Introduction à l'analyse des durées de survie - Philippe SAINT PIERRE, Université Pierre et Marie Curie}
+Le terme de durée de survie désigne le temps écoulé jusqu'à la survenue d'un événement précis. L'événement étudié (communément appelé décès) est le passage irréversible entre deux états (communément nommé vivant et décès). L'événement terminal n'est pas forcément la mort : il peut s'agir de l'apparition d'une maladie (par exemple, le temps avant une rechute ou un rejet de greffe), d'une guérison (temps entre le diagnostic et la guérison),la panne d'une machine (durée de fonctionnement d'une machine, en fiabilité) ou la survenue d'un sinistre (temps entre deux sinistres, en actuariat). [\dots]\newline
+\\
+Quelques définitions sont couramment utilisées dans les études de survie.
+\begin{itemize}
+\item Date d'origine : elle correspond à l'origine de la durée étudiée. Elle peut être la date
+de naissance, le début d'une exposition à un facteur de risque, la date d'une opération
+chirurgicale, la date de début d'une maladie ou la date d'entrée dans l'étude. Chaque
+individu peut donc avoir une date d'origine diérente (pas important car c'est la durée
+qui nous intéresse).
+\item Date de point : c'est la date au-delà de laquelle on arrêtera l'étude et on ne tiendra
+plus compte des informations sur les sujets.
+\item Date des dernières nouvelles : c'est la date la plus récente où des informations sur un
+sujet ont été recueillies.
+\end{itemize}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 00000000001000011111000010000000000000000000000
+% 00000000001000010000000010000000000000000000000
+% 00000000001000010000000010000000000000000000000
+% 00000000001000011111000010000000000000000000000
+% 00000000000000000000000000000000000000000000000
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{lstlisting}[language=html]
+
+\end{lstlisting}
+
+#-----------------------------------------------------------------
+
+
+
+
+
+
+
+
+###Exercice 1.2
+#-----------------------------------------------------------------
+##Créer les vecteurs suivants avec rep et seq :
+######Explication : 
+########rep(binf:bsup,nb_de_répetition)
+rep(1:4,1)
+rep(1:4,2)
+rep(1:18, each = 1, len = 20) 
+rep(1:4, each = 2, times = 3)
+########rep(binf:bsup,pas_d_itération)
+seq(1,4,1)
+seq(1,4,2)
+seq(1, 9, by = 2)  
+seq(1, 6, by = 3)
+seq(1.575, 5.125, by = 0.05)
+seq(17)
+seq(0, 1, length.out = 11)
+
+######----------------------------------------------------------- 
+###y0 constituée de la suite des entiers de −3 à 20 par pas de 1.
+y0r <- rep(-3:20, 1)
+y0r
+length(y0r)
+y0s <- seq(-3,20,1)
+y0s
+length(y0s)
+###y1 contient tout les entiers pairs entre 2 et 18
+y1s <- seq(2,18,2)
+y1s
+length(y1s)
+##y2 est constitué de 8 fois de suite la valeur 4.
+y2r <- rep(4,8)
+y2r
+length(y2r)
+##y3 contient 8 nombres entre 0 et 16, par pas égaux.
+pas <- 16/8; pas
+y3_bad <-seq(0, 16, by = 16/8)
+y3_bad
+length(y3_bad)
+##∆∆∆∆∆∆∆ Concaténation avec R
+paste('Mauvais car il possède ', length(y3_bad), 'composantes')
+##Note : 16/8 = 2, en principe c’est logique qu’on utilise un pas de 2 mais on obtient 9 éléments la répétition avec un pas de 2 n’est donc pas conseillée.
+##Pour résoudre se problème, il faut crée une séquence de dont les bornes sont 0 et 16 en forçant la séquence à contenir 8 termes. Le pas sera calculé automatiquement.
+
+y3_good <- seq(0,16,length.out = 8)
+#### length.out :desired length of the sequence.
+y3_good
+length(y3_good)
+paste('Correct car il possède ', length(y3_good), 'composantes')
+
+
+
+y3 <-seq(0, 16, by = 16/8)  
+if(length(y3) == 8){
+  paste('Correct car il possède ', length(y3), 'composantes')
+} else {
+  paste('Mauvais car il possède ', length(y3), 'composantes')
+}
+  
+  
+y3 <- seq(0,16,length.out = 8)
+if(length(y3) == 8){
+    paste('Correct car il possède ', length(y3), 'composantes')
+} else {
+    paste('Mauvais car il possède ', length(y3), 'composantes')
+}
+  
+
+##Extraire de y3 :
+###un vecteur composé du 4ème puis le 7ème éléement.
+y3_good
+length(y3_good)
+paste('Composante de y3 position 4 : ', y3_good[4])
+paste('Composante de y3 position 7 : ', y3_good[7])
+y3_ss1 <- c(y3_good[4],y3_good[7])
+y3_ss1 
+length(y3_ss1)
+### tous les élements sauf le 7ème
+y3_good
+length(y3_good)
+paste("7ème composante de y3 ", y3_good[7])
+y3_ss2 <- c(y3_good[-7])
+y3_ss2
+length(y3_ss2)
+
+
+##Comparer les commandes suivantes :
+y0 <- seq(-3,20,1);y0
+length(y0)
+##Création de la matrice (3x8) constituée des composantes du vecteur y0. Remplissage par colonne (méthode standard).
+m_c <- matrix(y0, 3, 8)
+m_c
+length(m_c)
+paste('Nombre de ligne de m_c =', nrow(m_c))
+paste('Nombre de colonne de m_c = ', ncol(m_c))
+## Création de la matrice (3x8) constituée des composantes du vecteur y0. Remplissage par ligne (byrow = par ligne).
+m_l <- matrix(y0, 3, 8, byrow=TRUE)
+m_l
+length(m_l)
+paste('Nombre de ligne de m_l =', nrow(m_l))
+paste('Nombre de colonne de m_l = ', ncol(m_l))
+##Création de la matrice m de 4 lignes et constituée des composantes de y0. Remplissage par colonne (méthode standard).
+###Nombre de ligne fixé, il fait le reste
+m=matrix(y0, nrow = 4);m
+length(m)
+paste('Nombre de ligne de m =', nrow(m))
+paste('Nombre de colonne de m = ', ncol(m))
+
+m_prime=matrix(y0, nrow = 8);m_prime
+length(m_prime)
+paste('Nombre de ligne de m =', nrow(m_prime))
+paste('Nombre de colonne de m = ', ncol(m_prime))
+
+##Renvoi la composante de la matrice m présente à la position (3,3).
+m[3,3]
+m_prime[3,3]
+
+##Balayage par colonne puis par ligne
+m
+for(i in 1:nrow(m)){
+  for(j in 1:ncol(m)){
+    print(m[i,j])
+  }
+}
+
+m
+##Balayage par colonne puis par ligne
+for(i in 1:ncol(m)){
+  for(j in 1:nrow(m)){
+    print(m[j,i])
+  }
+}
+m
+##Retourne les composantes de la 1er et 3eme ligne pour tous les indices de colonne (de 1 à 6).
+vec_mat_1 <- m[c(1,3),]
+vec_mat_1
+##idem pour les lignes 2 et 4
+vec_mat_12 <- m[c(2,4),]
+vec_mat_12
+##Retourne les composantes de la 1er et 3eme colonne pour tous les indices de ligne (de 1 à 6).
+vec_mat_2 <- m[,c(1,3)]
+vec_mat_2
+##idem pour les colonnes 2 et 4
+vec_mat_22 <- m[,c(2,4)]
+vec_mat_22
+##Sup : 
+m[c(1,3),1]
+###Renvoi les composantes de la première et troisième ligne pour la colonne d’indice 1.
+m[c(1,3),3]
+###Renvoi les composantes de la première et troisième ligne pour la colonne d’indice 3.
+m[c(1,3),6]
+###Renvoi les composantes de la première et troisième ligne pour la colonne d’indice 6.
+m[c(2,4),2]
+###Renvoi les composantes de la deuxième et quatrième ligne pour la colonne d’indice 2.
+m[c(2,4),4]
+###Renvoi les composantes de la deuxième et quatrième ligne pour la colonne d’indice 4.
+m[c(2,4),5]
+###Renvoi les composantes de la deuxième et quatrième ligne pour la colonne d’indice 5.
+m[c(2,1),c(1,3)]
+###Renvoi les composantes de la deuxième et quatrième ligne pour la colonne d’indice 1 et 3.
+m[c(2,5),c(1,5)]
+###Et oui, la matrice m est de dimension (4x6)
+nrow(m)
+ncol(m)
+
+y1 <- seq(2,18,2);length(y1)
+y2 <- rep(4,8);y2;length(y2)
+y3 <- seq(0,16,length.out = 8);y3;length(y3)
+
+###Concatène les vecteurs y2 et y3 sous forme d’une matrice 2 lignes
+m_2_3 <- rbind(y2, y3);m_1_2;length(m_1_2)
+m_1_2 <- rbind(y1, y2);m_1_2;length(m_1_2)
+
+###Note : Si les vecteurs que l’on tente de concaténer avec la fonction rbind ne sont pas de la même dimension, alors le logiciel 
+###recopie le nombre de composante à partir du début. Exemple : y2 est constitué de 8 composantes, y1 de 9 ; l’élément d’indice (1,9) 
+###est le premier élément du vecteur y2 (1,1).
+m_1_2
+m_1_2[2,9]
+m_1_2[2,1]
+
+
+##Idem pour les colonnes : Concatène les vecteurs y2 et y3 sous forme d’une matrice 2 colonnes
+m_c_2_3 <- cbind(y2, y3); m_c_2_3
+ncol(m_c_2_3);nrow(m_c_2_3)
+length(y1);length(y2)
+m_c_1_2 <- cbind(y1, y2); m_c_1_2;m_c_1_2[1,2];m_c_1_2[9,2]
+ncol(m_c_1_2);nrow(m_c_1_2)
+#### Toujours le même problème
+
+###Exercice 1.3
+#-----------------------------------------------------------------
+##Créer un vecteur x qui contient les réels compris entre 0 et 1 par pas de 0, 1.
+x <- seq(0,1,0.1);x
+##Calculer n la longueur de x
+n <- length(x);n
+##Créer un vecteur y = 4x(1 − x)
+y <- 4*x*(1-x);y
+##tracer la courbe rejoignant les points (xi,yi)
+plot(x,y,main="Graphe des couples (x,y)")
+##Calculer le maximum des yi
+max(y)
+min(y)
+##En quel point le maximum est-il atteint?
+which.max(y)
+y[which.max(y)]
+paste('Le maximum est atteint au point numéro ', which.max(y), ' et a pour valeur ', y[which.max(y)])
+paste('Le minimum est atteint au point numéro ', which.min(y), ' et a pour valeur ', y[which.min(y)])
+##Tracer la courbe de la fonction f(x) = 4x^{2} (1-x) sur l’intervalle [−2, 1], en rouge avec  le logiciel.
+y = 4*x*x*(1-x);y
+plot(x,y,main = "f(x) = 4x^{2} (1-x)",xlab = "échelle des x", ylab = "échelle des y",xlim=c(- 2,1),ylim=c(-1,1),col="red")
+
+
+
+###Exercice 1.4
+####Explications
+#####Fonction factorielle n! = n x (n-1) x (n-2) x ... x 1
+######factorial(nb)
+tst_fac <- factorial(4)
+tst_fac
+#####Combinatoire : C_n^k : nombre de façon de choisir k éléments parmi n.
+######choose(n,k)
+n = 5
+k = 2
+tst_com <- choose(n, k)
+tst_com
+paste('Nombre de façon de choisir', k ,' élément(s) parmi ', n ,' : ', tst_com)
+##### Petit truc drôle : le triangle de Pascal
+for (n in 0:10) print(choose(n, k = 0:n))
+
+###Pour k = 1, 2, 3, 4, 5, 6, taper choose(k, 0:k) puis sum(choose(k, 0:k)). A quel énonce du cours correspondent ces sommes ?
+n <- 10
+for (k in 1:n){print(choose(k,0:k))};print("C'est le triangle de Pascal")
+
+for (k in 1:n){
+  print(sum(choose(k,0:k)))
+}
+paste ('Mais c’est les résultats du calcule de 2n pour n variant de 1 à ',n)
+
+## 1 - 7
+### On jette deux fois un dé équilibré : 
+### 2 évènements :
+#### E : " la somme des deux dès est paire"
+#### F : " le 3 est obtenu au moins un fois"
+#### Décrivons Omega {1,2,...,6}x{1,2,...,6}
+Om = 6*6
+#### Calculons P(E)
+### E1 : "La première face est pair et la deuxème face est pair"
+### E1 : "Deux faces paires"
+E1 = 3*3
+PE1 <- E1/Om
+PE1
+paste('la probabilité d obtenir deux faces paires est : ',  PE1)
+### E2 : "la première face est impaire et la deuxième face est impaire"
+### E2 : "Deux face impaires"
+E2 = 3*3
+PE2 <- E2/Om
+paste('la probabilité d obtenir deux faces impaires est : ',  PE2)
+### P(E) = P(E1 ou E2)
+print('P(E) = P(E1 ou E2)')
+print('P(E) = P(E1) + P(E2) - P(E1 et E2)')
+### Poincaré
+print('E1 et E2 sont indépendants')
+### E1 et E2 sont indépendants 
+paste ('P(E) = ', PE1, '+', PE2 , '+ 0')
+PE <- PE1+PE2
+PE
+paste('la probabilité d obtenir une somme paire est : ',  PE)
+
+
+
+### 
+###
+
+## 1 - 8
+### Une urne contient deux boules blanches et 4 boules noires. On extrait successivement et au hasard toutes les boules.
+### Quelle est la probabilité pour que toutes les boules blanches soient extraitent lors des 4 premiers tirages
+###Décrire Omega 
+### Omega = {(b1,b2,b3,b4) avec (b1,b2,b3,b4)\in T}
+### Tirage successif sans remises 
+### Dans notre cas, l'ordre d'arrivée des boules blanches n'importe pas
+### Arrangement  - Attention, la formule d'arrangement standard prend en compte l'ordre Ce que l'on ne veut pas ici - Pour rétablir le désordre, il faut diviser l'arrangement par le nombre de permutation possibles
+n = 6
+paste ("Soit n, le nombre total de boules : n = ",n)
+k = 4
+paste("Soit k, le nombre de boules noires : k = ",k)
+Arr <- (factorial(n)/factorial(n-k))
+Per <- factorial(k)
+paste("Nombre d'arrangement possibles : ",Arr, ". Nombre de permutations possibles : ", Per)
+Omega <- (Arr/Per) 
+Omega
+paste("Card(Omega) = ", Omega)
+
+### Soit E : "Toutes les boules blanches sont tirées lors des 4 premiers tirages
+print("E : Toutes les boules blanches sont tirées lors des 4 premiers tirages")
+b <- n-k
+paste('Soit b, le nombre de boules blanches, b = ', b)
+E <- choose(2,2) * choose(4,2)
+paste('Nombre de façon de choisir',b,'blanches parmi ', n - k, 'blanches : ', choose(n-k,b))
+paste('Et nombre de façons de choisir', n-k,' boules parmis les ',k, 'boules noires restantes : '  )
+E
+paste('Card(E) = ',6)
+PE = E/Omega
+paste("P(E) =",PE)
+
+###Une urne contient 10 boules numérotées de 1 à 10. On extrait au hasard 5 boules
+###successivement et sans remises.
+###Quelle est la probabilité pour que les boules soient tirées dans l’ordre des
+###numéros croissants ?
+####Nombre d'arrangement possibles et l'ordre n'importe pas (Puisque dans tous les cas, on les laisses tel quel, on ne les réarrange pas)
+
+omega = (factorial(10))/(factorial(5))
+omega
+
+E = (factorial(10))/(factorial(5)*factorial(5))
+E
+
+ProbaE = E/omega
+ProbaE
+
+###Même question avec 100 boules ?
+####Nombre d'arrangement possibles et l'ordre n'importe pas
+omega = (factorial(100))/(factorial(5))
+omega
+
+E = (factorial(100))/(factorial(5)*factorial(5))
+E
+
+ProbaE = E/omega
+ProbaE
+
+
+### On tire au hasard 5 cartes dans un jeu de 32 cartes. Quelle est la probabilité de
+###l’événement : {les 5 cartes sont de la même famille}.
+### Reflexion : 
+jeu = 32
+t = 4
+f = 1
+paste("Choix d' ", f," famille parmi les ", t ," possibles (carreaux, cœur, pique, trèfle)")
+c = 5
+p = jeu/t
+paste("Choix de ", c, " cartes parmi les ", p, " cartes possibles pour une couleur choisie{7,8,9,10,V,D,R,A}.")
+paste("Choix de ",c," cartes parmi les ", jeu ," cartes possibles constituant le jeu de cartes.")
+Omega = choose(jeu,c)
+Omega
+A=choose(t,f)*choose(p,c)
+A
+PA=A/Omega
+PA
+
+###On tire au hasard 5 cartes dans un jeu de 32 cartes. Quelle est la probabilité de
+###l’événement : {les 5 cartes sont de la même couleur}.
+col = 2
+paste("Choix d’une couleur parmi les", col , " possibles (rouge, noire).")
+pos =jeu/col
+paste("Choix de ",c," cartes parmi les ", pos ," cartes possibles pour une couleur choisie")
+paste("Choix de ",c," cartes parmi les ", jeu, " cartes possibles constituant le jeu de cartes.")
+
+Omega = choose(32,5)
+A=choose(col,f)*choose(pos,c)
+A
+PA = A/Omega
+PA
+
+##Combien de chances a-t-on de gagner le super jackpot à l’Euromillion ? 
+##(5 numéros parmi 49, et 2 numéros étoilés parmi 10, l’ordre ne compte pas).
+paste("Nombre de combinaisons possibles si on pioche 7 boules dans une urne ou sont mélangés numéros étoilés et normaux : ") 
+Omega = choose(59, 7)
+Omega
+##On suppose que l’on a une chance sur ... de tirer les bons numéros, ces derniers sont
+##répartis dans deux urnes différentes :
+A <-1
+A
+Omega <- choose(49,5)*choose(10,2)
+PA <- A/Omega
+PA
+
+
+###Exercice 1.5
+### Taper x = c(1). Utiliser la boucle for contenant la commande x = c(x,1) pour créer un vecteur de taille 20 ne contenant que de 1.
+x = c(1)
+x
+length(x)
+for( i in 1:20){x = c(x,1)}
+x
+length(x)
+print('Bah oui gros con, tu as déjà une composante dans ton vecteur !! tu dois donc faire 19 itérations et non 20')
+x = c(1)
+for( i in 1:19){x = c(x,1)}
+x
+length(x)
+
+##Comment créer le même vecteur avec rep ?
+###Avec la fonction rep, créer un vecteur de taille 20 ne contenant que de 1. c'est beaucoup plus simple
+y = rep(1,20)
+y
+length(y)
+
+##Même question, avec une commande du genre x = i*x, pour calculer 20! =factorial(20).
+x = c(1)
+##Ca devra toujours rester 1
+length(x)
+for(i in 1:20){x = i*x}
+x
+length(x)
+f <-factorial(20)
+if(f==x){
+  print('tu es trop un champion')
+} else {
+  print('tu es trop un looser')
+}
+paste('avec x (boucle), tu as ', x)
+paste('avec f (fonction), tu as ', f)
+
+print("Vérification de relation : ")
+n = 8
+partright = choose(2*n,n)
+partleft = 0
+for(k in 0:n){partleft = partleft + choose(n,k)*choose(n,k)}
+partleft
+
+if(partleft == partright){
+  paste("La relation est vérifiée et on obtient ", partleft)
+} else {
+  paste ("Tu es trop con, tu as une variation de ", abs(partleft - partright))
+}
+
+##---------------------------------
+##---------------------------------
+##---------------------------------
+
+##Notions supplémentaires Algèbre matriciel et R
+###Init matrice row bind (association de lignes)
+rbind(1 ,2 ,3)
+###Init matrice col bind (association de colonnes)
+cbind(1, 2, 3)
+###Init matrice avec fonction rep : 
+#### Attention rep inverse les commandes (pour obtenir des lignes faire cbind/pour obtenir des colonnes faire rbind)
+rbind(rep(0, 3))
+cbind(rep(0, 3))
+###Autre méthode pour initialiser (matrix(data = NA, nrow = 1, ncol = 1, byrow = FALSE,dimnames = NULL))
+matrix(data = 1:12, nrow = 3, ncol = 4)
+matrix(1:12, 3, 4)
+a <- matrix (c(1,2,3,4), 2, 2, byrow=TRUE);a
+n1 <- 3;n2 <- 3;a <- matrix (rep(0, n1*n2), n1, n2);a
+### Accès : 
+a <- matrix (c(1,2,3,4,5,6,7,8,9,10,11,12), 2, byrow=TRUE)
+a
+indices <- a>5 & a<9
+indices
+a[indices]
+
+##Le rapport entre l'indice unique ket la paire d'indices (i, j) est :
+k = (j - 1)*nrow(a) + i;k
+i <- k%%nrow(a);i
+j <- k%/%nrow(a) + 1;j
+
+##Opérations de bases sur matrices : 
+a = matrix (c(1,2,3,4,5,6), 2, 3);a
+b = matrix (c(5,1,3,4,1,0), 2, 3);b
+###Addition terme à terme
+a+b
+###Soustraction terme à terme 
+a-b
+###Multiplication terme à terme
+a*b
+###Division terme à terme
+a/b
+
+###Multiplication matricielle
+a = matrix (c(1,2,3,4,5,6,8,9,0), 3, 3);a
+b = matrix (c(5,1,3,4,1,0,2,1,8), 3, 3);b
+a %*% b
+###Déterminant 
+det(a)
+###Transposition
+aperm(a)
+###Produit scalaire
+a %*% aperm(b)
+###Norme 
+sqrt(a %*% aperm(a))
+sqrt(aperm(a) %*% a)
+###Inversion 
+solve(a)
+###Etudes du spectre d'une matrice :
+x = eigen(a)
+x$values # valeurs propres
+x$vectors # vecteurs propres
+
+
+
+
+#CODE TP1
+#FAC
+setwd("~/L2-S4-2016-2017/R/1_TP")
+#MAC
+##setwd("/Users/mehdilatif/Desktop/ÉTUDES/FAC/S4/2016_2017/PROBA/R")
+
+##### VECTEURS CREATIONS
+x <- c(1,3,5,7);x
+y <- c(2,3,5,7,11,13);y
+z <- c(4,-1);z
+b <- y < 5;b
+
+##### OPERATIONS BASES
+# / division réelle
+47 / 8
+# %/% division euclidienne 
+47 %/% 8
+7*8+5
+# %% modulo
+47 %% 8
+7+8*5
+
+##### PRODUIT SCALAIRE
+a<- c(2,3)
+b<-c(5,6)
+# produit de matrices
+a %*% b
+x+2
+y*3
+
+##### OPERATIONS BASES VECTORIELLES
+v<-seq(10,60, by=10)
+w<-c(20,10,31,31,61,51)
+u<-c(5,5,5,32,62,49)
+#longueur d'un vecteur 
+length(v)
+#Dimension d'une matrices
+m = matrix(1,3,6);m
+dim(m)
+
+#somme
+sum(v)
+#moyenne
+mean(v)
+#min
+min(v)
+#max
+max(v)
+#min et max du vector dans un vect 2D
+range(v)
+#écart-type
+sd(v)
+#médianne
+median(v)
+#Taile du vecteur
+length(v)
+#affichage simple
+str(v)
+#affichage des informations sur le vecteur : min - Q1 - mediane - moyenne - Q3 - max
+summary(v)
+#indique si il y a des valeurs manquantes
+is.na(v)
+
+#ajout de NA (Not Available)
+vbis<- c(NA,v,NA,NA);v
+sum(is.na(vbis))
+# na.rm = T -> on ne tient pas compte des NA (T = TRUE, F = FALSE)
+range(vbis, na.rm = TRUE)
+
+
+#statistiques simples sur les vectors
+#quartiles de v, 4 paquets d'effectifs égaux  
+#suivant une certaine loi définissant les frontières 
+quantile(v)
+
+
+#détermination de frontière : "loi pareto"
+quantile(v, probs = c(0,0.1,0.9,1))
+
+
+#Resumé des différentes données importantes du vecteur
+summary(v)
+
+#correlation linaire entre 2 vecteurs
+cor(v,w)
+#tri 
+sort(w)
+sort(w, decreasing = T)#decroissant
+#ordre : designe l'ordre des éléments dans le vecteurs sans les trier
+order(w)
+#rank : permet de définir le même numéro d'ordre pour des valeurs égales 
+rank(w, ties.method = "min")#ex : places des coureurs dans une course à pied
+
+
+#valeurs maximun (minimale) membre à membre
+w;v;u
+pmax(w,v,u) 
+pmin(w,v,u)
+
+
+
+#sommes cummulées du vecteur : u[n]<-u[n]+u[n-1]
+cumsum(v)
+
+#produits cummulées du vecteur : u[n]<-u[n]*u[n-1]
+cumprod(v)
+
+
+#max (min) succésifs u[n]<-max(v[n],v[n-1])
+cummax(w) 
+cummin(w)
+
+##### OPERATIONS SUR BOOLEENS
+#types de données simples :
+#booléens
+
+
+#définition de vecteurs de booléens
+A <- c(F,T,F,T)
+B<- c(F,F,T,T)
+
+#Table de vérités : 
+#ET
+A & B
+#OU
+A | B
+#non-A
+!A
+#OU-exclusif
+xor(A,B)
+#=> (non A ou B)
+!A|B
+#<=>
+(!A|B) & (!B|A)
+
+
+#on peut effectuer un "filtre booléen" sur les membres d'un vecteur 
+#t contient tout les membres de v > 30
+t <- (v>30) ;v;t
+#on ne garde que les membres où true a été obtenu
+v <- v[(v>30)] 
+
+#which : retourne les indices du vecteurs satifaissant la condition
+v
+which(v == 40) #trouve les indices pour lesquels le membre est égal à 30
+which(v == 30)
+which.max(v) #indice du max
+which.min(v) #indice du min
+
+#transformation vect bool -> vect int
+as.integer(A)
+#all : toutes les valeurs satifont la condition
+all(v > 3)
+#any : au moins une satisfait la condition
+any(v < 3)
+
+
+##### OPERATIONS SUR LES ENSEMBLES
+
+#unique : supprime la redondance dans le vecteur
+H<-unique(c("e","f","g","h","h","h"))
+
+P<-c("e","f","g","h")
+Q<-c("g","h","i","j")
+#union
+union(P,Q)
+
+#intersection
+intersect(P,Q)
+#différence (non symétrique)
+
+setdiff(P,Q)
+setdiff(Q,P)
+
+#différence symétrique
+union(setdiff(P,Q),setdiff(Q,P))
+
+
+#appartenance membre à membre d'un premier ensemble à un autre ensemble
+#retourne un vecteur de booléen réprésentant si le i-ème membre de l'ensemble A appartient à l'ensemble B
+
+H %in% P
+P %in% H
+#Les listes
+#réalité algorithmique : dictionaire "clé-valeur" (hashmap ?)
+
+#liste clé-valeur
+l <- list (nom = "Dupond", age = 25, vec = v)
+
+
+#valeurs
+l&nom
+l&age
+l&vec
+
+
+
+
+
+#accés par indice dans une liste
+l[[1]]
+l[[2]]
+l[[3]]
+#les facteurs 
+#classes non ordonnées
+coul <- factor(c("bleu","vert","rouge","bleu","vert"))# facteur = pas d'ordre
+coul
+
+
+z
+c(z)
+c(z,z)
+w <- c(x,y)
+(w <- c(x,y))
+x+z
+x+y
+b
+!b
+y>7
+y[y>7]
+y[b]
+x[b]
+sum(x>5)
+sum(x[x>5])
+sum( x>5 | x<3)
+x > 5 & x < 3
+sum(x > 5 & x < 3)
+y[3]
+y[-3]
+y[x]
+class(x)
+class(b)
+as.integer(b)
+
+
+savehistory("Sauvegarde_historique_TP1.R")
+remove()
+
+
+
+
+###https://openclassrooms.com/courses/effectuez-vos-etudes-statistiques-avec-r/introduction-a-r
+#######https://fr.wikibooks.org/wiki/Programmer_en_R/Manipuler_les_matrices
+
+
+
+savehistory("Sauvegarde_historique_TP1.R")
+
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 00000000001000011111000010000000000000000000000
+% 00000000001000010000000010000000000000000000000
+% 00000000001000010000000010000000000000000000000
+% 00000000001000011111000010000000000000000000000
+% 00000000000000000000000000000000000000000000000
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 00000000001000011111000010000000000000000000000
+% 00000000001000010000000010000000000000000000000
+% 00000000001000010000000010000000000000000000000
+% 00000000001000011111000010000000000000000000000
+% 00000000000000000000000000000000000000000000000
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+
+
+
+
+
+
+
+
+
+ar exemple, du risque instantanté de décès).
+\begin{lstlisting}[language=html]
+> library(Epi)
+> twoby2(1-smp$suicide.hr,1-smp$abus)
+2 by 2 table analysis: 
+------------------------------------------------------ 
+Outcome   : 0 
+Comparing : 0 vs. 1 
+
+    0   1    P(0) 95% conf. interval
+0  63  90  0.4118    0.3366   0.4913
+1 147 453  0.2450    0.2122   0.2810
+
+                                   95% conf. interval
+             Relative Risk: 1.6807    1.3276   2.1276
+         Sample Odds Ratio: 2.1571    1.4873   3.1287
+Conditional MLE Odds Ratio: 2.1547    1.4577   3.1764
+    Probability difference: 0.1668    0.0837   0.2525
+
+             Exact P-value: 1e-04 
+        Asymptotic P-value: 1e-04 
+------------------------------------------------------
+\end{lstlisting}
+
+
+
+
+
+
+
+
+%%%%%%%%%%%%TU TRAVAILLES SUR LA BRANCH PRIME NOW %%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%TU TRAVAILLES SUR LA BRANCH PRIME NOW %%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%TU TRAVAILLES SUR LA BRANCH PRIME NOW %%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%TU TRAVAILLES SUR LA BRANCH PRIME NOW %%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{lstlisting}[language=html]
+
+\end{lstlisting}
+
+\begin{figure}[H]\begin{center}\includegraphics[scale=1]{ilu/g1.png}\caption{Probabilité d'obtention de face entre 0 et 6}\end{center}\end{figure}
+
+
+%%%%%%%%%%%%TU TRAVAILLES SUR LA BRANCH PRIME NOW %%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%TU TRAVAILLES SUR LA BRANCH PRIME NOW %%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%TU TRAVAILLES SUR LA BRANCH PRIME NOW %%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{lstlisting}[language=html]
+
+\end{lstlisting}
+
+\begin{figure}[H]\begin{center}\includegraphics[scale=1]{ilu/g1.png}\caption{Probabilité d'obtention de face entre 0 et 6}\end{center}\end{figure}
+
+
+
+ 
+ 
+
+
+
+
+
+
