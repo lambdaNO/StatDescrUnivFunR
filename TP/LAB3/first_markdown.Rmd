@@ -1,0 +1,71 @@
+---
+title: "Exemple d'analyse"
+author: "LATIF Mehdi"
+date: "11/10/2016"
+output: html_document
+---
+## Description : Analyse des données sur la santé mentale en prison : 
+
+**URL** : http://rmarkdown.rstudio.com/authoring_basics.html
+
+Défintion du workspace par défaut et chargement du dataframe
+```{r}
+setwd("~/XX_Université_fun/univfunR/TP/LAB3")
+smp <- read.csv2("/comptes/E131729J/XX_Université_fun/univfunR/TP/smp2.csv")
+```
+######TADAH
+**Note :**  Si l'on considère que ce n'est pas important à affichier, il suffit d'écrire dans le chunk echo = FALSE
+```{r echo=FALSE}
+setwd("~/XX_Université_fun/univfunR/TP/LAB3")
+smp <- read.csv2("/comptes/E131729J/XX_Université_fun/univfunR/TP/smp2.csv")
+```
+######Et rien apparait RETADAH
+
+Affichage des variables contenues dans le DATAFRAMES SMP
+```{r}
+names(smp)
+```
+Résumé synthétique des différentes variables contenues dans le fichier SMP
+```{r}
+str(smp)
+```
+Affichage des principaux paramètres statistiques des différentes variables contenues dans le fichier SMP
+variables contenues dans le fichier SMP
+```{r}
+summary(smp)
+```
+**Note :** Il est possible de faire un affichage unique de trois commandes dans un même _chunk_ : pour cela, il faut ecrire : 
+_{r, eval = c(1,3)}_ (Dans notre cas, les lignes que l'on souhaites évaluer sont les lignes de commandes 1 et 3) :
+```{r, eval = c(1,3)}
+names(smp)
+str(smp)
+summary(smp)
+```
+Définition d'une nouvelle variable _gauss_, variable catégorielle (on dit aussi qualitative) ou **l'âge des enfants est une modalité**
+```{r}
+gauss <- factor(smp$n.enfant)
+table(gauss)
+```
+Redéfinition d'une modalité dans la variable catégoricielle _gauss_. On concatène les âges supérieurs à 6 ans et on les rassemble dans une même modalité : 
+```{r}
+levels(gauss)[6:13]<-"5+"
+table(gauss)
+```
+Affichage des pourcentage de chaque modalité de la variable : 
+```{r}
+prop.table(table(gauss))
+```
+Modification des pourcentage (x100) pour avoir des résultats plus _lisibles_ : 
+```{r}
+f <- prop.table(table(gauss))*100
+f
+```
+**Vérification :** La somme des fréquences cumulée est bien égale à 1 :
+```{r}
+r<-sum(f)/100
+r
+```
+**Représentation graphique** sous forme d'histogramme de la variable qualitative _gauss_
+```{r}
+barplot(f, ylim = c(0,30),las=1,xlab="catégorie d'âge", ylab="Population")
+```

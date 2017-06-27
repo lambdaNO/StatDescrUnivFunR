@@ -1,0 +1,11 @@
+setwd("~/Desktop/DIVERS_TEMPLATES/R/TP")
+smp.c <-read.csv2("DONNEES/smp1.csv")
+smp.c$ed.bin <- ifelse(smp.c$ed>2,1,0)
+str(smp.c)
+table(smp.c$ed.bin,smp.c$dep.cons,deparse.level = 2,useNA = "always")
+tab <- table(smp.c$ed.bin,smp.c$dep.cons,deparse.level = 2)
+tab
+prop.table(tab,1)
+prop.table(tab,2)
+chisq.test(smp.c$ed.bin,smp.c$dep.cons,correct = FALSE)
+fisher.test(smp.c$ed.bin,smp.c$dep.cons)
