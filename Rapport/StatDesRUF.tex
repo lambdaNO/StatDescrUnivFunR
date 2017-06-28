@@ -5356,7 +5356,7 @@ X$recommander   0   1 <NA>
          <NA>   0   0  129
 
 \end{lstlisting}
-\textbf{A l'aide d?un odds-ratio, estimez la force de l'association entre « recommander.b » et « sexe ». Estimez un intervalle de confiance de cet odds-ratio.}\newline
+\textbf{A l'aide d'un odds-ratio, estimez la force de l'association entre « recommander.b » et « sexe ». Estimez un intervalle de confiance de cet odds-ratio.}\newline
 \textbf{Fonctions utilisées}
 \begin{itemize}
 \item \textit{Package EPI}
@@ -7279,6 +7279,106 @@ Min et Max du vector dans un vecteur en 2 dimensions
 [1] NA NA
 \end{lstlisting}
 
+
+\subsection{Statistiques simples sur les vecteurs}
+Quartiles , 4 paquets d'effectifs égaux 
+\begin{lstlisting}[language=html]
+> v<-seq(10,60, by=10);v
+[1] 10 20 30 40 50 60
+> quantile(v)
+  0%  25%  50%  75% 100% 
+10.0 22.5 35.0 47.5 60.0
+\end{lstlisting}
+Quantiles à valeurs redéfinies
+\begin{lstlisting}[language=html]
+> v<-seq(10,60, by=10);v
+[1] 10 20 30 40 50 60
+> quantile(v, probs = c(0,0.1,0.9,1))
+  0%  10%  90% 100% 
+  10   15   55   60 
+\end{lstlisting}
+
+Resumé des différentes données importantes du vecteur
+\begin{lstlisting}[language=html]
+> v<-seq(10,60, by=10);v
+[1] 10 20 30 40 50 60
+> summary(v)
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+   10.0    22.5    35.0    35.0    47.5    60.0 
+\end{lstlisting}
+Correlation linaire entre 2 vecteurs
+\begin{lstlisting}[language=html]
+> v<-seq(10,60, by=10);v
+[1] 10 20 30 40 50 60
+> w<-c(20,10,31,31,61,51);w
+[1] 20 10 31 31 61 51
+> cor(v,w)
+[1] 0.8657699
+\end{lstlisting}
+Tri 
+\begin{lstlisting}[language=html]
+> w<-c(20,10,31,31,61,51);w
+[1] 20 10 31 31 61 51
+> sort(w)
+[1] 10 20 31 31 51 61
+> w<-c(20,10,31,31,61,51);w
+[1] 20 10 31 31 61 51
+> sort(w, decreasing = T)
+[1] 61 51 31 31 20 10
+\end{lstlisting}
+Ordre : designe l'ordre des éléments dans le vecteurs sans les trier
+\begin{lstlisting}[language=html]
+> w<-c(20,10,31,31,61,51);w
+[1] 20 10 31 31 61 51
+> order(w)
+[1] 2 1 3 4 6 5
+\end{lstlisting}
+Rank : permet de définir le même numéro d'ordre pour des valeurs égales 
+\begin{lstlisting}[language=html]
+> w<-c(20,10,31,31,61,51);w
+[1] 20 10 31 31 61 51
+> rank(w, ties.method = "min")
+[1] 2 1 3 3 6 5
+\end{lstlisting}
+
+Valeurs maximale (minimale) membre à membre
+\begin{lstlisting}[language=html]
+> v<-seq(10,60, by=10);v
+[1] 10 20 30 40 50 60
+> w<-c(20,10,31,31,61,51);w
+[1] 20 10 31 31 61 51
+> u<-c(5,5,5,32,62,49);u
+[1]  5  5  5 32 62 49
+> pmax(w,v,u)
+[1] 20 20 31 40 62 60
+> pmin(w,v,u)
+\end{lstlisting}
+
+Sommes cummulées du vecteur : $u[n] = u[n]+u[n-1]$
+\begin{lstlisting}[language=html]
+> v<-seq(10,60, by=10);v
+[1] 10 20 30 40 50 60
+> cumsum(v)
+[1]  10  30  60 100 150 210
+\end{lstlisting}
+Produits cummulées du vecteur : $u[n]=u[n] \times u[n-1]$
+\begin{lstlisting}[language=html]
+> v<-seq(10,60, by=10);v
+[1] 10 20 30 40 50 60
+> cumprod(v)
+[1] 1.0e+01 2.0e+02 6.0e+03 2.4e+05 1.2e+07 7.2e+08
+\end{lstlisting}
+
+Max (min) succésifs $u[n] = \max(v[n],v[n-1])$
+\begin{lstlisting}[language=html]
+> u<-c(5,5,5,32,62,49);u
+[1]  5  5  5 32 62 49
+> cummax(u)
+[1]  5  5  5 32 62 62
+> cummin(u)
+[1] 5 5 5 5 5 5
+\end{lstlisting}
+
 \subsection{Factorielle et Coefficient binomial}
 \textbf{Fonction factorielle :}
 $$n! = n \times (n-1) \times (n-2) \times ... \times 1$$
@@ -7374,11 +7474,339 @@ est le nombre de façon de choisir $k$ éléments parmi $n$ éléments avec $n\geq k$
 [25]  75025 121393 196418 317811 514229 832040
 \end{lstlisting}
 
+\subsection{Logique et opérations sur booléens}
 
+Définition de vecteurs de booléens
+\begin{lstlisting}[language=html]
+> A <- c(F,T,F,T);A
+[1] FALSE  TRUE FALSE  TRUE
+> B<- c(F,F,T,T);B
+[1] FALSE FALSE  TRUE  TRUE
+\end{lstlisting}
 
+\textbf{Table de vérités :}\newline
+$A\land B$
+\begin{lstlisting}[language=html]
+> A
+[1] FALSE  TRUE FALSE  TRUE
+> B
+[1] FALSE FALSE  TRUE  TRUE
+> Et <- A & B;Et
+[1] FALSE FALSE FALSE  TRUE
+> cbind(A,B,Et)
+         A     B    Et
+[1,] FALSE FALSE FALSE
+[2,]  TRUE FALSE FALSE
+[3,] FALSE  TRUE FALSE
+[4,]  TRUE  TRUE  TRUE
+\end{lstlisting}
+$A \lor B$
+\begin{lstlisting}[language=html]
+> A
+[1] FALSE  TRUE FALSE  TRUE
+> B
+[1] FALSE FALSE  TRUE  TRUE
+> Ou <- A | B;Ou
+[1] FALSE  TRUE  TRUE  TRUE
+> cbind(A,B,Ou)
+         A     B    Ou
+[1,] FALSE FALSE FALSE
+[2,]  TRUE FALSE  TRUE
+[3,] FALSE  TRUE  TRUE
+[4,]  TRUE  TRUE  TRUE
+\end{lstlisting}
+$\lnot A$
+\begin{lstlisting}[language=html]
+> A
+[1] FALSE  TRUE FALSE  TRUE
+> nonA <- !(A)
+> cbind(A,nonA)
+         A  nonA
+[1,] FALSE  TRUE
+[2,]  TRUE FALSE
+[3,] FALSE  TRUE
+[4,]  TRUE FALSE
+\end{lstlisting}
+$A \oplus B$\footnote{Ou exclusif : \textit{Le résultat est VRAI si un et un seul des opérandes A et B est VRAI} ou \textit{Le résultat est VRAI si les deux opérandes A et B ont des valeurs distinctes} ou \textit{Le résultat est VRAI si un nombre impair d'entrées est vrai (ceci est surtout applicable lorsque deux ou plusieurs opérateurs logiques XOR se cascadent } \newline
+$ p \oplus q \equiv (p\lor q )\land \lnot (p\land q) \equiv (p\land \lnot q)\lor(\lnot p \land q)$
+\begin{center}
+\begin{tabular}{|l|l|l|}
+\hline
+A & B & A $\oplus$ B \\ \hline
+0 & 0 & 0          \\ \hline
+0 & 1 & 1          \\ \hline
+1 & 0 & 1          \\ \hline
+1 & 1 & 0          \\ \hline
+\end{tabular}
+\end{center}
+}
 
+\begin{lstlisting}[language=html]
+> A
+[1] FALSE  TRUE FALSE  TRUE
+> B
+[1] FALSE FALSE  TRUE  TRUE
+> OuEx <- xor(A,B)
+> cbind(A,B,OuEx)
+         A     B  OuEx
+[1,] FALSE FALSE FALSE
+[2,]  TRUE FALSE  TRUE
+[3,] FALSE  TRUE  TRUE
+[4,]  TRUE  TRUE FALSE
+\end{lstlisting}
+Implication : $A \Rightarrow B \equiv  \lnot A \lor B$
+\begin{lstlisting}[language=html]
+> A
+[1] FALSE  TRUE FALSE  TRUE
+> B
+[1] FALSE FALSE  TRUE  TRUE
+> imp <- !A|B;imp
+[1]  TRUE FALSE  TRUE  TRUE
+> cbind(A,B,imp)
+         A     B   imp
+[1,] FALSE FALSE  TRUE
+[2,]  TRUE FALSE FALSE
+[3,] FALSE  TRUE  TRUE
+[4,]  TRUE  TRUE  TRUE
+\end{lstlisting}
+Equivalence : $A \Leftrightarrow B \equiv (\lnot A \lor B)\land (\lnot B \lor A)$
+\begin{lstlisting}[language=html]
+> A
+[1] FALSE  TRUE FALSE  TRUE
+> B
+[1] FALSE FALSE  TRUE  TRUE
+> equi <- (!A|B) & (!B|A);equi
+[1]  TRUE FALSE FALSE  TRUE
+> cbind(A,B,equi)
+         A     B  equi
+[1,] FALSE FALSE  TRUE
+[2,]  TRUE FALSE FALSE
+[3,] FALSE  TRUE FALSE
+[4,]  TRUE  TRUE  TRUE
+\end{lstlisting}
+On peut effectuer un "filtre booléen" sur les membres d'un vecteur. \newline
+Soit $t$, un vecteur qui contient tout les membres de $v$ > 30 On ne garde que les membres où TRUE a été obtenu :
+\begin{lstlisting}[language=html]
+> v<-seq(10,60, by=10);v
+[1] 10 20 30 40 50 60
+> t <- (v>30) ;v;t
+[1] 10 20 30 40 50 60
+[1] FALSE FALSE FALSE  TRUE  TRUE  TRUE
+> v <- v[(v>30)];v
+[1] 40 50 60
+\end{lstlisting}
+which : retourne les indices du vecteurs qui satisfont la condition : 
+\begin{lstlisting}[language=html]
+ > v<-seq(10,60, by=10);v
+[1] 10 20 30 40 50 60
+> which(v == 40) #trouve les indices pour lesquels le membre est égal à 30
+[1] 4
+> v[which(v == 40)] #logique
+[1] 40
+> which(v == 30)
+[1] 3
+> v[which(v == 30)]#logique
+[1] 30
+> which.max(v) #indice du max
+[1] 6
+> v[which.max(v)]
+[1] 60
+> which.min(v) #indice du min
+[1] 1
+> v[which.min(v)]
+[1] 10
+\end{lstlisting}
+Transformation d'un vecteur de booléens en vecteur d'entier
+\begin{lstlisting}[language=html]
+> A
+[1] FALSE  TRUE FALSE  TRUE
+> A <- as.integer(A);A
+[1] 0 1 0 1
+\end{lstlisting}
+all : vrai si toutes les valeurs satisfont la condition.
+\begin{lstlisting}[language=html]
+> v<-seq(10,60, by=10);v
+[1] 10 20 30 40 50 60
+> all(v > 3)
+[1] TRUE
+> all (v < 20)
+[1] FALSE
+\end{lstlisting}
+\begin{lstlisting}[language=html]
+any : vrai si au moins une valeur satisfait la condition
+> v<-seq(10,60, by=10);v
+[1] 10 20 30 40 50 60
+> any(v < 3)
+[1] FALSE
+> any(v < 20)
+[1] TRUE
+\end{lstlisting}
+\subsection{Opérations sur les ensembles}
+\begin{lstlisting}[language=html]
+unique : supprime les redondances dans un vecteur
+> H<-unique(c("e","f","g","h","h","h"))
+> H
+[1] "e" "f" "g" "h"
+\end{lstlisting}
+Soient deux ensembles $P$ et $Q$
+\begin{lstlisting}[language=html]
+> P<-c("e","f","g","h");P
+[1] "e" "f" "g" "h"
+> Q<-c("g","h","i","j");Q
+[1] "g" "h" "i" "j"
+\end{lstlisting}
+Union : $P\cup Q$
+\begin{lstlisting}[language=html]
+> union(P,Q)
+[1] "e" "f" "g" "h" "i" "j"
+\end{lstlisting}
+Intersection : $P\cap Q$
+\begin{lstlisting}[language=html]
+> intersect(P,Q)
+[1] "g" "h"
+\end{lstlisting}
+Différence non symétrique
+\begin{lstlisting}[language=html]
+> P<-c("e","f","g","h");P
+[1] "e" "f" "g" "h"
+> Q<-c("g","h","i","j");Q
+[1] "g" "h" "i" "j"
+> setdiff(P,Q)
+[1] "e" "f"
+> setdiff(Q,P)
+[1] "i" "j"
+\end{lstlisting}
+Différence symétrique
+\begin{lstlisting}[language=html]
+> P<-c("e","f","g","h");P
+[1] "e" "f" "g" "h"
+> Q<-c("g","h","i","j");Q
+[1] "g" "h" "i" "j"
+> union(setdiff(P,Q),setdiff(Q,P))
+[1] "e" "f" "i" "j"
+\end{lstlisting}
+Appartenance, membre à membre, d'un premier ensemble à un autre. Retourne un vecteur de booléen réprésentant si le i-ème membre de l'ensemble P appartient à l'ensemble Q
+\begin{lstlisting}[language=html]
+> P<-c("e","f","g","h");P
+[1] "e" "f" "g" "h"
+> H<-unique(c("e","f","g","h","h","h","a","z"));H
+[1] "e" "f" "g" "h" "a" "z"
+> H %in% P
+[1]  TRUE  TRUE  TRUE  TRUE FALSE FALSE
+> P %in% H
+[1] TRUE TRUE TRUE TRUE
+\end{lstlisting}
 
+\subsection{Les listes}
+D'après \href{http://www.r-tutor.com/r-introduction/list}{\underline{R-Tutor.com}}\newline
+\\
+A list is a generic vector containing other objects.\newline
+For example, the following variable x is a list containing copies of three vectors n, s, b, and a numeric value 3. 
+\begin{lstlisting}[language=html]
+> n = c(2, 3, 5)
+> s = c("aa", "bb", "cc", "dd", "ee")
+> b = c(TRUE, FALSE, TRUE, FALSE, FALSE)
+> x = list(n, s, b, 3);x
+[[1]]
+[1] 2 3 5
 
+[[2]]
+[1] "aa" "bb" "cc" "dd" "ee"
+
+[[3]]
+[1]  TRUE FALSE  TRUE FALSE FALSE
+
+[[4]]
+[1] 3
+\end{lstlisting}
+\textbf{List Slicing}\newline
+We retrieve a list slice with the single square bracket "[]" operator. The following is a slice containing the second member of x, which is a copy of s. 
+\begin{lstlisting}[language=html]
+> x[2]
+[[1]]
+[1] "aa" "bb" "cc" "dd" "ee"
+\end{lstlisting}
+
+With an index vector, we can retrieve a slice with multiple members. Here a slice containing the second and fourth members of x. 
+\begin{lstlisting}[language=html]
+> x[c(2, 4)]
+[[1]]
+[1] "aa" "bb" "cc" "dd" "ee"
+
+[[2]]
+[1] 3
+\end{lstlisting}
+\textbf{Member Reference}\newline
+In order to reference a list member directly, we have to use the double square bracket "[[]]" operator. The following object x[[2]] is the second member of x. In other words, x[[2]] is a copy of s, but is not a slice containing s or its copy. 
+\begin{lstlisting}[language=html]
+> x[[2]]
+[1] "aa" "bb" "cc" "dd" "ee"
+\end{lstlisting}
+We can modify its content directly. 
+\begin{lstlisting}[language=html]
+> x[[2]]
+[1] "aa" "bb" "cc" "dd" "ee"
+> x[[2]]
+[1] "aa" "bb" "cc" "dd" "ee"
+> x[[2]][1] = "ta"
+> x[[2]]
+[1] "ta" "bb" "cc" "dd" "ee"
+\end{lstlisting}
+\textbf{Named List }\newline
+We can assign names to list members, and reference them by names instead of numeric indexes.
+For example, in the following, v is a list of two members, named "bob" and "john".
+\begin{lstlisting}[language=html] 
+> v = list(bob=c(2, 3, 5), john=c("aa", "bb"))
+> v
+$bob
+[1] 2 3 5
+
+$john
+[1] "aa" "bb"
+\end{lstlisting}
+\textbf{List Slicing}\newline
+We retrieve a list slice with the single square bracket "[]" operator. Here is a list slice containing a member of v named "bob". 
+\begin{lstlisting}[language=html]
+> v["bob"]
+$bob
+[1] 2 3 5
+
+> v$bob
+[1] 2 3 5
+\end{lstlisting}
+With an index vector, we can retrieve a slice with multiple members. Here is a list slice with both members of v. Notice how they are reversed from their original positions in v. 
+\begin{lstlisting}[language=html]
+> v[c("john", "bob")]
+$john
+[1] "aa" "bb"
+
+$bob
+[1] 2 3 5
+\end{lstlisting}
+\textbf{Member Reference}\newline
+In order to reference a list member directly, we have to use the double square bracket "[[]]" operator. The following references a member of v by name. 
+\begin{lstlisting}[language=html]
+> v[["bob"]]
+[1] 2 3 5
+\end{lstlisting}
+
+A named list member can also be referenced directly with the "\$" operator in lieu of the double square bracket operator. 
+\begin{lstlisting}[language=html]
+> v$john
+[1] "aa" "bb"
+\end{lstlisting}
+\textbf{Search Path Attachment}\newline
+We can attach a list to the R search path and access its members without explicitly mentioning the list. It should to be detached for cleanup. 
+\begin{lstlisting}[language=html]
+> attach(v)
+> bob
+[1] 2 3 5
+> john
+[1] "aa" "bb"
+> detach(v)
+> bob
+Erreur : objet 'bob' introuvable
+\end{lstlisting}
 \newpage
 
 

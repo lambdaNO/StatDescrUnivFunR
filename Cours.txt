@@ -61,124 +61,24 @@ sujet ont été recueillies.
 
 
 
-
-
-
-
-##---------------------------------
-##---------------------------------
-##---------------------------------
-
-
-
-
-
-
-
-
-
-#CODE TP1
-#FAC
-setwd("~/L2-S4-2016-2017/R/1_TP")
-#MAC
-##setwd("/Users/mehdilatif/Desktop/ÉTUDES/FAC/S4/2016_2017/PROBA/R")
-
-##### VECTEURS CREATIONS
-x <- c(1,3,5,7);x
-y <- c(2,3,5,7,11,13);y
-z <- c(4,-1);z
-b <- y < 5;b
-
-
-##### PRODUIT SCALAIRE
-a<- c(2,3)
-b<-c(5,6)
-# produit de matrices
-a %*% b
-x+2
-y*3
-
-##### OPERATIONS BASES VECTORIELLES
 v<-seq(10,60, by=10)
 w<-c(20,10,31,31,61,51)
 u<-c(5,5,5,32,62,49)
-#longueur d'un vecteur 
-length(v)
-#Dimension d'une matrices
-m = matrix(1,3,6);m
-dim(m)
-
-#somme
-sum(v)
-#moyenne
-mean(v)
-#min
-min(v)
-#max
-max(v)
-#min et max du vector dans un vect 2D
-range(v)
-#écart-type
-sd(v)
-#médianne
-median(v)
-#Taile du vecteur
-length(v)
-#affichage simple
-str(v)
-#affichage des informations sur le vecteur : min - Q1 - mediane - moyenne - Q3 - max
-summary(v)
-#indique si il y a des valeurs manquantes
-is.na(v)
-
-#ajout de NA (Not Available)
-vbis<- c(NA,v,NA,NA);v
-sum(is.na(vbis))
-# na.rm = T -> on ne tient pas compte des NA (T = TRUE, F = FALSE)
-range(vbis, na.rm = TRUE)
-
-
-#statistiques simples sur les vectors
-#quartiles de v, 4 paquets d'effectifs égaux  
-#suivant une certaine loi définissant les frontières 
-quantile(v)
-
-
-#détermination de frontière : "loi pareto"
-quantile(v, probs = c(0,0.1,0.9,1))
-
-
-#Resumé des différentes données importantes du vecteur
-summary(v)
-
-#correlation linaire entre 2 vecteurs
-cor(v,w)
-#tri 
-sort(w)
-sort(w, decreasing = T)#decroissant
-#ordre : designe l'ordre des éléments dans le vecteurs sans les trier
-order(w)
-#rank : permet de définir le même numéro d'ordre pour des valeurs égales 
-rank(w, ties.method = "min")#ex : places des coureurs dans une course à pied
-
-
-#valeurs maximun (minimale) membre à membre
-w;v;u
-pmax(w,v,u) 
-pmin(w,v,u)
 
 
 
-#sommes cummulées du vecteur : u[n]<-u[n]+u[n-1]
-cumsum(v)
-
-#produits cummulées du vecteur : u[n]<-u[n]*u[n-1]
-cumprod(v)
+##---------------------------------
+##---------------------------------
+##---------------------------------
 
 
-#max (min) succésifs u[n]<-max(v[n],v[n-1])
-cummax(w) 
-cummin(w)
+
+
+
+
+
+
+
 
 ##### OPERATIONS SUR BOOLEENS
 #types de données simples :
@@ -285,8 +185,6 @@ remove()
 
 
 
-###https://openclassrooms.com/courses/effectuez-vos-etudes-statistiques-avec-r/introduction-a-r
-#######https://fr.wikibooks.org/wiki/Programmer_en_R/Manipuler_les_matrices
 
 
 
