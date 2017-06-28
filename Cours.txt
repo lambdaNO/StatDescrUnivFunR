@@ -56,172 +56,23 @@ sujet ont été recueillies.
 
 
 
-###Exercice 1.3
-#-----------------------------------------------------------------
-##Créer un vecteur x qui contient les réels compris entre 0 et 1 par pas de 0, 1.
-x <- seq(0,1,0.1);x
-##Calculer n la longueur de x
-n <- length(x);n
-##Créer un vecteur y = 4x(1 − x)
-y <- 4*x*(1-x);y
-##tracer la courbe rejoignant les points (xi,yi)
-plot(x,y,main="Graphe des couples (x,y)")
-##Calculer le maximum des yi
-max(y)
-min(y)
-##En quel point le maximum est-il atteint?
-which.max(y)
-y[which.max(y)]
-paste('Le maximum est atteint au point numéro ', which.max(y), ' et a pour valeur ', y[which.max(y)])
-paste('Le minimum est atteint au point numéro ', which.min(y), ' et a pour valeur ', y[which.min(y)])
-##Tracer la courbe de la fonction f(x) = 4x^{2} (1-x) sur l’intervalle [−2, 1], en rouge avec  le logiciel.
-y = 4*x*x*(1-x);y
-plot(x,y,main = "f(x) = 4x^{2} (1-x)",xlab = "échelle des x", ylab = "échelle des y",xlim=c(- 2,1),ylim=c(-1,1),col="red")
 
 
 
-###Exercice 1.4
-####Explications
-#####Fonction factorielle n! = n x (n-1) x (n-2) x ... x 1
-######factorial(nb)
-tst_fac <- factorial(4)
-tst_fac
-#####Combinatoire : C_n^k : nombre de façon de choisir k éléments parmi n.
-######choose(n,k)
-n = 5
-k = 2
-tst_com <- choose(n, k)
-tst_com
-paste('Nombre de façon de choisir', k ,' élément(s) parmi ', n ,' : ', tst_com)
-##### Petit truc drôle : le triangle de Pascal
-for (n in 0:10) print(choose(n, k = 0:n))
-
-###Pour k = 1, 2, 3, 4, 5, 6, taper choose(k, 0:k) puis sum(choose(k, 0:k)). A quel énonce du cours correspondent ces sommes ?
-n <- 10
-for (k in 1:n){print(choose(k,0:k))};print("C'est le triangle de Pascal")
-
-for (k in 1:n){
-  print(sum(choose(k,0:k)))
-}
-paste ('Mais c’est les résultats du calcule de 2n pour n variant de 1 à ',n)
 
 
 
-### 
-###
 
 
-
-###Exercice 1.5
-### Taper x = c(1). Utiliser la boucle for contenant la commande x = c(x,1) pour créer un vecteur de taille 20 ne contenant que de 1.
-x = c(1)
-x
-length(x)
-for( i in 1:20){x = c(x,1)}
-x
-length(x)
-print('Bah oui gros con, tu as déjà une composante dans ton vecteur !! tu dois donc faire 19 itérations et non 20')
-x = c(1)
-for( i in 1:19){x = c(x,1)}
-x
-length(x)
-
-##Comment créer le même vecteur avec rep ?
-###Avec la fonction rep, créer un vecteur de taille 20 ne contenant que de 1. c'est beaucoup plus simple
-y = rep(1,20)
-y
-length(y)
-
-##Même question, avec une commande du genre x = i*x, pour calculer 20! =factorial(20).
-x = c(1)
-##Ca devra toujours rester 1
-length(x)
-for(i in 1:20){x = i*x}
-x
-length(x)
-f <-factorial(20)
-if(f==x){
-  print('tu es trop un champion')
-} else {
-  print('tu es trop un looser')
-}
-paste('avec x (boucle), tu as ', x)
-paste('avec f (fonction), tu as ', f)
-
-print("Vérification de relation : ")
-n = 8
-partright = choose(2*n,n)
-partleft = 0
-for(k in 0:n){partleft = partleft + choose(n,k)*choose(n,k)}
-partleft
-
-if(partleft == partright){
-  paste("La relation est vérifiée et on obtient ", partleft)
-} else {
-  paste ("Tu es trop con, tu as une variation de ", abs(partleft - partright))
-}
 
 ##---------------------------------
 ##---------------------------------
 ##---------------------------------
 
-##Notions supplémentaires Algèbre matriciel et R
-###Init matrice row bind (association de lignes)
-rbind(1 ,2 ,3)
-###Init matrice col bind (association de colonnes)
-cbind(1, 2, 3)
-###Init matrice avec fonction rep : 
-#### Attention rep inverse les commandes (pour obtenir des lignes faire cbind/pour obtenir des colonnes faire rbind)
-rbind(rep(0, 3))
-cbind(rep(0, 3))
-###Autre méthode pour initialiser (matrix(data = NA, nrow = 1, ncol = 1, byrow = FALSE,dimnames = NULL))
-matrix(data = 1:12, nrow = 3, ncol = 4)
-matrix(1:12, 3, 4)
-a <- matrix (c(1,2,3,4), 2, 2, byrow=TRUE);a
-n1 <- 3;n2 <- 3;a <- matrix (rep(0, n1*n2), n1, n2);a
-### Accès : 
-a <- matrix (c(1,2,3,4,5,6,7,8,9,10,11,12), 2, byrow=TRUE)
-a
-indices <- a>5 & a<9
-indices
-a[indices]
 
-##Le rapport entre l'indice unique ket la paire d'indices (i, j) est :
-k = (j - 1)*nrow(a) + i;k
-i <- k%%nrow(a);i
-j <- k%/%nrow(a) + 1;j
 
-##Opérations de bases sur matrices : 
-a = matrix (c(1,2,3,4,5,6), 2, 3);a
-b = matrix (c(5,1,3,4,1,0), 2, 3);b
-###Addition terme à terme
-a+b
-###Soustraction terme à terme 
-a-b
-###Multiplication terme à terme
-a*b
-###Division terme à terme
-a/b
 
-###Multiplication matricielle
-a = matrix (c(1,2,3,4,5,6,8,9,0), 3, 3);a
-b = matrix (c(5,1,3,4,1,0,2,1,8), 3, 3);b
-a %*% b
-###Déterminant 
-det(a)
-###Transposition
-aperm(a)
-###Produit scalaire
-a %*% aperm(b)
-###Norme 
-sqrt(a %*% aperm(a))
-sqrt(aperm(a) %*% a)
-###Inversion 
-solve(a)
-###Etudes du spectre d'une matrice :
-x = eigen(a)
-x$values # valeurs propres
-x$vectors # vecteurs propres
+
 
 
 
@@ -426,30 +277,6 @@ coul <- factor(c("bleu","vert","rouge","bleu","vert"))# facteur = pas d'ordre
 coul
 
 
-z
-c(z)
-c(z,z)
-w <- c(x,y)
-(w <- c(x,y))
-x+z
-x+y
-b
-!b
-y>7
-y[y>7]
-y[b]
-x[b]
-sum(x>5)
-sum(x[x>5])
-sum( x>5 | x<3)
-x > 5 & x < 3
-sum(x > 5 & x < 3)
-y[3]
-y[-3]
-y[x]
-class(x)
-class(b)
-as.integer(b)
 
 
 savehistory("Sauvegarde_historique_TP1.R")
@@ -469,126 +296,11 @@ savehistory("Sauvegarde_historique_TP1.R")
 
 
 
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% 00000000001000011111000010000000000000000000000
-% 00000000001000010000000010000000000000000000000
-% 00000000001000010000000010000000000000000000000
-% 00000000001000011111000010000000000000000000000
-% 00000000000000000000000000000000000000000000000
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% 00000000001000011111000010000000000000000000000
-% 00000000001000010000000010000000000000000000000
-% 00000000001000010000000010000000000000000000000
-% 00000000001000011111000010000000000000000000000
-% 00000000000000000000000000000000000000000000000
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-
-
-
-
-
-
-
-
-
-
-
-ar exemple, du risque instantanté de décès).
-\begin{lstlisting}[language=html]
-> library(Epi)
-> twoby2(1-smp$suicide.hr,1-smp$abus)
-2 by 2 table analysis: 
------------------------------------------------------- 
-Outcome   : 0 
-Comparing : 0 vs. 1 
-
-    0   1    P(0) 95% conf. interval
-0  63  90  0.4118    0.3366   0.4913
-1 147 453  0.2450    0.2122   0.2810
-
-                                   95% conf. interval
-             Relative Risk: 1.6807    1.3276   2.1276
-         Sample Odds Ratio: 2.1571    1.4873   3.1287
-Conditional MLE Odds Ratio: 2.1547    1.4577   3.1764
-    Probability difference: 0.1668    0.0837   0.2525
-
-             Exact P-value: 1e-04 
-        Asymptotic P-value: 1e-04 
-------------------------------------------------------
-\end{lstlisting}
-
-
-
-
-
-
-
-
-%%%%%%%%%%%%TU TRAVAILLES SUR LA BRANCH PRIME NOW %%%%%%%%%%%%%%%%%
-
-%%%%%%%%%%%%TU TRAVAILLES SUR LA BRANCH PRIME NOW %%%%%%%%%%%%%%%%%
-
-%%%%%%%%%%%%TU TRAVAILLES SUR LA BRANCH PRIME NOW %%%%%%%%%%%%%%%%%
-
-%%%%%%%%%%%%TU TRAVAILLES SUR LA BRANCH PRIME NOW %%%%%%%%%%%%%%%%%
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
 \begin{lstlisting}[language=html]
 
 \end{lstlisting}
 
 \begin{figure}[H]\begin{center}\includegraphics[scale=1]{ilu/g1.png}\caption{Probabilité d'obtention de face entre 0 et 6}\end{center}\end{figure}
-
-
-%%%%%%%%%%%%TU TRAVAILLES SUR LA BRANCH PRIME NOW %%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%TU TRAVAILLES SUR LA BRANCH PRIME NOW %%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%TU TRAVAILLES SUR LA BRANCH PRIME NOW %%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-
-
-
-
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\begin{lstlisting}[language=html]
-
-\end{lstlisting}
-
-\begin{figure}[H]\begin{center}\includegraphics[scale=1]{ilu/g1.png}\caption{Probabilité d'obtention de face entre 0 et 6}\end{center}\end{figure}
-
-
-
- 
- 
-
 
 
 
