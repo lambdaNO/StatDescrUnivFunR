@@ -18,3 +18,9 @@ https://www.fun-mooc.fr/c4x/UPSUD/42001S06/asset/introR.html
 - Coefficient de SPEARMAN
 http://www.jybaudot.fr/Inferentielle/spearman.html
 https://lemakistatheux.wordpress.com/2013/05/22/le-coefficient-correlation-et-le-test-de-spearman/
+
+
+
+
+///////
+https://www.fun-mooc.fr/courses/course-v1:UPSUD+42001+session07/c3903b9dc6614be99cfd4c82cf247823/

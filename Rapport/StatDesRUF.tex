@@ -8044,6 +8044,49 @@ Erreur : objet 'bob' introuvable
 \end{lstlisting}
 \newpage
 
+\newpage
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{AIDE MÉMOIRE R}
+\textbf{Référence des fonctions de R les plus courantes} - \textit{Mayeul KAUFFMANN - Mars 2009}
+
+
+\subsection{Aide}
+La plupart des fonctions de R ont une documentation en ligne\newline
+\\          
+\textbf{help(sujet)}: documentation sur un sujet. Flèches haut et bas pour se déplacer, touche q pour quitter\newline
+\textbf{?topic}: idem \newline
+\textbf{help.search("sujet")} : recherche dans l'aide \newline
+\textbf{apropos(" sujet")}: le nom de tous les objets dans la liste de recherche qui correspondent à l'expression régulière  " sujet "\newline
+\textbf{help.start()}: démarre la version  HTML de l'aide (indispensable; le moteur de recherche intégré nécessite Java installé sur votre ordinateur)\newline
+\textbf{example(function)} : exécute l'exemple donné en bas de la page d'aide de la function indiquée\newline
+\subsection{Fonctions de base}
+\textbf{$<-$ et $->$} : assignation dans le sens de la flèche ($a <-b$ équivaut donc à $b->a$); e.g.: $x<-0$; $x+1->x$ (met $x$ à $0$, puis additionne $x$ et $1$ pour mettre le résultat dans $x$)\newline\\   
+\textbf{NULL} : l'ensemble vide\newline   
+\textbf{NA}: valeur manquante (Not Available)\newline
+\textbf{"abc"} : une chaîne de 3 caractères\newline
+\textbf{str(a)} : affiche la structure d'un objet R\newline   
+\textbf{summary(a)} : donne un "résumé " de a, généralement un résumé statistique, mais c'est une fonction générique (fonctionne différemment selon la classe de a))\newline
+\textbf{ls()} : liste les objets de la liste de recherche; spécifier e.g.  pat="MonTexte" pour chercher selon un patron\newline
+\textbf{ls.str()} :  \textbf{str()} pour chaque variable de la liste de recherche)\newline
+\textbf{dir()} : lister les fichiers dans le dossier (directory) en cours)\newline  
+\textbf{methods(a)} : afficher les méthodes de a\newline
+\textbf{methods(class=class(a))} : lister toutes les méthodes permettant de traiter les objets de la classe de l'objet a\newline
+\textbf{options(...)} : définit ou examine de nombreuses options globales; options fréquentes : width (largeur en nombre de caractères de la fenêtre des résultats), digits (nombre de chiffres significatifs à l'affichage), error (traitement des erreurs))\newline   
+\textbf{library(x)  } : charge des packages additionnels; library(help=x) liste les jeux de données et fonctions du package x.)\newline 
+\textbf{attach(x)} : ajoute le contenu de x dans la liste de recherche de R ; x peut être une liste, une data frame, ou un fichier de données R créé avec save. Utilisez search() pour montrer la liste de recherche.)\newline   
+\textbf{detach(x)} : enlève le contenu de x de la liste de recherche de R; x peut être un nom ou une chaîne de caractères désignant un objet préalablement attaché ou un package.)\newline   
+\textbf{q()} : quitter R (répondre y (yes) et Entrée pour confirmer))\newline
+
+
+
+
+
+\newpage
 
 
 
