@@ -13,22 +13,10 @@
 % 00000000001000011111000010000000000000000000000
 % 00000000000000000000000000000000000000000000000
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Complément sur les données de survie}
-\subsection{Introduction à l'analyse des durées de survie - Philippe SAINT PIERRE, Université Pierre et Marie Curie}
-Le terme de durée de survie désigne le temps écoulé jusqu'à la survenue d'un événement précis. L'événement étudié (communément appelé décès) est le passage irréversible entre deux états (communément nommé vivant et décès). L'événement terminal n'est pas forcément la mort : il peut s'agir de l'apparition d'une maladie (par exemple, le temps avant une rechute ou un rejet de greffe), d'une guérison (temps entre le diagnostic et la guérison),la panne d'une machine (durée de fonctionnement d'une machine, en fiabilité) ou la survenue d'un sinistre (temps entre deux sinistres, en actuariat). [\dots]\newline
-\\
-Quelques définitions sont couramment utilisées dans les études de survie.
-\begin{itemize}
-\item Date d'origine : elle correspond à l'origine de la durée étudiée. Elle peut être la date
-de naissance, le début d'une exposition à un facteur de risque, la date d'une opération
-chirurgicale, la date de début d'une maladie ou la date d'entrée dans l'étude. Chaque
-individu peut donc avoir une date d'origine diérente (pas important car c'est la durée
-qui nous intéresse).
-\item Date de point : c'est la date au-delà de laquelle on arrêtera l'étude et on ne tiendra
-plus compte des informations sur les sujets.
-\item Date des dernières nouvelles : c'est la date la plus récente où des informations sur un
-sujet ont été recueillies.
-\end{itemize}
+
+
+
+
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -43,23 +31,6 @@ sujet ont été recueillies.
 
 \end{lstlisting}
 
-#-----------------------------------------------------------------
-
-
-
-
-
-
-
-
-######----------------------------------------------------------- 
-
-
-
-
-
-
-
 
 v<-seq(10,60, by=10)
 w<-c(20,10,31,31,61,51)
@@ -70,111 +41,11 @@ u<-c(5,5,5,32,62,49)
 ##---------------------------------
 ##---------------------------------
 ##---------------------------------
+\textbf{Simple List}
 
 
 
 
-
-
-
-
-
-
-##### OPERATIONS SUR BOOLEENS
-#types de données simples :
-#booléens
-
-
-#définition de vecteurs de booléens
-A <- c(F,T,F,T)
-B<- c(F,F,T,T)
-
-#Table de vérités : 
-#ET
-A & B
-#OU
-A | B
-#non-A
-!A
-#OU-exclusif
-xor(A,B)
-#=> (non A ou B)
-!A|B
-#<=>
-(!A|B) & (!B|A)
-
-
-#on peut effectuer un "filtre booléen" sur les membres d'un vecteur 
-#t contient tout les membres de v > 30
-t <- (v>30) ;v;t
-#on ne garde que les membres où true a été obtenu
-v <- v[(v>30)] 
-
-#which : retourne les indices du vecteurs satifaissant la condition
-v
-which(v == 40) #trouve les indices pour lesquels le membre est égal à 30
-which(v == 30)
-which.max(v) #indice du max
-which.min(v) #indice du min
-
-#transformation vect bool -> vect int
-as.integer(A)
-#all : toutes les valeurs satifont la condition
-all(v > 3)
-#any : au moins une satisfait la condition
-any(v < 3)
-
-
-##### OPERATIONS SUR LES ENSEMBLES
-
-#unique : supprime la redondance dans le vecteur
-H<-unique(c("e","f","g","h","h","h"))
-
-P<-c("e","f","g","h")
-Q<-c("g","h","i","j")
-#union
-union(P,Q)
-
-#intersection
-intersect(P,Q)
-#différence (non symétrique)
-
-setdiff(P,Q)
-setdiff(Q,P)
-
-#différence symétrique
-union(setdiff(P,Q),setdiff(Q,P))
-
-
-#appartenance membre à membre d'un premier ensemble à un autre ensemble
-#retourne un vecteur de booléen réprésentant si le i-ème membre de l'ensemble A appartient à l'ensemble B
-
-H %in% P
-P %in% H
-#Les listes
-#réalité algorithmique : dictionaire "clé-valeur" (hashmap ?)
-
-#liste clé-valeur
-l <- list (nom = "Dupond", age = 25, vec = v)
-
-
-#valeurs
-l&nom
-l&age
-l&vec
-
-
-
-
-
-#accés par indice dans une liste
-l[[1]]
-l[[2]]
-l[[3]]
-#les facteurs 
-#classes non ordonnées
-coul <- factor(c("bleu","vert","rouge","bleu","vert"))# facteur = pas d'ordre
-coul
 
 
 

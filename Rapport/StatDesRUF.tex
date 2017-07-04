@@ -3144,7 +3144,242 @@ De plus, comme dans le chapitre sur la régression linéaire multiple et sur la ré
 d'interaction entre des variables pour rechercher les synergies entre variables explicatives.
 
 \newpage
+\section{Complément sur les données de survie}
+\subsection{Introduction à l'analyse des durées de survie - Philippe SAINT PIERRE, Université Pierre et Marie Curie}
+Le terme de durée de survie désigne le temps écoulé jusqu'à la survenue d'un événement précis. L'événement étudié (communément appelé décès) est le passage irréversible entre deux états (communément nommé vivant et décès). L'événement terminal n'est pas forcément la mort : il peut s'agir de l'apparition d'une maladie (par exemple, le temps avant une rechute ou un rejet de greffe), d'une guérison (temps entre le diagnostic et la guérison),la panne d'une machine (durée de fonctionnement d'une machine, en fiabilité) ou la survenue d'un sinistre (temps entre deux sinistres, en actuariat). [\dots]\newline
+\\
+Quelques définitions sont couramment utilisées dans les études de survie.
+\begin{itemize}
+\item Date d'origine : elle correspond à l'origine de la durée étudiée. Elle peut être la date
+de naissance, le début d'une exposition à un facteur de risque, la date d'une opération
+chirurgicale, la date de début d'une maladie ou la date d'entrée dans l'étude. Chaque
+individu peut donc avoir une date d'origine différente (pas important car c'est la durée
+qui nous intéresse).
+\item Date de point : c'est la date au-delà de laquelle on arrêtera l'étude et on ne tiendra
+plus compte des informations sur les sujets.
+\item Date des dernières nouvelles : c'est la date la plus récente où des informations sur un
+sujet ont été recueillies.
+\end{itemize}
+\textbf{Distributions de la durée de survie}\newline
+Supposons que la durée de survie $X$ soit une variable positive ou nulle et absolument continue; alors sa loi de probabilité peut être définie par l'une des cinq fonctions équivalentes suivantes :\newline
+\textit{Fonction de survie $S$} : La fonction de survie est, pour $t$ fixé, la probabilité de survivre jusqu'à l'instant $t$, c'est-à-dire : 
+$$S(t) = \mathbb{P}(X > t), \textrm{ avec } t \geq 0$$
+\textit{Fonction de répartition $S$} : La fonction de répartition (ou c.d.f. pour "cumulative distribution function") représente, pour $t$ fixé, la probabilité de mourir avant l'instant $t$, c'est-à-dire :
+$$F(t) = \mathbb{P}(X \leq t) = 1 - S(t)$$
+\underline{Remarque : } Il est arbitraire de décider que $S(t) = \mathbb{P}(X \geq t)$ ou $S(t) = \mathbb{P}(X > t)$. Cela n'a aucune importance quand la loi de X est continue car $\mathbb{P}(X > t) = P(X \geq t)$ : Dans les cas où $F$ a des sauts (quand le temps est discret, par exemple, compté en mois ou semaine), on utilise les notations suivantes :
+$$F^{-}(t) = P(X < t) \textrm{ et } F^{+}(t) = P(X \leq t)$$
+où $F^{-}$ est la limite à gauche et $F^{+}$ la limite à droite de $F$ (définitions et notations sont identiques pour la fonction $S$) : Remarquons que $F^{-} \leq F^{+}$ et $S^{-} \geq S^{+}$.\newline
+\textbf{Densité de probabilité $f$} : C'est la fonction $f(t) \geq 0$ telle que pour tout $t > 0$ :
+$$F(t) = \int_{0}^{t} f(u)\textrm{du}$$
+Si la fonction de répartition $F$ admet une dérivée au point $f$ alors 
+$$f(t) = \lim\limits_{h \rightarrow 0} \frac{\mathbb{P}(t\leq X < t+h)}{h} = F^{'}(t) = - S^{'}(t)$$
+Pour $t$ fixé, la densité de probabilité représente la probabilité de mourir dans un petit intervalle de temps après l'instant $t$.\newline
+\textit{Risque instantané $\lambda$ (ou taux de hasard)}\newline
+Le risque instantané (ou taux d'incidence), pour $t$ fixé caractérise la probabilité de mourir dans un petit intervalle de temps après $t$, conditionnellement au fait d'avoir survécu jusqu'au temps $t$ (c'est-à-dire le risque de mort instantané pour ceux qui ont survécu) :
+$$\lambda(t) = \lim\limits_{h \rightarrow 0} \frac{\mathbb{P}(t\leq X < t+h| X \geq t)}{h}  = \frac{f(t)}{S(t)} = - \ln(S(t))^{'}$$
+\textit{Taux de hasard cumulé $\Lambda$} : Le taux de hasard cumulé est l'intégrale du risque instantané $\lambda$ :
+$$ \Lambda(t) = \int_{0}^{t}\lambda(u)\textrm{du } = -\ln(S(t))$$
+On peut déduire de cette équation une expression de la fonction de survie en fonction du taux de hasard cumulé (ou du risque instantané) :
+$$S(t) = e^{-\Lambda(t)} = e^{\left( -\int_{0}^{t} \lambda(u)\textrm{du} \right)}$$
+On en déduit que 
+$$f(t) = \lambda(t)e^{\left( -\int_{0}^{t} \lambda(u)\textrm{du} \right)}$$
+\textbf{Moyenne et variance de la durée de survie} : Le temps moyen de survie $\mathbb{E}(X)$ et la variance de la durée de survie $\mathbb{V}(X)$ sont définis par les quantités suivantes (en utilisant des IPP\footnote{Intégration par parties}) :
+$$\mathbb{E}(X) = \int_{0}^{\infty} S(t)\textrm{ dt}$$
+$$\mathbb{V}(X) = 2\int_{0}^{\infty} tS(t)\textrm{ dt} - (\mathbb{E}(X))^{2}$$
+Ainsi on peut déduire l'espérance et la variance à partir de n'importe laquelle des fonctions $F, S, f, \lambda, \Lambda$ (mais pas l'inverse).\newline
+\textbf{Estimateur de Kaplan-Meier de la survie} : L'estimateur de Kaplan-Meier découle de l'idée suivante : survivre après un temps $t$ c'est
+être en vie juste avant $t$ et ne pas mourir au temps $t$; c'est-à-dire, si $t^{''} < t^{'} < t$ : 
+$$\begin{aligned}
+P(X > t) &= P(X>t', X > t) \\
+        &= P(X > t | X > t')\times P(X > t') \\
+        &= P(X > t | X > t') \times P(X > t' | X > t'') \times P(X > t'')
+\end{aligned}$$
+En considérant les temps d'événements (décès et censure) distincts $T_{(i)}$ avec  $(i = 1,  \dots , n)$ rangés par ordre croissant, on obtient :
+$$P(X > T_{(j)}) = \prod_{k=1}^{j} P(X>T_{(k)} | X>T_{(k-1)})$$
+avec $T_{(0)} = 0$, Considérons les notations suivantes :
+\begin{itemize}
+\item $Y_{i}$, le nombre d'individus à risque de subir l'événement juste avant le temps $T_{(i)}$.
+\item $d_{i}$, le nombre de décès en $T_{(i)}$
+\end{itemize}
+Alors la probabilité pi de mourir dans l'intervalle $]T_{(i-1)},T_{(i)}$sachant que l'on était vivant en $T_{(i-1)}$, i:e: $p_{i} = P(X \leq T_{(i)}| X > T_{(i-1)})$, peut être estimée par
+$$\widehat{p}_{i} = \frac{d_{i}}{Y_{i}}$$\footnote{$\widehat{p}$ ou $p$ chapeau est l'estimation de la probabilité $p$ par une certaine méthode d'approximation algébrique qui peut être le maximum de vraisemblance ou les moindres carrés utilisées en statistique. En pratique on donne une distribution statistique (ensemble de données chiffrées) et on essaie d'ajuster une fonction $\widehat{p}$ sur cette distribution.}
+Comme les temps d'événements sont supposés distincts, on a :
+\begin{itemize}
+\item $d_{i} = 0 $en cas de censure en $T_{(i)}$, i.e. quand $\delta_{i} = 0$\footnote{$\delta_{i}$ est un indicateur tel que $\delta_{i} = \mathbb{1}_{\{X_{i}\leq C_{i}\}}$.\begin{itemize}\item $\delta_{i}=1$ si l'événement est observé (d'où $T_{i} = X_{i}$). On observe les "vraies" durées ou les durées complètes.\item $\delta_{i}=0$ si l'individu est censuré (d'où $T_{i} = C_{i}$). On observe des durées incomplètes (censurées).\end{itemize}};
+\item $d_{i} = 1 $ en cas de décès en $T_{(i)}$, i.e. quand $\delta_{i} = 1$;
+\end{itemize}
+On obtient alors l'estimateur\footnote{un estimateur est une statistique permettant d'évaluer un paramètre inconnu relatif à une loi de probabilité (comme son espérance ou sa variance). Il peut par exemple servir à estimer certaines caractéristiques d'une population totale à partir de données obtenues sur un échantillon comme lors d'un sondage. La définition et l'utilisation de tels estimateurs constitue la statistique inférentielle.} de Kaplan-Meier :
 
+
+$$\widehat{S}(t) = \prod_{i = 1,\dots,n\\T_{(i)}\leq t} \left( 1 - \frac{\delta_{i}}{Y_{i}} \right) = \prod_{i = 1,\dots,n\\T_{(i)}\leq t} \left( 1 - \frac{\delta_{i}}{n-(i-1)} \right) = \prod_{i = 1,\dots,n\\T_{(i)}\leq t} \left( \frac{n-i}{n-(i-1)} \right)^{\delta_{i}}$$
+
+L'estimateur $\widehat{S}(t)$ est également appelé Produit Limite car il s'obtient comme la limite d'un produit. On montre que l'estimateur de Kaplan-Meier est un estimateur du maximum de vraisemblance. $\widehat{S}(t)$ est une fonction en escalier décroissante, continue à droite. On peut également obtenir un estimateur de Kaplan-Meier dans le cas de données tronquées mais pas dans le cas de données censurées par intervalles (car les temps de décès ne sont pas connus).\newline
+\textbf{Type de censure}
+La censure aléatoire est la plus courante. Par exemple, lors d'un essai thérapeutique, elle peut être engendrée par
+\begin{itemize}
+\item la perte de vue : le patient quitte l'étude en cours et on ne le revoit plus (à cause d'un déménagement, le patient décide de se faire soigner ailleurs). Ce sont des patients "perdus de vue".
+\item l'arrêt ou le changement du traitement : les effets secondaires ou l'inefficacité du traitement peuvent entraîner un changement ou un arrêt du traitement. Ces patients sont exclus de l'étude.
+\item la finn de l'étude : l'étude se termine alors que certains patients sont toujours vivants (ils n'ont pas subi l'événement). Ce sont des patients "exclus-vivants". Les "perdus de vue" (et les exclusions) et les "exclus-vivants" correspondent à des observations censurées mais les deux mécanismes sont de nature différente (la censure peut être informative chez les "perdus de vue").
+\end{itemize}
+\subsection{Institut de l'élevage - Séminaire d'épidémiologie animale - 28-30/09/2011}
+\textbf{Terminologie}
+\begin{itemize}
+\item \textbf{Date d'origine (do)} : date d'entrée dans l'étude (peut être spécifique à l'individu)
+\item \textbf{Date de point (dp)} : Date de fin de la période d'étude 
+\item \textbf{Date des dernières nouvelles (ddn)} : Date la plus récente de recueil d'information sur un individu $i$
+\item \textbf{Durée de surveillance (ds)} : délai écoulé entre la date d'origine et la date des dernières nouvelles
+\item \textbf{Temps de participation (tp)} : 
+\begin{itemize}
+\item Si ddn $\leq$ dp, alors tp = ddn - do
+\item Si dp $<$ ddn; alors tp = dp - do
+\end{itemize}
+\item \textbf{Censures} : 
+\begin{itemize}
+\item \textit{Perdu de vue} : Individu dont on ne connait pas l'état à la date de point
+\item \textit{Exclu-vivant} : Individu vivant à la date de point
+\end{itemize}
+\end{itemize}
+\textbf{Les différents types de censures}\newline
+\textit{Les censures par intervalle : } Observation périodique des individus pendant toute la durée de l'étude. Exemple : Examen des animaux dans les élevages périodiques, passage tous les six mois.
+La seule information disponible est que les événements se sont produits entre deux passages $t_{i}$ et $t_{i+1}$.\newline
+\textit{Censure à gauche :} L'évenement s'est déja produit avant la premiere observation. L'individu est généralement exclu de l'analyse.\newline
+\textit{Troncature : } Des "trous" dans le suivi des individus pendant lesquels on ne dispose d'aucune information, ni sur l'événement considéré ni sur les facteurs de risque potentiels. Impossible avec des événements "définitifs" (la mort).Trous en début de période : "Troncature a gauche" ; "troncature a droite" = censure à droite.\newline
+\\
+\textbf{Deux types de censures}\newline
+\textit{Les censures non aléatoires} : Exemple, expérience carcinogène\footnote{Qui peut provoquer un cancer.} chimique :
+\begin{itemize}
+\item Suivi pendant quatre mois de n portées de rats traités.
+\item Traitement d'une portée de rats parjour
+\item Sacrifice des survivants au bout de quatre mois (censure à droite)
+\item \textbf{Pas de perdus de vue}
+\end{itemize}
+\textit{Les censures aléatoires} Entrée aléatoire des individus dans l'étude. Exemple : Enquêtes sur population ouvertes, essai cliniques, \dots.
+\textbf{La variable analysée}\newline
+\begin{itemize}
+\item $T_{i}$ : Temps au bout duquel apparaît l'évènement (échec, décès) pour un individu $i$. C'est le \underline{Temps de survie}.
+\item $tp$ : \underline{Temps de participation}; Délai entre la date d'origine $\inf$(Date de dernière nouvelle, Date de point).
+\end{itemize}
+On peut représenter les observations pour un individu $i$ par le couple $(t_{i},\delta_{i})$ avec : 
+\begin{itemize}
+\item $t_{i} = \min(T_{i}, tp_{i})$
+\item $\delta_{i} = 1$ si $T_{i}\leq tp_{i}$ (évènement "mort"); $\delta_{i} = 0$ si $T_{i} > tp_{i}$ (censure)
+\end{itemize}
+Le temps $T_{i}$ est considéré a priori comme continu.\newline
+\\
+\textbf{Une hypothèse fondamentale sur les censures (cas de censures aléatoires)}\newline
+Il faut supposer que la durée de surveillance $ds$ et le temps au bout duquel se produit l'événement $T$ sont des variables indépendantes.\newline
+\textit{Censure non informative"} Cela signifie que les perdus de vus ne le sont pas pour des raisons liées à l'événement étudié. C'est une condition nécessaire pour que les censures ne biaisent pas les résultats (et aussi pour que la vraisemblance ne soit pas fonction des temps de censure).\newline
+Les censures non aléatoires ne posent pas de problèmes
+\textbf{Les fonctions de survie }\newline
+$T$ : \underline{Temps de survie}, est le temps au bout duquel se produit un certain évènement. Pour $t$ donné, la survie à $t$ est la probabilité que le temps de survie $T$ soit supérieur à $t$.
+$$S(t) = \mathbb{P}(X > t), \textrm{ avec } t \geq 0$$
+On désigne par $f(t)$, la densité de probabilité que l'évènement se produise à $t$ : 
+$$f(t) = \lim\limits_{h \rightarrow 0} \frac{\mathbb{P}(t\leq X < t+h)}{h}$$
+\underline{Le risque instantané} : Probabilité de mourir entre $t$ et $t+textrm{dt}$ sachant que l'individu est vivant avant $t$. On diminue l'intervalle jusqu'à le rendre infiniment petit $textrm{dt} \rightarrow 0$. On obtient alors le risque instantané de mort à $t$ : $h(t)$.\newline
+\underline{Force de mortalité} $h(t)$ aussi appelée hazard\footnote{Hazard signifie risque en anglais et non hasard} function ou fonction de risque.
+\underline{La fonction de risque cumulée} $H(t)$ (Cumulative Hazard Function) est le cumul des risques instantanés $h(t)$ sur une période données. 
+$$H(t) = \int_{0}^{t} h(u)\textrm{ du}$$
+$$S(t) = e^{-H(t)}$$
+La probabilité de mourir dans l'intervalle $[0,t]$ est donc : 
+$$P(t) = 1 - e^{-H(t)}$$
+\textbf{L'estimation de la fonction de survie }
+Il existe deux méthodes simples. Ce sont des méthodes non-paramétriques\footnote{Les tests paramétriques se basent sur des distributions statistiques supposées dans les données. Par conséquent, certaines conditions de validité doivent être vérifiées pour que le résultat d'un test paramétrique soit fiable. Par exemple, le test t de Student pour échantillons indépendants n'est fiable que si les données associées à chaque échantillon suivent une distribution normale et si les variances des échantillons sont homogènes.\newline
+Les tests non-paramétriques ne se basent pas sur des distributions statistiques. Ils peuvent donc être utilisés même si les conditions de validité des tests paramétriques ne sont pas vérifiées.}
+\begin{enumerate}
+\item La méthode actuarielle (Bohmer, 1912)
+\begin{itemize}
+\item Les temps sont discrétisés\footnote{Discrétiser une variable quantitative c'est, mathématiquement, transformer un vecteur de nombres réels en un vecteur de nombres entiers nommés "indices de classe". C'est pourquoi cette effectuer cette transformation se dit en langage courant "réaliser un découpage en classes". En statistiques, discrétiser c'est à la fois réaliser cette transformation mathématique, nommer et justifier les classes. } en intervalles (en général des intervalles égaux).
+\item Calcul de la survie au milieu de l'intervalle de chaque classe
+\item Les perdus de vue sont comptés à risque pour la moitié de l'intervalle.
+\end{itemize}
+\item La méthode de Kaplan-Meier (1958), 'Product-Iimit estimates'
+\begin{itemize}
+\item calcul de la survie à chaque mort
+\item Les perdus de vue entre deux morts sont comptabilisés à risque pour le
+premier des deux morts.
+\end{itemize}
+\end{enumerate}
+L'idée : 
+\begin{center}
+\textit{Être en vie après l'instant $t$, c'est être en vie juste avant $t$ et ne pas mourir à l'instant $t$}
+\end{center}
+Si $(t_{1},t_{2},\dots,t_{k})$ désigne une série de temps d'exposition à quelque chose, alors Probabilité de survivre au temps $t_{1}$ : 
+$$S(t_{1}) = P(T > t_{1}) = 1 ? P(T \leq t_{1})$$
+Probabilité de survivre au temps t2 : 
+$$S(t_{2}) = P(T > t_{1}) .P(T>t_{2} | T > t_{1}) = S(t_{1})[1 ? P(T\leq t_{2}| T>t_{1})]$$
+$P(T \leq t_{2}| T>t_{1})$ est la probabilité de mourir entre l'intervalle $]t_{1} ; t_{2}]$ sachant que l'on est vivant jusqu'à $t_{1}$. C'est un \underline{taux d'incidence}.
+On peut généraliser cette formule : 
+$$ S(t_{i}) = S(t_{i-1})[1 ? P(T\leq t_{i}| T>t_{i-1})]$$
+\textbf{Gestion des censures} 
+\begin{enumerate}
+\item Méthode actuarielle :
+\begin{itemize}
+\item Calcul par intervalles $[t_{i} ; t_{i+1}[$ fixés a priori
+\item On compte pour moitié les perdus de vue dans l'intervalle.
+\end{itemize}
+\item Méthode de Kaplan-Meier:
+\begin{itemize}
+\item Calcul par intervalles $[t_{i} ; t_{i+1}[$ à chaque fois que se produit un événement $t_{i}$ et avant que ne s'en produise un autre à une date ultérieure $t_{i+1}$
+\item Les perdus de vue entre $t_{i}$ et $t_{i+1}$ sont comptés à risque à $t_{i}$ mais pas à $t_{i+1}$
+\end{itemize}
+\end{enumerate}
+\textbf{L'estimation des risques}
+Le risque instantané $h(t)$ (force de mortalité)/ Lorsque les tables de survies sont calculées selon la méthode actuarielle, La fonction de risque $h(t)$ peut être estimée à l'aide de la formule suivante (Kimball, 1960)
+$$\widehat{h}(t) = \frac{m_{i}}{(t_{i}-t_{i-1})\times r_{i} \times \left(1 - \frac{m_{i}}{2r_{i}}\right)}$$
+$\widehat{h}(t)$ est l'estimation du risque instantané au milieu de l'intervalle $[t_{i-1} ; t_{i}[$, $m_{i}$ est le nombre de morts observés en $t_{i}$ et $r_{i}$ est le nombre d'individus à risque à $t_{i}$.\newline
+Le risque cumulé $H(t)$ est estimé par le cumul des taux d'incidence par intervalle $[t_{i-1} ; t_{i}[$
+$$\widehat{H}(t_{k}) = \sum_{i = t_{1}}^{t_{k}} \widehat{h}(t)\times (t_{i}-t_{i-1}) = \sum_{i = t_{1}}^{t_{k}} \frac{m_{i}}{\left( r_{i} - \frac{1}{2}m_{i}\right)}$$
+\textbf{Exemple : } Estimation des risques instantanés de pneumonie\newline
+Le taux d'incidence instantané moyen pendant la période :
+
+$$\bar{h}(t) = \frac{\sum_{t=1}^{k} \widehat{h}(t)}{k} = 0,0058$$
+Avec $k = 9$ et $k$, correspondant au nombre d'intervalles.\newline
+$\bar{h}(t) = 0,58$ cas pour $100$ animaux par jours.\newline
+$\bar{h}(t) = 0,58$ cas pour $24$ animaux sur $150$ jours.\newline
+Taux d'incidence moyen observé : 
+$$ h_{0}(t) = \frac{m}{\sum_{0}^{150}r(t)} = \frac{12}{2589} = 0,0046$$
+\textbf{Compléments sur les formules :}
+\begin{itemize}
+\item \textbf{Force de mortalité et survie : }\newline
+\textit{Fonction de densité :}
+$$f(t) = \lim\limits_{h \rightarrow 0} \frac{\mathbb{P}(t\leq X < t+h)}{h}$$
+\textit{Fonction de répartition :}
+$$F(t) = P(T \leq t)$$
+\textit{Fonction de survie :}
+$$S(t) = 1 - P(T \leq t) = P(T > t)$$
+\item \textbf{La force de mortalité :} \newline
+Probabilité de "décéder" entre $[t + dt]$ sachant que l'on était "vivant" à $t$; $h(t)$, la force de mortalité ("Hazard function")
+$$f(t) = \lim\limits_{dt \rightarrow 0} \left[\frac{\mathbb{P}(t\leq T \leq t+dt | T \geq t)}{dt}\right]$$
+\item \textbf{Relation entre force de mortalité et survie :} 
+$$
+\begin{aligned}
+h(t) & = \lim\limits_{dt \rightarrow 0} \frac{1}{dt}\left[\mathbb{P}(t\leq T \leq t+dt | T \geq t)\right]\\
+	 & = \lim\limits_{dt \rightarrow 0} \frac{1}{dt}\left[\frac{\mathbb{P}((t\leq T \leq t+dt) \cap (T \geq t))}{\mathbb{P}(T \geq t)}\right]\\
+     & = \lim\limits_{dt \rightarrow 0} \frac{1}{dt} \left[\frac{\mathbb{P}(t\leq T \leq t+dt)}{1 - \mathbb{P}(T \leq t)}\right]\\
+     & = \frac{1}{1 - \mathbb{P}(T \leq t)} \lim\limits_{dt \rightarrow 0} \left[\frac{\mathbb{P}(t\leq T \leq t+dt)}{dt}\right]
+\end{aligned}
+$$
+Donc : 
+$$h(t) = \frac{f(t)}{S(t)}$$
+\item \textbf{Relation entre la fonction de risque cumulé et la survie :}
+$$\frac{f(t)}{S(t)} = - \frac{d}{dt} \left(\ln(S(t))\right)$$
+$$S(t) = e^{-\int_{0}^{t}h(u)\textrm{du}} =e^{[-H(t)]}$$
+$H(t)$, la fonction de risque cumulé (cumulative hazard function).
+$$S(t) = e^{-\int_{0}^{t}h(u)\textrm{du}} =e^{[-H(t)]}$$
+$$H(t) = - \ln(S(t))$$
+\item \textbf{Intervalle de con?ance de la fonction de Survie :}\newline
+L'intervalle n'est pas calculé sur la fonction de Survie directement mis sur une
+transformation de la Survie en raison d'une distribution non normale de la Survie.\newline
+Plusieurs transformations sont possibles :
+$$ \arcsin(\sqrt{S(t)})\textrm{, }\log(S(t))\textrm{, }\log[-\log(S(t))]\textrm{, }\log_{it}(S(t)) = \log\left(\frac{S(t)}{1-S(t)}\right)$$
+La transformation 
+$$ z(t) = \log[-\log(S(t))]$$
+est celle qui a été utilisée dans les calculs.\newline
+La variance $z(t)$ s'écrit : 
+$$\textrm{Var}(z(t)) = S_{z}^{2} = \frac{\textrm{Var}(S(t))}{(S(t)\times \ln(S(t)))^{2}}$$
+L'intervalle de confiance au seuil de $95\%$ est alors défini par les bornes 
+$$\widehat{S}(t)_{\inf} = \left[\widehat{S}(t)\right]^{\exp(-1,96\times S_{z})} \textrm{ ; }\widehat{S}(t)_{\sup} = \left[\widehat{S}(t)\right]^{\exp(+1,96\times S_{z})}$$
+\end{itemize}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%ICI LES MATHS%%%%%%%%%%%%%%%%%%ICI LES MATHS%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%ICI LES MATHS%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%ICI LES MATHS%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%ICI LES MATHS%%%%%%%%%%%%%%%%%ICI LES MATHS%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%ICI LES MATHS%%%%%%%%%@@@@@@@@@@@@@@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%ICI LES MATHS%%%%%%%%%%%%%%%%%%%%%%%%%%%ICI LES MATHS%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%ICI LES MATHS%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%ICI LES MATHS%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
@@ -5054,7 +5289,7 @@ Il s'agit d'une étude évaluant la qualité de relation et la quantité d'informati
 \item \textit{score.relation :} score relatif à la qualité des relations avec le personnel soignant pendant le séjour (score variant de 10 à 40)
 \end{itemize}
 
-\section{Devoir 1 : Satisfaction Hopital}
+\section{Devoir 1 : Satisfaction Hopital - Travaux sur variables, mise en relation et histogrammes}
 \textbf{Définition du répertoire et import des données.}
 
 \begin{lstlisting}[language=html]
@@ -5297,7 +5532,7 @@ $femme
 
 \newpage
 
-\section{Devoir 2 : Satisfaction Hopital}
+\section{Devoir 2 : Satisfaction Hopital - Analyse de corrélation et OR entre variables}
 
 \textbf{Définition du répertoire et import des données.}
 
@@ -5471,7 +5706,7 @@ La valeur de $p$ étant de $26,5\%$, on ne peut conclure sur une différence signi
 
 \newpage
 
-\section{Devoir 3 : Satisfaction Hopital}
+\section{Devoir 3 : Satisfaction Hopital - Régressions linéaires et logistiques}
 
 \textbf{Définition du répertoire et import des données.}
 
