@@ -5,21 +5,12 @@
 %\usepackage{newcent}
 \usepackage[T1]{fontenc}
 
-
 \usepackage[latin1]{inputenc}
 \usepackage[cyr]{aeguill}
 \usepackage{url}
 \usepackage[francais]{babel}
-\usepackage{fancyhdr}
-\lhead{\textbf{Université FUN}}
-\rhead{\textbf{Session 2016/2017}}
-%\renewcommand{\headrulewidth}{0,1mm}
-\lfoot{Introduction à la statistique avec R}
-\rfoot{$\lambda$}
-%\renewcommand{\footrulewidth}{0,1mm}
-\pagestyle{fancy}
-\usepackage[left=1.5cm,right=1cm,top=1.8cm,bottom=1.7cm]{geometry}
-\usepackage{graphicx}%\begin{figure}[H]\begin{center}\includegraphics[scale=1]{Intro/Prob.jpg}\caption{}\end{center}\end{figure}
+\usepackage[left=1.5cm,right=1.5cm,top=1.8cm,bottom=1.8cm]{geometry}
+\usepackage{graphicx}%\begin{figure}[H]\begin{center}\includegraphics[scale=0.5]{Intro/Prob.jpg}\caption{}\end{center}\end{figure}
 \usepackage{float}
 \usepackage{eurosym}
 \usepackage{textcomp}
@@ -176,7 +167,7 @@
 \usepackage{hyperref}
 
 
-\title{\textbf{R} \\ Université FUN}
+\title{\textbf{R} \\ Université FUN 2016/2017\\\textit{Introduction à la statistique avec R}}
 \author{Bruno Falissard, Christophe Lalanne}
 \date{}
 
@@ -184,12 +175,11 @@
 %\sffamily
 
 \maketitle
+\begin{figure}[H]\begin{flushright}\includegraphics[scale=0.5]{Ilu/licenceCC.png}\end{flushright}\end{figure}
 \begin{flushright}
 \textit{Synthèse : LATIF Mehdi}
 \end{flushright}
 \part{Cours}
-
-
 \section{Définitions}
 Comme la plupart des discipline, les statistiques ont leur jargon, c'est à dire leur vocabulaire qu'il faut connaitre pour pouvoir s'y retrouver.
 \subsection{Le hasard}
@@ -2280,7 +2270,6 @@ Le modèle précédent est souvent appelé \textbf{modèle de regression linéaire mul
 \begin{lstlisting}[language=html]
 > mod_reg_mul <- lm(dur.interv~age+dep.cons+subst.cons+scz.cons,data = smp)
 > summary(mod_reg_mul)
-
 Call:
 lm(formula = dur.interv ~ age + dep.cons + subst.cons + scz.cons, 
     data = smp)
@@ -8044,6 +8033,233 @@ Erreur : objet 'bob' introuvable
 \end{lstlisting}
 \newpage
 
+\section{Statistiques Descriptives - L3 Université de Nantes}
+\textbf{Enseignant en charge du cours : }\href{http://www.math.sciences.univ-nantes.fr/~lavancie/}{\underline{Frédéric Lavancier}}
+\subsection{Vocabulaire de base : }
+Le vocabulaire est issu de la démographie, domaine d'application initial des statistiques.\newline
+\begin{itemize}
+\item \textbf{Population :} ensemble étudié.\newline
+\textit{Exemples} : la population franc?aise, l'ensemble des entreprises d'une région, un ensemble de sites géographiques, un ensemble de dates,\dots
+\item \textbf{Individus :} les éléments composant la population\newline
+\textit{Exemples} : une personne, une entreprise, un site géographique, une date,\dots
+\item \textbf{Variables :} les caractéristiques observées sur chaque individu\newline
+\textit{Exemples} :
+\begin{itemize}
+\item pour des personnes : sexe, CSP, âge, salaire,\dots
+\item pour des entreprises : nombre de salariés, secteur d'activité,\dots
+\item pour des sites géographiques : altitude, type de végétation,\dots
+\item pour des dates : cours d'une action, température, ventes journalières,\dots
+\end{itemize}
+Lorsqu'on on observe une seule variable au cours du temps (par exemple la température journalière), on parle d'une \textbf{série temporelle}.\newline
+Un \textbf{jeu de données} est composé de l'observation des variables sur les individus issus de la population. Il se présente généralement sous forme d'un tableau dont les lignes sont les individus et les colonnes les variables.
+\end{itemize}
+
+\textbf{Exemple de jeu de données :} 
+\begin{enumerate}
+\item Cours d'indices boursiers nationaux.
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.5]{ilu/ccm1.png}\end{center}\end{figure}
+\begin{itemize}
+\item Les individus : les 1860 jours ouvrés du 01/01/1991 au 31/12/1998
+\item Les variables : les indices allemands (DAX), suisses (SMI), franc?ais (CAC) et anglais (FTSE).
+\end{itemize}
+\item Composition chimique de poteries trouvées sur différents sites archéologiques au Royaume Uni.
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.5]{ilu/ccm2.png}\end{center}\end{figure}
+\begin{itemize}
+\item Les individus : les poteries numérotées de 1 à 13
+\item Les variables : le site archéologique et différents composés chimiques
+\end{itemize}
+\end{enumerate}
+
+
+Deux grandes catégories déclinées en deux types.
+\begin{itemize}
+\item \textbf{Variable quantitative} : son observation est une quantité mesurée.\newline
+\textit{Exemples} : âge, salaire, nombre d'infractions,\dots
+On distingue les variables \textbf{quantitatives discrètes} dont les valeurs possibles sont finies ou dénombrables (\textit{Exemples} : nombre d'enfants, nombre d'infractions,\dots) et les variables \textbf{quantitatives continues} qui peuvent prendre toutes les valeurs possibles d'un intervalle (\textit{Exemples} : taille, salaire,\dots)
+\item \textbf{Variable qualitative (ou facteur)} : son observation se traduit par une catégorie ou un code. Les observations possibles sont appelées les modalités de la variable qualitative.\newline
+\textit{Exemples} : sexe, CSP, nationalité, mention au BAC,\dots
+Lorsqu'un ordre naturel apparaît dans les modalités, on parle de variable \textbf{qualitative ordinale} (\textit{Exemples} : mention au BAC,\dots). Dans le cas contraire on parle de variable \textbf{qualitative nominale} (\textit{Exemples} : sexe, CSP,\dots).
+\end{itemize}
+
+\textbf{Quelques exemples :}
+\begin{itemize}
+\item Le "reporting": résumer de fac?on efficace un jeu de données afin de rendre l'information lisible facilement et rapidement.
+Outils : résumés numériques, représentations graphiques.
+\item L'inférence : les observations sont souvent recueillies auprès d'un échantillon et non de toute la population d'intérêt. L'inférence statistique vise à induire certaines caractéristiques de la population à partir de leur observation sur un échantillon.\newline
+\textit{Outils :} estimation, tests statistiques.
+L'étude du lien entre des variables : quantifier le lien, voire le modéliser. \newline
+\textit{Outils :} analyse bivariée, analyse multivariée, modèles de régression,\dots
+\item La classification des individus : chercher des regroupements entre individus selon leurs profils.\newline
+\textit{Outils :} analyse multivariée, analyse discriminante,\dots
+\item La prévision : prédire des valeurs futures (pour une série temporelle) ou la valeur manquante d'une variable pour un individu.\newline
+\textit{Outils :} modélisation temporelle, modèles de régression,\dots
+\end{itemize}
+
+\subsection{Analyse univariée}
+\subsubsection{Variable qualitative (ou facteur)}
+\paragraph{Résumés numériques}
+Soit une variable qualitative $A$ ayant $k$ modalités notées $A_{1}, \dots , A_{k}$ . L'observation de la variable $A$ sur $n$ individus peut se résumer par un \textbf{tableau des fréquences}.
+
+\begin{center}
+\begin{tabular}{|l|l|l|l|l|}
+\hline
+\textbf{Modalités de A}       & $A_{1}$ & $A_{2}$ & \dots & $A_{n}$ \\ \hline
+\textbf{Effectifs observés}   & $m_{1}$ & $m_{2}$ & \dots & $m_{n}$ \\ \hline
+\textbf{Fréquences observées} & $f_{1}$ & $f_{2}$ & dots  & $f_{n}$ \\ \hline
+\end{tabular}
+\end{center}
+
+où $n_{i}$ est l'effectif dans la modalité $A_{i}$ et $f_{i} = \frac{n_{i}}{n}$, pour tout $i = 1,\dots,k$.\newline
+\textbf{Propriétés}
+$$ \sum_{i=1}^{k} n_{i} = n \textrm{ et } \sum_{i=1}^{k} f_{i} = 1$$
+Le \textbf{mode} est la modalité la plus fréquente dans l'échantillon.
+
+\paragraph{Représentations graphiques} 
+Les fréquences de chaque modalité peuvent être résumées par :
+\begin{itemize}
+\item un graphe en barres : chaque modalité en abscisse est représentée par une barre dont la hauteur est proportionnelle à la fréquence de la modalité. Les barres ne sont pas collées les unes aux autres.
+\item un diagramme circulaire (ou camembert) : chaque modalité est représentée par un secteur dont l'aire est proportionnelle à la fréquence.
+\end{itemize}
+\textbf{Ordre des modalités} . Si la variable est ordinale, les modalités sont présentées dans leur ordre naturel. Sinon, les modalités sont classées par ordre décroissant de leur fréquence d'apparition.\newline
+\\
+\textit{Exemples : }
+Distribution de la CSP des clients d'une banque (variable qualitative nominale) :
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.5]{ilu/ccm3.png}\end{center}\end{figure}
+Distribution de la classe d'âge des clients d'une banque (variable qualitative ordinale) :
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.5]{ilu/ccm4.png}\end{center}\end{figure}
+\subsubsection{Variable quantitative}
+\paragraph{Résumés numériques}
+On note $x_{1},\dots,x_{n}$ l'échantillon des $n$ valeurs numériques.
+\subparagraph{Les mesures de position d'un échantillon}
+\begin{itemize}
+\item Le \textbf{mode} est la valeur la plus fréquente dans l'échantillon.
+\item La \textbf{moyenne}, notée $\bar{x_{n}}$, est
+$$\bar{x_{n}} = \frac{1}{n} \sum_{i = 1}^{n} x_{i}$$
+\textbf{Propriétés} :
+$$ \bar{x_{n}} \underset{y}{\arg\min} \sum_{i=1}^{n} (x_{i}-y)^{2}$$
+\item La \textbf{médiane} est le nombre $m$ séparant l'échantillon ordonné en 2 parties égales. Plus précisément, $m$ vérifie :
+$$ \frac{1}{n} \sum_{i=1}^{n} \mathbf{1}_{\{x_{i}\leq m\}} \geq \frac{1}{2} \textrm{ et }\frac{1}{n} \sum_{i=1}^{n} \mathbf{1}_{\{x_{i}\geq m\}} \leq \frac{1}{2} $$
+\textbf{Propriétés} :
+On note $x_{(1)},\dots,x_{(n)}$ l'échantillon ordonné.
+\begin{enumerate}
+\item 
+$$ m \in \underset{y}{\arg\min} \sum_{i=1}^{n} |x_{i}-y|$$
+\item Si $n = 2k+1$, alors $m$ est unique et vaut $m=x_{(k+1)}$. Si $n = 2k$, alors $m$ n'est pas unique, l'ensemble des solutions est $[x_{(k)},x_{(k+1)}]$ et on choisit en pratique : 
+$$ m = \frac{1}{2}(x_{(k)} + x_{(k+1)})$$
+\end{enumerate}
+\textbf{Remarque} : la médiane est plus robuste aux valeurs extrêmes que la moyenne
+
+\item Les \textbf{quantiles} : Soit $p \in [0, 1]$, le quantile d'ordre $p$, noté $Q(p)$, sépare l'échantillon ordonné en deux parties de taille respective $np$ et $n(1 ? p)$ approximativement.
+Plus précisément, $Q(p)$ vérifie : 
+$$\frac{1}{n} \sum_{i=1}^{n} \mathbf{1}_{\{x_{i}\leq Q(p)\}} \geq p \textrm{ et }\frac{1}{n} \sum_{i=1}^{n} \mathbf{1}_{\{x_{i}\geq Q(p)\}} \geq 1-p$$
+On note $\lfloor . \rfloor$ la partie entière inférieure et $\lceil . \rceil$ la partie entière supérieure.\newline
+\textbf{Propriétés} : $Q(p)$ n'est pas nécessairement unique, l'ensemble des solutions étant $[x_{(\lceil np\rceil)}, x_{(\lfloor np \rfloor+1)}]$. Pour $p = 0.5$, on retrouve la définition de la médiane.\newline
+\textbf{Calcul en pratique :}
+\begin{enumerate}
+\item $Q(p) = x_{(\lceil np\rceil)}$ : choix qui respecte la définition mais n'est pas cohérent avec la convention adoptée pour la médiane (lorsque $p = 0.5$).
+\item $Q(p) = x_{(\lfloor np\rfloor)}$ si $np$ n'est pas un entier, et $Q(p) = \frac{1}{2}(x_{(np)} + x_{(np+1)})$ sinon. Ce choix respecte la définition et est cohérent avec la convention adoptée pour la médiane.
+\end{enumerate}
+Pour $p = 0.25, 0.5, 0.75$, les quantiles sont appelés \textbf{quartiles}.\newline
+Pour $p = 0.1, \dots , 0.9$, ce sont les \textbf{déciles}.\newline
+\\
+Représentation de $Q(p)$ en fonction de $p$, selon le choix de sa définition. \textit{Exemple} pour $n = 4$
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.5]{ilu/ccm5.png}\end{center}\end{figure}
+\textbf{Autres choix possibles pour $Q(p)$ : } \textbf{R} en propose 9 (voir l'aide de la fonction \textit{quantile}).
+\begin{enumerate}
+\item Les deux premiers sont les 2 choix précédents.
+\item Le troisième est un autre choix conduisant à Q(p) discontinu.
+\item Les six autres sont des choix rendant $Q(p)$ continu mais dans ce cas la propriété initiale n'est plus vérifiée.\newline
+L'idée est d'interpoler\footnote{une interpolation est une opération mathématique permettant de construire une courbe à partir des données d'un nombre fini de points, ou une fonction à partir de la donnée d'un nombre fini de valeurs ;} linéairement les points $(p_{k} , x_{(k)})$ où $k = 1, \dots, n$ et où le choix de $p_{k}$ diffère selon les versions:
+\begin{itemize}
+\item Le choix $p_{k} = k/n$ correspond à une interpolation linéaire du choix 1 ci-dessus et correspond au choix 4 dans R.
+\item Pour les autres choix, la motivation est inférentielle. En supposant que $X_{1},\dots,X_{n}$ est unéchantillon dont la loi est de fonction de répartition $F$, le but est d'estimer au mieux le quantile théorique de la loi.\newline
+En notant $F_{n}$ la fonction de répartition empirique, on a $k/n = F_{n}(X_{(k)})$. Ainsi au lieu de choisir $p_{k} = k/n = F_{n}(X_{(k)})$ on considère $F(X_{(k)})$. Quelle que soit $F$, $F(X_{(k)})$ est distribué comme la kème statistique d'ordre d'un échantillon i.i.d suivant la loi uniforme sur $[0, 1]$, qui est une loi $\beta(k,n+1?k)$\footnote{Dans la théorie des probabilités et en statistiques, la loi bêta est une famille de lois de probabilités continues, définies sur $[0,1]$, paramétrée par deux paramètres de forme, typiquement notés $\alpha$ et $\beta$.\newline
+Un paramètre $X$ est distribué suivant une loi Beta $X \sim Be (\alpha,\beta)$ si sa densité de probabilité suit :
+$$ \mathbb{P}(X) = \frac{1}{Be(\alpha,\beta)} X^{\alpha-1} (1-X)^{\beta - 1}$$ 
+où la fonction Beta est définie par :
+$$Be(\alpha;\beta) = \frac{\Gamma(\alpha)\Gamma(\beta)}{\Gamma(\alpha + \beta)}$$ 
+Les paramètres de la loi Beta : $\alpha$ et $\beta$ avec : 
+\begin{itemize}
+\item $\alpha$ : nombre de succès dans une série de $\alpha + \beta$ épreuves binaires
+\item $\beta$ : nombre d'échecs dans une série de $\alpha + \beta$ épreuves binaires
+\end{itemize}
+Principales propriétés de la loi Beta :
+\begin{itemize}
+\item Moyenne d'une loi Beta : 
+$$\frac{\alpha}{\alpha + \beta}$$
+\item Variance d'une loi Beta : 
+$$ \frac{\alpha\beta}{(\alpha + \beta)^{2}(\alpha + \beta+1)}$$
+\item Mode d'une loi Beta : 
+$$\frac{\alpha-1}{\alpha + \beta-2}$$
+\item Avec 
+$$\Gamma : z \mapsto \int_{0}^{+\infty} t^{z-1}e^{t}\textrm{dt, et } \Gamma(n+1) = n! $$
+\end{itemize}
+}. On peut alors choisir par exemple :
+$$p_{k} = \mathbb{E}(F(X_{(k)})) \textrm{ ou } p_{k} = \textrm{mode}(F(X_{(k)}))\textrm{ ou } p_{k} = \textrm{mediane}(F(X_{(k)})). $$
+Le choix par défaut sous \textrm{R} correspond à 
+$$p_{k} = \textrm{mode}(F(X_{(k)})) = \frac{k-1}{n-1}$$
+Si le but n'est pas inférentiel mais descriptif, le choix 2 semble plus approprié.
+\end{itemize}
+\end{enumerate} 
+\end{itemize}
+\subparagraph{Les mesures de dispersion d'un échantillon}
+\begin{itemize}
+
+\item \textbf{L'étendue }vaut $\max ? \min$, c'est à dire $x_{(n)} ? x_{(1)}$.
+\item La \textbf{variance} est
+$$V = \frac{1}{n} \sum_{i=1}^{n} (x_{i} - \bar{x}_{n})^{2}$$
+On a 
+$$V = \frac{1}{n} \sum_{i=1}^{n} x_{i}^{2} - \bar{x}_{n}^{2}$$
+\item La \textbf{variance corrigée} est
+$$S^{2} = \frac{1}{n-1}\sum_{i=1}^{n} (x_{i}-\bar{x}_{n})^{2}$$
+\item \textbf{L'écart-type} est $\sigma = \sqrt{V}$
+\item \textbf{L'écart-type corrigé} est $S=\sqrt{S^{2}}$
+\item \textbf{L'écart moyen absolu} est 
+$$\textrm{EMA} = \frac{1}{n}\sum_{i=1}^{n}|x_{i}-m|$$
+où $m$ est la médiane.
+\item \textbf{L'écart inter-quartile} est $Q(0.75) - Q(0.25)$\newline
+La mesure la plus utilisée est l'écart-type, qui peut être interprétée comme suit :\newline
+Soit $\alpha \geq 1$ et $\mathit{I} =  [\bar{x}-\alpha\sigma,\bar{x}+\alpha\sigma]$, alors 
+$$\frac{1}{n}\sum_{i=1}^{n}\mathbf{1}_{x_{i}\in\mathit{I}} \geq 1 - \frac{1}{\alpha^{2}}$$
+En particulier (pour $\alpha = 2)$, au moins $3/4$ des observations appartiennent à l'intervalle $[\bar{x}-2\sigma,\bar{x}+2\sigma]$.\newline
+\textbf{Attention :} La variance et l'écart-type calculés dans R correspondent à leur
+version "corrigée" $S^{2}$ et $S$.
+\end{itemize}
+\subparagraph{Mesures d'asymétrie }
+Pour mesurer l'asymétrie de la répartition des valeurs, on utilise le \textbf{coefficient d'asymétrie} ou \textbf{skewness} en anglais.
+$$\gamma_{1} = \frac{m_{3}}{m_{2}^{3/2}}$$
+où $m_{k}=\frac{1}{n} \sum_{i=1}^{n} (x_{i} - \bar{x}_{n})^{k}$  est le moment centré d'ordre $k$ (la variance si $k = 2$).
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.5]{ilu/ccm6.png}\end{center}\end{figure}
+\subparagraph{Mesures d'aplatissement} Pour mesurer l'aplatissement de la répartition des valeurs, on utilise \textbf{l'excès d'aplatissement} ou \textbf{kurtosis normalisé } :
+$$\gamma_{2} = \frac{m_{4}}{m_{2}^{2}} - 3$$
+où $m_{k}=\frac{1}{n} \sum_{i=1}^{n} (x_{i} - \bar{x}_{n})^{k}$  est le moment centré d'ordre $k$.
+le "$-3$" correspond au kurtosis (non normalisé) théorique d'une $mathit{N}(0,\sigma^{2})$. $\gamma_{2}$ compare donc l'aplatissement de la distribution à celui d'une loi normale.
+\begin{itemize}
+\item $\gamma_{2}>0$ : distribution \textbf{leptokurtique} (en noir). Profil plus "pointue"qu'une normale de même
+variance (en rouge). C'est le cas en présence de nombreuses valeurs extrêmes. Le kurtosis est utilisé en finance pour repérer ce phénomène.
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.5]{ilu/ccm7.png}\end{center}\end{figure}
+\item distribution \textbf{platikurtique} (en noir). Profil plus "plat" qu'une normale de même variance (en rouge).
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.5]{ilu/ccm8.png}\end{center}\end{figure}
+\end{itemize}
+\paragraph{Représentations graphiques} 
+\subparagraph{Variable quantitative discrète}\textcolor{white}{.}\newline
+\textbf{Le diagramme en bâtons (pour une variable quantitative discrète).}
+Les bâtons sont placés en abscisse au niveau de chaque valeur possible de la variable discrète et leur hauteur est proportionnelle à la fréquence observée.\newline
+\textit{Exemple : } répartition du nombre d'enfants par femme dans un  échantillon de femmes actives am éricaines. Dans R : en ligne de commandes, il faut d'abord calculer les fréquences avec la fonction table puis représenter le résultat avec plot.
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.5]{ilu/ccm9.png}\end{center}\end{figure}
+\subparagraph{Variable quantitative continue}\textcolor{white}{.}\newline
+\textbf{L'histogramme (pour une variable quantitative continue).}\newline
+L'ensemble des valeurs possibles est découpé en intervalles disjoints appelés classes. Au niveau de chaque classe s'élève un rectangle dont l'aire est égale à la fréquence observée de la classe.\newline
+\textit{Exemple :} répartition du salaire annuel des femmes actives américaines (en milliers de dollars)
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.5]{ilu/ccm10.png}\end{center}\end{figure}
+\textbf{Le boxplot ou boîte à moustaches ou boite de dispersion.}\newline
+Le rectangle central est délimité par le premier et le troisième quartile et la médiane y est symbolisée par un trait.
+Les "moustaches" partent de chaque côté jusqu'à la valeur minimale et maximale de l'échantillon, sous réserve que leur longueur ne dépasse pas $1.5(Q(0.75) ? Q(0.25))$, soit $1.5$ fois la hauteur de la boîte. Sinon, les moustaches s'arr?etent à la dernière valeur avant cette limite et les valeurs restantes sont représentées par des points isolés.\newline
+\textit{Exemple :} répartition du salaire des femmes actives américaines.
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.5]{ilu/ccm11.png}\end{center}\end{figure}
+
+
+
 \newpage
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -8051,6 +8267,36 @@ Erreur : objet 'bob' introuvable
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+\part{Les graphiques}
+
+\section{Introduction aux graphiques avec R - Christophe Chesneau}
+
+
+
+\section{Graphiques de base - Pr Jean R. Lobry}
+
+
+
+
+
+\section{Sites internet}
+\paragraph{Site internet (source) : } \underline{\href{https://sites.google.com/site/rgraphiques/realiser-des-graphiques-avec-le-logiciel-r}{Aide à l'utilisation de R}}\newline
+\textbf{Exemples de graphiques réalisés avec R : } \href{https://sites.google.com/site/rgraphiques/realiser-des-graphiques-avec-le-logiciel-r/des-exemples-de-graphiques}{\underline{Représentations et scripts}}
+
+
+
+
+
+
+
+
+
+
+\newpage 
+
+
+
+\part{Fonctions usuelles et aide mémoire}
 \section{AIDE MÉMOIRE R}
 \textbf{Référence des fonctions de R les plus courantes} - \textit{Mayeul KAUFFMANN - Mars 2009}
 
