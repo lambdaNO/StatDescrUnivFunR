@@ -8105,7 +8105,7 @@ Soit une variable qualitative $A$ ayant $k$ modalités notées $A_{1}, \dots , A_{
 \hline
 \textbf{Modalités de A}       & $A_{1}$ & $A_{2}$ & \dots & $A_{n}$ \\ \hline
 \textbf{Effectifs observés}   & $m_{1}$ & $m_{2}$ & \dots & $m_{n}$ \\ \hline
-\textbf{Fréquences observées} & $f_{1}$ & $f_{2}$ & dots  & $f_{n}$ \\ \hline
+\textbf{Fréquences observées} & $f_{1}$ & $f_{2}$ & \dots  & $f_{n}$ \\ \hline
 \end{tabular}
 \end{center}
 
@@ -8124,9 +8124,9 @@ Les fréquences de chaque modalité peuvent être résumées par :
 \\
 \textit{Exemples : }
 Distribution de la CSP des clients d'une banque (variable qualitative nominale) :
-\begin{figure}[H]\begin{center}\includegraphics[scale=0.5]{ilu/ccm3.png}\end{center}\end{figure}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.7]{ilu/ccm3.png}\end{center}\end{figure}
 Distribution de la classe d'âge des clients d'une banque (variable qualitative ordinale) :
-\begin{figure}[H]\begin{center}\includegraphics[scale=0.5]{ilu/ccm4.png}\end{center}\end{figure}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.7]{ilu/ccm4.png}\end{center}\end{figure}
 \subsubsection{Variable quantitative}
 \paragraph{Résumés numériques}
 On note $x_{1},\dots,x_{n}$ l'échantillon des $n$ valeurs numériques.
@@ -8163,7 +8163,7 @@ Pour $p = 0.25, 0.5, 0.75$, les quantiles sont appelés \textbf{quartiles}.\newli
 Pour $p = 0.1, \dots , 0.9$, ce sont les \textbf{déciles}.\newline
 \\
 Représentation de $Q(p)$ en fonction de $p$, selon le choix de sa définition. \textit{Exemple} pour $n = 4$
-\begin{figure}[H]\begin{center}\includegraphics[scale=0.5]{ilu/ccm5.png}\end{center}\end{figure}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.7]{ilu/ccm5.png}\end{center}\end{figure}
 \textbf{Autres choix possibles pour $Q(p)$ : } \textbf{R} en propose 9 (voir l'aide de la fonction \textit{quantile}).
 \begin{enumerate}
 \item Les deux premiers sont les 2 choix précédents.
@@ -8237,26 +8237,755 @@ le "$-3$" correspond au kurtosis (non normalisé) théorique d'une $mathit{N}(0,\s
 \begin{itemize}
 \item $\gamma_{2}>0$ : distribution \textbf{leptokurtique} (en noir). Profil plus "pointue"qu'une normale de même
 variance (en rouge). C'est le cas en présence de nombreuses valeurs extrêmes. Le kurtosis est utilisé en finance pour repérer ce phénomène.
-\begin{figure}[H]\begin{center}\includegraphics[scale=0.5]{ilu/ccm7.png}\end{center}\end{figure}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.7]{ilu/ccm7.png}\end{center}\end{figure}
 \item distribution \textbf{platikurtique} (en noir). Profil plus "plat" qu'une normale de même variance (en rouge).
-\begin{figure}[H]\begin{center}\includegraphics[scale=0.5]{ilu/ccm8.png}\end{center}\end{figure}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.7]{ilu/ccm8.png}\end{center}\end{figure}
 \end{itemize}
 \paragraph{Représentations graphiques} 
 \subparagraph{Variable quantitative discrète}\textcolor{white}{.}\newline
 \textbf{Le diagramme en bâtons (pour une variable quantitative discrète).}
 Les bâtons sont placés en abscisse au niveau de chaque valeur possible de la variable discrète et leur hauteur est proportionnelle à la fréquence observée.\newline
 \textit{Exemple : } répartition du nombre d'enfants par femme dans un  échantillon de femmes actives am éricaines. Dans R : en ligne de commandes, il faut d'abord calculer les fréquences avec la fonction table puis représenter le résultat avec plot.
-\begin{figure}[H]\begin{center}\includegraphics[scale=0.5]{ilu/ccm9.png}\end{center}\end{figure}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.7]{ilu/ccm9.png}\end{center}\end{figure}
 \subparagraph{Variable quantitative continue}\textcolor{white}{.}\newline
 \textbf{L'histogramme (pour une variable quantitative continue).}\newline
 L'ensemble des valeurs possibles est découpé en intervalles disjoints appelés classes. Au niveau de chaque classe s'élève un rectangle dont l'aire est égale à la fréquence observée de la classe.\newline
 \textit{Exemple :} répartition du salaire annuel des femmes actives américaines (en milliers de dollars)
-\begin{figure}[H]\begin{center}\includegraphics[scale=0.5]{ilu/ccm10.png}\end{center}\end{figure}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.7]{ilu/ccm10.png}\end{center}\end{figure}
 \textbf{Le boxplot ou boîte à moustaches ou boite de dispersion.}\newline
 Le rectangle central est délimité par le premier et le troisième quartile et la médiane y est symbolisée par un trait.
-Les "moustaches" partent de chaque côté jusqu'à la valeur minimale et maximale de l'échantillon, sous réserve que leur longueur ne dépasse pas $1.5(Q(0.75) ? Q(0.25))$, soit $1.5$ fois la hauteur de la boîte. Sinon, les moustaches s'arr?etent à la dernière valeur avant cette limite et les valeurs restantes sont représentées par des points isolés.\newline
+Les "moustaches" partent de chaque côté jusqu'à la valeur minimale et maximale de l'échantillon, sous réserve que leur longueur ne dépasse pas $1.5(Q(0.75) - Q(0.25))$, soit $1.5$ fois la hauteur de la boîte. Sinon, les moustaches s'arrêtent à la dernière valeur avant cette limite et les valeurs restantes sont représentées par des points isolés.\newline
 \textit{Exemple :} répartition du salaire des femmes actives américaines.
-\begin{figure}[H]\begin{center}\includegraphics[scale=0.5]{ilu/ccm11.png}\end{center}\end{figure}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.7]{ilu/ccm11.png}\end{center}\end{figure}
+\subsection{Analyse bivariée}
+\subsubsection{Variable quantitative/Variable qualitative}
+\paragraph{mesure d'association}
+On suppose que le facteur admet $I$ modalités contenant chacune $n_{i}$ individus ($i = 1,\dots,I)$.\newline
+On a donc :
+
+$$\sum_{i=1}^{I} n_{i} = n$$
+
+On note $x_{ij}$ la valeur de la variable quantitative pour l'individu $j$ se trouvant dans la modalité i du facteur $(i = 1,\dots,I \cap j =1,\dots,n_{i})$.\newline
+On note $\bar{x}_{i}$ la moyenne dans la modalité $i$ et $\bar{x}$ la moyenne totale, i.e\footnote{C'est-à-dire} : 
+$$\bar{x}_{i} = \frac{1}{n_{i}}\sum_{j=1}^{n_{i}} x_{ij}$$
+Et 
+$$\bar{x} = \frac{1}{n}\sum_{i=1}^{I}\sum_{j=1}^{n_{i}} x_{ij} = \frac{1}{n}\sum_{i=1}^{I}n_{i}\bar{x}_{i}$$
+Le lien entre la variable et le facteur est parfois mesuré par le \textit{rapport de corrélation eta}\footnote{La force d'une relation est évaluée par la statistique $\textrm{eta}^{2}$ (Eta carré) : $\eta^{2}$.\newline
+$\textrm{Eta}^{2}$ mesure l'effet global de la variable, $\eta^{2}$ partiel ne mesure que l'effet net, une fois l'effet des autres variables enlevé. Ces indicateurs sont reliés à la puissance du test: plus l'association entre les variables dépendante et indépendantes est forte, plus l'effet est fort, plus le test est puissant (probabilité de rejeter H0 alors que H0 est faux).\newline
+L'$\textrm{eta}^{2}$représente donc la proportion de variance de la variable dépendante (la variable testée) expliquée par la variable indépendante (la variable groupe). Cet indice varie entre 0 et 1 et les balises suivantes ont été élaborées par Cohen (1988) pour guider son interprétation. L'analyse des résultats se fait grâce à ces indicateurs :
+\begin{itemize}
+\item Autour de $0.01$ : Effet de petite taille 
+\item Autour de $0.06$ : Effet de moyenne taille 
+\item Autour de $0.14$ et plus : Effet de grande taille
+\end{itemize}
+} 
+$$\eta^{2} = \frac{\sum_{i=1}^{I} n_{i} (\bar{x}_{i}-\bar{x})^{2}}{\sum_{i=1}^{I}\sum_{j=1}^{n_{i}}(x_{ij}-\bar{x})^{2}}$$
+\textbf{Propriétés : } Formule de décomposition de la variance : La variance totale est la somme de la variance inter-modalités et de la variance intra-modalités.
+$$\sum_{i=1}^{I}\sum_{j=1}^{n_{i}} (x_{ij}-\bar{x})^{2} = \sum_{i=1}^{I}n_{i}(\bar{x}_{i} - \bar{x})^{2} + \sum_{i=1}^{I}\sum_{j=1}^{n_{i}} (x_{ij}-\bar{x}_{i})^{2}$$
+Et on a ainsi $0\leq \eta 1$
+\paragraph{résumés numériques}
+Ce cours utilise \textbf{R Commander} pour afficher des résultats et effectuer des calculs\footnote{je pars du principe que R commander c'est nul, donc je mets les scripts en R directement}.\newline
+L'option \textit{Résumer par groupe \dots de Statistiques/Résumés/Statistiques descriptives...} permet de résumer différentes statistiques d'une variable quantitative selon les modalités d'un facteur.\newline
+\textit{Exemple : } quelques statistiques descriptives du taux de NO2 dans les véhicules
+en fonction de la fluidité du trafic (\underline{\href{http://www.math.sciences.univ-nantes.fr/~lavancie/enseignement.html}{jeu de données vu en TP}}).
+\begin{lstlisting}[language=html]
+setwd("~/[...]/StatDesR/TP")
+##library(Rcmdr)
+> tauxNO <- read.table("/Users[...]/StatDesR/TP/NO2.txt",header=TRUE, sep="", na.strings="NA", dec=".", strip.white=TRUE)
+> str(tauxNO)
+'data.frame': 286 obs. of  3 variables:
+ $ NO2     : num  379 807 635 673 590 ...
+ $ type    : Factor w/ 5 levels "A","P","T","U",..: 2 3 1 3 2 5 1 4 4 2 ...
+ $ fluidite: Factor w/ 4 levels "A","B","C","D": 1 4 4 3 1 4 4 4 4 1 ...
+ > table(tauxNO$fluidite)
+
+ A  B  C  D 
+79 68 65 74 
+> table(tauxNO$type)
+
+ A  P  T  U  V 
+69 78 33 75 31 
+> summary(tauxNO$NO2)
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+   13.4   147.1   206.6   245.3   319.5   844.4
+> library(abind, pos=15)
+> library(e1071, pos=16)
+> numSummary(tauxNO[,"NO2"], groups=tauxNO$fluidite, statistics=c("mean", "sd", "IQR", "quantiles"), quantiles=c(0,.25,.5,.75,1))
+      mean       sd      IQR       0%      25%      50%      75%     100% data:n
+A 244.1691 143.9747 181.5894 16.53659 140.3315 203.6442 321.9210 844.3919     79
+B 232.5729 123.3186 155.8541 53.64617 143.6053 199.0793 299.4594 573.0764     68
+C 235.1250 136.0099 176.2739 52.36647 126.5375 202.1544 302.8114 673.3514     65
+D 266.9988 149.9037 165.4900 13.40037 171.7825 220.6241 337.2726 806.6694     74
+\end{lstlisting}
+Avec les notations précédentes, nous avons : $I = 4$, $n_{1} = 79$, $n_{2} = 68$, $n_{3} = 65$, $n_{4} = 74$, $\bar{x_{1}} = 244$, $\bar{x_{2}} = 233$, $\bar{x_{3}} = 235$, $\bar{x_{4}} = 267$. De la même manière, on peut obtenir : 
+\begin{lstlisting}[language=html]
+numSummary(tauxNO[,"NO2"], groups=tauxNO$type, statistics=c("mean", "sd", "IQR", "quantiles"), quantiles=c(0,.25,.5,.75,1))
+      mean       sd      IQR       0%      25%      50%      75%     100% data:n
+A 215.5343 126.6993 135.7991 52.36647 121.8790 190.2742 257.6781 646.7451     69
+P 246.9322 126.2990 194.2088 55.69369 151.0428 213.5476 345.2516 589.7507     78
+T 348.7938 209.7387 296.4244 74.49000 185.5641 286.7483 481.9885 844.3919     33
+U 233.7392 115.6702 171.9220 13.40037 144.7656 206.0508 316.6875 573.0764     75
+V 224.9077 109.1470 136.1649 16.53659 142.2749 206.5283 278.4398 511.3834     31
+\end{lstlisting}
+Avec les notations précédentes, nous avons : $I = 5$, $n_{1} = 69$, $n_{2} = 78$, $n_{3} = 33$, $n_{4} = 75$,$n_{5} = 31$, $\bar{x_{1}} = 216$, $\bar{x_{2}} = 247$, $\bar{x_{3}} = 349$, $\bar{x_{4}} = 234$,$\bar{x_{5}} = 225$.
+
+Pour calculer $\eta$, on peut utiliser le menu \textit{Statistiques/Moyennes/ANOVA à un facteur...} : $\eta^{2}$ correspond au rapport des "Sum Sq" (somme des carrés) pour le facteur sur ceux des "Residuals" (résidus).\newline
+Pour l'exemple ci-dessus, la sortie de l'ANOVA donne:
+\begin{lstlisting}[language=html]
+> library(mvtnorm, pos=17)
+> library(survival, pos=17)
+> library(MASS, pos=17)
+> library(TH.data, pos=17)
+> library(multcomp, pos=17)
+
+> AnovaModel.2 <- aov(NO2 ~ fluidite, data=tauxNO)
+> summary(AnovaModel.2)
+             Df  Sum Sq Mean Sq F value Pr(>F)
+fluidite      3   52687   17562   0.907  0.438
+Residuals   282 5460050   19362
+
+> 52687/5460050
+[1] 0.009649545
+\end{lstlisting}
+Ainsi :
+$$\eta^{2} = \frac{52687}{5460050} \approx 0.1$$
+\paragraph{Graphes}
+L'option \textit{Graphe par groupe\dots} de \textit{Graphes/Boite de dispersion\dots} permet une comparaison rapide de la répartition d'une série selon les modalités d'un facteur.\newline
+\textit{Exemple : } Pour la série NO2 précédente, classée selon la fluidité du trafic, de fluide ("A") à congestionné ("D").
+\begin{lstlisting}[language=html]
+boxplot(NO2~fluidite, data=tauxNO, id.method="y")
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.4]{ilu/ccm12.png}\end{center}\end{figure}
+\textit{Exemple : } Pour la série NO2 précédente, classée selon le type de véhicule :
+\begin{lstlisting}[language=html]
+boxplot(NO2~type, data=tauxNO, id.method="y")
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.4]{ilu/ccm13.png}\end{center}\end{figure}
+\subsubsection{Variable qualitative/ Variable qualitative}
+\paragraph{Résumés numériques}\textcolor{white}{.}\newline
+On suppose que le premier facteur admet $I$ modalités et le second $J$ modalités.
+\begin{itemize}
+\item $n_{ij}$ : nombre d'individus ayant la modalité $i$ pour le premier facteur et $j$ pour le second.
+\item $n_{i}$ : nombre d'individus ayant la modalité $i$ pour le premier facteur
+\item $n_{j}$ : nombre d'individus ayant la modalité $j$ pour le second facteur
+\end{itemize}
+$$n_{i} = \sum_{j=1}^{J} n_{ij}\textrm{ , } n_{j} = \sum_{i=1}^{I} n_{ij}\\
+n = \sum_{i=1}^{I} n_{i} = \sum_{j=1}^{J} n_{j} = \sum_{i=1}^{I}\sum_{j=1}^{J} n_{ij}$$
+Les effectifs $n_{ij}$ sont résumés dans un \textbf{tableau de contingence}.\newline
+Sous R Commander, on peut le construire automatiquement à l'aide du menu \textit{Statistiques/Tables de contingence/Tri croisé\dots}\newline
+\textit{Exemple : } Pour les variables "type" et "fluidite" du jeu de données NO2trafic, le tableau de contingence (avec l'option par défaut "Pas de pourcentages") est :
+\begin{lstlisting}[language=html]
+library(abind, pos=15)
+local({
+  .Table <- xtabs(~fluidite+type, data=tauxNO)
+  cat("\nFrequency table:\n")
+  print(.Table)
+  .Test <- chisq.test(.Table, correct=FALSE)
+  print(.Test)
+})
+
+
+Frequency table:
+        type
+fluidite  A  P  T  U  V
+       A 19 21  9 21  9
+       B 16 20  8 17  7
+       C 16 17  8 17  7
+       D 18 20  8 20  8
+
+  Pearson's Chi-squared test
+
+data:  .Table
+X-squared = 0.35134, df = 12, p-value = 1
+\end{lstlisting}
+Ou plus simplement sans R Commander : 
+\begin{lstlisting}[language=html]
+> tab <- table(tauxNO$fluidite,tauxNO$type, deparse.level = 2);tab
+               tauxNO$type
+tauxNO$fluidite  A  P  T  U  V
+              A 19 21  9 21  9
+              B 16 20  8 17  7
+              C 16 17  8 17  7
+              D 18 20  8 20  8
+\end{lstlisting}
+\textbf{Remarque :} On peut remplacer les effectifs $n_{ij}$ par les fréquences $n_{ij}/n$ en choisissant l'option "Pourcentages du total" dans l'onglet "Statistiques".
+Ou plus simplement sans R Commander : 
+\begin{lstlisting}[language=html]
+> round(prop.table(table(tauxNO$fluidite,tauxNO$type)),2)
+   
+       A    P    T    U    V
+  A 0.07 0.07 0.03 0.07 0.03
+  B 0.06 0.07 0.03 0.06 0.02
+  C 0.06 0.06 0.03 0.06 0.02
+  D 0.06 0.07 0.03 0.07 0.03
+\end{lstlisting}
+\paragraph{Distributions conditionnelles}\textcolor{white}{.}\newline
+La \textbf{distribution conditionnelle} du second facteur sachant la modalité $i$ du premier facteur est donnée par les fréquences:
+$$\frac{n_{ij}}{n_{i}} \textrm{, }\forall j \in 1,\dots,J$$
+Pour chaque i, on a évidemment :
+$$\sum_{j=1}^{J}\frac{n_{ij}}{n_{i}} = 1$$
+Les profils lignes correspondent à l'ensemble de ces distributions
+conditionnelles pour $i=1,\dots,I$.\newline
+L'intérêt des profils lignes est de comparer la distribution du second facteur selon les modalités du premier facteur. S'il y a indépendance entre les deux facteurs, les profils lignes doivent être similaires.
+De même on peut s'intéresser aux profils colonnes qui sont les distributions conditionnelles du premier facteur sachant le second. Elles sont données par les fréquences
+$$\frac{n_{ij}}{n_{j}} \textrm{, }\forall i \in 1,\dots,I$$
+Dans R Commander, on obtient les profils lignes en choisissant l'option
+"Pourcentages des lignes" dans l'onglet "Statistiques" du menu
+\textit{Statistiques/Tables de contingence/Tri croisé\dots}\newline
+\textit{Exemple : } Les profils lignes du tableau précédent sont :
+\begin{lstlisting}[language=html]
+Row percentages:
+        type
+fluidite    A    P    T    U    V Total Count
+       A 24.1 26.6 11.4 26.6 11.4 100.1    79
+       B 23.5 29.4 11.8 25.0 10.3 100.0    68
+       C 24.6 26.2 12.3 26.2 10.8 100.1    65
+       D 24.3 27.0 10.8 27.0 10.8  99.9    74
+## OU
+> tabligne=cbind(addmargins(prop.table(addmargins(x,1),1),2), c(margin.table(x,1),sum(x)))
+> colnames(tabligne)<-c(colnames(x),"TOTAL","EFFECTIF")
+> round(tabligne,2)
+       A    P    T    U    V TOTAL EFFECTIF
+A   0.24 0.27 0.11 0.27 0.11     1       79
+B   0.24 0.29 0.12 0.25 0.10     1       68
+C   0.25 0.26 0.12 0.26 0.11     1       65
+D   0.24 0.27 0.11 0.27 0.11     1       74
+Sum 0.24 0.27 0.12 0.26 0.11     1      286
+\end{lstlisting}
+Les profils colonnes sont :
+\begin{lstlisting}[language=html]
+Column percentages:
+        type
+fluidite     A    P    T     U     V
+   A      27.5 26.9 27.3  28.0  29.0
+   B      23.2 25.6 24.2  22.7  22.6
+   C      23.2 21.8 24.2  22.7  22.6
+   D      26.1 25.6 24.2  26.7  25.8
+   Total 100.0 99.9 99.9 100.1 100.0
+   Count  69.0 78.0 33.0  75.0  31.0
+## OU
+> tabcol=rbind(addmargins(prop.table(addmargins(x,2),2),1)*100, c(margin.table(x,2),sum(x)))
+> rownames(tabcol)<-c(rownames(x),"TOTAL","EFFECTIF")
+> round(tabcol,2)
+              A      P      T      U      V    Sum
+A         27.54  26.92  27.27  28.00  29.03  27.62
+B         23.19  25.64  24.24  22.67  22.58  23.78
+C         23.19  21.79  24.24  22.67  22.58  22.73
+D         26.09  25.64  24.24  26.67  25.81  25.87
+TOTAL    100.00 100.00 100.00 100.00 100.00 100.00
+EFFECTIF  69.00  78.00  33.00  75.00  31.00 286.00
+\end{lstlisting}
+On constate peu de différences entre les profils lignes (de même pour les profils
+colonnes), il ne semble donc pas y avoir de lien entre les deux facteurs.
+\paragraph{Distance du khi-deux}\textcolor{white}{.}\newline
+Pour mesurer le lien entre les deux facteurs, on calcule la distance du khi-deux.
+$$\chi^{2} = \sum_{i=1}^{I}\sum_{j=1}^{J} \frac{(n_{ij}-\frac{n_{i}\cdot n_{j}}{n})^{2}}{\frac{n_{i}\cdot n_{j}}{n}}
+$$
+
+Cette distance mesure la différence entre les effectifs observés $n_{ij}$ et les effectifs théoriques s'il y avait indépendance : dans ce cas la fréquence observée dans $i$ et $j$ , $\frac{n_{ij}}{n}$ vaudrait le produit des fréquences marginales $\frac{n_{i}}{n}\cdot\frac{n_{ij}}{n}$.\newline
+\textbf{Propriétés}
+$$0 \leq \chi^{2} \leq n\times [\min(I,J)-1]$$
+On peut mesurer le lien entre deux variables qualitatives par le \textbf{V de Cramer} :
+$$V = \sqrt{\frac{\chi^{2}}{n\times [\min(I,J)-1]}}$$
+On a $0\leq V\leq 1$.
+Sous R Commander, la distance du  $\chi^{2}$ est donnée dans la sortie du menu \textit{Statistiques/Tables de contingence/Tri croisé...} sous l'appellation "X-squared", en cochant "Test Chi-deux d'indépendance"dans l'onglet "Statistiques".\newline
+\textit{Exemple :}
+\begin{lstlisting}[language=html]
+Frequency table:
+        type
+fluidite  A  P  T  U  V
+       A 19 21  9 21  9
+       B 16 20  8 17  7
+       C 16 17  8 17  7
+       D 18 20  8 20  8
+
+Total percentages:
+         A    P    T    U    V Total
+A      6.6  7.3  3.1  7.3  3.1  27.6
+B      5.6  7.0  2.8  5.9  2.4  23.8
+C      5.6  5.9  2.8  5.9  2.4  22.7
+D      6.3  7.0  2.8  7.0  2.8  25.9
+Total 24.1 27.3 11.5 26.2 10.8 100.0
+
+  Pearson's Chi-squared test
+
+data:  .Table
+X-squared = 0.35134, df = 12, p-value = 1
+\end{lstlisting}
+Ou plus simplement : 
+\begin{lstlisting}[language=html]
+> chisq.test(tauxNO$type,tauxNO$fluidite,correct = FALSE)
+
+  Pearson's Chi-squared test
+
+data:  tauxNO$type and tauxNO$fluidite
+X-squared = 0.35134, df = 12, p-value = 1
+\end{lstlisting}
+On lit dans R Commander X-squared = 0.3513.\newline
+On en déduit $V =\sqrt{0.3513/(283 \times 3)} = 0.02$. L'absence de lien entre les variables "type"et "fluidite"se confirme.\newline
+Pour comprendre plus profondément le lien éventuel entre les deux facteurs :
+\begin{itemize}
+\item L'option "Imprimer les fréquences attendues" donne le tableau des effectifs
+(et non fréquences\dots) théoriques $\frac{n_{i}\cdot n_{j}}{n}$ s'il y avait eu indépendance.
+\item L'option "Composants de la statistique du chi-deux" donne le tableau des
+résidus, c'est à dire chaque terme composant la somme du $\chi^{2}$
+\end{itemize}
+Un résidu élevé témoigne d'une sur-représentation (ou sous-représentation) de
+la modalité croisée par rapport à une situation d'indépendance.
+\paragraph{Graphes}\textcolor{white}{.}\newline
+On résume le tableau de contingence par des diagrammes en batons "croisés",
+soit par empilement (à gauche), soit côte à côte (à droite).\newline
+Ces graphes se font en lignes de commande : si le tableau de contingence se
+nomme x, il suffit de taper barplot(x) ou barplot(x,beside=TRUE).
+\begin{lstlisting}[language=html]
+x<-table(tauxNO$fluidite,tauxNO$type)
+barplot(x,legend.text = TRUE)
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.5]{ilu/ccm14.png}\end{center}\end{figure}
+
+\begin{lstlisting}[language=html]
+x<-table(tauxNO$fluidite,tauxNO$type)
+barplot(x,legend.text = TRUE,beside = TRUE)
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.5]{ilu/ccm15.png}\end{center}\end{figure}
+\textbf{Remarque : } si on souhaite représenter les fréquences et non les effectifs, il suffit de diviser $x$ par l'effectif total $n$, barplot(x/n).
+\begin{lstlisting}[language=html]
+x
+n = nrow(tauxNO)
+barplot(x/n,legend.text = TRUE)
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.5]{ilu/ccm16.png}\end{center}\end{figure}
+\subsubsection{Variable quantitative/ Variable quantitative}
+\paragraph{Lien entre deux variables quantitatives : nuage de points}
+\textcolor{white}{.}\newline
+Soit $x_{1},\dots, x_{n}$ les valeurs de la première variable quantitative $X$ et  $y_{1},\dots, y_{n}$ les valeurs de la seconde variable quantitative $Y$.\newline
+On visualise le lien entre $X$ et $Y$ grâce au nuage des points $(x_{i},y_{i})$.\newline
+Dans R Commander : \textit{Graphe/Nuage de points\dots} ou \textit{Graphe/Matrice de nuages de points\dots} si on en souhaite plusieurs.\newline
+\textit{Exemple : }nuage de points entre "Al" et "Ca" des données "Pottery" et matrice des nuages de points entre toutes les variables.
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.3]{ilu/ccm17.png}\end{center}\end{figure}
+\paragraph{Lien entre deux variables quantitatives : corrélation linéaire}\textcolor{white}{.}\newline
+On définit la covariance entre $X$ et $Y$ par :
+$$\textrm{cov}(X,Y) = \frac{1}{n}\sum_{i=1}^{n}(x_{i}-\bar{x}_{n})(y_{i}-\bar{y}_{n})=\frac{1}{n}\sum_{i=1}^{n}x_{i}y_{i} - \bar{x}_{n}\bar{y}_{n}$$ 
+Où $\bar{x}_{n}$ (resp. $\bar{y}_{n}$) désigne la moyenne de $X$ (resp. $Y$).\newline
+Le lien linéaire est quantifié par la \textit{corrélation linéaire de Pearson} :
+$$r = \frac{\textrm{cov}(X,Y)}{\sigma_{X}\sigma_{Y}} = \frac{\frac{1}{n}\sum_{i=1}^{n}(x_{i}-\bar{x}_{n})(y_{i}-\bar{y}_{n})}{\sqrt{\frac{1}{n}\sum_{i=1}^{n}(x_{i}-\bar{x}_{n})^{2}\frac{1}{n}\sum_{i=1}^{n}(y_{i}-\bar{y}_{n})^{2}}}$$
+où $\sigma_{X}$ (resp. $\sigma_{y}$) désigne l'écart-type de $X$ (resp. $Y$).\newline
+\textit{Propriétés} : La corrélation $r$ est toujours comprise entre $?1$ et $1$ :
+\begin{itemize}
+\item si $r = 1$, il y a un lien linéaire "parfait" positif :\newline
+\textit{$r = 1$ ssi il existe $\alpha\geq 0$ et $\beta$ tel que $y_{i} = \alpha x_{i} + \beta$ pour tout $i=1,\dots,n$}
+\item si $r = -1$, il y a un lien linéaire "parfait" négatif :\newline
+\textit{$r = -1$ ssi il existe $\alpha\leq 0$ et $\beta$ tel que $y_{i} = \alpha x_{i} + \beta$ pour tout $i=1,\dots,n$}
+\item si r = 0, il n'y a aucun lien linéaire (mais il peut exister un lien non-linéaire).
+\end{itemize}
+Quelques exemples de nuages de points avec la corrélation correspondante.
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.7]{ilu/ccm18.png}\end{center}\end{figure}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.7]{ilu/ccm19.png}\end{center}\end{figure}
+\paragraph{Ajuster la droite des moindres carrés} \textcolor{white}{.}\newline
+\textbf{Droite des moindres carrés :} Il s'agit de la droite qui passe "le mieux"au milieu des points $(x_{i},y_{i})$, au sens où la somme des distances en rouge prises au carré est minimale. On dit aussi qu'on effectue la régression linéaire de $Y$ sur $X$.
+\begin{figure}[H]\begin{center}\includegraphics[scale=1]{ilu/ccm20.png}\end{center}\end{figure}
+L'équation de la droite recherchée est donc $y = \hat{a}x + \hat{b}$ où $\hat{a}$\footnote{une estimation, un estimateur} et $\hat{b}$ vérifient\footnote{
+  \textbf{Notation} : 
+  $$\underset{x}{\operatorname{arg\,max}} \, f(x) = \{x | \forall y : f(y) \leq f(x)\}$$
+  $$\underset{x}{\operatorname{arg\,min}} \, f(x) = \{x | \forall y : f(y) \geq f(x)\}$$
+} : 
+$$(\hat{a},\hat{b}) = \underset{(a,b)}{\arg\max} \sum_{i=1}^{n} (y_{i} = ax_{i} - b)^{2}$$
+On trouve, si $\textrm{Var}(X) \neq 0$ : 
+$$\hat{a} = \frac{\textrm{cov(X,Y)}}{\textrm{var}(X)} = \frac{\sum_{i=1}^{n}(x_{i}-\bar{x})(y_{i}-\bar{y})}{\sum_{i=1}^{n}(x_{i}-\bar{x})^{2}} \textrm{ et } \hat{b} = \bar{y}-\hat{a}\bar{x}$$
+Dans R Commander : \textit{Statistiques/Ajustement de modèles/Régression linéaire}.\newline
+La droite des moindres carrés peut servir à prédire une nouvelle valeur de $Y$ : pour $X = x$, $Y$ est prédit par $\hat{y} = \hat{a}\bar{x}+\hat{b}$.\newline
+Pour mesurer la qualité d'ajustement de la droite on considère les \textbf{résidus} :
+$$e_{i} = y_{i} - (\hat{a}x_{i} + \hat{b})$$ 
+(\textit{Il s'agit des segments rouges du graphique précédent.})\newline
+Pour l'ajustement de la droite précédente, on a toujours : 
+$$ \frac{1}{n} \sum_{i=1}^{n} e_{i} = 0$$
+\textbf{Formule de décomposition de la variance:}
+$$\sum_{i=1}^{n}(y_{i}-\bar{y})^{2} = \sum_{i=1}^{n}(\hat{y}_{i}-\bar{y})^{2} + \sum_{i=1}^{n} e_{i}^{2}$$
+que l'on note généralement $\textrm{SCT} = \textrm{SCE} + \textrm{SCR}$ où \textit{SCT} : "Somme des Carrés Totaux", \textit{SCE} : "SC Expliqués" et \textit{SCR} : "SC Résiduels".\newline
+On définit le coe cient de détermination : 
+$$R^{2} = \frac{\textrm{SCE}}{\textrm{SCT}}$$
+On a : 
+\begin{itemize}
+\item $0 \leq R^{2} \leq 1$ d'après la formule de décompositon de la variance
+\item $R^{2} = r^{2}$ où $r$ est le coefficient de corrélation linéaire entre $X$ et $Y$.
+\item L'ajustement par la droite est d'autant meilleur que $R^{2}$ est proche de 1 car dans ce cas : 
+$$ \sum_{i=1}^{n} e_{i}^{2} \approx 0$$
+\end{itemize}
+\subsection{Aspects temporels}
+\subsubsection{Représentation graphique}
+De nombreuses données sont acquises à intervalles réguliers dans le temps : ce sont des \textbf{séries temporelles}.\newline
+Des méthodes spécifiques permettent :
+\begin{itemize}
+\item de les représenter graphiquement
+\item de décrire leurs tendances temporelles et leurs effets périodiques 
+\item d'étudier leur dépendance temporelle
+\item de les prédire
+\end{itemize}
+Représentation graphique :
+\begin{itemize}
+\item \textit{En abscisse :} le temps (secondes, jours, mois, années, etc\dots); 
+\item \textit{En ordonnée :} les valeurs des observations.
+\end{itemize}
+\paragraph{Exemple : }
+\begin{itemize}
+%% Exemple 1
+\item \textit{PIB des Etats-Unis}
+\begin{itemize}
+\item textit{En ordonnée :} Une observation par an.
+\item \textit{En abscisse :} Intervalle d'observation : 1929 - 2012.
+\begin{figure}[H]\begin{center}\includegraphics[scale=1]{ilu/ccm21.png}\end{center}\end{figure}
+\end{itemize}
+%% Exemple 2
+\item \textit{Consommation d'électricité en Australie.}
+\begin{itemize}
+\item textit{En ordonnée :} Une donnée par demi-heure.
+\item \textit{En abscisse :} Intervalle d'observation : 35 jours en juin-juillet 1991.
+\begin{figure}[H]\begin{center}\includegraphics[scale=1]{ilu/ccm22.png}\end{center}\end{figure}
+\end{itemize}
+\item \textit{Trafic aérien.}
+\begin{itemize}
+\item textit{En ordonnée :} Une donnée par mois
+\item \textit{En abscisse :} Intervalle d'observation : 1949 à 1961.
+\begin{figure}[H]\begin{center}\includegraphics[scale=1]{ilu/ccm23.png}\end{center}\end{figure}
+\end{itemize}
+
+%% Exemple 4
+\item \textit{Production de bière en Australie.}
+\begin{itemize}
+\item textit{En ordonnée :} Une donnée par mois
+\item \textit{En abscisse :} Intervalle d'observation : 1956 à 1995.
+\begin{figure}[H]\begin{center}\includegraphics[scale=1]{ilu/ccm24.png}\end{center}\end{figure}
+\end{itemize}
+
+%% Exemple 5
+\item \textit{Maximum journalier d'ozone à Rennes.}
+\begin{itemize}
+\item \textit{En ordonnée :} Une donnée par jour
+\item \textit{En abscisse :} Intervalle d'observation : de juin à septembre 2006.
+\begin{figure}[H]\begin{center}\includegraphics[scale=1]{ilu/ccm25.png}\end{center}\end{figure}
+\end{itemize}
+\end{itemize}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\paragraph{Sous R}
+L'étude sous R se fait par lignes de commandes.\newline
+Supposons que la série temporelle est la variable var du tableau tab.
+\begin{enumerate}
+\item On commence par définir la série temporelle sous R :
+$$x = \textrm{ts}(\textrm{tab}\$\textrm{var}, \textrm{start}=1980, \textrm{freq}=12)$$
+\begin{itemize}
+\item \textcolor{red}{\textbf{ts}} - "time series"\newline
+permet à R de voir la variable comme une série temporelle
+\item \textcolor{red}{\textbf{start}} - Optionnel.\newline
+permet de préciser la date de début de la série
+\item \textcolor{red}{\textbf{freq}} - Optionnel.\newline
+précise la période de la série, s'il y en a une (ici on suppose que la période vaut 12, ce qui est typique de données mensuelles). 
+\end{itemize}
+\item On peut alors travailler avec la série sous R, notamment la représenter avec :
+$$\textrm{plot}(x)$$
+\item La légende en abscisse se gère en général toute seule. On peut néanmoins imposer une datation personnelle, par exemple comme ceci :
+\begin{lstlisting}[language=html]
+dates=seq(as.POSIXlt("2006/6/7"),as.POSIXlt("2006/9/25"),"days")
+plot(dates, x, type="l", xaxt="n",xlab='Jours')
+r = as.POSIXct(round(range(dates), "days"))
+axis.POSIXct(1, at=seq(r[1], r[2], by="month"), format="%b-%y")
+\end{lstlisting}
+\end{enumerate}
+\subsubsection{Dépendance temporelle, la fonction d'autocorrélation (ACF) }
+\paragraph{La dépendance temporelle}\textcolor{white}{.}\newline
+Dans une série temporelle, il est courant d'observer une dépendance entre les différentes valeurs de la série, notamment entre les valeurs voisines.\newline
+Cela peut se vérifier en calculant la corrélation ou en représentant le nuage de points entre les valeurs de la série et ses valeurs au pas de temps précédent.
+\textit{Exemple : } Pour la série des max d'ozone, on construit la série des valeurs de la veille.
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.5]{ilu/ccm26.png}\end{center}\end{figure}
+\begin{itemize}
+\item Le nuage de points entre la série initiale et la série des valeurs de la veille est donné ci-contre.
+\item La corrélation vaut $r = 0.68$.
+\item La série est donc corrélée positivement à son passé immédiat.
+\end{itemize}
+\paragraph{Les ACF}\textcolor{white}{.}\newline
+On note $x_{t}$, la valeur de la série à l'instant $t$, observée pour $t=1,\dots,n$.
+\begin{itemize}
+\item La \textbf{fonction d'autocovariance} est définie pour tout entier $h$ de $0$ à $n$ par :
+$$\sigma(h) = \frac{1}{n-h} \sum_{t=1}^{n-h}(x_{t}-\bar{x})(x_{t+h}-\bar{x})$$
+où $\bar{x}$ désigne la moyenne empirique de la série\footnote{
+En mathématiques, la notion de \textbf{série} permet de généraliser la notion de \textbf{somme finie}.\newline
+Étant donnée une suite de terme général $u_{n}$, étudier la série de terme général $u_{n}$, c'est étudier la suite obtenue en prenant la somme des premiers termes de la suite $(u_{n})_{n\in\mathbb{N}}$, autrement dit la suite de terme général $S_{n}$ défini par :
+$$S_{n} = u_{0} + u_{1} + \dots + u_{n} = \sum_{k=0}^{n} u_{k}$$} : 
+$$\bar{x} = \frac{1}{n} \sum_{t=1}^{n} x_{t}$$
+\textbf{Remarque) :}
+\begin{itemize}
+\item la sommation s'arrête à $n - h$ car au-delà il n'y a plus de valeurs disponibles pour calculer $x_{t+h}$.
+\item $\sigma(0)$ correspond à la variance de la série.
+\end{itemize}
+\item La \textbf{fonction d'autocorrélation} (ACF en anglais) est définie pour tout entier $h$ de $0$ à $n$ par :
+$$\rho(h)=\frac{\sigma(h)}{\sigma(0)}$$
+\textbf{Remarque) : } $\rho(h)$ calcule la corrélation entre les valeurs de la série et les valeurs \textit{"h plus tard"}.\newline
+\\
+Sous R : la fonction \textcolor{red}{acf($x$)} calcule et représente les ACF de la série $x$.\newline
+\textit{Exemple :} les ACF de la série des max d'ozone.
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.5]{ilu/ccm27.png}\end{center}\end{figure}
+Chaque baton représente $\rho(h)$ où $h=\textrm{" Lag"}$
+\begin{itemize}
+\item \textcolor{blue}{Lag=0} corrélation de la série avec elle-même (elle vaut toujours 1).
+\item \textcolor{blue}{Lag=1} corrélation de la série avec son passé immédiat (on retrouve r = 0.68).
+\item \textcolor{blue}{Lag=2} corrélation de la série avec la série des valeurs de l'avant-veille.
+\item \textcolor{blue}{Lag= \dots} etc.
+\end{itemize}
+\textbf{Remarque : } les batons entre les pointillés peuvent être considérés négligeables.
+\end{itemize}
+\subsubsection{Tendance et saisonnalité}
+On observe généralement dans une série temporelle :
+\begin{itemize}
+\item Une \textbf{tendance}, déterministe, qui représente le comportement moyen de la série au cours du temps. On la note $m_{t}$. Par exemple, pour une tendance linéaire : 
+$$m_{t} = at + b$$
+\item Une \textbf{saisonnalité}, déterministe, de période $T$, qui représente un comportement périodique (ou saisonnier) de la série (par exemple des pics de ventes tous les mois de décembre pour une série mensuelle). On la note $s_{t}$ et on a: $s_{t+T} = s_{t}$, pour tout $t$.\newline
+La connaissance de $s_{1} ,\dots, s_{T}$ fournit le profil saisonnier.
+\item un \textbf{reste aléatoire}, qui contient les variations aléatoires au cours du temps, ces dernières pouvant être liées entre elles dans le temps.
+\end{itemize}
+La tendance et la saisonnalité (avec sa période $T$) sont généralement visibles sur la représentation graphique de la série. On peut également détecter leur présences sur les ACF. \newline
+\\
+\paragraph{Exemple : série et ses ACF}
+\subparagraph{PIB des USA de 1929 à 2012}
+Série avec tendance croissante, non linéaire.
+\begin{itemize}
+\item tendance croissante visible sur la série.
+\item les ACF décroissent lentement et restent non négligeables
+\end{itemize}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.7]{ilu/ccm28.png}\end{center}\end{figure}
+\subparagraph{Températures moyennes mensuelles à Dubuque, Iowa, de 1964 à 1975}
+Série avec saisonnalité de période $T = 12$.
+\begin{itemize}
+\item aspect saisonnier de période 12 visible sur la série.
+\item les ACF ont également un comportement périodique de période 12
+\end{itemize}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.7]{ilu/ccm29.png}\end{center}\end{figure}
+\subparagraph{Concentration de CO2 mensuelle à Hawaï de 1994 à 2004}
+Série avec tendance et saisonnalité de période $T = 12$.
+\begin{itemize}
+\item tendance linéaire et saisonnalité de période 12 visibles sur la série.
+\item les ACF ont un comportement périodique et décroissent faiblement.
+\end{itemize}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.7]{ilu/ccm30.png}\end{center}\end{figure}
+\subparagraph{Max d'ozone journalier à Rennes l'été 2006}
+Série sans tendance ni saisonnalité.
+\begin{itemize}
+\item aucune structure visible sur la série.
+\item les ACF décroissent rapidement pour devenir négligeables.
+\end{itemize}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.7]{ilu/ccm31.png}\end{center}\end{figure}
+
+\paragraph{Décomposition additive et multiplicative}
+On note $x_{t}$ la valeur de la série à l'instant t, observée pour différents $t$.\newline
+La plupart des séries observées peuvent se décomposer :
+\begin{itemize}
+\item de façon \textbf{additive} (la plus courante) : 
+$$x_{t} = m_{t} + s_{t} + r_{t}$$
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.7]{ilu/ccm32.png}\end{center}\end{figure}
+\item de façon \textbf{multiplicative} : 
+$$x_{t} = m_{t} \times s_{t} \times r_{t}$$
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.7]{ilu/ccm33.png}\end{center}\end{figure}
+\end{itemize}
+\subsubsection{Estimation de la tendance}
+On peut estimer la tendance $m_{t}$ de deux façons.
+\begin{itemize}
+\item \textbf{De façon paramétrique.}\newline
+On suppose que $m_{t}$ admet une forme paramétrique spécifique, par exemple $m_{t} = at + b$ pour une tendance linéaire, et on estime les paramètres par la méthode des moindres carrés.
+\item \textbf{De façon non-paramétrique.}\newline
+On effectue des moyennes mobiles de la série, ce qui équivaut à la lisser : le lissage résultant estime la tendance, mais aucune formule exprimant cette tendance n'est fournie.
+\end{itemize}
+\paragraph{Estimation paramétrique de la tendance : } On considère la série du PIB aux USA.\newline
+On décide d'estimer la tendance mt à l'aide de deux modèles paramétriques :
+\begin{enumerate}
+\item En supposant que $m_{t}$ est \textcolor{red}{linéaire} : $m_{t} = at + b$.\newline
+On en déduit une estimation de $a$ et $b$ par les moindres carrés. La droite estimée est représentée en rouge ci-dessous.
+\item En supposant que $m_{t}$ est \textcolor{green}{quadratique} : $m_{t} = at^{2} + bt + c$.
+On estime de même $a$, $b$ et $c$ par les moindres carrés. La courbe estimée est représentée en vert ci-dessous.
+\end{enumerate}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.5]{ilu/ccm34.png}\end{center}\end{figure}
+Le code R pour la tendance quadratique est donné ci-dessous.
+\begin{lstlisting}[language=html]
+temps=as.numeric(time(GDP))
+temps2=temps^2
+reg=lm(GDP ~ temps + temps2)
+plot(GDP)
+lines(temps,reg$fitted.values)
+\end{lstlisting}
+
+\paragraph{Estimation de la tendance par moyenne mobile}
+La \textbf{moyenne mobile} de $x$ associée aux $k_{1} +k_{2} + 1$ coefficient$ a_{k_{1}},\dots,a_{k_{2}}$ est : 
+$$M(t) = \sum_{i=-k_{1}}^{k_{2}}a_{i}x_{t+i}\textrm{ ,}\forall t = k_{1} + 1,\dots, n-k_{2}$$
+où les poids somment à 1 :
+$$\sum_{i=-k_{1}}^{k_{2}}a_{i}=1$$
+Chaque valeur xt est donc remplacée par la moyenne pondérée des valeurs autour de $x_{t}$ : $k_{1}$ valeurs avant, $k_{2}$ valeurs après, soit en tout $k_{1} + k_{2} + 1$ valeurs moyennées.\newline
+En pratique, $M(t)$ se calcule pour $t = k_{1} + 1$ à $n-k_{2}$ afin que toutes les valeurs à moyenner soient accessibles.
+\subparagraph{Quelques moyennes mobiles standards :}
+\begin{itemize}
+\item  La \textbf{moyenne mobile arithmétique} d'ordre $p$ pour laquelle $k_{1} = p$, $k_{2} = 0$ et $a_{i} = \frac{1}{p+1}$ . Elle n'utilise que le passé de $x_{t}$.
+$$\bar{M}_{p}(t)=\frac{1}{p+1}\sum_{i=-p}^{0}x_{t+i} = \frac{1}{p+1}\sum_{i=0}^{p}x_{t-i}\textrm{, }\forall t = p+1,\dots, n$$
+Elle est utilisée en finance afin de comparer la valeur présente d'une action $x_{n}$ (à l'instant $t = n$) à sa tendance passée.
+\item La \textbf{moyenne mobile centrée d'ordre $p$}, pour laquelle $k_{1} = k_{2}$ et :
+\begin{itemize}
+\item si $p=2k+1$, $a_{i} = \frac{1}{p}$ pour tout $i= -k,\dots,k$
+$$M_{2k+1}(t) = \frac{1}{2k+1}(x_{t-k}+\dots+x_{t+k})$$
+\item si $p=2k$, $a_{-k} = a_{k} = \frac{1}{2p}$ et $a_{i} = \frac{1}{p}$ pour tout $i= -(k-1),\dots,(k-1)$
+$$M_{2k}(t) = \frac{1}{2k}\left(\frac{x_{t-k}}{2} + x_{t-k+1}+\dots+x_{t+k-1}+\frac{x_{t+k}}{2}\right)$$
+\end{itemize}
+\end{itemize}
+\subparagraph{Exemple :}
+\begin{itemize}
+\item $M_{3}$ : Moyenne mobile centrée d'ordre 3
+\item $M_{4}$ : Moyenne mobile centrée d'ordre 4
+\end{itemize}
+On considère le lissage par $M_{3}$ et $M_{4}$ de la série des 9 valeurs suivantes.
+
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|}
+\hline
+{ \textbf{$x(1)$}} & { \textbf{$x(2)$}} & { \textbf{$x(3)$}} & { \textbf{$x(4)$}} & { \textbf{$x(5)$}} & { \textbf{$x(6)$}} & { \textbf{$x(7)$}} & { \textbf{$x(8)$}} & { \textbf{$x(9)$}} \\ \hline
+4                                      & 6                                      & 5                                      & 3                                      & 7                                      & 5                                      & 4                                      & 3                                      & 6                                      \\ \hline
+\end{tabular}
+\end{center}
+On obtient :
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|}
+\hline
+{ \textbf{$M_{3}(1)$}} & { \textbf{$M_{3}(2)$}} & { \textbf{$M_{3}(3)$}} & { \textbf{$M_{3}(4)$}} & { \textbf{$M_{3}(5)$}} & { \textbf{$M_{3}(6)$}} & { \textbf{$M_{3}(7)$}} & { \textbf{$M_{3}(8)$}} & { \textbf{$M_{3}(9)$}} \\ \hline
+-                                          & 5                                          & 4.67                                       & 5                                          & 5                                          & 5.33                                       & 4                                          & 4.33                                       & -                                          \\ \hline
+\end{tabular}
+\end{center}
+
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|}
+\hline
+{ \textbf{$M_{4}(1)$}} & { \textbf{$M_{4}(2)$}} & { \textbf{$M_{4}(3)$}} & { \textbf{$M_{4}(4)$}} & { \textbf{$M_{4}(5)$}} & { \textbf{$M_{4}(6)$}} & { \textbf{$M_{4}(7)$}} & { \textbf{$M_{4}(8)$}} & { \textbf{$M_{4}(9)$}} \\ \hline
+- & - & 4.875 & 5.125 & 4.875 & 4.75 & 4.625 & - & - \\ \hline
+\end{tabular}
+\end{center}
+\textbf{Exemples de calcul :}
+
+$$M_{3}(2) = \frac{1}{3}(x(1)+x(2)+x(3)) = \frac{1}{3}(4+6+5) = 5$$
+$$M_{4}(3) =  \frac{1}{4}(\frac{x(1)}{2}+x(2)+x(3)+x(4)+\frac{x(5)}{2}) = \frac{1}{4}(\frac{4}{2}+6+5+3+\frac{7}{2}) = 4.875$$
+
+\textit{Application de $M_{p}$ aux données de production de bières en Australie.}\newline
+Plus l'ordre est grand, plus le lissage est important.
+
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.8]{ilu/ccm35.png}\end{center}\end{figure}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.8]{ilu/ccm36.png}\end{center}\end{figure}
+\subparagraph{Moyenne mobile en présence d'une saisonnalité}
+Pour estimer la tendance en présence d'un saisonnalité de période $T$, il est conseillé d'utiliser une moyenne mobile centrée d'\textbf{ordre multiple de $T$}, pour atténuer l'effet saisonnier.\newline
+\textit{Exemple : } le lissage de la série précédente (pour laquelle $T = 12$) donne pour $M_{36}$ (à gauche) et $M_{37}$ (à droite) :
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.8]{ilu/ccm37.png}\end{center}\end{figure}
+Le lissage par $M_{37}$, bien que d'un ordre supérieur à $M_{36}$, est parasité par l'effet saisonnier initial.\newline
+\\
+Sous \textbf{R}, Pour appliquer la moyenne mobile centrée $M_{p}$ à la série x, on utilise la commande \textcolor{red}{filter}, en précisant les coefficients de la moyenne mobile.\newline
+Plus précisément :
+\begin{itemize}
+\item si $p=2k+1$
+$$\textrm{filter(}x, \textrm{rep(}1/(2\ast k+1), 2\ast k+1)) $$
+La commande \textit{rep($a,n$)} crée un vecteur contenant $n$ fois la valeur $a$.
+\item si $p = 2k$
+$$\textrm{filter}(x, \textrm{c}(1/(4\ast k), \textrm{rep}(1/(2\ast k), 2\ast k-1), 1/(4\ast k)))$$
+La commande \textit{c()} permet de concaténer dans un même vecteur un ensemble de valeurs, ici les $2k +1$ coefficients : $\frac{1}{4k}$ $(2k-1)$ fois, $\frac{1}{2k}$ et $\frac{1}{4k}$.
+\end{itemize}
+\subsubsection{Estimation de la saisonnalité}
+Pour estimer la saisonnalité, on élimine au préalable la tendance de la série. On travaille donc avec la nouvelle série $\tilde{x}_{t}$ où : 
+\begin{itemize}
+\item $$\tilde{x}_{t} = x_{t} - \hat{m}_{t}$$
+si on a supposé une décomposition additive, avec $\hat{m}_{t}$ une estimation de la tendance.
+\item $$\tilde{x}_{t} = \frac{x_{t}}{\hat{m}_{t}}$$
+dans le cas d'une décomposition multiplicative.
+\end{itemize}
+Le profil saisonnier $s_{1} ,\dots, s_{T}$ s'estime à partir de $\tilde{x}_{t}$ 
+\begin{itemize}
+\item de manière paramétrique :\newline
+on suppose généralement que :
+$$s_{t} = a + b\cos\left(\frac{2\pi t}{T}\right) + c\sin\left(\frac{2\pi t}{T}\right)$$
+ et les coefficients a, b et c sont estimés par moindres carrés.
+\item ou de manière non-paramétrique :\newline
+Soit $k = 1,\dots, T$ et soit $n_{k}$ le nombre d'instants multiples de $k$ parmi $1, \dots , n$. On estime le profil saisonnier de la manière suivante:
+$$\hat{s}_{k} = \frac{1}{n_{k}} \sum_{i=0}^{n_{k}-1} \tilde{x}_{i+kT}$$
+La série complète $\hat{s}_{1},\dots,\hat{s}_{n}$ s'obtient par périodicité en répétant $\hat{s}_{1},\dots,\hat{s}_{T}$.\newline
+\end{itemize}
+\textit{Exemple :} 
+\begin{itemize}
+\item pour une série mensuelle de période $T = 12$, $\hat{s}_{1}$ correspond à la moyenne des mois de janvier, $\hat{s}_{2}$à la moyenne de mois de février, \dots.
+\item Cas d'une décomposition additive
+\begin{itemize}
+\item La tendance de la série de production de bières a été estimée avec $M_{36}$
+\item La série \textbf{moins} sa tendance est représentée à gauche.
+\item Le profil saisonnier, à droite, est déduit en moyennant chaque mois.
+\end{itemize}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.8]{ilu/ccm38.png}\end{center}\end{figure}
+Si x est la série sans tendance : 
+$$\textrm{profil}=\textrm{aggregate}(x \sim \textrm{cycle}(x),\textrm{FUN}=\textrm{mean})$$
+\item Cas d'une décomposition multiplicative
+\begin{itemize}
+\item La tendance de la série de trafic aérien a été estimée avec $M_{12}$.
+\item La série \textbf{divisée} par sa tendance est représentée à gauche.
+\item Le profil saisonnier, à droite, est déduit en moyennant chaque mois.
+\end{itemize}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.8]{ilu/ccm39.png}\end{center}\end{figure}
+\end{itemize}
+\subsubsection{Série ajustée, Série CVS (Corrigée des Variations Saisonnières)}
+\paragraph{Décomposition totale d'une série}
+En supposant que la série s'écrit $x_{t} = m_{t} + s_{t} + r_{t}$ , on peut estimer chacune des composantes :
+\begin{enumerate}
+\item On estime $m_{t}$ par $\hat{m}_{t}$ (de façon paramétrique ou par moyennes mobiles)
+\item On estime $s_{t}$ à partir de $x_{t} - \hat{m}_{t}$, ce qui donne $\hat{s}_{t}$
+\item On en déduit une estimation du reste $\hat{r}_{t} = x_{t}-\hat{m}_{t}-\hat{s}_{t}$
+\end{enumerate}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.7]{ilu/ccm40.png}\end{center}\end{figure}
+Pour obtenir le graphe ci-contre: \textcolor{red}{plot(decompose(x))}.\newline
+Pour récupérer la tendance : \textcolor{red}{decompose(x)\$trend}\newline
+Pour récupérer la saisonnalité : \textcolor{red}{decompose(x)\$seasonal}\newline
+Pour récupérer le reste : \textcolor{red}{decompose(x)\$random}\newline
+Pour récupérer le profil saisonnier :\textcolor{red}{decompose(x)\$figure}\newline
+\textbf{Remarque} : le même type de décomposition est possible dans le cas multiplicatif avec : \textcolor{red}{plot(decompose(x,"multiplicative"))}
+\paragraph{Série ajustée et série CVS}\textcolor{white}{.}\newline
+La série ajustée $\hat{m}_{t}+\hat{s}_{t}$ est un lissage de $x_{t}$ qui respecte la tendance et la saisonnalité.
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.7]{ilu/ccm41.png}\end{center}\end{figure}
+La série CVS (corrigée des variations saisonnières) correspond à $x_{t} - \hat{s}_{t} = \hat{m}_{t} +\hat{r}_{t}$. Elle permet d'analyser les variations de la série sans être influencé par l'aspect saisonnier. On l'utilise parfois pour
+réestimer $m_{t}$ de façon plus fine.
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.7]{ilu/ccm42.png}\end{center}\end{figure}
+\subsubsection{Pour aller plus loin : prévision et modélisation}
+
+On suppose une décomposition additive : $x_{t} = m_{t} + s_{t} + r_{t}$  , ou` $s_{t}$ est de p ériode $T$.
+
+\begin{itemize}
+\item Une prévision de la série est possible grâce à la série ajustée $\hat{m}_{t} + \hat{s}_{t}$ , pourvu que $\hat{m}_{t}$ ait une forme paramétrique.\newline
+\textit{Exemple : }  si $\hat{m}_{t} =\hat{a}t+\hat{b}$,alors la prévision de la série en $t=n+1$ est :
+$$\hat{x}_{n+1} = \hat{m}_{n+1} + \hat{s}_{n+1} = \hat{a}(n+1) + \hat{b} + \hat{s}_{n+1-T}$$
+ou` la dernière égalité est obtenue par périodicité de $\hat{s}_{t}$.\newline
+\textit{Exemple : } série de CO2 à Hawaï. En noir : la série initiale, observée de 1994 à 2004. En rouge : la série ajustée $\hat{a}t + \hat{b} + \hat{s}_{t}$ , prolongée en 2005.
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.7]{ilu/ccm43.png}\end{center}\end{figure}
+\item Pour améliorer la prévision, il convient d'essayer de prédire également le reste aléatoire $r_{t}$ , estimé par $\hat{r}_{t} = x_{t} - \hat{m}_{t} - \hat{s}_{t}$.\newline
+\textit{Exemple : } $\hat{r}_{t}$ pour la série précédente (série noire - série rouge) et ses ACF.
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.7]{ilu/ccm44.png}\end{center}\end{figure}
+Les ACF montre que $\hat{r}_{t}$ est corrélé avec son passé.
+\begin{itemize}
+\item On souhaite tirer parti de cette dépendance pour prédire $\hat{r}_{t}$ et améliorer la prévision en 2005.
+\item Cela se fait en modélisant la dépendance de $\hat{r}_{t}$, par exemple à l'aide de modèles ARMA\footnote{
+En statistique, les modèles ARMA (modèles autorégressifs et moyenne mobile), ou aussi modèle de Box-Jenkins, sont les principaux modèles de séries temporelles.\newline
+Étant donné une série temporelle $X_{t}$, le modèle ARMA est un outil pour comprendre et prédire, éventuellement, les valeurs futures de cette série.\newline 
+Le modèle est composé de deux parties : une part autorégressive (AR) et une part moyenne-mobile (MA). 
+Le modèle est généralement noté ARMA($p,q$), où $p$ est l'ordre de la partie AR et $q$ l'ordre de la partie MA.\newline
+\\
+\textbf{définition :} un modèle autorégressif et moyenne-mobile d'ordres $(p,q)$ (abrégé en ARMA $(p,q)$ est un processus temporel discret ($X_{t}$, $t\in?\mathbb{N}$) vérifiant :
+$$X_t = \varepsilon_{t} +  \sum_{i=1}^{p} \varphi_{i} X_{t-i} + \sum_{i=1}^{q} \theta_{i} \varepsilon_{t-i}$$
+où les paramètres $\varphi_{i}$ et $\theta_{i}$ sont constants, et les termes d'erreurs $\varepsilon_{i}$ sont indépendants du processus.
+Un modèle autorégressif AR($p$) est un ARMA($p,0$). Un modèle moyenne mobile MA($q$) est un ARMA($0,q$).\newline
+\textbf{Note : } Un processus aléatoire généralise la notion de variable aléatoire utilisée en statistiques élémentaires. On le définit comme une famille de variables aléatoires $X(t)$ associées à toutes les valeurs $t\in T$. L'ensemble des observations disponibles $x(t)$ constitue une réalisation du processus.\newline
+Si l'ensemble  est dénombrable on parle de processus discret ou de série temporelle, si l'ensemble est indénombrable on parle de processus continu.
+}.
+
+\end{itemize}
+\end{itemize}
+
+
+
 
 
 
@@ -8283,7 +9012,7 @@ Les "moustaches" partent de chaque côté jusqu'à la valeur minimale et maximale d
 \paragraph{Site internet (source) : } \underline{\href{https://sites.google.com/site/rgraphiques/realiser-des-graphiques-avec-le-logiciel-r}{Aide à l'utilisation de R}}\newline
 \textbf{Exemples de graphiques réalisés avec R : } \href{https://sites.google.com/site/rgraphiques/realiser-des-graphiques-avec-le-logiciel-r/des-exemples-de-graphiques}{\underline{Représentations et scripts}}
 
-
+%%http://larmarange.github.io/analyse-R/graphiques-bivaries-ggplot2.html#matrice-de-nuages-de-points-et-matrice-de-correlation
 
 
 
@@ -8301,9 +9030,21 @@ Les "moustaches" partent de chaque côté jusqu'à la valeur minimale et maximale d
 \textbf{Référence des fonctions de R les plus courantes} - \textit{Mayeul KAUFFMANN - Mars 2009}
 
 
+
+
+
+
 \subsection{Aide}
 La plupart des fonctions de R ont une documentation en ligne\newline
 \\          
+
+
+ \begin{description}
+ \item[help(sujet) :] documentation sur un sujet. Flèches haut et bas pour se déplacer, touche q pour quitter ;
+ \item[mot2 :] définition2.
+ \end{description}
+
+
 \textbf{help(sujet)}: documentation sur un sujet. Flèches haut et bas pour se déplacer, touche q pour quitter\newline
 \textbf{?topic}: idem \newline
 \textbf{help.search("sujet")} : recherche dans l'aide \newline

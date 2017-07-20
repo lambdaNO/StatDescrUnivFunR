@@ -1,249 +1,404 @@
-\subsection{Vocabulaire de base : }
-Le vocabulaire est issu de la démographie, domaine d'application initial des statistiques.\newline
+
+
+
+
+
+
+
+Dans R Commander : \textit{Statistiques/Ajustement de modèles/Régression linéaire}.\newline
+La droite des moindres carrés peut servir à prédire une nouvelle valeur de $Y$ : pour $X = x$, $Y$ est prédit par $\hat{y} = \hat{a}\bar{x}+\hat{b}$.\newline
+Pour mesurer la qualité d'ajustement de la droite on considère les \textbf{résidus} :
+$$e_{i} = y_{i} - (\hat{a}x_{i} + \hat{b})$$ 
+(\textit{Il s'agit des segments rouges du graphique précédent.})\newline
+Pour l'ajustement de la droite précédente, on a toujours : 
+$$ \frac{1}{n} \sum_{i=1}^{n} e_{i} = 0$$
+\textbf{Formule de décomposition de la variance:}
+$$\sum_{i=1}^{n}(y_{i}-\bar{y})^{2} = \sum_{i=1}^{n}(\hat{y}_{i}-\bar{y})^{2} + \sum_{i=1}^{n} e_{i}^{2}$$
+que l'on note généralement $\textrm{SCT} = \textrm{SCE} + \textrm{SCR}$ où \textit{SCT} : "Somme des Carrés Totaux", \textit{SCE} : "SC Expliqués" et \textit{SCR} : "SC Résiduels".\newline
+On définit le coe cient de détermination : 
+$$R^{2} = \frac{\textrm{SCE}}{\textrm{SCT}}$$
+On a : 
 \begin{itemize}
-\item \textbf{Population :} ensemble étudié.\newline
-\textit{Exemples} : la population franc ̧aise, l'ensemble des entreprises d'une région, un ensemble de sites géographiques, un ensemble de dates,\dots
-\item \textbf{Individus :} les éléments composant la population\newline
-\textit{Exemples} : une personne, une entreprise, un site géographique, une date,\dots
-\item \textbf{Variables :} les caractéristiques observées sur chaque individu\newline
-\textit{Exemples} :
-\begin{itemize}
-\item pour des personnes : sexe, CSP, âge, salaire,\dots
-\item pour des entreprises : nombre de salariés, secteur d'activité,\dots
-\item pour des sites géographiques : altitude, type de végétation,\dots
-\item pour des dates : cours d'une action, température, ventes journalières,\dots
+\item $0 \leq R^{2} \leq 1$ d'après la formule de décompositon de la variance
+\item $R^{2} = r^{2}$ où $r$ est le coefficient de corrélation linéaire entre $X$ et $Y$.
+\item L'ajustement par la droite est d'autant meilleur que $R^{2}$ est proche de 1 car dans ce cas : 
+$$ \sum_{i=1}^{n} e_{i}^{2} \approx 0$$
 \end{itemize}
-Lorsqu'on on observe une seule variable au cours du temps (par exemple la température journalière), on parle d'une \textbf{série temporelle}.\newline
-Un \textbf{jeu de données} est composé de l'observation des variables sur les individus issus de la population. Il se présente généralement sous forme d'un tableau dont les lignes sont les individus et les colonnes les variables.
+\subsection{Aspects temporels}
+\subsubsection{Représentation graphique}
+De nombreuses données sont acquises à intervalles réguliers dans le temps : ce sont des \textbf{séries temporelles}.\newline
+Des méthodes spécifiques permettent :
+\begin{itemize}
+\item de les représenter graphiquement
+\item de décrire leurs tendances temporelles et leurs effets périodiques 
+\item d'étudier leur dépendance temporelle
+\item de les prédire
+\end{itemize}
+Représentation graphique :
+\begin{itemize}
+\item \textit{En abscisse :} le temps (secondes, jours, mois, années, etc\dots); 
+\item \textit{En ordonnée :} les valeurs des observations.
+\end{itemize}
+\paragraph{Exemple : }
+\begin{itemize}
+%% Exemple 1
+\item \textit{PIB des Etats-Unis}
+\begin{itemize}
+\item textit{En ordonnée :} Une observation par an.
+\item \textit{En abscisse :} Intervalle d'observation : 1929 - 2012.
+\begin{figure}[H]\begin{center}\includegraphics[scale=1]{ilu/ccm21.png}\end{center}\end{figure}
+\end{itemize}
+%% Exemple 2
+\item \textit{Consommation d'électricité en Australie.}
+\begin{itemize}
+\item textit{En ordonnée :} Une donnée par demi-heure.
+\item \textit{En abscisse :} Intervalle d'observation : 35 jours en juin-juillet 1991.
+\begin{figure}[H]\begin{center}\includegraphics[scale=1]{ilu/ccm22.png}\end{center}\end{figure}
+\end{itemize}
+%% Exemple 3
+\item \textit{Trafic aérien.}
+\begin{itemize}
+\item textit{En ordonnée :} Une donnée par mois
+\item \textit{En abscisse :} Intervalle d'observation : 1949 à 1961.
+\begin{figure}[H]\begin{center}\includegraphics[scale=1]{ilu/ccm23.png}\end{center}\end{figure}
 \end{itemize}
 
-\textbf{Exemple de jeu de données :} 
+%% Exemple 4
+\item \textit{Production de bière en Australie.}
+\begin{itemize}
+\item textit{En ordonnée :} Une donnée par mois
+\item \textit{En abscisse :} Intervalle d'observation : 1956 à 1995.
+\begin{figure}[H]\begin{center}\includegraphics[scale=1]{ilu/ccm24.png}\end{center}\end{figure}
+\end{itemize}
+
+%% Exemple 5
+\item \textit{Maximum journalier d'ozone à Rennes.}
+\begin{itemize}
+\item textit{En ordonnée :} Une donnée par jour
+\item \textit{En abscisse :} Intervalle d'observation : de juin à septembre 2006.
+\begin{figure}[H]\begin{center}\includegraphics[scale=1]{ilu/ccm25.png}\end{center}\end{figure}
+\end{itemize}
+\end{itemize}
+\paragraph{Sous R}
+L'étude sous R se fait par lignes de commandes.\newline
+Supposons que la série temporelle est la variable var du tableau tab.
 \begin{enumerate}
-\item Cours d'indices boursiers nationaux.
-\begin{figure}[H]\begin{center}\includegraphics[scale=1]{ilu/ccm1.png}\end{center}\end{figure}
+\item On commence par définir la série temporelle sous R :
+$$x = \textrm{ts}(\textrm{tab}\$\textrm{var}, \textrm{start}=1980, \textrm{freq}=12)$$
 \begin{itemize}
-\item Les individus : les 1860 jours ouvrés du 01/01/1991 au 31/12/1998
-\item Les variables : les indices allemands (DAX), suisses (SMI), franc ̧ais (CAC) et anglais (FTSE).
+\item \textcolor{red}{\textbf{ts}} - ”time series”\newline
+permet à R de voir la variable comme une série temporelle
+\item \textcolor{red}{\textbf{start}} - Optionnel.\newline
+permet de préciser la date de début de la série
+\item \textcolor{red}{\textbf{freq}} - Optionnel.\newline
+précise la période de la série, s'il y en a une (ici on suppose que la période vaut 12, ce qui est typique de données mensuelles). 
 \end{itemize}
-\item Composition chimique de poteries trouvées sur différents sites archéologiques au Royaume Uni.
-\begin{figure}[H]\begin{center}\includegraphics[scale=1]{ilu/ccm2.png}\end{center}\end{figure}
-\begin{itemize}
-\item Les individus : les poteries numérotées de 1 à 13
-\item Les variables : le site archéologique et différents composés chimiques
-\end{itemize}
+\item On peut alors travailler avec la série sous R, notamment la représenter avec :
+$$\textrm{plot}(x)$$
+\item La légende en abscisse se gère en général toute seule. On peut néanmoins imposer une datation personnelle, par exemple comme ceci :
+\begin{lstlisting}[language=html]
+dates=seq(as.POSIXlt("2006/6/7"),as.POSIXlt("2006/9/25"),"days")
+plot(dates, x, type="l", xaxt="n",xlab='Jours')
+r = as.POSIXct(round(range(dates), "days"))
+axis.POSIXct(1, at=seq(r[1], r[2], by="month"), format="%b-%y")
+\end{lstlisting}
 \end{enumerate}
 
-
-Deux grandes catégories déclinées en deux types.
+\subsubsection{Dépendance temporelle, la fonction d'autocorrélation (ACF) }
+\paragraph{La dépendance temporelle}\textcolor{white}{.}\newline
+Dans une série temporelle, il est courant d'observer une dépendance entre les différentes valeurs de la série, notamment entre les valeurs voisines.\newline
+Cela peut se vérifier en calculant la corrélation ou en représentant le nuage de points entre les valeurs de la série et ses valeurs au pas de temps précédent.
+\textit{Exemple : } Pour la série des max d'ozone, on construit la série des valeurs de la veille.
+\begin{figure}[H]\begin{center}\includegraphics[scale=1]{ilu/ccm26.png}\end{center}\end{figure}
 \begin{itemize}
-\item \textbf{Variable quantitative} : son observation est une quantité mesurée.\newline
-\textit{Exemples} : âge, salaire, nombre d'infractions,\dots
-On distingue les variables \textbf{quantitatives discrètes} dont les valeurs possibles sont finies ou dénombrables (\textit{Exemples} : nombre d'enfants, nombre d'infractions,\dots) et les variables \textbf{quantitatives continues} qui peuvent prendre toutes les valeurs possibles d'un intervalle (\textit{Exemples} : taille, salaire,\dots)
-\item \textbf{Variable qualitative (ou facteur)} : son observation se traduit par une catégorie ou un code. Les observations possibles sont appelées les modalités de la variable qualitative.\newline
-\textit{Exemples} : sexe, CSP, nationalité, mention au BAC,\dots
-Lorsqu'un ordre naturel apparaît dans les modalités, on parle de variable \textbf{qualitative ordinale} (\textit{Exemples} : mention au BAC,\dots). Dans le cas contraire on parle de variable \textbf{qualitative nominale} (\textit{Exemples} : sexe, CSP,\dots).
+\item Le nuage de points entre la série initiale et la série des valeurs de la veille est donné ci-contre.
+\item La corrélation vaut $r = 0.68$.
+\item La série est donc corrélée positivement à son passé immédiat.
+\end{itemize}
+\paragraph{Les ACF}\textcolor{white}{.}\newline
+On note $x_{t}$, la valeur de la série à l'instant $t$, observée pour $t=1,\dots,n$.
+\begin{itemize}
+\item La \textbf{fonction d'autocovariance} est définie pour tout entier $h$ de $0$ à $n$ par :
+$$\sigma(h) = \frac{1}{n-h} \sum_{t=1}^{n-h}(x_{t}-\bar{x})(x_{t+h}-\bar{x})$$
+où $\bar{x}$ désigne la moyenne empirique de la série\footnote{
+En mathématiques, la notion de \textbf{série} permet de généraliser la notion de \textbf{somme finie}.\newline
+Étant donnée une suite de terme général $u_{n}$, étudier la série de terme général $u_{n}$, c'est étudier la suite obtenue en prenant la somme des premiers termes de la suite $(u_{n})_{n\in\mathbb{N}}$, autrement dit la suite de terme général $S_{n}$ défini par :
+$$S_{n} = u_{0} + u_{1} + \dots + u_{n} = \sum_{k=0}^{n} u_{k}$$} : 
+$$\bar{x} = \frac{1}{n} \sum_{t=1}^{n} x_{t}$$
+\textbf{Remarque) :}
+\begin{itemize}
+\item la sommation s'arrête à $n - h$ car au-delà il n'y a plus de valeurs disponibles pour calculer $x_{t+h}$.
+\item $\sigma(0)$ correspond à la variance de la série.
+\end{itemize}
+\item La \textbf{fonction d'autocorrélation} (ACF en anglais) est définie pour tout entier $h$ de $0$ à $n$ par :
+$$\rho(h)=\frac{\sigma(h)}{\sigma(0)}$$
+\textbf{Remarque) : } $\rho(h)$ calcule la corrélation entre les valeurs de la série et les valeurs \textit{"h plus tard"}.\newline
+\\
+Sous R : la fonction \textcolor{red}{acf($x$)} calcule et représente les ACF de la série $x$.\newline
+\textit{Exemple :} les ACF de la série des max d'ozone.
+\begin{figure}[H]\begin{center}\includegraphics[scale=1]{ilu/ccm27.png}\end{center}\end{figure}
+Chaque baton représente $\rho(h)$ où $h=\textrm{" Lag"}$
+\begin{itemize}
+\item \textcolor{blue}{Lag=0} corrélation de la série avec elle-même (elle vaut toujours 1).
+\item \textcolor{blue}{Lag=1} corrélation de la série avec son passé immédiat (on retrouve r = 0.68).
+\item \textcolor{blue}{Lag=2} corrélation de la série avec la série des valeurs de l'avant-veille.
+\item \textcolor{blue}{Lag= \dots} etc.
+\end{itemize}
+\textbf{Remarque : } les batons entre les pointillés peuvent être considérés négligeables.
+\end{itemize}
+\subsubsection{Tendance et saisonnalité}
+On observe généralement dans une série temporelle :
+\begin{itemize}
+\item Une \textbf{tendance}, déterministe, qui représente le comportement moyen de la série au cours du temps. On la note $m_{t}$. Par exemple, pour une tendance linéaire : 
+$$m_{t} = at + b$$
+\item Une \textbf{saisonnalité}, déterministe, de période $T$, qui représente un comportement périodique (ou saisonnier) de la série (par exemple des pics de ventes tous les mois de décembre pour une série mensuelle). On la note $s_{t}$ et on a: $s_{t+T} = s_{t}$, pour tout $t$.\newline
+La connaissance de $s_{1} ,\dots, s_{T}$ fournit le profil saisonnier.
+\item un \textbf{reste aléatoire}, qui contient les variations aléatoires au cours du temps, ces dernières pouvant être liées entre elles dans le temps.
 \end{itemize}
 
-\textbf{Quelques exemples :}
+La tendance et la saisonnalité (avec sa période $T$) sont généralement visibles sur la représentation graphique de la série. On peut également détecter leur présences sur les ACF. \newline
+\\
+\paragraph{Exemple : série et ses ACF}
+\subparagraph{PIB des USA de 1929 à 2012}
+Série avec tendance croissante, non linéaire.
 \begin{itemize}
-\item Le "reporting": résumer de fac ̧on efficace un jeu de données afin de rendre l'information lisible facilement et rapidement.
-Outils : résumés numériques, représentations graphiques.
-\item L'inférence : les observations sont souvent recueillies auprès d'un échantillon et non de toute la population d'intérêt. L'inférence statistique vise à induire certaines caractéristiques de la population à partir de leur observation sur un échantillon.\newline
-\textit{Outils :} estimation, tests statistiques.
-L'étude du lien entre des variables : quantifier le lien, voire le modéliser. \newline
-\textit{Outils :} analyse bivariée, analyse multivariée, modèles de régression,\dots
-\item La classification des individus : chercher des regroupements entre individus selon leurs profils.\newline
-\textit{Outils :} analyse multivariée, analyse discriminante,\dots
-\item La prévision : prédire des valeurs futures (pour une série temporelle) ou la valeur manquante d'une variable pour un individu.\newline
-\textit{Outils :} modélisation temporelle, modèles de régression,\dots
+\item tendance croissante visible sur la série.
+\item les ACF décroissent lentement et restent non négligeables
 \end{itemize}
+\begin{figure}[H]\begin{center}\includegraphics[scale=1]{ilu/ccm28.png}\end{center}\end{figure}
+\subparagraph{Températures moyennes mensuelles à Dubuque, Iowa, de 1964 à 1975}
+Série avec saisonnalité de période $T = 12$.
+\begin{itemize}
+\item aspect saisonnier de période 12 visible sur la série.
+\item les ACF ont également un comportement périodique de période 12
+\end{itemize}
+\begin{figure}[H]\begin{center}\includegraphics[scale=1]{ilu/ccm29.png}\end{center}\end{figure}
+\subparagraph{Concentration de CO2 mensuelle à Hawaï de 1994 à 2004}
+Série avec tendance et saisonnalité de période $T = 12$.
+\begin{itemize}
+\item tendance linéaire et saisonnalité de période 12 visibles sur la série.
+\item les ACF ont un comportement périodique et décroissent faiblement.
+\end{itemize}
+\begin{figure}[H]\begin{center}\includegraphics[scale=1]{ilu/ccm30.png}\end{center}\end{figure}
+\subparagraph{Max d'ozone journalier à Rennes l'été 2006}
+Série sans tendance ni saisonnalité.
+\begin{itemize}
+\item aucune structure visible sur la série.
+\item les ACF décroissent rapidement pour devenir négligeables.
+\end{itemize}
+\begin{figure}[H]\begin{center}\includegraphics[scale=1]{ilu/ccm31.png}\end{center}\end{figure}
 
-\subsection{Analyse univariée}
-\subsubsection{Variable qualitative (ou facteur)}
-\paragraph{Résumés numériques}
-Soit une variable qualitative $A$ ayant $k$ modalités notées $A_{1}, \dots , A_{k}$ . L'observation de la variable $A$ sur $n$ individus peut se résumer par un \textbf{tableau des fréquences}.
+\paragraph{Décomposition additive et multiplicative}
+On note $x_{t}$ la valeur de la série à l'instant t, observée pour différents $t$.\newline
+La plupart des séries observées peuvent se décomposer :
+\begin{itemize}
+\item de façon \textbf{additive} (la plus courante) : 
+$$x_{t} = m_{t} + s_{t} + r_{t}$$
+\begin{figure}[H]\begin{center}\includegraphics[scale=1]{ilu/ccm32.png}\end{center}\end{figure}
+\item de façon \textbf{multiplicative} : 
+$$x_{t} = m_{t} \times s_{t} \times r_{t}$$
+\begin{figure}[H]\begin{center}\includegraphics[scale=1]{ilu/ccm33.png}\end{center}\end{figure}
+\end{itemize}
+\subsubsection{Estimation de la tendance}
+On peut estimer la tendance $m_{t}$ de deux façons.
+\begin{itemize}
+\item \textbf{De façon paramétrique.}\newline
+On suppose que $m_{t}$ admet une forme paramétrique spécifique, par exemple $m_{t} = at + b$ pour une tendance linéaire, et on estime les paramètres par la méthode des moindres carrés.
+\item \textbf{De façon non-paramétrique.}\newline
+On effectue des moyennes mobiles de la série, ce qui équivaut à la lisser : le lissage résultant estime la tendance, mais aucune formule exprimant cette tendance n'est fournie.
+\end{itemize}
+\paragraph{Estimation paramétrique de la tendance : } On considère la série du PIB aux USA.\newline
+On décide d'estimer la tendance mt à l'aide de deux modèles paramétriques :
+\begin{enumerate}
+\item En supposant que $m_{t}$ est \textcolor{red}{linéaire} : $m_{t} = at + b$.\newline
+On en déduit une estimation de $a$ et $b$ par les moindres carrés. La droite estimée est représentée en rouge ci-dessous.
+\item En supposant que $m_{t}$ est \textcolor{forestgreen}{quadratique} : $m_{t} = at^{2} + bt + c$.
+On estime de même $a$, $b$ et $c$ par les moindres carrés. La courbe estimée est représentée en vert ci-dessous.
+\end{enumerate}
+\begin{figure}[H]\begin{center}\includegraphics[scale=1]{ilu/ccm34.png}\end{center}\end{figure}
+Le code R pour la tendance quadratique est donné ci-dessous.
+
+\begin{lstlisting}[language=html]
+temps=as.numeric(time(GDP))
+temps2=temps^2
+reg=lm(GDP ~ temps + temps2)
+plot(GDP)
+lines(temps,reg$fitted.values)
+\end{lstlisting}
+
+\paragraph{Estimation de la tendance par moyenne mobile}
+La \textbf{moyenne mobile} de $x$ associée aux $k_{1} +k_{2} + 1$ coefficient$ a_{k_{1}},\dots,a_{k_{2}}$ est : 
+$$M(t) = \sum_{i=-k_{1}}^{k_{2}}a_{i}x_{t+i}\textrm{ ,}\forall t = k_{1} + 1,\dots, n-k_{2}$$
+où les poids somment à 1 :
+$$\sum_{i=-k_{1}}^{k_{2}}a_{i}=1$$
+Chaque valeur xt est donc remplacée par la moyenne pondérée des valeurs autour de $x_{t}$ : $k_{1}$ valeurs avant, $k_{2}$ valeurs après, soit en tout $k_{1} + k_{2} + 1$ valeurs moyennées.\newline
+En pratique, $M(t)$ se calcule pour $t = k_{1} + 1$ à $n-k_{2}$ afin que toutes les valeurs à moyenner soient accessibles.
+\subparagraph{Quelques moyennes mobiles standards :}
+\begin{itemize}
+\item  La \textbf{moyenne mobile arithmétique} d'ordre $p$ pour laquelle $k_{1} = p$, $k_{2} = 0$ et $a_{i} = \frac{1}{p+1}$ . Elle n'utilise que le passé de $x_{t}$.
+$$\bar{M}_{p}(t)=\frac{1}{p+1}\sum_{i=-p}^{0}x_{t+i} = \frac{1}{p+1}\sum_{i=0}^{p}x_{t-i}\textrm{, }\forall t = p+1,\dots, n$$
+Elle est utilisée en finance afin de comparer la valeur présente d'une action $x_{n}$ (à l'instant $t = n$) à sa tendance passée.
+\item La \textbf{moyenne mobile centrée d'ordre $p$}, pour laquelle $k_{1} = k_{2}$ et :
+\begin{itemize}
+\item si $p=2k+1$, $a_{i} = \frac{1}{p}$ pour tout $i= -k,\dots,k$
+$$M_{2k+1}(t) = \frac{1}{2k+1}(x_{t-k}+\dots+x_{t+k})$$
+\item si $p=2k$, $a_{-k} = a_{k} = \frac{1}{2p}$ et $a_{i} = \frac{1}{p}$ pour tout $i= -(k-1),\dots,(k-1)$
+$$M_{2k}(t) = \frac{1}{2k}\left(\frac{x_{t-k}}{2} + x_{t-k+1}+\dots+x_{t+k-1}+\frac{x_{t+k}}{2}\right)$$
+\end{itemize}
+\end{itemize}
+\subparagraph{Exemple :}
+\begin{itemize}
+\item $M_{3}$ : Moyenne mobile centrée d'ordre 3
+\item $M_{4}$ : Moyenne mobile centrée d'ordre 4
+\end{itemize}
+On considère le lissage par $M_{3}$ et $M_{4}$ de la série des 9 valeurs suivantes.
 
 \begin{center}
-\begin{tabular}{|l|l|l|l|l|}
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|}
 \hline
-\textbf{Modalités de A}       & $A_{1}$ & $A_{2}$ & \dots & $A_{n}$ \\ \hline
-\textbf{Effectifs observés}   & $m_{1}$ & $m_{2}$ & \dots & $m_{n}$ \\ \hline
-\textbf{Fréquences observées} & $f_{1}$ & $f_{2}$ & dots  & $f_{n}$ \\ \hline
+{ \textbf{$x(1)$}} & { \textbf{$x(2)$}} & { \textbf{$x(3)$}} & { \textbf{$x(4)$}} & { \textbf{$x(5)$}} & { \textbf{$x(6)$}} & { \textbf{$x(7)$}} & { \textbf{$x(8)$}} & { \textbf{$x(9)$}} \\ \hline
+4                                      & 6                                      & 5                                      & 3                                      & 7                                      & 5                                      & 4                                      & 3                                      & 6                                      \\ \hline
+\end{tabular}
+\end{center}
+On obtient :
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|}
+\hline
+{ \textbf{$M_{3}(1)$}} & { \textbf{$M_{3}(2)$}} & { \textbf{$M_{3}(3)$}} & { \textbf{$M_{3}(4)$}} & { \textbf{$M_{3}(5)$}} & { \textbf{$M_{3}(6)$}} & { \textbf{$M_{3}(7)$}} & { \textbf{$M_{3}(8)$}} & { \textbf{$M_{3}(9)$}} \\ \hline
+-                                          & 5                                          & 4.67                                       & 5                                          & 5                                          & 5.33                                       & 4                                          & 4.33                                       & -                                          \\ \hline
 \end{tabular}
 \end{center}
 
-où $n_{i}$ est l'effectif dans la modalité $A_{i}$ et $f_{i} = \frac{n_{i}}{n}$, pour tout $i = 1,\dots,k$.\newline
-\textbf{Propriétés}
-$$ \sum_{i=1}^{k} n_{i} = n \textrm{ et } \sum_{i=1}^{k} f_{i} = 1$$
-Le \textbf{mode} est la modalité la plus fréquente dans l'échantillon.
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|}
+\hline
+{ \textbf{$M_{4}(1)$}} & { \textbf{$M_{4}(2)$}} & { \textbf{$M_{4}(3)$}} & { \textbf{$M_{4}(4)$}} & { \textbf{$M_{4}(5)$}} & { \textbf{$M_{4}(6)$}} & { \textbf{$M_{4}(7)$}} & { \textbf{$M_{4}(8)$}} & { \textbf{$M_{4}(9)$}} \\ \hline
+- & - & 4.875 & 5.125 & 4.875 & 4.75 & 4.625 & - & - \\ \hline
+\end{tabular}
+\end{center}
 
-\paragraph{Représentations graphiques} 
-Les fréquences de chaque modalité peuvent être résumées par :
-\begin{itemize}
-\item un graphe en barres : chaque modalité en abscisse est représentée par une barre dont la hauteur est proportionnelle à la fréquence de la modalité. Les barres ne sont pas collées les unes aux autres.
-\item un diagramme circulaire (ou camembert) : chaque modalité est représentée par un secteur dont l'aire est proportionnelle à la fréquence.
-\end{itemize}
-\textbf{Ordre des modalités} . Si la variable est ordinale, les modalités sont présentées dans leur ordre naturel. Sinon, les modalités sont classées par ordre décroissant de leur fréquence d'apparition.\newline
+\textbf{Exemples de calcul :}
+
+$$M_{3}(2) = \frac{1}{3}(x(1)+x(2)+x(3)) = \frac{1}{3}(4+6+5) = 5$$
+$$M_{4}(3) =  \frac{1}{4}(\frac{x(1)}{2}+x(2)+x(3)+x(4)+\frac{x(5)}{2}) = \frac{1}{4}(\frac{4}{2}+6+5+3+\frac{7}{2}) = 4.875$$
+
+\textit{Application de $M_{p}$ aux données de production de bières en Australie.}\newline
+Plus l'ordre est grand, plus le lissage est important.
+
+\begin{figure}[H]\begin{center}\includegraphics[scale=1]{ilu/ccm35.png}\end{center}\end{figure}
+\begin{figure}[H]\begin{center}\includegraphics[scale=1]{ilu/ccm36.png}\end{center}\end{figure}
+
+\subparagraph{Moyenne mobile en présence d'une saisonnalité}
+Pour estimer la tendance en présence d'un saisonnalité de période $T$, il est conseillé d'utiliser une moyenne mobile centrée d'\textbf{ordre multiple de $T$}, pour atténuer l'effet saisonnier.\newline
+\textit{Exemple : } le lissage de la série précédente (pour laquelle $T = 12$) donne pour $M_{36}$ (à gauche) et $M_{37}$ (à droite) :
+\begin{figure}[H]\begin{center}\includegraphics[scale=1]{ilu/ccm37.png}\end{center}\end{figure}
+Le lissage par $M_{37}$, bien que d'un ordre supérieur à $M_{36}$, est parasité par l'effet saisonnier initial.\newline
 \\
-\textit{Exemples : }
-Distribution de la CSP des clients d'une banque (variable qualitative nominale) :
-\begin{figure}[H]\begin{center}\includegraphics[scale=1]{ilu/ccm3.png}\end{center}\end{figure}
-Distribution de la classe d'âge des clients d'une banque (variable qualitative ordinale) :
-\begin{figure}[H]\begin{center}\includegraphics[scale=1]{ilu/ccm4.png}\end{center}\end{figure}
-\subsubsection{Variable quantitative}
-\paragraph{Résumés numériques}
-On note $x_{1},\dots,x_{n}$ l'échantillon des $n$ valeurs numériques.
-\subparagraph{Les mesures de position d'un échantillon}
+Sous \textbf{R}, Pour appliquer la moyenne mobile centrée $M_{p}$ à la série x, on utilise la commande \textcolor{red}{filter}, en précisant les coefficients de la moyenne mobile.\newline
+Plus précisément :
 \begin{itemize}
-\item Le \textbf{mode} est la valeur la plus fréquente dans l'échantillon.
-\item La \textbf{moyenne}, notée $\bar{x_{n}}$, est
-$$\bar{x_{n}} = \frac{1}{n} \sum_{i = 1}^{n} x_{i}$$
-\textbf{Propriétés} :
-$$ \bar{x_{n}} \underset{y}{\arg\min} \sum_{i=1}^{n} (x_{i}-y)^{2}$$
-\item La \textbf{médiane} est le nombre $m$ séparant l'échantillon ordonné en 2 parties égales. Plus précisément, $m$ vérifie :
-$$ \frac{1}{n} \sum_{i=1}^{n} \mathbf{1}_{\{x_{i}\leq m\}} \geq \frac{1}{2} \textrm{ et }\frac{1}{n} \sum_{i=1}^{n} \mathbf{1}_{\{x_{i}\geq m\}} \leq \frac{1}{2} $$
-\textbf{Propriétés} :
-On note $x_{(1)},\dots,x_{(n)}$ l'échantillon ordonné.
-\begin{enumerate}
-\item 
-$$ m \in \underset{y}{\arg\min} \sum_{i=1}^{n} |x_{i}-y|$$
-\item Si $n = 2k+1$, alors $m$ est unique et vaut $m=x_{(k+1)}$. Si $n = 2k$, alors $m$ n'est pas unique, l'ensemble des solutions est $[x_{(k)},x_{(k+1)}]$ et on choisit en pratique : 
-$$ m = \frac{1}{2}(x_{(k)} + x_{(k+1)})$$
-\end{enumerate}
-\textbf{Remarque} : la médiane est plus robuste aux valeurs extrêmes que la moyenne
+\item si $p=2k+1$
+$$\textrm{filter(}x, \textrm{rep(}1/(2\ast k+1), 2\ast k+1)) $$
+La commande \textit{rep($a,n$)} crée un vecteur contenant $n$ fois la valeur $a$.
+\item si $p = 2k$
+$$\textrm{filter}(x, \textrm{c}(1/(4\ast k), \textrm{rep}(1/(2\ast k), 2\ast k-1), 1/(4\ast k)))$$
+La commande \textit{c()} permet de concaténer dans un même vecteur un ensemble de valeurs, ici les $2k +1$ coefficients : $\frac{1}{4k}$ $(2k-1)$ fois, $\frac{1}{2k}$ et $\frac{1}{4k}$.
+\end{itemize}
+\subsubsection{Estimation de la saisonnalité}
+Pour estimer la saisonnalité, on élimine au préalable la tendance de la série. On travaille donc avec la nouvelle série $\tilde{x}_{t}$ où : 
+\begin{itemize}
+\item $$\tilde{x}_{t} = x_{t} - \hat{m}_{t}$$
+si on a supposé une décomposition additive, avec $\hat{m}_{t}$ une estimation de la tendance.
+\item $$\tilde{x}_{t} = \frac{x_{t}}{\hat{m}_{t}}$$
+dans le cas d'une décomposition multiplicative.
+\end{itemize}
+Le profil saisonnier $s_{1} ,\dots, s_{T}$ s'estime à partir de $\tilde{x}_{t}$ 
+\begin{itemize}
+\item de manière paramétrique :\newline
+on suppose généralement que :
+$$s_{t} = a + b\cos\left(\frac{2\pi t}{T}\right) + c\sin\left(\frac{2\pi t}{T}\right)$$
+ et les coefficients a, b et c sont estimés par moindres carrés.
+\item ou de manière non-paramétrique :\newline
+Soit $k = 1,\dots, T$ et soit $n_{k}$ le nombre d'instants multiples de $k$ parmi $1, \dots , n$. On estime le profil saisonnier de la manière suivante:
+$$\hat{s}_{k} = \frac{1}{n_{k}} \sum_{i=0}^{n_{k}-1} \tilde{x}_{i+kT}$$
+La série complète $\hat{s}_{1},\dots,\hat{s}_{n}$ s'obtient par périodicité en répétant $\hat{s}_{1},\dots,\hat{s}_{T}$.\newline
+\end{itemize}
+\textit{Exemple :} 
+\begin{itemize}
 
-\item Les \textbf{quantiles} : Soit $p \in [0, 1]$, le quantile d'ordre $p$, noté $Q(p)$, sépare l'échantillon ordonné en deux parties de taille respective $np$ et $n(1 − p)$ approximativement.
-Plus précisément, $Q(p)$ vérifie : 
-$$\frac{1}{n} \sum_{i=1}^{n} \mathbf{1}_{\{x_{i}\leq Q(p)\}} \geq p \textrm{ et }\frac{1}{n} \sum_{i=1}^{n} \mathbf{1}_{\{x_{i}\geq Q(p)\}} \geq 1-p$$
-On note $\lfloor . \rfloor$ la partie entière inférieure et $\lceil . \rceil$ la partie entière supérieure.\newline
-\textbf{Propriétés} : $Q(p)$ n'est pas nécessairement unique, l'ensemble des solutions étant $[x_{(\lceil np\rceil)}, x_{(\lfloor np \rfloor+1)}]$. Pour $p = 0.5$, on retrouve la définition de la médiane.\newline
-\textbf{Calcul en pratique :}
+\item pour une série mensuelle de période $T = 12$, $\hat{s}_{1}$ correspond à la moyenne des mois de janvier, $\hat{s}_{2}$à la moyenne de mois de février, \dots.
+\item Cas d'une décomposition additive
+\begin{itemize}
+\item La tendance de la série de production de bières a été estimée avec $M_{36}$
+\item La série \textbf{moins} sa tendance est représentée à gauche.
+\item Le profil saisonnier, à droite, est déduit en moyennant chaque mois.
+\end{itemize}
+\begin{figure}[H]\begin{center}\includegraphics[scale=1]{ilu/ccm38.png}\end{center}\end{figure}
+Si x est la série sans tendance : 
+$$\textrm{profil}=\textrm{aggregate}(x \sim \textrm{cycle}(x),\textrm{FUN}=\textrm{mean})$$
+
+\item Cas d'une décomposition multiplicative
+\begin{itemize}
+\item La tendance de la série de trafic aérien a été estimée avec $M_{12}$.
+\item La série \textbf{divisée} par sa tendance est représentée à gauche.
+\item Le profil saisonnier, à droite, est déduit en moyennant chaque mois.
+\end{itemize}
+\begin{figure}[H]\begin{center}\includegraphics[scale=1]{ilu/ccm39.png}\end{center}\end{figure}
+\end{itemize}
+\subsubsection{Série ajustée, Série CVS (Corrigée des Variations Saisonnières)}
+\paragraph{Décomposition totale d'une série}
+En supposant que la série s'écrit $x_{t} = m_{t} + s_{t} + r_{t}$ , on peut estimer chacune des composantes :
 \begin{enumerate}
-\item $Q(p) = x_{(\lceil np\rceil)}$ : choix qui respecte la définition mais n'est pas cohérent avec la convention adoptée pour la médiane (lorsque $p = 0.5$).
-\item $Q(p) = x_{(\lfloor np\rfloor)}$ si $np$ n'est pas un entier, et $Q(p) = \frac{1}{2}(x_{(np)} + x_{(np+1)})$ sinon. Ce choix respecte la définition et est cohérent avec la convention adoptée pour la médiane.
+\item On estime $m_{t}$ par $\hat{m}_{t}$ (de façon paramétrique ou par moyennes mobiles)
+\item On estime $s_{t}$ à partir de $x_{t} - \hat{m}_{t}$, ce qui donne $\hat{s}_{t}$
+\item On en déduit une estimation du reste $\hat{r}_{t} = x_{t}-\hat{m}_{t}-\hat{s}_{t}$
 \end{enumerate}
-Pour $p = 0.25, 0.5, 0.75$, les quantiles sont appelés \textbf{quartiles}.\newline
-Pour $p = 0.1, \dots , 0.9$, ce sont les \textbf{déciles}.\newline
+\begin{figure}[H]\begin{center}\includegraphics[scale=1]{ilu/ccm40.png}\end{center}\end{figure}
+Pour obtenir le graphe ci-contre: \textcolor{red}{plot(decompose(x))}.\newline
+Pour récupérer la tendance : \textcolor{red}{decompose(x)\$trend}\newline
+Pour récupérer la saisonnalité : \textcolor{red}{decompose(x)\$seasonal}\newline
+Pour récupérer le reste : \textcolor{red}{decompose(x)\$random}
+Pour récupérer le profil saisonnier :\textcolor{red}{decompose(x)\$figure}\newline
+\textbf{Remarque} : le mˆeme type de décomposition est possible dans le cas multiplicatif avec : \textcolor{red}{plot(decompose(x,"multiplicative"))}
+\paragraph{Série ajustée et série CVS}\textcolor{white}{.}\newline
+La séri eajustée $\hat{m}_{t}+\hat{s}_{t}$ est un lissage de $x_{t}$ qui respecte la tendance et la saisonnalité.
+\begin{figure}[H]\begin{center}\includegraphics[scale=1]{ilu/ccm41.png}\end{center}\end{figure}
+La série CVS (corrigée des variations saisonnières) correspond à $x_{t} - \hat{s}_{t} = \hat{m}_{t} +\hat{r}_{t}$. Elle permet d'analyser les variations de la série sans ˆetre influencé par l'aspect saisonnier. On l'utilise parfois pour
+réestimer $m_{t}$ de façon plus fine.
+
+\begin{figure}[H]\begin{center}\includegraphics[scale=1]{ilu/ccm42.png}\end{center}\end{figure}
+\subsubsection{Pour aller plus loin : prévision et modélisation}
+
+On suppose une décomposition additive : $x_{t} = m_{t} + s_{t} + r_{t}$  , ou` $s_{t}$ est de p ériode $T$.
+
+\begin{itemize}
+\item Une prévision de la série est possible grâce à la série ajustée $\hat{m}_{t} + \hat{s}_{t}$ , pourvu que $\hat{m}_{t}$ ait une forme paramétrique.\newline
+\textit{Exemple : }  si $\hat{m}_{t} =\hat{a}t+\hat{b}$,alors la prévision de la série en $t=n+1$ est :
+$$\hat{x}_{n+1} = \hat{m}_{n+1} + \hat{s}_{n+1} = \hat{a}(n+1) + \hat{b} + \hat{s}_{n+1-T}$$
+ou` la dernière égalité est obtenue par périodicité de $\hat{s}_{t}$.\newline
+\textit{Exemple : } série de CO2 à Hawaï. En noir : la série initiale, observée de 1994 à 2004. En rouge : la série ajustée $\hat{a}t + \hat{b} + \hat{s}_{t}$ , prolongée en 2005.
+\begin{figure}[H]\begin{center}\includegraphics[scale=1]{ilu/ccm43.png}\end{center}\end{figure}
+\item Pour améliorer la prévision, il convient d’essayer de prédire également le reste aléatoire $r_{t}$ , estimé par $\hat{r}_{t} = x_{t} - \hat{m}_{t} - \hat{s}_{t}$.\newline
+\textit{Exemple : } $\hat{r}_{t}$ pour la série précédente (série noire - série rouge) et ses ACF.
+\begin{figure}[H]\begin{center}\includegraphics[scale=1]{ilu/ccm44.png}\end{center}\end{figure}
+Les ACF montre que $\hat{r}_{t}$ est corrélé avec son passé.
+\begin{itemize}
+\item On souhaite tirer parti de cette dépendance pour prédire $\hat{r}_{t}$ et améliorer la prévision en 2005.
+\item Cela se fait en modélisant la dépendance de $\hat{r}_{t}$, par exemple à l’aide de modèles ARMA\footnote{
+En statistique, les modèles ARMA (modèles autorégressifs et moyenne mobile), ou aussi modèle de Box-Jenkins, sont les principaux modèles de séries temporelles.\newline
+Étant donné une série temporelle $X_{t}$, le modèle ARMA est un outil pour comprendre et prédire, éventuellement, les valeurs futures de cette série.\newline 
+Le modèle est composé de deux parties : une part autorégressive (AR) et une part moyenne-mobile (MA). 
+Le modèle est généralement noté ARMA($p,q$), où $p$ est l'ordre de la partie AR et $q$ l'ordre de la partie MA.\newline
 \\
-Représentation de $Q(p)$ en fonction de $p$, selon le choix de sa définition. \textit{Exemple} pour $n = 4$
-\begin{figure}[H]\begin{center}\includegraphics[scale=1]{ilu/ccm5.png}\end{center}\end{figure}
-\textbf{Autres choix possibles pour $Q(p)$ : } \textbf{R} en propose 9 (voir l'aide de la fonction \textit{quantile}).
-\begin{enumerate}
-\item Les deux premiers sont les 2 choix précédents.
-\item Le troisième est un autre choix conduisant à Q(p) discontinu.
-\item Les six autres sont des choix rendant $Q(p)$ continu mais dans ce cas la propriété initiale n'est plus vérifiée.\newline
-L'idée est d'interpoler\footnote{une interpolation est une opération mathématique permettant de construire une courbe à partir des données d'un nombre fini de points, ou une fonction à partir de la donnée d'un nombre fini de valeurs ;} linéairement les points $(p_{k} , x_{(k)})$ où $k = 1, \dots, n$ et où le choix de $p_{k}$ diffère selon les versions:
-\begin{itemize}
-\item Le choix $p_{k} = k/n$ correspond à une interpolation linéaire du choix 1 ci-dessus et correspond au choix 4 dans R.
-\item Pour les autres choix, la motivation est inférentielle. En supposant que $X_{1},\dots,X_{n}$ est unéchantillon dont la loi est de fonction de répartition $F$, le but est d'estimer au mieux le quantile théorique de la loi.\newline
-En notant $F_{n}$ la fonction de répartition empirique, on a $k/n = F_{n}(X_{(k)})$. Ainsi au lieu de choisir $p_{k} = k/n = F_{n}(X_{(k)})$ on considère $F(X_{(k)})$. Quelle que soit $F$, $F(X_{(k)})$ est distribué comme la kème statistique d'ordre d'un échantillon i.i.d suivant la loi uniforme sur $[0, 1]$, qui est une loi $\beta(k,n+1−k)$\footnote{Dans la théorie des probabilités et en statistiques, la loi bêta est une famille de lois de probabilités continues, définies sur $[0,1]$, paramétrée par deux paramètres de forme, typiquement notés $\alpha$ et $\beta$.\newline
-Un paramètre $X$ est distribué suivant une loi Beta $X \sim Be (\alpha,\beta)$ si sa densité de probabilité suit :
-$$ \mathbb{P}(X) = \frac{1}{Be(\alpha,\beta)} X^{\alpha-1} (1-X)^{\beta - 1}$$ 
-où la fonction Beta est définie par :
-$$Be(\alpha;\beta) = \frac{\Gamma(\alpha)\Gamma(\beta)}{\Gamma(\alpha + \beta)}$$ 
-Les paramètres de la loi Beta : $\alpha$ et $\beta$ avec : 
-\begin{itemize}
-\item $\alpha$ : nombre de succès dans une série de $\alpha + \beta$ épreuves binaires
-\item $\beta$ : nombre d'échecs dans une série de $\alpha + \beta$ épreuves binaires
+\textbf{définition :} un modèle autorégressif et moyenne-mobile d'ordres $(p,q)$ (abrégé en ARMA $(p,q)$ est un processus temporel discret ($X_{t}$, $t\in \mathbb{N}$) vérifiant :
+$$X_t = \varepsilon_{t} +  \sum_{i=1}^{p} \varphi_{i} X_{t-i} + \sum_{i=1}^{q} \theta_{i} \varepsilon_{t-i}$$
+où les paramètres $\varphi_{i}$ et $\theta_{i}$ sont constants, et les termes d'erreurs $\varepsilon_{i}$ sont indépendants du processus\footnote{Un processus aléatoire généralise la notion de variable aléatoire utilisée en statistiques élémentaires. On le définit comme une famille de variables aléatoires $X(t)$ associées à toutes les valeurs $\t\in T$. L'ensemble des observations disponibles $x(t)$ constitue une réalisation du processus.\newline
+Si l'ensemble  est dénombrable on parle de processus discret ou de série temporelle, si l'ensemble est indénombrable on parle de processus continu.
+}.
+Un modèle autorégressif AR($p$) est un ARMA($p,0$). Un modèle moyenne mobile MA($q$) est un ARMA($0,q$).
+}.
 \end{itemize}
-Principales propriétés de la loi Beta :
-\begin{itemize}
-\item Moyenne d'une loi Beta : 
-$$\frac{\alpha}{\alpha + \beta}$$
-\item Variance d'une loi Beta : 
-$$ \frac{\alpha\beta}{(\alpha + \beta)^{2}(\alpha + \beta+1)}$$
-\item Mode d'une loi Beta : 
-$$\frac{\alpha-1}{\alpha + \beta-2}$$
-\item Avec 
-$$\Gamma : z \mapsto \int_{0}^{+\infty} t^{z-1}e^{t}\textrm{dt, et } \Gamma(n+1) = n! $$
 \end{itemize}
-}. On peut alors choisir par exemple :
-$$p_{k} = \mathbb{E}(F(X_{(k)})) \textrm{ ou } p_{k} = \textrm{mode}(F(X_{(k)}))\textrm{ ou } p_{k} = \textrm{mediane}(F(X_{(k)})). $$
-Le choix par défaut sous \textrm{R} correspond à 
-$$p_{k} = \textrm{mode}(F(X_{(k)})) = \frac{k-1}{n-1}$$
-Si le but n'est pas inférentiel mais descriptif, le choix 2 semble plus approprié.
-\end{itemize}
-\end{enumerate} 
-\end{itemize}
-\subparagraph{Les mesures de dispersion d’un échantillon}
-\begin{itemize}
-
-\item \textbf{L’étendue }vaut $\max − \min$, c’est à dire $x_{(n)} − x_{(1)}$.
-\item La \textbf{variance} est
-$$V = \frac{1}{n} \sum_{i=1}^{n} (x_{i} - \bar{x}_{n})^{2}$$
-On a 
-$$V = \frac{1}{n} \sum_{i=1}^{n} x_{i}^{2} - \bar{x}_{n}^{2}$$
-\item La \textbf{variance corrigée} est
-$$S^{2} = \frac{1}{n-1}\sum_{i=1}^{n} (x_{i}-\bar{x}_{n})^{2}$$
-\item \textbf{L’écart-type} est $\sigma = \sqrt{V}$
-\item \textbf{L’écart-type corrigé} est $S=\sqrt{S^{2}}$
-\item \textbf{L'écart moyen absolu} est 
-$$\textrm{EMA} = \frac{1}{n}\sum_{i=1}^{n}|x_{i}-m|$$
-où $m$ est la médiane.
-\item \textbf{L'écart inter-quartile} est $Q(0.75) - Q(0.25)$\newline
-La mesure la plus utilisée est l’écart-type, qui peut être interprétée comme suit :\newline
-Soit $\alpha \geq 1$ et $\mathit{I} =  [\bar{x}-\alpha\sigma,\bar{x}+\alpha\sigma]$, alors 
-$$\frac{1}{n}\sum_{i=1}^{n}\mathbf{1}_{x_{i}\in\mathit{I}} \geq 1 - \frac{1}{\alpha^{2}}$$
-En particulier (pour $\alpha = 2)$, au moins $3/4$ des observations appartiennent à l’intervalle $[\bar{x}-2\sigma,\bar{x}+2\sigma]$.\newline
-\textbf{Attention :} La variance et l’écart-type calculés dans R correspondent à leur
-version "corrigée" $S^{2}$ et $S$.
-\end{itemize}
-\subparagraph{Mesures d’asymétrie }
-Pour mesurer l’asymétrie de la répartition des valeurs, on utilise le \textbf{coefficient d’asymétrie} ou \textbf{skewness} en anglais.
-$$\gamma_{1} = \frac{m_{3}}{m_{2}^{3/2}}$$
-où $m_{k}=\frac{1}{n} \sum_{i=1}^{n} (x_{i} - \bar{x}_{n})^{k}$  est le moment centré d’ordre $k$ (la variance si $k = 2$).
-\begin{figure}[H]\begin{center}\includegraphics[scale=1]{ilu/ccm6.png}\end{center}\end{figure}
-\subparagraph{Mesures d’aplatissement} Pour mesurer l’aplatissement de la répartition des valeurs, on utilise \textbf{l’excès d’aplatissement} ou \textbf{kurtosis normalisé } :
-$$\gamma_{2} = \frac{m_{4}}{m_{2}^{2}} - 3$$
-où $m_{k}=\frac{1}{n} \sum_{i=1}^{n} (x_{i} - \bar{x}_{n})^{k}$  est le moment centré d’ordre $k$.
-le "$-3$" correspond au kurtosis (non normalisé) théorique d’une $mathit{N}(0,\sigma^{2})$. $\gamma_{2}$ compare donc l’aplatissement de la distribution à celui d’une loi normale.
-\begin{itemize}
-\item $\gamma_{2}>0$ : distribution \textbf{leptokurtique} (en noir). Profil plus "pointue"qu’une normale de même
-variance (en rouge). C’est le cas en présence de nombreuses valeurs extrêmes. Le kurtosis est utilisé en finance pour repérer ce phénomène.
-\begin{figure}[H]\begin{center}\includegraphics[scale=1]{ilu/ccm7.png}\end{center}\end{figure}
-\item distribution \textbf{platikurtique} (en noir). Profil plus "plat" qu’une normale de même variance (en rouge).
-\begin{figure}[H]\begin{center}\includegraphics[scale=1]{ilu/ccm8.png}\end{center}\end{figure}
-\end{itemize}
-\paragraph{Représentations graphiques} 
-\subparagraph{Variable quantitative discrète}
-Le diagramme en bâtons (pour une variable quantitative discrète).
-Les bâtons sont placés en abscisse au niveau de chaque valeur possible de la variable discrète et leur hauteur est proportionnelle à la fréquence observée.\newline
-\textit{Exemple : } répartition du nombre d’enfants par femme dans un  échantillon de femmes actives am éricaines. Dans R : en ligne de commandes, il faut d’abord calculer les fréquences avec la fonction table puis représenter le résultat avec plot.
-\begin{figure}[H]\begin{center}\includegraphics[scale=1]{ilu/ccm9.png}\end{center}\end{figure}
-\subparagraph{Variable quantitative continue}\textcolor{white}{.}\newline
-\textbf{L’histogramme (pour une variable quantitative continue).}\newline
-L’ensemble des valeurs possibles est découpé en intervalles disjoints appelés classes. Au niveau de chaque classe s’élève un rectangle dont l’aire est égale à la fréquence observée de la classe.\newline
-\textit{Exemple :} répartition du salaire annuel des femmes actives américaines (en milliers de dollars)
-\begin{figure}[H]\begin{center}\includegraphics[scale=1]{ilu/ccm10.png}\end{center}\end{figure}
-\textbf{Le boxplot ou boîte à moustaches ou boite de dispersion.}\newline
-Le rectangle central est délimité par le premier et le troisième quartile et la médiane y est symbolisée par un trait.
-Les ”moustaches” partent de chaque côté jusqu’à la valeur minimale et maximale de l’échantillon, sous réserve que leur longueur ne dépasse pas $1.5(Q(0.75) − Q(0.25))$, soit $1.5$ fois la hauteur de la boîte. Sinon, les moustaches s’arrˆetent à la dernière valeur avant cette limite et les valeurs restantes sont représentées par des points isolés.\newline
-\textit{Exemple :} répartition du salaire des femmes actives américaines.
-\begin{figure}[H]\begin{center}\includegraphics[scale=1]{ilu/ccm11.png}\end{center}\end{figure}
-
-
-\subsection{Analyse bivariée}
-\subsubsection{Variable quantitative/Variable qualitative}
-
-
-
-
-
-\begin{lstlisting}[language=html]
-
-\end{lstlisting}
-\begin{lstlisting}[language=html]
-
-\end{lstlisting}
-\begin{lstlisting}[language=html]
-
-\end{lstlisting}
-\begin{lstlisting}[language=html]
-
-\end{lstlisting}
-
-
-
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -573,7 +728,10 @@ remove()
 
 savehistory("Sauvegarde_historique_TP1.R")
 
-
+ \begin{description}
+ \item[help(sujet) :] documentation sur un sujet. Flèches haut et bas pour se déplacer, touche q pour quitter ;
+ \item[mot2 :] définition2.
+ \end{description}
 
 
 
