@@ -5931,10 +5931,21 @@ La conditions de validité est qu'il y a au moins  5 à 10 évenements par variable
 $$1+1+1+1+1+7+7 \textrm{ variables explicatives : } 19\times 10 = 190 < 269$$
 On peut donc considérer que le modèle est valide.
  \newpage
+ 
+\section{Résumé des principales commandes utilisées dans le Mooc}
+\subsection{Comparaison de moyennes} 
+\subsection{Tableaux de contingence}
+\subsection{Corrélation et régression linéaire}
+\subsection{Régression logistique}
+\subsection{Données de survie}
+ 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage
+
+
 \part{R à l'université de Nantes}
 
 \textcolor{white}{.}\newline
@@ -10215,8 +10226,8 @@ Cela renvoie :
 
 
 \part{Fonctions usuelles et aide mémoire}
-\section{Commandes usuelles de R}
-\textit{J. Chiquet - octobre 2015}\newline
+\section{Commandes usuelles de R - Aide mémoire R}
+\textit{J. Chiquet - octobre 2015 \& M. Kauffmann - mars 2009}\newline
 \\
 Cette liste de commandes (non exhaustive) est une adaptation de
 la ref-card R de \textit{Tom Short}. Elle est un relais entre ce que cherche
@@ -10224,7 +10235,7 @@ l'utilisateur et l'aide de R : les nombreuses options disponibles ne
 sont que rarement spécifiées \href{http://www.rpad.org/Rpad/}{\underline{ici}}.
 
 \subsection{Aide et fonctions de base}
-\begin{multicols}{2}
+
 \begin{description}
 \item[help(topic) :] ?topic affiche l'aide relative à topic;
 \item[apropos("topic") :] ??topic recherche par mot-clé (version courte)
@@ -10236,167 +10247,206 @@ sont que rarement spécifiées \href{http://www.rpad.org/Rpad/}{\underline{ici}}.
 \item[summary(a):] propose un «résumé» de a, la plupart du temps un résumé statistique.
 \item[search() :] affiche l'itinéraire de recherche.
 \item[ls() :] affiche tous les objets présents dans l'itinéraire de recherche.
-\item[mls.str() :] applique str() à variable présente dans l'itinéraire de recherche.
+\item[ls.str() :] applique str() à chaque variable présente dans l'itinéraire de recherche (liste de recherche).
 \item[dir() :] affiche les fichiers présents dans le répertoire courant.
 \item[library(x) :] charge la bibliothèque x.
 \item[attach(x) :] place l'objet x dans l'itinéraire de recherche; x peut être une liste, un tableau de données ou un objet créé à l'aide de la fonction save.
+\item[search()] pour montrer la liste de recherche.
 \item[detach(x) :] ôte l'objet x de l'itinéraire de recherche.
 \item[with(x, expr) :] évalue la commande expr en ayant placé l'objet x dans l'itinéraire de recherche.
 \item[rm(x), remove(x):] détruit l'objet x.
 \item[setwd(dir), getwd(dir) :]  affecte ou récupère le chemin du répertoire de travail courant.
 \item[function( arglist ) { expr return(result)} :]  définition de fonction.
 \item[if, while, repeat, etc. :] voir help(if").
+\item[example(function) : ] exécute l'exemple donné en bas de la page d'aide de la function indiquée
+\item [<- et ->] assignation dans le sens de la flèche (a <-b équivaut donc à b->a); \textit{e.g.} : x<-0; x+1->x (met x à 0, puis additionne x et 1 pour mettre le résultat dans x)
+\item [methods(a)] afficher les méthodes S3\footnote{
+S3 refers to a scheme of method dispatching. If you've used R for a while, you'll notice that there are print, predict and summary methods for a lot of different kinds of objects.\newline
+In S3, this works by:
+\begin{itemize}
+\item setting the class of objects of interest (\textit{e.g.} : the return value of a call to method glm has class glm)
+\item providing a method with the general name (\textit{e.g.} print), then a dot, and then the classname (\textit{e.g.}: print.glm)
+\item some preparation has to have been done to this general name (print) for this to work, but if you're simply looking to conform yourself to existing method names, you don't need this (see the help I refered to earlier if you do).
+\end{itemize}
+} de a
+\item [methods(class=class(a))] lister toutes les méthodes permettant de traiter les objets de la classe de l?objet a
+\item[options(...) :] définit ou examine de nombreuses options globales; options fréquentes : width (largeur en nombre de caractères de la fenêtre des résultats), digits (nombre de chiffres significatifs à l'affichage), error (traitement des erreurs). 
+\item[q() :] quitter R (répondre y (yes) et Entrée pour confirmer).  
+
+
 \end{description}
-\end{multicols}
+
 
 \subsection{Entrées / Sorties}
-\begin{multicols}{2}
+
 \begin{description}
-\item[save(file,x,y) :] enregistre les objets x,y dans le fichier binaire
-file.
-\item[save.image(file) :] enregistre tous les objets de la session.
+\item[save("fichier", x,y) :] enregistre les objets x et y dans le fichier, au format binaire XDR propre à R
+\item[save.image("fichier") :] enregistre tous les objets de la session
 \item[load(file) :] charge un objet précédemment enregistré à l'aide de save.
 \item[data(x) :] charge le jeu de données x.
-\item[read.table(file), read.csv, read.delim :] lit un fichier stocké sous la forme d'un tableau et crée un objet data.frame; le séparateur par défaut est le caractère espace pour read.table, la virgule ou le point virgule pour read.csv, la tabulation pour read.delim; utiliser l'option header=TRUE pour que la première ligne soit considérée comme définissant le nom des colonnes.
-\item[cat(...) :] fonction d'impression bas niveau.
-\item[print(a):] fonction d'affichage d'un objet a s'adaptant au type de l'objet.
-\item[format(x) :] formatage d'un objet.
-\item[write.table(x):] imprime.
+\item[read.table(file), read.csv, read.delim :] lit un fichier stocké sous la forme d'un tableau et crée un objet data.frame; le séparateur par défaut est le caractère espace pour read.table, la virgule ou le point virgule pour read.csv, la tabulation pour read.delim; utiliser l'option header=TRUE pour que la première ligne soit considérée comme définissant le nom des colonnes. Plus en détails : 
+\item[read.table(file) :] lit un fichier au format tabulaire et en fait un data frame; le séparateur de colonne par défaut sep="" désigne n'importe quel espacement; utilisez header=TRUE pour prendre la première ligne comme titre (header) de colonne; utilisez as.is=TRUE pour empêcher les vecteurs de caractères d'être transformés en factors; utilisez skip=n pour ignorer les n premières lignes ; consultez l'aide pour les options concernant le nommage des colonnes, le traitement des valeurs manquantes (NA), etc.
+
+\item[read.csv2("filename",header=TRUE) :] idem mais avec des options pré-définies pour lire les fichiers CSV.
+
+\item[read.delim("filename",header=TRUE):] idem mais avec des options pré-définies pour lire les fichiers dont les valeurs sont séparées par des tabulations.
+
+\item[read.fwf(file,widths,header=FALSE,sep=" ",as.is=FALSE) :] lit un tableau dont toutes les colonnes ont la même largeur (fwf: fixed width format); widths est un vecteur d'entiers donnant la largeur des colonnes dans le fichier.
+
+\item[cat(..., file="", sep=" "):]  fonction d'impression bas niveau. Affiche les arguments après les avoir converti en caractères; sep est le séparateur entre les arguments
+
+\item[print(a, ...) :] affiche les arguments; fonction générique (fonctionne différemment selon la classe de a)
+\item[format(x,...) :] formate un objet R pour un affichage personnalisé.
+\item[write.table(x,file="",row.names=TRUE,col.names=TRUE, sep=" ") :] affiche x après l'avoir converti en data frame; si quote est TRUE, les colonnes de caractères ou de factors sont entourés par des guillemets; sep est le séparateur de colonnes. Avec file= suivi du chemin d'un fichier, écrit sur le disque dur.\newline
+\\
+\textit{La plupart des fonctions d'entrée/sortie ont un argument file. Cela peut souvent être une chaîne de caractères nommant un fichier ou une connexion. Sous Windows, la connexion peut aussi être utilisée avec description ="clipboard" pour lire un tableau copié d'un tableur par le presse-papier}
+\item[x <- read.delim("clipboard")] pour lire un tableau copié par le presse-papier depuis un tableur.
+\item[write.table(x,"clipboard",sep="$\backslash$t",col.names=NA)] pour écrire un tableau vers le presse-papier pour un tableur.
+
 \end{description}
-\end{multicols}
+
 
 \subsection{Variables réservées}
-\begin{multicols}{2}
+
 \begin{description}
 \item[NULL:] l'objet nul (objet réservé).
 \item[NA :] absense de données/valeur manquante.
 \item[TRUE/FALSE :] vrai et faux logiques.
 \item[Inf :] valeur infinie.
+\item ["abc"] une chaîne de 3 caractères
 \end{description}
-\end{multicols}
+
 
 \subsection{Création de données}
-\begin{multicols}{2}
+
 \begin{description}
 \item[vector(mode, size) :] initialise un vecteur de mode mode de taille size.
 \item[logical(size), numeric(size), double(size), character(size) :] spécialisation de code aux modes élémentaires..
-\item[c(nom1=, nom2=, ...) :] fonction générique combinant une suite d'éléments en un vecteur (possibilité d'attribuer des noms).
+\item[c(nom1=, nom2=, ...) :] fonction générique combinant une suite d'éléments en un vecteur (possibilité d'attribuer des noms). fonction combinant les arguments pour former un vecteur; avec recursive=TRUE va dans les listes pour combiner leurs éléments en un seul vecteur (plutôt qu'en un vecteur de listes)
 \item[from:to:] génère une séquence; priorité de l'opérateur «:» 1:4 + 1 vaut 2,3,4,5.
 \item[seq(from,to) :] génère une séquence; by= et length= spécifient l'incrément et/ou la longueur..
 \item[seq\_along, seq.intseq :] variante de seq.
 \item[rep(x,times) :] répète x un nombre times de fois; utiliser each= pour répéter chaque élément each fois; each peut être un vecteur.
-\item[rep.int, rep\_len :] variantes de rep.
-\item[data.frame(...) :] crée un tableau de données; les vecteurs courts sont répétés jusqu'à correspondre à la taille des vecteurs les plus longs.
-\item[list(...) :] crée une liste.
-\item[vector(?list?, size) :] crée une liste de taille size.
+\item[rep.int, rep\_len :] variantes de rep. rep(c(1,2,3),2) vaut 1 2 3 1 2 3, rep(c(1,2,3),each=2) vaut 1 1 2 2 3 3
+\item[data.frame(...) :] crée un tableau de données; les vecteurs courts sont répétés jusqu'à correspondre à la taille des vecteurs les plus longs. data.frame(...) crée un data frame avec les arguments (nommés ou non); \textit{e.g.}: data.frame(v=1:4, ch=c("a", "b", "c", "d"), lettre= "A"); les vecteurs plus courts (ici: "A") sont réutilisés (recyclés) plusieurs fois pour atteindre la longueur du vecteur le plus long ; à la différence d'une matrix, un data.frame est un tableau dont les colonnes peuvent être de types différents
+\item[list(...) :] crée une liste avec les arguments (nommés ou non, qui peuvent être de longueur différente); \textit{e.g.} : list(a=c(1,2),b="hi",c=3);
+\item[vector(list, size) :] crée une liste de taille size.
 \item[array(x,dim=):] crée un tableau multidimensionnel x; les éléments de x sont répétés si la taille ne correspond pas aux dimensions spécifiées.
 \item[matrix(x,nrow=,ncol=) :] crée une matrice; les éléments de x sont répétés si la taille ne convient pas.
-\item[factor(x,levels=):] crée un vecteur de facteurs.
+\item[factor(x,levels=):] crée un vecteur de facteurs.  Transforme un vecteur x en factor (les niveaux sont indiqués par levels=)
 \item[expand.grid() :] génère un tableau de données contenant les combinaisons des vecteurs spécifiés en arguments.
 \item[rbind(),cbind():] pour combiner les éléments d'un objet par ligne et par colonne.
 \end{description}
-\end{multicols}
-
 \subsection{Extraction de données}
 \subsubsection{Indexation des listes}
-\begin{multicols}{2}
-\begin{description}
-\item[x[n] :] une liste avec les éléments de n.
-\item[x[[n]] :] le n$^{e}$ élément de la liste.
-\item[x\$name,x[["name"]]:]  l'élément "name".
-\end{description}
-\end{multicols}
-\subsubsection{Indexation des vecteurs}
-\begin{multicols}{2}
-\begin{description}
-\item[x[n]:] ne élément du vecteur.
-\item[x[-n]:] tous les éléments sauf le n$^{e}$.
-\item[x[1:n] :] n premiers éléments.
-\item[x[-(1:n)] :] tous les éléments sauf les n premiers.
-\item[x[c(1,4,2)] :] éléments 1,4 et 2.
-\item[x["name"] :] élément(s) de nom "name".
-\item[x[x > 3] :] tous les éléments plus grands que 3  
-\item[x[x > 3 \& x < 5] :] tous les éléments compris entre 3 et 5.
-\end{description}
-\end{multicols}
-\subsubsection{Indexation des matrices}
-\begin{multicols}{2}
-\begin{description}
-\item[x[i,j] :] élément de la i$^{e}$ ligne et j$^{e}$ colonne.
-\item[x[i,] :] i$^{e}$ ligne.
-\item[x[,j] :] j$^{e}$ colonne.
-\item[x[,c(1,3)]:] colonnes 1 et 3. 
-\item[x["name",] :] lignes intitulées "name". 
-\item[x[rowSums(x)>10,] :] lignes dont la somme est supérieure à 10. 
-\end{description}
-\end{multicols}
 
-\subsection{Variables et attributs}
-\begin{multicols}{2}
 \begin{description}
-\item[as.array(x), as.data.frame(x), as.numeric(x), as.logical(x), as.character(x), \dots:] conversion de type.
-\item[mis.na(x), is.null(x), is.array(x), is.data.frame(x), is.numeric(x), is.character(x), \dots :] teste le type d'un objet.\newline
+\item[x$\lbrack$n$\rbrack$ :] une liste avec les éléments de n. x$\lbrack$i$\rbrack$ le ou les éléments i de la liste (renvoyé(s) sous forme de liste, à la différence des cas suivants; fonctionne comme pour les vecteurs)
+\item[x$\lbrack$$\lbrack$n$\rbrack$$\rbrack$ :] le n$^{e}$ élément de la liste.
+\item[x\$name : ] l'élément "name". 
+\item[x$\lbrack$$\lbrack$"name"$\rbrack$$\rbrack$ : ]  l'élément "name".
+\end{description}
+
+\subsubsection{Indexation des vecteurs}
+
+\begin{description}
+\item[x$\lbrack$n$\rbrack$ :] n$^{e}$ élément du vecteur.
+\item[x$\lbrack$-n$\rbrack$ :] tous les éléments sauf le n$^{e}$.
+\item[x$\lbrack$1:n$\rbrack$ :] n premiers éléments.
+\item[x$\lbrack$-(1:n)$\rbrack$ :] tous les éléments sauf les n premiers. Les éléments de $n+1$ à la fin.
+\item[x$\lbrack$c(1,4,2)$\rbrack$ :] éléments 1,4 et 2.
+\item[x$\lbrack$"name"$\rbrack$ :] élément(s) de nom "name".
+\item[x$\lbrack$x > 3$\rbrack$ :] tous les éléments plus grands que 3  
+\item[x$\lbrack$x > 3 \& x < 5$\rbrack$ :] tous les éléments compris entre 3 et 5.
+\item[x$\lbrack$x \%in\% c("a","and","the")$\rbrack$] les éléments appartenant à l'ensemble donné.
+\end{description}
+
+\subsubsection{Indexation des matrices}
+
+\begin{description}
+\item[x$\lbrack$i,j$\rbrack$ :] élément de la i$^{e}$ ligne et j$^{e}$ colonne.
+\item[x$\lbrack$i,$\rbrack$ :] i$^{e}$ ligne.
+\item[x$\lbrack$,j$\rbrack$ :] j$^{e}$ colonne.
+\item[x$\lbrack$,c(1,3)$\rbrack$:] colonnes 1 et 3. 
+\item[x$\lbrack$"name",$\rbrack$ :] lignes intitulées "name". 
+\item[x$\lbrack$rowSums(x)>10,$\rbrack$ :] lignes dont la somme est supérieure à 10. 
+\end{description}
+
+\subsubsection{Indexation des data.frame}
+\textit{Comme pour les matrices plus ce qui suit}
+\begin{description}
+\item[x$\lbrack$$\lbrack$"nom"$\rbrack$$\rbrack$ : ] la colonne nommée "nom"
+\item[x\$nom : ] la colonne nommée "nom"
+\end{description}
+\subsection{Variables et attributs}
+
+\begin{description}
+\item[as.array(x), as.data.frame(x), as.numeric(x), as.logical(x), as.character(x), \dots:] conversion de type. \textit{e.g.} : as.logical(x) convertit x en TRUE ou FALSE) ; pour la liste complète, faites methods(as)
+\item[is.na(x), is.null(x), is.array(x), is.data.frame(x), is.numeric(x), is.character(x), \dots :] teste le type d'un objet, renvoie TRUE ou FALSE; pour une liste complète, faites methods(is)\newline
 \\
 \textit{Les fonctions suivantes s'utilisent pour récupérer ou spécifier un attribut.}\newline
 \item[length(x) :] nombre d'éléments de x.
-\item[dim(x) :] nombre de dimensions d'un objet.  
+\item[dim(x) :] nombre de dimensions d'un objet.  Récupère ou définit (dim(x) <- c(3,2)) les dimensions d'un objet
 \item[dimnames(x) :] noms des dimensions d'un objet.
 \item[names(x):] manipulation de l'attribut names de l'objet x.
 \item[setNames(noms, x)  :] attribue le vecteurs de noms "noms" au vecteur x.
-\item[nrow(x), ncol(x) :] nombre de lignes et de colonnes. 
-\item[class(x) :] classe de l'objet x.
+\item[nrow(x)/NROW(x), ncol(x)/NCOL(x) :] nombre de lignes et de colonnes. NROW(x) et NCOL(x) considère un vecteur comme une matrice
+\item[class(x) :] classe de l'objet x. Récupère ou définit la classe de x; class(x) <- "maclasse"
 \item[unclass(x) :] supprime l'attribut class de la variable x.
 \item[attr(x,which) :] récupère ou spécifie les attributs de x décrits par which.
 \item[attributes(x) :] récupère ou spécifie tous les attributs de x. 
 \end{description}
-\end{multicols}
+
 
 \subsection{Manipulation et sélection de données}
-\begin{multicols}{2}
+
 \begin{description}
 \item[which.max(x),which.min(x) :] retourne l'indice du plus grand (resp. plus petit) élément de x.
 \item[rev(x) :] inverse l'ordre des éléments x.
-\item[sort(x) :] ordonne les éléments de x par ordre croissant.
-\item[cut(x,breaks) :] découpe x en intervalles définis par breaks. 
+\item[sort(x) :] ordonne les éléments de x par ordre croissant.; pour l'ordre décroissant: rev(sort(x))
+\item[order() :] renvoie une série d'indices permettant de permuter un tableau afin de le mettre dans l'ordre selon les valeurs de certaines colonnes; \textit{e.g.},trier par ordre alphabétique de prénom le tableau suivant: x<-data.frame(prenom=c("Bernard","Charles", "Annie"),age=c(10,20,30)); x[order(x\$prenom),].
+
+\item[cut(x,breaks) :] découpe x en intervalles (factors) définis par breaks. breaks est le nombre de cas ou un vecteur de cloisons. 
 \item[split(x,index):] renvoie une liste découpant x selon le facteur index.
 \item[unlist(l, recursive) :] mise à plat de la liste l (récursivement par défaut).
 \item[match(x, y) :] renvoie un vecteur de la même taille que x dont l'élément i vaut x[i] si x[i] appartient à y et NA sinon.  
-\item[which(x==a) :] renvoie les indices des éléments de x vérifiant x==a.
+\item[which(x==a) :] renvoie les indices des éléments de x vérifiant x==a. renvoie les indices de x pour lesquels le résultat de l'opération logique est vrai (TRUE), dans cette exemple les valeurs de i pour lesquelles x[i]==a (l'argument de cette fonction doit être une variable de type « logique » (vrai ou faux)).
 \item[choose(n, k):] calcule les combinaisons de k éléments parmi n.
 \item[tabulate(x,nbin=length(x)) :] compte les occurennces de tous les entiers jusqu'à nbin de x.
-\item[table(x) :] généralisation de tabulate à des facteurs et tableaux de données. 
-\item[na.omit(x) :] supprime les observations manquantes (notées NA).
+\item[table(x) :] généralisation de tabulate à des facteurs et tableaux de données. renvoie une table avec le décompte de chaque valeur différente de x; table(x,y) renvoie un tableau de contingence
+\item[na.omit(x) :] supprime les observations manquantes (notées NA). supprime les lignes correspondantes si x est une matrice ou un data.frame)
 \item[na.fail(x) :] renvoie une erreur si x contient aumoins un NA.
 \item[any(x) :] teste si x contient aumoins un élémént TRUE.
 \item[anyNA(x) :] teste si x contientau moins un élémént NA. 
-\item[unique(x) :] supprime les doublons d'un vecteur ou d'un tableau.
+\item[unique(x) :] supprime les doublons d'un vecteur ou d'un tableau. (pour un data.frame, ne renvoie que des lignes uniques)
 \item[table(x) :] renvoie un tableau avec le nombre des différentes valeurs.
 \item[subset(x, ...)  :] renvoie un sous ensemble de x défini par levels(f), nlevels(f), is.ordered(f).
 \item[levels(f), nlevels(f), is.ordered(f) :] manipulations des niveaux du facteur f . 
 \item[sample(x, size):] crée un échantillon aléatoire de taille size parmi les éléments de x.
 \end{description}
-\end{multicols}
+
 
 
 \subsection{Mathématiques}
-\begin{multicols}{2}
+
 \begin{description}
 \item[abs, sqrt, sin, cos, tan, asin, acos, atan, atan2, log, log10,
 exp, \%$\backslash$\%, \%\%, exp\dots:] fonctions mathématiques élémentaires.
-\item[max(x), min(x), range(x), sum(x), diff(x), prod(x), mean(x), median(x), sd(x) :] maximum, minimum, amplitude, somme, différences, produit, moyenne, médiane, écart-type.
-\item[quantile(x,probs=) :] fractiles des éléments de x.  
+\item[max(x), min(x), range(x), sum(x), diff(x), prod(x), mean(x), median(x), sd(x) :] maximum (des éléments de x), minimum (des éléments de x), amplitude ( c(mix(x),max(x)) ), somme (des éléments de x), différences (différence entre chaque élément de x et son prédécesseur), produit (des éléments de x), moyenne (des éléments de x), médiane (des éléments de x), écart-type (des éléments de x).
+\item[quantile(x,probs=) :] fractiles des éléments de x.  quantiles correspondant aux probabilités données; le paramètre par défaut probs=c(0,.25,.5,.75,1) donne les quartiles
 \item[weighted.mean(x, w) :] moyenne de x pondérée par w.
 \item[var(x), cov(x)  :] variance empirique corrigée; si x est une matrice, renvoie la matrice de variance-covariance.
 \item[cor(x):] matrice de corrélations de x. 
 \item[var(x, y), cov(x, y)  :] covariance entre x et y, ou entre les colonnes de x et de y si ce sont des matrices ou des tableaux.
 \item[cor(x, y) :] idem pour la corrélation linéaire.
+\item[rank(x)] rang des éléments de x
 \item[round(x, n) :] arrondit les éléments de x à n décimales.
 \item[floor(x), ceiling(x) :] arrondissent à l'entier relatif supérieur ou inférieur. 
 \item[scale(x) :] centre et réduit les données x; pour centrer et/ou réduire uniquement, utiliser les scale et/ou center.
 \item[pmin(x,y,...), pmax(x,y,...) :] un vecteur dont le i$^{e}$ élément est le minimum (resp. maximum) entre x[i] et y[i].
 \item[cumsum(x) :] un vecteur dont le i$^{e}$ élément est la somme des i premiers éléments de x.
 \item[cumprod(x), cummin(x), cummax(x) :] idem pour le produit, le min, le max. 
-\item[union(x,y), intersect(x,y), setdiff(x,y), setequal(x,y), all.equal(x,y) et is.element(el,set) :] fonctions de définition d'ensembles.
+\item[union(x,y), intersect(x,y), setdiff(x,y), setequal(x,y), all.equal(x,y) et is.element(el,set) :] fonctions de définition d'ensembles. setdiff(x,y) trouve les éléments de x qui ne sont pasdans y
 \item[Re(x), Im(x), Mod(x),Arg(x), Conj(x) :] partie réelle, partie imaginaire, module, argument et conjugué d'un nombre complexe.
 \item[convolve(x,y) :] calcule de convolution\footnote{
 Le produit de convolution de deux fonctions réelles ou complexes $f$ et $g$, est une autre fonction, qui se note généralement $f\ast g $ et qui est définie par :
@@ -10408,12 +10458,12 @@ $$ (f \ast g)(n) = \sum_{m=-\infty}^{\infty} f(n - m)g(m)= \sum_{m=-\infty}^{\in
 On peut considérer cette formule comme une généralisation de l'idée de moyenne mobile.\newline
 Pour que cette définition ait un sens, il faut que $f$ et $g$ satisfassent certaines hypothèses ; par exemple, si ces deux fonctions sont intégrables au sens de Lebesgue (c'est-à-dire qu'elles sont mesurables et que l'intégrale de leur module est finie), leur produit de convolution est défini pour presque tout $x$ et est lui-même intégrable.} entre deux séquences.
 \item[fft(x), mvfft(x) :] transformation de Fourier d'une matrice,resp des colonnes d'une matrice.
-\item[filter(x,filter) :] application d'un filtre linéaire à chaque élément d'une suite x.
+\item[filter(x,filter) :] application d'un filtre linéaire à chaque élément d'une suite x. applique un filtre linéaire à une série temporelle; \textit{e.g.} , pour une moyenne mobile sur trois périodes: filter(x, c(1/3, 1/3, 1/3))
+\item[na.rm=FALSE] De nombreuses fonctions mathématiques ont un paramètre na.rm=TRUE (non available removed) pour enlever les données manquantes (NA) avant le calcul
 \end{description}
-\end{multicols} 
- 
+
 \subsection{Matrices}
-\begin{multicols}{2}
+
 \begin{description}
 \item[rowSums(x), colSums(x), rowMeans(x), colMeans(x) :] somme et moyenne de chaque ligne, resp. chaque colonne de x.
 \item[t(x) :] transposée de x.
@@ -10472,79 +10522,91 @@ Ce type de décomposition est souvent utilisée pour le calcul de solutions de sys
 factorisations et décomposition usuelles (SVD, Cholesky,
 QR)}
 \end{description}
-\end{multicols} 
+
 
 
 \subsection{Traitements avancés}
-\begin{multicols}{2}
 \begin{description}
-\item[apply(x,INDEX,FUN=):] renvoie un vecteur ou une liste de valeurs obtenues en appliquant la fonction FUN aux éléments de la dimension INDEX de x.
-\item[lapply(x,FUN) :] applique FUN aux éléments d'une liste.
+\item[apply(x,INDEX,FUN=):] renvoie un vecteur ou une liste de valeurs obtenues en appliquant la fonction FUN aux éléments de la dimension INDEX de x. apply(X,MARGIN,FUN=, ...) applique une fonction FUN aux marges de X (MARGIN=1 pour les lignes, MARGIN=2 pour les colonnes); les paramètres ... sont passés à la fonction FUN.
+\item[lapply(x,FUN) :] applique FUN aux éléments d'une liste. lapply(X,FUN) applique une fonction FUN à chaque élément de X
 \item[sapply(x,FUN) :] applique FUN aux éléments d'une liste et simplifie la sortie.
 \item[tapply(x,INDEX,FUN=) :] applique FUN à chaque groupe du tableau X défini par les indices INDEX.
 \item[rowsum(x,INDEX) :] spécialisation de tapply pour la fonction sum (très performant).
 \item[by(data,INDEX,FUN) :] applique FUN au tableau de données data découpé via INDEX.
 \item[ave(x,...,FUN)  :] applique FUN à chaque sous-ensemble de x définis par des facteurs.
-\item[merge(a,b) :] fusion de deux tableaux de données portant les mêmes noms de ligne ou de colonne.
-\item[aggregate(x,by,FUN) :] découpe le tableau x en sousensembles auxquels sont appliqués la fonction FUN et renvoie le résultat; by est une liste définissant les sous-ensembles de x.
-\item[stack(x, ...), unstack(x, ...):] transforme un tableau ou une liste x en un vecteur colonne, et réciproquement.
+\item[merge(a,b) :] fusion de deux tableaux de données portant les mêmes noms de ligne ou de colonne. merge(x,y) fusionne 2 data frames en utilisant leurs noms de colonnes en commun (ou en les désignant avec by.x et by.y)
+\item[aggregate(x,by,FUN) :] découpe le tableau x en sous ensembles auxquels sont appliqués la fonction FUN et renvoie le résultat; by est une liste définissant les sous-ensembles de x. aggregate(x,by,FUN) divise le data frame x en groupes, calcule la fonction FUN pour chacun; by est une liste d'éléments de regroupement, chaque élément aussi long que le nombre de ligne de x
+\item[stack(x, ...), unstack(x, ...):] transforme un tableau ou une liste x en un vecteur colonne, et réciproquement. transforme un tableau en plusieurs colonnes en tableau à 1 colonne, en indiquant d'où vient chaque valeur; \textit{e.g.} : stack(data.frame(a=1:3,b=4:6)). 
+\item[unstack(x, ...)] inverse de stack().
 \item[combn(x, m, func) :] applique la fonction func à toutes les combinaisons de m éléments parmi les élément de x.
 \item[replicate(n, expr, \dots) :] repète une opération faisant intervenir de l'aléa et renvoie un tableau multidimensionnel résultant de ces opérations.
 \item[do.call(func, list) :] appelle la fonction func qu'elle applique aux arguments défini par les élements de list.
+\item[reshape(x, ...)] fonction avancée (et compliquée) réorganisant en largeur ou en longueur une data.frame (\textit{e.g.} : un tableau de 2 variables avec 3 années pour 4 pays contient 24 données, organisées en 2x12 ou 6x4 8x3; reshape convertit entre ces formats)
 \end{description}
-\end{multicols} 
+
 
 
 \subsection{Chaînes de caractères}
-\begin{multicols}{2}
+
 \begin{description}
-\item[paste(\dots) :] concaténation de vecteurs après conversion en caractères.
+\item[paste(\dots) :] concaténation de vecteurs après conversion en caractères. sep= les sépare (par défaut: espace)
 \item[substr(x,start,stop):] extraction ou spécification d'une sous-chaîne de x.
 \item[strsplit(x,split) :] découpe x selon la sous-chaîne "split".  
-\item[grep(pattern,x)  :] recherche le motif pattern dans la chaîne x.
+\item[grep(pattern,x)  :] recherche le motif pattern dans la chaîne x. renvoie les indices des éléments de x dans lesquels on trouve le patron pattern, \textit{e.g.} : grep("b", c("ab", "cd", "bz"))
 \item[tolower(x), toupper(x):] conversion en minuscules, resp. en majuscules.
-\item[match(x,table)  :] un vecteur renvoyant les positions où les éléments de x ont été pour la première fois rencontrés dans table
-\item[x \% in\% table:] identique, mais renvoie un vecteur de booléens. 
+\item[match(x,table)  :] un vecteur renvoyant les positions où les éléments de x ont été pour la première fois rencontrés dans table. pour chaque élément de x, renvoie NA si l'élément n'est pas trouvé dans table, sinon renvoie la position où il se trouve dans table
+\item[x \% in\% table:] identique, mais renvoie un vecteur de booléens. pour chaque élément de x, renvoie TRUE si l'élément est trouvé dans table, sinon renvoie FALSE
 \item[pmatch(x,table) :] appariement partiel des éléments de x parmi table.
 \item[nchar(x) :] nombre de caractères de x.
 \end{description}
-\end{multicols} 
+
+\subsection{Dates et heures}
+La classe Date enregistre des dates. POSIXct enregistre date, heure et fuseau horaire. Les comparaisons (>, < \dots),seq() ence, et écart de temps (difftime()) sont utiles. On peut enlever ou ajouter des jours à un objet Date (+, -).
+\begin{description}
+\item[as.Date(x)] convertit une chaîne de caractères en date; as.Date("2009-12-31")+1 renvoie le 1er janvier 2010.
+\item[format(x)] l'inverse; on peut choisir la représentation voulue (cf. help(strftime))
+\end{description}
 
 \subsection{Graphiques et figures}
-\begin{multicols}{2}
+
 \begin{description}
-\item[x11(), windows() :] ouvre une nouvelle fenêtre graphique.
-\item[pdf() ] , png(), jpeg(), bitmap(), xfig(), pictex(), postscript():pilote graphique produisant des sorties dans des fichiers plutôt qu'à l'écran. 
-\item[dev.off() :] ferme le pilote de sortie graphique pour clore le fichier de sortie .
+\item[x11(), windows() :] ouvre une nouvelle fenêtre graphique x11 sous linux/mac, windows sur windows.
+\item[pdf()  , png(), jpeg(), bitmap(), xfig(), pictex(), postscript() ] : pilote graphique produisant des sorties dans des fichiers plutôt qu'à l'écran. pdf(file), png(file), jpeg(file), bmp(file), tiff(file) se prépare à écrire les instructions graphiques qui suivront dans le fichier file, au format désigné (pdf ou png recommandés); width= et height= fixent les dimensions
+\item[dev.off() :] ferme le pilote de sortie graphique pour clore le fichier de sortie. cf. aussi dev.cur, dev.set
 \end{description}
-\end{multicols} 
+
 \subsubsection{Commandes graphiques haut niveau}
-\begin{multicols}{2}
+
 \begin{description}
 \item[plot(x)  :] trace les valeurs contenues dans x sur l'axe des y; s'adapte à la classe de l'objet x.
-\item[plot(x, y):] graphe bivarié (x sur l'axe des x, y sur l'axe des y).
+\item[plot(x, y):] graphe bivarié (x sur l'axe des x, y sur l'axe des y) - nuage de points.
 \item[hist(x) :] histogramme des fréquences de x. 
-\item[barplot(x):] histogramme des valeurs de x. 
+\item[barplot(x):] histogramme des valeurs de x - diagramme en barre
 \item[curve(expr) :] trace la fonction définie par l'expression expr.
 \item[dotchart(x) :] si x est un tableau de données, trace les données par nuages de points groupés par ligne en ordonnées puis par colonne en abscisses.
 \item[pie(x):] graphe en camembert. 
-\item[boxplot(x) :] boîte à moustaches.
+\item[boxplot(x) :] boîte à moustaches. diagramme en boîte; la boîte et son milieu montrent les 3 quartiles; les moustaches (whisker) un intervalle de confiance de 95\% pour la médiane (s'il y a des valeurs en dehors, elles sont affichées)
 \item[interaction.plot (f1, f2, y) :] si f1 et f2 sont des facteurs, trace les moyennes de y en fonction des valeurs de f1 et f2 sur deux courbes différentes.
 \item[matplot(x,y) :] graphe bivarié traçant la première colonne de x vs. la première colonne de y, puis la deuxième colonne de x vs. la deuxième colonne de y, etc..
 \item[assocplot(x) :] graphe d'association indiquant à quelle point les colonnes et lignes du tableau de contingence x dévient de l'hypothèse d'indépendance. 
 \item[mosaicplot() :] graphe mosaïque des résidus d'un modèle loglinéaire.
+\item[mosaicplot(table(x,y))] version graphique de la table de contingence (les surfaces des carrés sont proportionnelles aux effectifs).
+\item[sunflowerplot(x, y)] comme plot(x,y) mais les points qui se superposent exactement sont représentés avec des « fleurs » (un pétale par valeur répétée)
+\item[stripchart(x, method="stack")] superpose les valeurs identiques du vecteur x; \textit{e.g.} stripchart( round( rnorm(30,sd=5)) , method="stack")
+\item[coplot(y$\sim$x | a)] nuage des points de coordonnées x, y pour chaque valeur ou intervalle de valeur de a.
+\item[image(table(x,y))] similaire mais les effectifs influencent la couleur et non la surface.
 \item[pairs(x):] trace tous les graphes bivariés possibles entre les colonnes du tableau de données x.
-\item[plot.ts(x) :] si x est de classe "ts" (time-serie), trace x en fonction du temps.
-\item[qqnorm(x) :] fractiles de x en fonction des valeurs attendues sous l'hypothèse gaussienne. 
-\item[qqplot(x, y)  :] fractiles de y en fonction des fractiles de x.
+\item[plot.ts(x) : ] si x est de classe "ts" (time-serie), trace x en fonction du temps.
+\item[ts.plot(x) : ]idem mais les séries peuvent ne pas commencer ou finir en même temps
+\item[qqnorm(x) :] fractiles de x en fonction des valeurs attendues sous l'hypothèse gaussienne. nuage des quantiles observés contre quantilesthéoriques; si x suit une loi normale, une droite; comparer qqnorm(rnorm(100)) et qqnorm(1:100)
+\item[qqplot(x, y)  :] fractiles de y en fonction des fractiles de x. De y en fonction des quantiles de x
 \item[contour(x, y, z), image(x, y, z), persp(x, y, z):] variantes pour tracer les données de la matrice z en fonction des vecteurs x et y.
 \item[symbols(x, y, ...):] trace aux coordonnées spécifiées par x et y des cercles, carrés, rectangles, étoiles, boîtés àmoustaches, etc..  
-\item[termplot(mod.obj) :] trace les termes d'un modèle de régression
-en fonction des prédicteurs .
+\item[termplot(mod.obj) :] trace les termes d'un modèle de régression en fonction des prédicteurs .
 \end{description}
-\end{multicols} 
+
 \subsubsection{Paramètres récurrents des fonctions graphiques}
-\begin{multicols}{2}
+
 \begin{description}
 \item[add=FALSE :] si TRUE superpose le graphe au précédent.
 \item[axes=TRUE  :] si FALSE ne trace pas d'axes.
@@ -10554,40 +10616,40 @@ en fonction des prédicteurs .
 \item[main= :] titre du graphe en cours.
 \item[sub=  :] sous-titre du graphe en cours. 
 \end{description}
-\end{multicols} 
+
 \subsubsection{Commandes graphiques bas-niveau}
-\begin{multicols}{2}
+
 \begin{description}
-\item[points(x, y) :] ajoute des points aux coordonnées x et y.
+\item[points(x, y) :] ajoute des points aux coordonnées x et y (type= peut être utilisé).
 \item[lines(x, y) :] trace y en fonction de x.
-\item[text(x, y, labels, ...):] ajoute le texte labels aux coordonnées (x,y).
-\item[rug(x):] ajoute les occurrences des points en abscisses. 
+\item[text(x, y, labels, ...):] ajoute le texte labels aux coordonnées (x,y). plot(x, y, type="n"); text(x, y, names)
+\item[rug(x):] ajoute les occurrences des points en abscisses. ajoute près de l'axe des abscisses une petite barre pour chaque valeur de x
 \item[mtext :] (text, side=3, ...) ajoute le texte text dans la marge side.
 \item[segments(x0, y0, x1, y1) :] trace des lignes des points (x0,y0) aux points (x1,y1).
 \item[arrows(x0, y0, x1, y1) :] identique mais avec des flèches.
-\item[abline(a,b) :] trace une droite de pente b et de décalage a par rapport à l'axe des x. 
+\item[abline(a,b) :] trace une droite de pente b et de décalage a par rapport à l'axe des x.  $y = ax + b$
 \item[abline(h=y):] trace une ligne horizontale à l'ordonnée y.
 \item[abline(v=x)  :] trace une ligne verticale à l'abscisse x.
+\item[abline(lm.obj)] trace la droite de régression du modèle linéaire lm.obj
 \item[rect(x1, y1, x2, y2) :] trace un rectangle défini par x1, x2, y1 et y2.
 \item[polygon(x, y) :] trace un polygone en liant les points de coordonnées définies dans les vecteurs x et y.
-\item[legend(x, y, legend) :] ajoute une légende au point (x,y)
-spécifié par legend.
+\item[legend(x, y, legend) :] ajoute une légende au point (x,y) spécifié par legend.
 \item[title() :] ajoute un titre et éventuellement un sous-titre.
-\item[axis(side) :] fonction de bas niveau pour gérer les axes de la figure. 
+\item[axis(side) :] fonction de bas niveau pour gérer les axes de la figure.  ajoute un axe en bas (side=1), à gauche (2), en haut (3) ou à droite (4); optionnels: at= pour les coordonnées des graduation, labels= pour leur texte
 \item[box() :] trace un cadre autour de la figure courante. 
+\item[locator(n)] renvoie les coordonnées des clics de la souris après n clics sur le graphique
 \end{description}
-\end{multicols} 
+
 \subsubsection{Paramètres graphiques de bas de niveau}
 \textit{Ces paramètres sont définis à l'aide de la commande par(...)
 ou directement par passage à la fonction graphique d'appel}
-\begin{multicols}{2}
 \begin{description}
+\item[par(...)] définit les paramètres suivants pour les graphiques à venir, e.g. par(cex=2); nombre de ces paramètres peuvent aussi être utilisés directement avec une commande graphique de haut ou bas niveau, \textit{e.g.} plot(x, cex=2) ; liste complète avec help(par)
 \item[adj :] contrôle la justification du texte.
 \item[bg :] spécifie la couleur de fond.
 \item[bty :] contrôle le type de cadre tracé autour de la figure.
 \item[cex :] contrôle la taille du texte et des symboles.
-\item[col :] contrôle la couleur des symboles et des courbes (entier ou
-chaîne de caractères). 
+\item[col :] contrôle la couleur des symboles et des courbes (entier ou chaîne de caractères). pour créer des vecteurs de 5 couleurs, faire suivre col= de gray(0:5/5), rainbow(5) ou terrain.colors(5)
 \item[font :] un entier contrôlant le style de la police.
 \item[las :] un entier contrôlant l'orientation des annotations des axes.
 \item[lty :] contrôle le type de ligne (entier ou chaîne de caractère).
@@ -10596,18 +10658,99 @@ chaîne de caractères).
 \item[mfc :] un vecteur de la forme c(nr,nc) qui partitionne la fenêtre graphique en nr lignes et nc colonnes, les graphes étant tracés par colonne.
 \item[mfrow  :] identique mais les graphes sont tracés par ligne.
 \item[pch :] contrôle le type de symbole.
-\begin{figure}[H]\begin{center}\includegraphics[scale=0.4]{ilu/pch.png}\end{center}\end{figure}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.7]{ilu/pch.png}\end{center}\end{figure}
 \item[ps:] un entier contrôlant la taille du texte et des symboles.
 \end{description}
-\end{multicols} 
+
+\subsubsection{Groupes de graphiques conditionnels}
+Pour accéder à ces fonctions, il faut faire avant \textit{library(lattice)}\newline
+La formule $y\sim x$ trace $y$ en fonction de $x$. On peut faire un graphique $y\sim x$ par sous groupe de données en indiquant l'appartenance à tel ou tel groupe par le vecteur $g1$ : $y \sim x | g1$;\newline
+pour toutes les combinaisons des séries de groupes $g1$ et $g2$: $y\sim x | g1*g2$
+\begin{description}
+\item[xyplot(y$\sim$x) :] nuages de points
+\item[barchart(y$\sim$x) :] diagrammes en barre
+\item[histogram($\sim$x) :] histogrammes
+\item[bwplot(y$\sim$x) :] boîtes à moustache
+\item[stripplot(y$\sim$x) :] graphique à une dimension, x doit être un nombre, y peut être un facteur
+\end{description}
+
+\subsection{Statistiques}
+\subsubsection{Distributions}
+\textit{Toutes les fonctions suivantes peuvent s'utiliser en remplaçant la lettre $r$ avec $d$, $p$ ou $q$ pour obtenir, respectivement, un tirage de $n$ réalisations d'une variable aléatoire, la densité de probabilité, la fonction de répartition, et la valeur des fractiles.}
+\begin{description}
+\item[rnorm(n, mean=0, sd=1) :] gaussienne.
+\item[rexp(n, rate=1):] exponentielle.
+\item[rgamma(n, shape, scale=1) :] Gamma.  
+\item[rpois(n, lambda) :] Poisson.
+\item[rweibull(n, shape, scale=1):] Weibull.
+\item[rcauchy(n, location=0, scale=1) :] Cauchy.
+\item[rbeta(n, shape1, shape2) :] Beta. 
+\item[rt(n, df) :] Student.
+\item[rf(n, df1, df2)  :] Fisher-Snedecor ($F$).
+\item[rchisq(n, df) :] Pearson $(\chi^{2})$.
+\item[rbinom(n, size, prob) :] binomiale. 
+\item[rgeom(n, prob) :] geometrique.
+\item[rhyper(nn, m, n, k) :] hypergeometrique.
+\item[rlogis(n, location=0, scale=1) :] logistique.
+\item[rlnorm(n, meanlog=0, sdlog=1)  :] lognormale. 
+\item[rnbinom(n, size, prob) :] binomiale negative.
+\item[runif(n, min=0, max=1) :] uniforme.
+\item[rwilcox(nn, m, n), rsignrank(nn, n) :] Statistique de Wilcoxon.
+\end{description}
+
+\subsubsection{Modèles}
+\textit{Toutes les fonctions suivantes peuvent s'utiliser en remplaçant la lettre $r$ avec $d$, $p$ ou $q$ pour obtenir, respectivement, un tirage de $n$ réalisations d'une variable aléatoire, la densité de probabilité, la fonction de répartition, et la valeur des fractiles.}
+\begin{description}
+\item[density(x) :] estimateur à noyaux de la densité de x.
+\item[lm(formula) :] ajuste un modèle linéaire; formula est typiquement
+de la forme response $\sim termA + termB + \dots$. formula=$y\sim a+b$ estime le modèle $y=ax+by+c$ (mettre - 1 dans la formule pour enlever la constante c); summary(lm(...)) donne des informations utiles
+\item[glm(formula,family=):] ajuste un modèle linéaire généralisé. \textit{e.g.} family= binomial(link = "logit") pour un modèle logit (cf. ?family). Après la formule, on peut en général préciser le nom du data.frame (data=) et le sous-ensemble de données (subset=suivi d'un vecteur de valeurs logiques)
+\item[nls(formula) :] estimateur non-linéaire des moindres carrés
+des paramètres d'unmodèle non-linéaire. 
+\end{description}
+\textit{Les fonctions ci-dessus renvoient un objet modèle dont l'ajustement dépend de la méthode utilisée. Certains des attributs de cet objet sont évalués à l'aide des commandes suivantes.} 
+\begin{description}
+\item[aov, anova :] fonction d'analyse de la variance.
+\item[df.residual(fit) :] renvoie le nombre de degrés de liberté résiduels de fit.
+\item[coef(fit):] renvoie les coefficients estimés de fit.
+\item[residuals(fit) :] renvoie les résidus du modèle fit.  
+\item[predict(fit, \dots) :] prédiction à partir d'un modèle ajusté fit. Calcule également les intervalles de confiance et de prédiction.
+\item[fitted(fit):] retourne les valeurs prédites par le modèle.
+\item[logLik(fit):] calcule la log-vraisemblance du modèle et le nombre de paramètres.
+\item[AIC(fit)  :] calcule le critère AIC (Akaike information criterion). 
+\end{description}
+\textit{Quelques fonctions liées au modèle linéaire.}
+\begin{description}
+\item[step :] régression stepwise sur critère AIC/BIC.
+\item[regsubsets :] du package leaps, régression exhaustive.
+\item[rstandard(fit), rstudent(fit):] résidus standardisé ou studentisé associés à un modèle.
+\item[cooks.distance(fit):] calcul de la distance de cook. 
+\item[lm.influence(fit)  :] diverse fonctions d'influence.
+\end{description}
+\subsubsection{Tests}
+\textit{Toutes les fonctions suivantes peuvent s'utiliser en remplaçant la lettre $r$ avec $d$, $p$ ou $q$ pour obtenir, respectivement, un tirage de $n$ réalisations d'une variable aléatoire, la densité de probabilité, la fonction de répartition, et la valeur des fractiles.}
+\begin{description}
+\item[t.test(x,y=) :] test de Student pour une ou deux population.
+\item[pairwise.t.test:] test de Student apparié.
+\item[power.t.test:] calculs de puissance associée à un test de Student. 
+\item[chisq.test:] test du $\chi^{2}$ de contingence ou d'adéquation.
+\item[var.test :] test de Fisher d'égalité des variance.
+\item[fisher.test:] test exact de Fisher d'indépendance.
+\item[ks.test :] test de Kolmogorov-Smirnov d'adéquation, une ou deux populations.  
+\item[shapiro.test :] test de normalité de Shapiro-Wilk.
+\item[binom.test  :] test du paramètre d'une loi binomiale.
+\item[prop.test:]  test d'égalité de proportion.
+\end{description}
+\textit{Utiliser help.search("test") pour voir l'ensemble des tests statistiques disponibles}  
+
 \subsection{Optimisation}
-\begin{multicols}{2}
+
 \begin{description}
 \item[optimize(fn,interval) :] méthode d'optimisation pour les fonctions unidimensionnelles. 
 \item[optim(par, fn) :] méthode d'optimisation générique minimisant la fonction fn en partant de la valeur par des coefficients.
 \item[nlm(f,p) :] minimise la fonction f à l'aide d'un algorithme type 
 \item[approx(x,y=) :] interpolation linéaire.
-\item[spline(x,y=) :]  interpolation par splines\footnote{
+\item[spline(x,y=) :]  interpolation par splines \footnote{
 Une \textbf{courbe spline} est une fonction polynomiale par morceaux définie sur un intervalle $[a,b]$ divisé en sous intervalles $[t_{i-1}, t_i] $ tels que :
 $$a = t_{0} < t_{1} < \cdots < t_{k-1} < t_k = b $$
 on la note donc $S: [a,b]\to \mathbb{R}$.\newline
@@ -10643,102 +10786,43 @@ Ces 4 contraintes par intervalle vont nous permettre d'interpoler des courbes sp
 \end{itemize}
 } cubiques.
 \end{description}
-\end{multicols} 
 
 
-\subsection{Statistiques}
-\subsubsection{Distributions}
-\textit{Toutes les fonctions suivantes peuvent s'utiliser en remplaçant la lettre $r$ avec $d$, $p$ ou $q$ pour obtenir, respectivement, un tirage de $n$ réalisations d'une variable aléatoire, la densité de probabilité, la fonction de répartition, et la valeur des fractiles.}
-\begin{multicols}{2}
+
+
+\subsection{Programmation}
+Fonctions permettant d'enchaîner des opérations de manière structurée. Pour avoir de l'aide sur ces fonctions, saisir leur nom entre guillemets; \textit{e.g.} help("if").
+
+\begin{center}
+\textcolor{red}{\textbf{function(}} \textcolor{blue}{\textit{arglist}} \textcolor{red}{\textbf{)}} \textcolor{red}{\textbf{\{}}\textcolor{purple}{\textit{expr}}\textcolor{red}{\textbf{\}}}
+\end{center}
+\begin{itemize}
+\item \textcolor{blue}{arglist} est une liste d'arguments, 
+\item \textcolor{purple}{expr} est une expression exécutée;
+\end{itemize}
+\textit{e.g.} : \textbf{mafonction} <-function( a, b ) {a+2*b}; \textbf{mafonction(1,2)} renvoie 5.
+
 \begin{description}
-\item[rnorm(n, mean=0, sd=1) :] gaussienne.
-\item[rexp(n, rate=1):] exponentielle.
-\item[rgamma(n, shape, scale=1) :] Gamma.  
-\item[rpois(n, lambda) :] Poisson.
-\item[rweibull(n, shape, scale=1):] Weibull.
-\item[rcauchy(n, location=0, scale=1) :] Cauchy.
-\item[rbeta(n, shape1, shape2) :] Beta. 
-\item[rt(n, df) :] Student.
-\item[rf(n, df1, df2)  :] Fisher?Snedecor ($F$).
-\item[rchisq(n, df) :] Pearson $(\chi^{2})$.
-\item[rbinom(n, size, prob) :] binomiale. 
-\item[rgeom(n, prob) :] geometrique.
-\item[rhyper(nn, m, n, k) :] hypergeometrique.
-\item[rlogis(n, location=0, scale=1) :] logistique.
-\item[rlnorm(n, meanlog=0, sdlog=1)  :] lognormale. 
-\item[rnbinom(n, size, prob) :] binomiale negative.
-\item[runif(n, min=0, max=1) :] uniforme.
-\item[rwilcox(nn, m, n), rsignrank(nn, n) :] Statistique de Wilcoxon.
+\item[return(value)] mis dans expr lors d'une définition de fonction, indique que la fonction doit renvoyer ce résultat(si return est absent, la fonction renvoie la dernière valeur calculée dans expr)
+
+\item[if(cond) \{expr\}] si cond est vrai (TRUE), évaluer expr
+
+\item[== != < > <= >=] opérateurs de comparaison, dans l'ordre: égal, différent, inférieur, supérieur, inférieur ou égal, supérieur ou égal; \textit{e.g.} 1==1 vaut TRUE ou T; 1!=1 vaut FALSE ou F; dans les opérations avec des nombres, T est converti en 1 et F en 0 (T-1==0 est vrai)
+
+\item[if(cond) \{cons.expr\} else \{alt.expr\}] si cond est vrai évaluer cons.expr sinon évaluer alt.expr
+
+\item[for(var in seq) \{expr\}] exécute l'expression pour chaque valeur de var prises dans une sequence
+
+\item[while(cond) \{expr\}] exécute l'expression tant que la condition est vraie
+
+\item[repeat \{expr\}] répète expr en boucle; penser à l'arrêter avec if(...) \{break\} (ou avec les touches Ctrl+C)
+
+\item[break] arrête une boucle for, while ou repeat
+
+\item[next] arrête l'itération en cours et reprend la boucle (dans le cas de for, avec la valeur suivante de la sequence)
+
+\item[ifelse(test, yes, no)] pour chaque ligne/cellule de test, renvoie la valeur yes si le test
 \end{description}
-\end{multicols} 
-
-\subsubsection{Modèles}
-\textit{Toutes les fonctions suivantes peuvent s'utiliser en remplaçant la lettre $r$ avec $d$, $p$ ou $q$ pour obtenir, respectivement, un tirage de $n$ réalisations d'une variable aléatoire, la densité de probabilité, la fonction de répartition, et la valeur des fractiles.}
-\begin{multicols}{2}
-\begin{description}
-\item[density(x) :] estimateur à noyaux de la densité de x.
-\item[lm(formula) :] ajuste un modèle linéaire; formula est typiquement
-de la forme response $\sim termA + termB + \dots$
-\item[glm(formula,family=):] ajuste un modèle linéaire généralisé.
-\item[nls(formula) :] estimateur non-linéaire des moindres carrés
-des paramètres d'unmodèle non-linéaire. 
-\end{description}
-\end{multicols} 
-\textit{Les fonctions ci-dessus renvoient un objet modèle dont l'ajustement dépend de la méthode utilisée. Certains des attributs de cet objet sont évalués à l'aide des commandes suivantes.} 
- \begin{multicols}{2}
-\begin{description}
-\item[aov, anova :] fonction d'analyse de la variance.
-\item[df.residual(fit) :] renvoie le nombre de degrés de liberté résiduels de fit.
-\item[coef(fit):] renvoie les coefficients estimés de fit.
-\item[residuals(fit) :] renvoie les résidus.  
-\item[predict(fit, \dots) :] prédiction à partir d'un modèle ajusté. Calcule également les intervalles de confiance et de prédiction.
-\item[fitted(fit):] renvoie les valeurs ajustées.
-\item[logLik(fit):] calcule la log-vraisemblance du modèle et le nombre de paramètres.
-\item[AIC(fit)  :] calcule le critère AIC (Akaike information criterion). 
-\end{description}
-\end{multicols} 
-\textit{Quelques fonctions liées au modèle linéaire.}
-\begin{multicols}{2}
-\begin{description}
-\item[step :] régression stepwise sur critère AIC/BIC.
-\item[regsubsets :] du package leaps, régression exhaustive.
-\item[rstandard(fit), rstudent(fit):] résidus standardisé ou studentisé associés à un modèle.
-\item[cooks.distance(fit):] calcul de la distance de cook. 
-\item[lm.influence(fit)  :] diverse fonctions d'influence.
-\end{description}
-\end{multicols} 
-\subsubsection{Tests}
-\textit{Toutes les fonctions suivantes peuvent s'utiliser en remplaçant la lettre $r$ avec $d$, $p$ ou $q$ pour obtenir, respectivement, un tirage de $n$ réalisations d'une variable aléatoire, la densité de probabilité, la fonction de répartition, et la valeur des fractiles.}
-\begin{multicols}{2}
-\begin{description}
-\item[t.test(x,y=) :] test de Student pour une ou deux population.
-\item[pairwise.t.test:] test de Student apparié.
-\item[power.t.test:] calculs de puissance associée à un test de Student. 
-\item[chisq.test:] test du $\chi^{2}$ de contingence ou d'adéquation.
-\item[var.test :] test de Fisher d'égalité des variance.
-\item[fisher.test:] test exact de Fisher d'indépendance.
-\item[ks.test :] test de Kolmogorov-Smirnov d'adéquation, une ou deux populations.  
-\item[shapiro.test :] test de normalité de Shapiro-Wilk.
-\item[binom.test  :] test du paramètre d'une loi binomiale.
-\item[prop.test:]  test d'égalité de proportion.
-\end{description}
-\end{multicols} 
-\textit{Utiliser help.search("test") pour voir l'ensemble des tests statistiques disponibles}  
-
-
-
-
-
-
-
-\section{AIDE MÉMOIRE R}
-\textbf{Référence des fonctions de R les plus courantes} - \textit{Mayeul KAUFFMANN - Mars 2009}
-
-
-
-
-
-
 
 
 
