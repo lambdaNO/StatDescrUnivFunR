@@ -1,0 +1,21 @@
+\begin{description}
+\item[return(value)] mis dans expr lors d'une définition de fonction, indique que la fonction doit renvoyer ce résultat(si return est absent, la fonction renvoie la dernière valeur calculée dans expr)
+
+\item[if(cond) \{expr\}] si cond est vrai (TRUE), évaluer expr
+
+\item[== != < > <= >=] opérateurs de comparaison, dans l'ordre: égal, différent, inférieur, supérieur, inférieur ou égal, supérieur ou égal; \textit{e.g.} 1==1 vaut TRUE ou T; 1!=1 vaut FALSE ou F; dans les opérations avec des nombres, T est converti en 1 et F en 0 (T-1==0 est vrai)
+
+\item[if(cond) \{cons.expr\} else \{alt.expr\}] si cond est vrai évaluer cons.expr sinon évaluer alt.expr
+
+\item[for(var in seq) \{expr\}] exécute l'expression pour chaque valeur de var prises dans une sequence
+
+\item[while(cond) \{expr\}] exécute l'expression tant que la condition est vraie
+
+\item[repeat \{expr\}] répète expr en boucle; penser à l'arrêter avec if(...) \{break\} (ou avec les touches Ctrl+C)
+
+\item[break] arrête une boucle for, while ou repeat
+
+\item[next] arrête l'itération en cours et reprend la boucle (dans le cas de for, avec la valeur suivante de la sequence)
+
+\item[ifelse(test, yes, no)] pour chaque ligne/cellule de test, renvoie la valeur yes si le test
+\end{description}
