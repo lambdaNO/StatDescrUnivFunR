@@ -1,0 +1,745 @@
+\chapter{Comment créer des fonctions dans le langage R}
+Département de sciences biologiques, Université de Montréal.\newline
+\\
+\textbf{Auteurs : }
+\begin{itemize}
+	\item Guillaume Blanchet (Mai 2005, Février 2006)
+	\item Marie-Hélène Ouellette (Novembre 2005)
+	\item Modifié par Sébastien Durand - 11/08/2006
+\end{itemize}
+\paragraph*{Qu'est-ce qu'une fonction dans le langage R ?}
+Avant tout, une fonction est un objet R, au même titre qu'un vecteur, une matrice, un tableau de données ou une liste. Une fonction est une série de commandes qui effectuent une tâche prédéfinie.\newline
+L'avantage de travailler avec des fonctions, est qu'une fois qu'elles sont écrites, elles permettent d'effectuer rapidement des tâches répétitives, et ce, sur différents jeux de données.
+\paragraph*{La représentation graphique du fonctionnement d'une fonction}
+Une fonction peut être vue comme une \textit{machine} faite de code. Cette \textit{machine} prend des informations sous forme \textbf{d'arguments} et en extrait des \textit{résultats}.
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.5]{ilu/foncR.png}\end{center}\end{figure}
+\paragraph*{Les notions de base pour créer une fonction}
+Une fonction se doit d'avoir 4 éléments :
+\begin{itemize}
+	\item Un \textbf{nom évocateur} pour vous (le nom est à votre discrétion !!).
+	\item La fonction \textbf{function} dans son en-tête, afin d'indiquer à R que l'objet que vous créez est
+une fonction.
+	\item Un ou plusieurs \textbf{arguments}\newline
+Les arguments contiennent les informations qui seront traitées par la fonction. Un argument peut être un vecteur, une matrice, un \textit{data.frame} ou bien une liste.
+	\item Un \textit{script} qui effectue les tâches que la fonction va accomplir.\newline
+Ces informations se transmettent à l'ordinateur sous forme de commandes et de code de programmation.
+\end{itemize}
+\paragraph*{La description de la structure d'une fonction}
+Voici un exemple simple de fonction en R :
+\begin{lstlisting}[language=html]
+Salut <- function( x )
+{
+  # La fonction "cat" imprime dans la console
+  # "\n" provoque un retour de chariot
+  cat("Bonjour", x, "\n")
+}
+> Salut("Mehdi")
+Bonjour Mehdi 
+\end{lstlisting}
+\begin{itemize}
+	\item À la Ligne 1, nous avons l'en-tête de la fonction . L'utilisation du mot \textit{function} indique à R que nous créons \textbf{un nouvel objet}, qui dans le cas présent est une \textbf{fonction nommée  Salut }. Les arguments qui seront utilisés par la fonction doivent être nommés et mis entre les parenthèses de l'en-tête. L'utilité de ces \textit{arguments} est simplement de passer des données à la fonction. Donc dans le cas présent,  \textit{x} est l'argument qu'utilise la fonction \textit{Salut}.\newline
+	Je suppose que vous avez remarqué le symbole d'attribution \textit{<-} dans l'en-tête. L'en-tête peut se lire comme suit : \textit{Salut} devient une fonction ayant comme seul argument \textit{x}.
+	\item À la Ligne 2, une \textbf{accolade est ouverte}. Cette accolade définit le début du \textbf{script}. Une fonction normalement constituée ne travaille directement que sur ses arguments et non sur les objets stockés dans la console. L'utilité des \textbf{arguments} est de passer au script les objets que nous avons stockés dans notre console et que l'on souhaite voir traités par la fonction. Ces arguments peuvent être de n'importe quel type à condition qu'ils soient définis dans l'en-tête de la fonction. \textbf{En somme, c'est simple ! Tous les objets qui seront utilisés dans le script doivent avoir été créés dans le script}. Les seules exceptions à cette règle sont les arguments qui eux sont définis dans l'en-tête.
+	\item À la Ligne 3 et Ligne 4, le symbole \textit{\#} est utilisé en début de ligne, il transforme les lignes en commentaires. Lorsque la fonction sera exécutée, R ignorera simplement ces lignes.
+	\item À la Ligne 5, la fonction \textit{cat} est utilisée afin d'imprimer à l'écran l'élément ou les éléments contenus dans l'argument \textit{x}.
+	\item À la Ligne 6, nous fermons le script en \textit{fermant} l'accolade et terminons ainsi la fonction.
+\end{itemize}
+\paragraph*{Utiliser une fonction copiée dans la console R\footnote{Il se peut que certaines fonctions R soient trop longues pour qu'on les copie-colle directement dans la console.Vous obtenez alors un grand message d'erreur en rouge. Pour remédier à la situation, référez-vous à la section Deuxième
+étape : Mettre en mémoire « sourcer » votre fonction de la page 7!}}
+Voici une façon simple de tester et d'utiliser des fonctions que vous créez. Copiez et collez la fonction \textit{Salut()} dans la console et tapez la commande d'appel qui suit :
+
+\begin{lstlisting}[language=html]
+> Salut( "Marie-Hélène et Corinne" )
+Bonjour Marie-Hélène et Corinne 
+\end{lstlisting}
+
+Avec une fonction un peu plus complexe, voyons ce que nous pouvons faire.
+
+\begin{lstlisting}[language=html]
+Additionne <- function( a, b )
+{
+  # On additionne les valeurs a et b
+  c <- a + b
+  # Imprime le résultat de l'addition
+  cat( c , "\n")
+}
+\end{lstlisting}
+Les arguments de la fonction sont \textit{a} et \textit{b}. Notez que nous décrivons à l'aide de commentaires, la nature et l'utilité des commandes qu'utilise la fonction \textit{Additionne}.\newline
+\\
+Copiez maintenant la nouvelle fonction \textit{Additionne} dans la console et tapez les commandes suivantes :
+\begin{lstlisting}[language=html]
+> Obj1 <- 5
+> Obj2 <- 2
+> Additionne( a = Obj1, b = Obj2 )
+7 
+> Additionne(Obj1, Obj2)
+7 
+> Additionne(5, 2)
+7 
+\end{lstlisting}
+
+\paragraph*{Comment retourner les résultats d'une fonction}
+Toutes les commandes que vous utilisez et inscrivez dans la console R peuvent être intégrées dans le script d'une fonction. Voyons ici une fonction un peu plus complexe qui effectue des tâches mathématiques et renvoie une valeur :
+\begin{lstlisting}[language=html]
+NbPneu <- function(voiture=0, bicyclette=0, monocycle=0, tricycle=0)
+{
+  # Dans cette fonction, nous calculons le nombre total de pneus
+  A <- voiture * 4
+  # Le Nb de pneus de voiture
+  B <- tricycle * 3
+  # Le Nb de pneus de tricycle
+  C <- bicyclette * 2
+  # Le Nb de pneus de bicyclette
+  D <- monocycle * 1
+  # Le Nb de pneus de monocycle
+  NbPneuTotal <- A + B + C + D
+  # Retourne le nombre total de pneus
+  return( NbPneuTotal )
+}
+\end{lstlisting}
+Notez ici qu'afin de retourner la valeur stockée dans « NbPneuTotal », la fonction « return( ) » est utilisée. \textbf{Cette fonction est nécessaire}. Sans elle, il n'y aurait aucune valeur retournée à la console R. Le fait de retourner une valeur nous permet de stocker en mémoire, ou simplement d'afficher le résultat de la fonction \textit{NbPneu()}. De plus, remarquez que dans l'en-tête chacun des arguments a une valeur par défaut de \textit{0} ». Advenant le cas où la fonction serait utilisée sans l'un de ses arguments, l'argument en question prendrait par défaut la valeur de zéro.\newline
+Ainsi, \textit{Si, dans votre garage vous avez 4 voitures, 12 tricycles, 5 bicyclettes, et 0 monocycle, combien de pneus avez-vous ?} Copiez la fonction dans la console et exécutez la fonction « NbPneu » en respectant l'ordre des arguments de la fonction.
+\begin{lstlisting}[language=html]
+> NbPneu(voiture=4, bicyclette=12, monocycle=5, tricycle=0)
+[1] 45
+\end{lstlisting}
+Notez que si vous n'utilisez pas les noms des arguments avant d'inscrire les valeurs ou les objets passés à la fonction, l'ordre des arguments est crucial.
+\begin{lstlisting}[language=html]
+> NbPneu( voiture=2, bicyclette=0, monocycle=0, tricycle=1 ) # Vous obtenez 11
+[1] 11
+> NbPneu( 2, 0, 0, 1 ) # Vous obtenez 11
+[1] 11
+> NbPneu( voiture=2, tricycle=1 ) # Vous obtenez 11
+[1] 11
+> NbPneu( 2, 1 ) # Oups? le résultat n'est plus le même! (car c'est une bicyclette et non plus un tricycle).
+[1] 10
+\end{lstlisting}
+\textbf{Voilà pourquoi nous vous suggérons d'inscrire le nom des arguments que vous utilisez lorsque vous appelez des fonctions.}
+\paragraph*{Créer une fonction permettant de calculer le coefficient de variation}
+Formule du coefficient de variation :
+$$\textrm{CV} = \frac{100\times s_{x}}{\bar{x}}$$
+Code d'une fonction calculant le coefficient de variation (avec commentaires bien sûr) :
+\begin{lstlisting}[language=html]
+CoefVar <- function( datum )
+{
+# Fonction permettant de calculer le coefficient de variation
+# Applicable seulement pour des données ayant un véritable zéro
+# Calcul de l'écart type
+EcartType <- sd(datum)
+# Calcul de la moyenne
+Moyenne <- mean(datum)
+# Calcul du coefficient de variation
+CV <- 100 * EcartType / Moyenne
+# Retourne le résultat
+return(CV)
+}
+\end{lstlisting}
+Lorsque vous pensez que votre fonction est sans erreur, enregistrez votre fichier de travail, copiez la fonction dans la console et testez-la.
+\begin{lstlisting}[language=html]
+> TestData <- c( 1, 2, 3, 4, 5 )
+> CoefVar( datum = TestData )
+[1] 52.70463
+\end{lstlisting}
+\paragraph*{Méthodes de travail}
+\subparagraph*{Comment ça marche}
+Lors de la construction d'une fonction, plusieurs fichiers doivent être ouverts. Il est important que chacun soit utilisé de la bonne façon. Voici une méthode de travail pour vous aider à mieux structurer le tout.
+\begin{itemize}
+	\item \textbf{Fichier de la fonction :} Fichier contenant seulement le code de la fonction (\textit{.R})
+	\item \textit{Fichier de données :} Fichier contenant seulement la série de données utilisée avec la fonction (\textit{.txt})
+	\item \textbf{Guide :} Fichier contenant seulement les commandes et les commentaires. Ce fichier contient les lignes d'appel de R. Vous recopierez ce fichier dans R pour obtenir la console R finale. (\textit{.R et .txt})
+\end{itemize}
+Et c'est parti : 
+\subparagraph*{Première étape : Créer un fichier pour votre fonction}
+Créez un nouveau fichier à l'intérieur duquel vous écrirez votre fonction. Prenez le soin de sauvegarder immédiatement votre document. Utilisez le nom de votre fonction comme nom de
+fichier. Dans notre cas, le nom de la fonction que créons est \textit{CentrageReduction}, donc le nom du fichier de la fonction est \textit{CentrageReduction.R}. L'extension \textit{.R} permet au langage R de savoir que le fichier contient des commandes R. Inscrivez ce qui suit dans un fichier et sauvez-le dans votre dossier de travail sous le nom \textit{CentrageReduction.R}.
+\begin{lstlisting}[language=html]
+## On est dans CentrageReduction.R
+setwd("~/Desktop/DIVERS_TEMPLATES/StatDesR/TP")
+CentrageReduction <- function( )
+{
+  ### Le code sera ici 
+}
+\end{lstlisting}
+\subparagraph*{Deuxième étape : Mettre en mémoire « sourcer » votre fonction}
+Dans la console R, nous allons utiliser la commande \textit{source()}. Sourcer une fonction dans le langage R permet d'enregistrer le code de la fonction pour pouvoir l'utiliser. Pour ce faire, allez dans \textit{Fichier -> Sourcer du code R\dots} et choisissez votre fonction. Vous pouvez aussi simplement taper dans la console :
+\begin{lstlisting}[language=html]
+## On est dans CentrageReduction.R
+> CentrageReduction <- function( )
+{
+  ### Le code sera ici 
+}
+> source("CentrageReduction.R")
+> CentrageReduction()
+NULL
+\end{lstlisting}
+Vous obtiendrez : \textit{NULL}, ne vous inquiétez pas, tout fonctionne.
+\subparagraph*{Troisième étape : Tester, modifier, sauver et re-sourcer la fonction de façon efficace}
+Nous voulons que cette fonction traite un vecteur, le nom de l'argument qu'utilisera la fonction est à votre discrétion, mais ici nous utilisons \textit{x}. Nous ajoutons aussi dans le script une commande qui retournera le résultat de notre fonction. Dans le cas présent nous retournons directement l'argument
+\textit{x}. N'oubliez pas de sauver votre fichier de fonction après chaque édition, sinon les changements ne seront pas considérés lorsque vous sourcerez votre fonction.
+\begin{lstlisting}[language=html]
+## On est dans CentrageReduction.R
+> setwd("~/Desktop/DIVERS_TEMPLATES/StatDesR/TP")
+> CentrageReduction <- function(x)
+{
+  ### Le code sera ici 
+  return(x)
+}
+> source("CentrageReduction.R")
+> CentrageReduction("Roger")
+[1] "Roger"
+\end{lstlisting}
+Maintenant que nous avons modifié notre fonction, sauvez votre fichier \textit{CentrageReduction.R} et tapez ceci dans la console R. Notez que la dernière ligne de commande charge et exécute la fonction.
+\begin{lstlisting}[language=html]
+## On est dans CentrageReduction.R
+> vec <- c(1, 2, 3, 4, 5) # Crée un vecteur de données
+> source("CentrageReduction.R")
+> CentrageReduction( x = vec )
+[1] 1 2 3 4 5
+\end{lstlisting}
+Si tout fonctionne, vous obtiendrez :
+\begin{lstlisting}[language=html]
+[1] 1 2 3 4 5
+\end{lstlisting}
+Ajoutons maintenant des commandes à l'intérieur de la fonction.
+\begin{lstlisting}[language=html]
+## On est dans CentrageReduction.R
+CentrageReduction <- function( x )
+{
+# Soustrait la moyenne au vecteur x
+xCentre <- x - mean( x )
+return( xCentre )
+}
+\end{lstlisting}
+Sauvez le fichier. Ensuite, afin de charger et de tester efficacement la fonction que l'on vient d'éditer, sélectionnez la console R et appuyez sur la flèche du haut afin de rappeler la dernière commande exécutée dans la console R. Il ne vous reste plus qu'à appuyer sur \textit{Enter}, et voilà, le tour est joué, la fonction évolue au rythme où vous la testez.
+\begin{lstlisting}[language=html]
+## On est dans CentrageReduction.R
+> source("CentrageReduction.R")
+> CentrageReduction( x = vec )
+[1] -2 -1  0  1  2
+\end{lstlisting}
+\subparagraph*{Quatrième étape : Comment trouver les erreurs et les problèmes d'exécution.}
+Le premier type d'erreur, si la fonction \textit{source("CentrageReduction.R")} vous indique une erreur, il se peut que vous ayez introduit dans la fonction des caractères incompatibles avec R.
+\begin{lstlisting}[language=html]
+## On est dans CentrageReduction.R
+CentrageReduction <- function(x)
+{
+  # Soustrait la moyenne au vecteur x
+  xCentre<- x - mean( x )
+  variance <- var( x )
+  EcartType<- variance ? ( 1/2 )
+  xCentreReduit <- xCentre / Ecart.Type
+  return( xCentreReduit )
+}
+source("CentrageReduction.R"); CentrageReduction( x = vec )
+\end{lstlisting}
+Vous obtenez l'erreur suivante :
+\begin{lstlisting}[language=html]
+Erreur dans source("CentrageReduction.R") : caractères multioctets
+incorrects dans mbcs_get_next
+\end{lstlisting}
+Dans ce cas, masquez avec le \textit{\#} toutes les commandes que vous venez d'éditer ou rajouter, sauf la première. Sauvez, et testez le fichier afin de voir si la première ligne éditée est correcte. Si « source » fonctionne, enlevez le prochain dièse. N'oubliez pas de sauver et de « sourcer » à chaque test.\newline
+L'erreur réapparaît ! Nous avons donc trouvé l'emplacement de l'erreur. Nous remplaçons le symbole erroné \textit{?} par le bon symbole \textit{\^}. Une fois l'erreur corrigée, nous pouvons donc enlever les dièses subséquents.\newline
+Advenant le cas ou n'avez aucune idée où se trouve l'erreur, nous allons utiliser la fonction \textit{print}.
+\begin{lstlisting}[language=html]
+CentrageReduction <- function( x )
+{
+# Soustrait la moyenne au vecteur x
+print(1)
+xCentre<- x - mean( x )
+print(2)
+variance <- var( x )
+print(3)
+EcartType<- variance ^ (1/2)
+print(4)
+xCentreReduit <- xCentre / Ecart.Type
+print(5)
+return( xCentreReduit )
+}
+\end{lstlisting}
+La compilation vous indique que l'erreur est apparue après le \textit{print(4)}. Effectivement, il y a un point de trop dans « Ecart.Type ». Corrigez-le et n'oubliez pas de sauver votre fichier.
+\begin{lstlisting}[language=html]
+CentrageReduction <- function( x )
+{
+  # Soustrait la moyenne au vecteur x
+  xCentre<- x - mean( x )
+  variance <- var( x )
+  EcartType<- variance^( 1/2 )
+  xCentreReduit <- xCentre / EcartType
+  return(xCentreReduit)
+}
+> source("CentrageReduction.R")
+> CentrageReduction( x = vec )
+[1] -1.2649111 -0.6324555  0.0000000  0.6324555  1.2649111
+\end{lstlisting}
+\subparagraph*{Cinquième étape : La touche finale}
+Après avoir testé votre fonction, sachez qu'il est très important d'ajouter des commentaires à votre fonction, ces commentaires vous faciliteront énormément la vie lorsque vous ouvrirez de nouveau ces documents dans un futur plus ou moins lointain.
+\begin{lstlisting}[language=html]
+CentrageReduction <- function( x )
+{
+# Cette fonction centre et réduit les données d'un vecteur
+# nommé x. Elle effectue la même tâche que la fonction «scale».
+# Soustrait la moyenne au vecteur x
+xCentre<- x - mean( x )
+# Calcule la variance
+variance <- var( x )
+# Trouve le l'écart type
+EcartType<- variance ^ (1/2)
+# Complète le centrage et la réduction des données
+xCentreReduit <- xCentre / EcartType
+# Retourne le vecteur de données centrées et réduites
+return( xCentreReduit )
+}
+> source("CentrageReduction.R")
+> CentrageReduction( x = vec )
+[1] -1.2649111 -0.6324555  0.0000000  0.6324555  1.2649111
+\end{lstlisting}
+Vous pouvez comparer vos résultats avec ceux de la fonction \textit{scale}. S'ils sont identiques et bien, vous avez réussi. \textcolor{blue}{Bravo !}
+\begin{lstlisting}[language=html]
+> # Teste la dernière version de notre fonction
+> as.vector( scale( vec ) )
+[1] -1.2649111 -0.6324555  0.0000000  0.6324555  1.2649111
+\end{lstlisting}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\chapter{WikiStat : Programmation en langage R}
+\section{Introduction}
+R est la version GNU du langage S conçu initialement aux Bell labs par John Chambers à partir de 1975 dans une syntaxe très proche du langage C. En septembre 2013, l'index \href{https://www.tiobe.com/tiobe-index//}{TIOBE} le classe en 18ème position loin derrière le C (1er) ou Java (2ème) mais devant MATLAB (19) ou SAS (21).
+\section{Structure de contrôle}
+Il est important d'intégrer que R, comme Matlab, est un langage interprété donc lent, voire très lent, losqu'il s'agit d'exécuter des boucles. Celles-ci doivent être éviter dès qu'une syntaxe, impliquant des calculs matriciels ou les commandes de type apply, peut se substituer.
+\subsection*{Structures conditionnelles}
+\begin{description}
+\item[if(condition)\{instructions\}] : est la syntaxe permettant de calculer les instructions uniquement si la condition est vraie.
+\item [if(condition)\{ A \}else\{ B \}] :  calcule les instructions A si la condition est vraie et les instructions B sinon. Dans l'exemple suivant, les deux commandes sont équivalentes :
+\begin{lstlisting}[language=html]
+if (x>0) y=x*log(x) else y=0
+y=ifelse(x>0,x*log(x),0)
+#################################
+> x = 2
+> if (x>0) y=x*log(x) else y=0
+> print(y)
+[1] 1.386294
+> y=ifelse(x>0,x*log(x),0)
+> print(y)
+[1] 1.386294
+#################################
+> x = -1
+> if (x>0) y=x*log(x) else y=0
+> print(y)
+[1] 0
+> y=ifelse(x>0,x*log(x),0)
+> print(y)
+[1] 0
+\end{lstlisting}
+\end{description}
+\subsection*{Structures itératives}
+Ces commandes définissent des boucles pour exécuter plusieurs fois une instruction ou un bloc d'instructions. Les trois types de boucle sont :
+\begin{description}
+\item [for (var in seq) \{commandes\}]
+\item [while (condition) \{commandes\}]
+\item [repeat \{commandes ; if (condition) break \}]
+\end{description}
+Dans une boucle \textit{for}, le nombre d'itérations est fixe alors qu'il peut être infini pour les boucles \textit{while} et \textit{repeat} ! La condition est évaluée avant toute exécution dans while alors que repeat exécute au moins une fois les
+commandes.
+\begin{lstlisting}[language=html]
+> for (i in 1:10) print(i)
+[1] 1
+[1] 2
+[1] 3
+[1] 4
+[1] 5
+[1] 6
+[1] 7
+[1] 8
+[1] 9
+[1] 10
+> y=z=0;
+> for (i in 1:10) {
+   x=runif(1)
+   if (x>0.5) y=y+1
+   else z=z+1 }
+> y;z
+[1] 5
+[1] 5
+> for (i in c(2,4,5,8)) print(i)
+[1] 2
+[1] 4
+[1] 5
+[1] 8
+> x = rnorm(100)
+> y = ifelse(x>0, 1, -1) # condition
+> y;i=0
+  [1]  1 -1  1 -1 -1 -1 -1  1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+ [20]  1  1 -1  1  1 -1  1  1  1 -1  1  1  1 -1  1  1 -1 -1  1
+ [39]  1 -1  1 -1  1  1 -1 -1  1 -1 -1 -1  1  1  1  1 -1  1  1
+ [58] -1  1  1  1  1 -1 -1  1  1 -1 -1 -1  1  1  1 -1 -1  1 -1
+ [77] -1  1 -1 -1  1 -1  1 -1 -1 -1 -1  1  1  1  1 -1 -1 -1  1
+ [96] -1  1  1  1 -1
+> while (i<10){
+   print(i)
+   i=i+1}
+[1] 0
+[1] 1
+[1] 2
+[1] 3
+[1] 4
+[1] 5
+[1] 6
+[1] 7
+[1] 8
+[1] 9
+\end{lstlisting}
+\subsubsection*{Questions}
+\begin{enumerate}
+  \item Que pensez-vous de : \textit{for (i in 1:length(b)) a[i]=cos(b[i])} ?\newline
+  \textcolor{blue}{Cette boucle est inutile. Il suffit de saisir \textit{a=cos(b)}.L'élément de base de R est la matrice dont le vecteur est un cas particulier.}
+  \item Obtenir l'équivalent de y et z dans la deuxième boucle for sans boucle.\newline
+  \textcolor{blue}{Une solution consiste à sommer les éléments TRUE d'un vecteur logique \textit{x=runif(10);y=sum(x>0.5);z=10-y}}
+
+  \item Dans l'enchaînement de commandes ci-dessous, supprimer d'abord la boucle for sur j puis les 2 boucles.
+\begin{lstlisting}[language=html]
+M=matrix(1:20,nr=5,nc=4)
+res=rep(0,5)
+for (i in 1:5){
+tmp=0
+for (j in 1:4) {tmp = tmp + M[i,j]}
+res[i]=tmp}
+\end{lstlisting}
+\textcolor{blue}{ Suppression de boucles
+  \begin{itemize}
+    \item Boucle for sur j : \textit{for (i in 1:5) res[i]=sum(M[i,])}
+    \item Les 2 boucles : \textit{res=apply(M,1,sum)}
+  \end{itemize}
+}
+\end{enumerate}
+\section{Fonctions}
+\subsection*{Principes}
+Il est possible sous R de construire ses propres fonctions. Il est conseillé d'écrire sa fonction dans un fichier \textit{nomfonction.R}.\newline
+\textit{source("nomfonction.R")} a pour effet de charger la fonction dans l'environnempent de travail. Il est aussi possible de définir directement la fonction par la syntaxe suivante :
+\begin{lstlisting}[language=html]
+nomfonction=function(arg1[=exp1],arg2[=exp2],...)
+{
+  bloc d'instructions
+  sortie = ...
+  return(sortie)
+}
+\end{lstlisting}
+Les accolades signalent le début et la fin du code source de la fonction, les crochets indiquent le caractère facultatif des valeurs par défaut des arguments.\newline
+L'objet sortie contient le ou les résultats retournés par la fonction, on peut en particulier utiliser une liste pour retourner plusieurs résultats.
+\subsection*{Exemples}
+Création d'une fonction élémentaire.
+\begin{lstlisting}[language=html]              
+> MaFonction=function(x){x+2}
+> ls()
+[1] "MaFonction"
+> MaFonction
+function(x){x+2}
+> MaFonction(3)
+[1] 5
+> x = MaFonction(4);x
+[1] 6
+\end{lstlisting}
+Gestion des paramètres avec une valeur par défaut.
+\begin{lstlisting}[language=html] 
+> Fonction2=function(a,b=7){a+b}
+> Fonction2(2,b=3)
+[1] 5
+> Fonction2(5)
+[1] 12
+\end{lstlisting}
+Résultats multiples dans un objet de type liste.
+\begin{lstlisting}[language=html] 
+> Calcule=function(r){
+   p=2*pi*r;s=pi*r*r;
+   list(rayon=r,perimetre=p,
+        surface=s)}
+> resultat=Calcule(3)
+> resultat$ray
+[1] 3
+> 2*pi*resultat$r==resultat$perim
+[1] TRUE
+> resultat$surface
+[1] 28.27433
+\end{lstlisting}
+\subsubsection*{Questions}
+\begin{enumerate}
+\item le recours à un objet de type \textit{list} est-il indispensable pour la fonction \textit{Calcule()} ?\newline
+\textcolor{blue}{
+  Les 3 éléments à renvoyer étant de type numérique, un vecteur peut suffire.
+}
+\item Écrire une fonction qui calcule le périmètre et la surface d'un rectangle à partir des longueurs $l_{1}$ et $l_{2}$ des deux côtés. La fonction renvoie également la longueur et la largeur du rectangle.\newline
+\textcolor{blue}{
+  Fonction rectangle() (la fonction rect() existe déjà) :
+}
+\begin{lstlisting}[language=html]
+rectangle=function(l1,l2){
+  p=(l1+l2)*2
+  s=l1*l2
+  list(largeur=min(l1,l2),longueur=max(l1,l2),
+  perimetre=p,surface=s)
+}
+> rectangle(12,5)
+$largeur
+[1] 5
+
+$longueur
+[1] 12
+
+$perimetre
+[1] 34
+
+$surface
+[1] 60
+
+> rectangle(12,5)$largeur
+[1] 5
+> rectangle(12,5)$longueur
+[1] 12
+> rectangle(12,5)$perimetre
+[1] 34
+> rectangle(12,5)$surface
+[1] 60
+\end{lstlisting}
+
+
+\item Écrire une fonction qui calcule les n premiers termes de la suite de Fibonacci ($u_{1} = 0$; $u_{2} = 1$; $\forall n > 2$; $u_{n} = u_{n-1} + u_{n-2}$)\newline
+Utiliser cette fonction pour calculer le rapport entre 2 termes consécutifs. Représenter ce rapport en fonction du nombre de termes pour $n = 20$.Que constatez-vous ? Avez-vous lu Da Vinci Code ?\newline
+\\
+\textcolor{blue}{
+  Utilisation de la fonction : rectangle(4,6) ; res=rectangle(8,7) pour calculer les n premiers termes de la suite de Fibonacci :
+}
+\begin{lstlisting}[language=html]
+> fibo=function(n){
+   res=rep(0,n);res[1]=0;res[2]=1
+   for (i in 3:n) res[i]=res[i-1]+res[i-2]
+   res}
+> res=fibo(20)
+> res
+ [1]    0    1    1    2    3    5    8   13   21   34   55
+[12]   89  144  233  377  610  987 1597 2584 4181
+> ratio=res[2:20]/res[1:19]
+> ratio
+ [1]      Inf 1.000000 2.000000 1.500000 1.666667 1.600000
+ [7] 1.625000 1.615385 1.619048 1.617647 1.618182 1.617978
+[13] 1.618056 1.618026 1.618037 1.618033 1.618034 1.618034
+[19] 1.618034
+> plot(1:19,ratio,type="b")
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.5]{ilu/fiboFonc.png}\end{center}\end{figure}
+Le rapport tend vers le nombre d'or : 
+$$ \frac{1 + \sqrt{5}}{2} \approx 1.618034$$ 
+\item Écrire une fonction qui supprime les lignes d'un data.frame ou d'une matrice présentant au moins une valeur manquante.\newline
+\textcolor{blue}{
+  Une façon, parmi beaucoup d'autres, de répondre à la question consiste à créer une fonction \textit{ligne.NA} qui repère s'il y a au moins une valeur manquante dans un vecteur. Cette fonction filtre les lignes en question.
+}
+\begin{lstlisting}[language=html]
+> ligne.NA=function(vec){any(is.na(vec))}
+> filtre.NA=function(mat){
+   tmp = apply(mat,1,ligne.NA)
+   mat[!tmp,]}
+> matrice.test = matrix(1:40,nc=5)
+> matrice.test
+     [,1] [,2] [,3] [,4] [,5]
+[1,]    1    9   17   25   33
+[2,]    2   10   18   26   34
+[3,]    3   11   19   27   35
+[4,]    4   12   20   28   36
+[5,]    5   13   21   29   37
+[6,]    6   14   22   30   38
+[7,]    7   15   23   31   39
+[8,]    8   16   24   32   40
+> matrice.test[2,5]=NA;matrice.test[4,2]=NA
+> matrice.test[7,1]=NA;matrice.test[7,5]=NA
+> filtre.NA(matrice.test)
+     [,1] [,2] [,3] [,4] [,5]
+[1,]    1    9   17   25   33
+[2,]    3   11   19   27   35
+[3,]    5   13   21   29   37
+[4,]    6   14   22   30   38
+[5,]    8   16   24   32   40
+\end{lstlisting}
+\end{enumerate}
+
+\section{Commandes de type apply}
+Comme déjà expliqué, il est vivement recommandé d'éviter les boucles très chronophages. La fonction \textit{apply} et ses variantes sur des vecteurs, matrices ou listes permettent d'appliquer une même fonction \textit{FUN} sur toutes les lignes (\textit{MARGIN=1}) ou les colonnes (\textit{MARGIN=2}) d'une matrice MAT : \textit{apply(MAT , MARGIN, FUN)}\newline
+Les fonctions \textit{lapply} et \textit{sapply} calculent la même fonction sur tous les éléments d'un vecteur ou d'une liste.\newline
+\textit{lapply(X,FUN, ARG.COMMUN)} permet d'appliquer la fonction FUN à tous les éléments du vecteur ou de la liste \textit{X}. Les valeurs de \textit{X} sont affectées au premier argument de la fonction \textit{FUN}. Si la fonction \textit{FUN} a plusieurs paramètres d'entrée, ils sont spécifiés dans \textit{ARG.COMMUN}. Cette fonction retourne le résultat sous la forme de listes. La fonction \textit{sapply} est similaire à \textit{lapply} mais le résultat est retourné si possible sous forme de vecteurs.\newline
+\textit{tapply(X,GRP,FUN,...)} applique une fonction \textit{FUN} sur les sousgroupes d'un vecteur \textit{X} définis par une variable de type factor GRP.\newline
+\subsubsection*{Exemples :}
+
+\begin{lstlisting}[language=html]
+> data(iris)
+> summary(iris)
+  Sepal.Length    Sepal.Width     Petal.Length  
+ Min.   :4.300   Min.   :2.000   Min.   :1.000  
+ 1st Qu.:5.100   1st Qu.:2.800   1st Qu.:1.600  
+ Median :5.800   Median :3.000   Median :4.350  
+ Mean   :5.843   Mean   :3.057   Mean   :3.758  
+ 3rd Qu.:6.400   3rd Qu.:3.300   3rd Qu.:5.100  
+ Max.   :7.900   Max.   :4.400   Max.   :6.900  
+  Petal.Width          Species  
+ Min.   :0.100   setosa    :50  
+ 1st Qu.:0.300   versicolor:50  
+ Median :1.300   virginica :50  
+ Mean   :1.199                  
+ 3rd Qu.:1.800                  
+ Max.   :2.500                  
+> apply(iris[,1:4],2,sum)
+Sepal.Length  Sepal.Width Petal.Length  Petal.Width 
+       876.5        458.6        563.7        179.9 
+> lapply(iris[,1:4],sum)
+$Sepal.Length
+[1] 876.5
+
+$Sepal.Width
+[1] 458.6
+
+$Petal.Length
+[1] 563.7
+
+$Petal.Width
+[1] 179.9
+
+> sapply(iris[,1:4],sum)
+Sepal.Length  Sepal.Width Petal.Length  Petal.Width 
+       876.5        458.6        563.7        179.9 
+> tapply(iris[,1],iris[,5],sum)
+    setosa versicolor  virginica 
+     250.3      296.8      329.4 
+\end{lstlisting}
+
+
+\chapter{WikiStat - Simulations de variables et nombres aléatoires}
+Tout en complétant la connaissance de R, cette section propose d'illustrer, par des simulations, les propriétés des estimateurs élémentaires (moyenne, écart-type, histogramme).
+\section{Estimation}
+Générer $n$ valeurs aléatoires d'une variable $Y$
+selon une loi normale de moyenne $80$ et d'écart-type
+$5$ ($\mathcal{N}(80,5)$). Décrire sommairement cette série de valeurs.\newline
+Associer les quantités calculées avec leur traduction en anglais mean, median, standard error, standard déviation, standard error mean.
+
+\begin{lstlisting}[language=html]
+n=10
+Y=rnorm(n,80,5) # génération
+Y
+mean(Y) # moyenne
+sd(Y) # écart-type
+sd(Y)/sqrt(length(Y)) # écart-type de la moyenne
+summary(Y) # quartiles et moyenne
+boxplot(Y) # diagramme boîte
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.45]{ilu/progMous.png}\end{center}\end{figure}
+\begin{lstlisting}[language=html]
+# histogramme de la densité
+hist(Y, probability=T, col="blue")
+# estimation par la méthode du noyau
+lines(density(Y), col="red", lwd=2)
+# tracer la loi théorique
+x=1:100
+curve(dnorm(x,mean=80,sd=5),add=TRUE,
+      col="green",lwd=2)
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.45]{ilu/progHist.png}\end{center}\end{figure}
+\section{Loi des grands nombres}
+Une moyenne et un écart-type sont la réalisation d'une variable aléatoire appelée \textit{estimateur} ; ce sont des estimations.\newline
+Refaire les calculs et graphiques en posant \textit{n = 10; n = 1000; n = 10000} ; comparer les résultats obtenus, notamment les estimations des indicateurs par rapport aux valeurs théoriques.\newline
+Etudier leur comportement en fonction de la taille $n$ de l'échantillon.
+\begin{lstlisting}[language=html]
+> n=100
+> Y=matrix(rnorm(n*10,80,5),n,10)
+> head(Y,10)
+          [,1]     [,2]     [,3]     [,4]     [,5]     [,6]
+ [1,] 79.48270 84.27621 81.73138 78.99269 77.61431 77.75340
+ [2,] 83.77394 86.79390 81.78309 80.53089 80.00903 76.69262
+ [3,] 79.02399 76.00706 79.75077 70.75721 76.02452 77.90167
+ [4,] 84.39570 79.94269 83.64426 85.88491 68.88521 82.20551
+ [5,] 78.06939 78.73939 81.34980 71.95216 77.31962 72.78067
+ [6,] 81.22735 90.79164 80.16963 76.25549 79.08157 77.37776
+ [7,] 80.68771 88.08090 83.33531 66.03324 76.67467 80.97571
+ [8,] 77.10515 74.77522 85.38394 78.16549 82.02096 78.07849
+ [9,] 83.88024 71.47557 91.40897 77.58785 79.78407 84.70586
+[10,] 75.77031 81.53350 75.39465 90.95792 74.83399 70.58027
+          [,7]     [,8]     [,9]    [,10]
+ [1,] 84.96222 88.05573 81.75889 71.65425
+ [2,] 79.63490 87.28453 74.87930 83.21735
+ [3,] 81.85036 86.65544 78.39155 73.27091
+ [4,] 77.18351 80.89803 87.63899 79.58546
+ [5,] 76.99141 84.32728 73.04157 75.37716
+ [6,] 79.58454 84.94999 91.69982 70.17788
+ [7,] 78.65798 78.87651 76.57626 85.84171
+ [8,] 76.38046 89.28734 79.88337 84.69042
+ [9,] 82.06707 83.45718 83.58626 72.12131
+[10,] 79.63492 79.30998 76.12833 76.28161
+> apply(Y,2,mean)
+ [1] 79.82224 79.80854 80.27630 79.59567 80.30352 79.52742
+ [7] 79.54855 79.82283 81.25733 80.10029
+> mean(apply(Y,2,mean)) # moyenne des moyennes
+[1] 80.00627
+> apply(Y,2,sd)
+ [1] 4.640057 4.953575 4.880277 5.345844 5.121228 4.907526
+ [7] 4.628382 5.118427 4.987085 4.594297
+> mean(apply(Y,2,sd)) # moyenne des écarts-types
+[1] 4.91767
+\end{lstlisting}
+Faire varier $n = 10; 100; 1000$ et comparer les résultats
+obtenus.
+\section{Théorème de la limite centrale}
+La simulation proposée illustre le résultat fondamental du théorème de la limite centrale :\newline
+Une somme de variables aléatoires indépendantes et de même loi converge vers une variable aléatoire de loi gaussienne. Le programme ci-dessous exécute les opérations suivantes :
+\begin{itemize}
+  \item initialisation par des 0 d'un vecteur de taille
+$n = 1000$
+  \item  chaque valeur de ce vecteur est une variable aléatoire X obtenue par la somme de N variables suivant une loi uniforme sur l'intervalle $[0; 1]$,
+  \item estimation de la densité de $X$
+  \item comparaison avec la loi théorique limite qui est la loi gaussienne de moyenne $N/2$ et de variance $N/12$.
+\end{itemize}
+\begin{lstlisting}[language=html]
+n=1000
+N=12
+X=rep(0,n)
+# n itérations
+for (i in 1 : n) X[i]=sum(runif(N))
+# histogramme
+hist(X, col="blue", probability=T)
+# estimation par méthode su noyau
+lines(density(X), col="red", lwd=2)
+x=X
+sigma2=N/12
+curve(dnorm(x,mean=N/2,sd=sqrt(sigma2)),
+      add=T, col="green", lwd=2)
+\end{lstlisting}
+
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.45]{ilu/progGdNb.png}\end{center}\end{figure}
+Faire varier $N = 4; 8; 12; 20$. Remarquer que la convergence est très rapide. Ceci \textit{justifie} la pratique qui revient à considérer que la loi d'un estimateur est gaussienne lorsque n est \textit{suffisamment} grand avec $n > 30$.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+
+\chapter{Liens vers WikiStat :  Statistique \& Big Data Analytics de Statisticien à Data Scientist}
+
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.4]{ilu/gandalf.png}\end{center}\end{figure}
+\begin{center}
+\href{http://wikistat.fr/}{\textit{Passez plutôt par là}}\footnote{Alors globalement, je ne sais pas pourquoi j'ai mis cette image mais je trouvais ça cool sur le moment}
+\end{center}
+

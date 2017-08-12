@@ -1,0 +1,2094 @@
+\chapter{R à l'université de Nantes}
+\textcolor{white}{.}\newline
+Cours de Probabilités discrètes - \href{http://www.math.sciences.univ-nantes.fr/~paturel/index.php}{\underline{Eric PATUREL}}. \newline
+Travaux pratiques 2016/2017 assurés par \href{http://www.math.sciences.univ-nantes.fr/fr/membres/259}{\underline{Abderemane MORAME}}. 
+\section{Manipulation des répertoires - DECOUVERTE de R }
+\textcolor{white}{.}\newline
+Donne la localisation du dossier  de travail de R
+\begin{lstlisting}[language=html]
+getwd()
+[1] "/Users/mehdilatif/Desktop/ÉTUDES/FAC/S4/2016_2017/PROBA/R/INTRO_R_PROF"
+\end{lstlisting}
+Pour aller chez vous en TP sous WINDOWS
+\begin{lstlisting}[language=html]
+setwd("/Users/mehdilatif/Desktop/ÉTUDES/FAC/S4/2016_2017/PROBA/R/INTRO_R_PROF")
+getwd()
+\end{lstlisting}
+Création de dossier
+\begin{lstlisting}[language=html]
+dir.create("TP_R_tmp")
+\end{lstlisting}
+Définition du répertoire de travail avec le nouveau dossier créé
+\begin{lstlisting}[language=html]
+> getwd() ## avant
+[1] "/Users/mehdilatif/Desktop/ÉTUDES/FAC/S4/2016_2017/PROBA/R/INTRO_R_PROF"
+> setwd("TP_R_tmp")
+> getwd() ## après 
+[1] "/Users/mehdilatif/Desktop/ÉTUDES/FAC/S4/2016_2017/PROBA/R/INTRO_R_PROF/TP_R_tmp"
+\end{lstlisting}
+Lister les fichiers et les dossiers 
+\begin{lstlisting}[language=html]
+> dir()
+character(0) ## Oui le répertoire est vide 
+\end{lstlisting}
+Création d'une variable contenant l'adresse du répertoire dans lequel nous travaillons
+\begin{lstlisting}[language=html]
+> mot = getwd()
+> mot
+[1] "/Users/mehdilatif/Desktop/ÉTUDES/FAC/S4/2016_2017/PROBA/R/INTRO_R_PROF/TP_R_tmp"
+\end{lstlisting}
+Ajout à la variable mot, d'une extension. Cette dernière est un fichier R nommé : \textit{"/R\_demo0.R"} avec la fonction \textit{paste()}\footnote{Concatenate vectors after converting to character.}
+\begin{lstlisting}[language=html]
+> Adresse = paste(mot,"/R_demo0.R", sep="")
+> Adresse
+[1] "/Users/mehdilatif/Desktop/ÉTUDES/FAC/S4/2016_2017/PROBA/R/INTRO_R_PROF/TP_R_tmp/R_demo0.R"
+\end{lstlisting}
+Chargement du contenu d'un fichier R contenu à une adresse donnée dans la variable adresse :
+\begin{lstlisting}[language=html]
+> download.file("http://www.math.sciences.univ-nantes.fr/~morame/donnees/R_demo0.R", destfile=Adresse)
+> dir()
+[1] "R_demo0.R"
+\end{lstlisting}
+
+\textit{system()}? permet d'executer des commandes du système UNIX. Par exemple on va demander de cater le fichier R\_demo
+\begin{lstlisting}[language=html]
+> system("cat R_demo0.R")
+a = -3
+b = 2
+s = 0.25
+x = runif(50) # 50 reels aleatoirs dans ]0, 1[
+y = b + a*x + rnorm(50, sd = sqrt(s)) # Ajout de "bruits" de loi normale 
+mean(x) # Valeur theorique: 0.5
+mean(y) # Valeur theorique: 2 - 3*0.5 = 0.5
+###########
+M = matrix(c(x, y),  nrow = 50, byrow = T)
+write.table(M, file="M_datas.txt", row.names=F, col.names=c("x", "y"))
+# row.names=F ou row.names=FALSE
+plot(x, y, col = "blue")
+abline(b, a, col = "red") # Ajoute la droite y = a*x + b
+###########
+dev.print(pdf, "M_dataPlot.pdf")
+\end{lstlisting}
+Execute le fichier \textit{R\_démo0} depuis un autre script que l'on affiche ici 
+\begin{lstlisting}[language=html]
+source("R_demo0.R")
+\end{lstlisting}
+Le code \textit{R\_demo0} à générer deux fichiers supplémentaires
+\begin{lstlisting}[language=html]
+> dir()
+[1] "M_dataPlot.pdf" "M_datas.txt"   
+[3] "R_demo0.R"
+\end{lstlisting}
+On peut les ouvrir depuis le terminal de \textbf{R} :
+\begin{lstlisting}[language=html]
+> system("cat M_datas.txt")
+"x" "y"
+0.105837354436517 0.485165714286268
+0.0695429055485874 0.974302545888349
+0.285385127412155 0.0164711575489491
+0.376083172857761 0.849727632943541
+[...]
+-0.473873033219746 1.07903785208372
+0.169027904058912 2.15773647250456
+1.82967005190671 1.84356180951002
+0.0274540750623853 0.0955194067097488
+1.70837398051715 1.06995668783105
+
+> system("open M_dataPlot.pdf")
+\end{lstlisting}
+
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.5]{ilu/MoramePlot.png}\end{center}\end{figure}
+\section{Opérations sur les objets}
+\subsection{Vecteurs}
+\textbf{Note :} Les "=" et les "$<-$" sont équivalents et interchangeable.\newline
+\\
+Création d'un vecteur d'entier nom x avec l'opérateur = et \textit{c()}, l'opérateur de concaténation.
+\begin{lstlisting}[language=html]
+> x = c(1,5,7,3)
+\end{lstlisting}
+Affichage de la variable
+\begin{lstlisting}[language=html]
+> x
+[1] 1 5 7 3
+\end{lstlisting}
+Autre type d'affichage avec la fonction \textit{print} 
+\begin{lstlisting}[language=html]
+> print(x)
+[1] 1 5 7 3
+\end{lstlisting}
+Autre type d'affichage avec la fonction \textit{paste}; cette fois ci, les composantes du vecteur sont transformées en chaines de caractères.
+\begin{lstlisting}[language=html]
+> paste(x)
+[1] "1" "5" "7" "3" 
+\end{lstlisting}
+Création d'un vecteur d'entier nom y avec l'opérateur $<-$.
+\begin{lstlisting}[language=html]
+> y <- c(2,3,5,7,11,13)
+> y
+[1]  2  3  5  7 11 13
+> z <- c(4,-1)
+> z
+[1]  4 -1
+\end{lstlisting}
+Création d'un vecteur de booléen b avec l'opérateur $<-$. (\textbf{True} (1) si la valeur de y à la position donnée est inférieure à 5,\textbf{False} (0) sinon)
+\begin{lstlisting}[language=html]
+> b <- y <5
+> b
+[1]  TRUE  TRUE FALSE FALSE FALSE FALSE
+> length(b)
+[1] 6
+> cbind(y,b)
+      y b
+[1,]  2 1
+[2,]  3 1
+[3,]  5 0
+[4,]  7 0
+[5,] 11 0
+[6,] 13 0
+\end{lstlisting}
+\subsection{Opérations sur vecteurs}
+\textcolor{white}{.}\newline
+Division 
+\begin{lstlisting}[language=html]
+> 47 / 8
+[1] 5.875
+\end{lstlisting}
+Quotien de la division Euclidienne de 47 par 8
+\begin{lstlisting}[language=html]
+> 47 %/% 8
+[1] 5
+\end{lstlisting}
+Reste de la division Euclidienne de 47 par 8 - Fonction MODULO
+\begin{lstlisting}[language=html]
+> 47 %% 8
+[1] 7
+\end{lstlisting}
+Ajoute 2 à chaque composantes du vecteur x
+\begin{lstlisting}[language=html]
+> x
+[1] 1 5 7 3
+> x+2
+[1] 3 7 9 5
+\end{lstlisting}
+Multiplie par 3 chaque composantes du vecteur x
+\begin{lstlisting}[language=html]
+> y
+[1]  2  3  5  7 11 13
+> y*3
+[1]  6  9 15 21 33 39
+\end{lstlisting}
+Retourne la longueur du vecteur x
+\begin{lstlisting}[language=html]
+> x
+[1] 1 5 7 3
+> length(x)
+[1] 4
+\end{lstlisting}
+Affiche simplement le vecteur z
+\begin{lstlisting}[language=html]
+> z
+[1]  4 -1
+\end{lstlisting}
+\textbf{Opérateur de concaténation : \textit{c()}}\newline
+Affiche z car z est déjà un vecteur 
+\begin{lstlisting}[language=html]
+> c(z)
+[1]  4 -1
+\end{lstlisting}
+Créait u un vecteur composé des composantes du vecteur z et ceci deux fois 
+\begin{lstlisting}[language=html]
+> u <- c(z,z)
+> u
+[1]  4 -1  4 -1
+\end{lstlisting}
+Créait w un vecteur composé des composantes des vecteurs x et y 
+\begin{lstlisting}[language=html]
+> w = c(x,y)
+> w
+ [1]  1  5  7  3  2  3  5  7 11 13
+\end{lstlisting}
+Créait w un vecteur composé des composantes des vecteurs x et y et l'affiche directement
+\begin{lstlisting}[language=html]
+> (w = c(x,y))
+ [1]  1  5  7  3  2  3  5  7 11 13
+\end{lstlisting}
+\textbf{Somme de vecteur composantes par composante}\newline
+Fonctionne car la taille de x est supérieure à la taille de z
+\begin{lstlisting}[language=html]
+> x
+[1] 1 5 7 3
+> length(x)
+[1] 4
+> z
+[1]  4 -1
+> length(z)
+[1] 2
+> x+z
+
+[1]  5  4 11  2
+\end{lstlisting}
+
+Fonctionne mais \textbf{\textcolor{red}{warning msg}} car la taille de x est inférieur à la taille de y
+\begin{lstlisting}[language=html]
+> x
+[1] 1 5 7 3
+> length(x)
+[1] 4
+> y
+[1]  2  3  5  7 11 13
+> length(y)
+[1] 6
+> x+y
+[1]  3  8 12 10 12 18
+Warning message:
+In x + y :
+  la taille d'un objet plus long n'est pas multiple de la taille d'un objet plus court
+> y+x
+[1]  3  8 12 10 12 18
+Warning message:
+In y + x :
+  la taille d'un objet plus long n'est pas multiple de la taille d'un objet plus court
+\end{lstlisting}
+On rappelle que b est : \textit{b <- y < 5}. Ici, \textit{y = (2,3,5,7,11,13)}.
+\begin{lstlisting}[language=html]
+> b
+[1]  TRUE  TRUE FALSE FALSE FALSE FALSE
+> y
+[1]  2  3  5  7 11 13
+\end{lstlisting}
+Affiche simplement le vecteur b (vecteur de booléen)
+\begin{lstlisting}[language=html]
+> b
+[1]  TRUE  TRUE FALSE FALSE FALSE FALSE
+\end{lstlisting}
+Retourne l'inverse du vecteur b (non(b)) (Renvoi \textbf{TRUE} si les composantes du vecteur Y sont supérieures à 7, Sinon \textbf{FALSE}.)
+\begin{lstlisting}[language=html]
+> b
+[1]  TRUE  TRUE FALSE FALSE FALSE FALSE
+> !b
+[1] FALSE FALSE  TRUE  TRUE  TRUE  TRUE
+\end{lstlisting}
+Retourne l'évaluation de l'expression booléene (y>7)
+\begin{lstlisting}[language=html]
+> y
+[1]  2  3  5  7 11 13
+> y>7
+[1] FALSE FALSE FALSE FALSE  TRUE  TRUE
+\end{lstlisting}
+Retourne les composantes du vecteur y qui sont supérieure à 7
+\begin{lstlisting}[language=html]
+> y
+[1]  2  3  5  7 11 13
+> y[y>7]
+[1] 11 13
+\end{lstlisting}
+Retoune les composantes du vecteur y pour lesquelles, les valeurs du vecteur b aux mêmes indices sont TRUE
+\begin{lstlisting}[language=html]
+> b
+[1]  TRUE  TRUE FALSE FALSE FALSE FALSE
+> y
+[1]  2  3  5  7 11 13
+> y[b]
+[1] 2 3
+\end{lstlisting}
+Retoune les composantes du vecteur y pour lesquelles, les valeurs du vecteur non(b) aux mêmes indices sont TRUE
+\begin{lstlisting}[language=html]
+> b
+[1]  TRUE  TRUE FALSE FALSE FALSE FALSE
+> y
+[1]  2  3  5  7 11 13
+> y[!b]
+[1]  5  7 11 13
+\end{lstlisting}
+On peut également écrire : 
+\begin{lstlisting}[language=html]
+> y[b==FALSE]
+[1]  5  7 11 13
+> y[b==TRUE]
+[1] 2 3
+\end{lstlisting}
+Retoune les composantes du vecteur x pour lesquelles, les valeurs du vecteur b aux mêmes indices sont TRUE\newline
+\textbf{Note :} On peut voir qu'ici, y n'est plus un vecteur dans l'inéquation mais une variable vectorielle qui prend pour valeur le vecteur x pour appliquer le test b.
+\begin{lstlisting}[language=html]
+> b
+[1]  TRUE  TRUE FALSE FALSE FALSE FALSE
+> x
+[1] 1 5 7 3
+> x[b]
+[1] 1 5
+\end{lstlisting}
+Retourne le nombre de composantes du vecteur x qui satisfont l'inéquation x>5
+\begin{lstlisting}[language=html]
+> x
+[1] 1 5 7 3
+> sum(x>5)
+[1] 1
+\end{lstlisting}
+Retourne la valeur de la composante du vecteur x qui satisfait l'inéquation x>5
+\begin{lstlisting}[language=html]
+> x[x>5]
+[1] 7
+\end{lstlisting}
+Retourne le nombre de composantes du vecteur x qui satisfont l'inéquation x>5 OU x<3
+\begin{lstlisting}[language=html]
+> x
+[1] 1 5 7 3
+> sum( x>5 | x<3)
+[1] 2
+\end{lstlisting}
+Retourne les valeurs des composantes du vecteur x qui satisfont l'inéquation x>5 OU x<3
+\begin{lstlisting}[language=html]
+> x
+[1] 1 5 7 3
+> x[x>5 | x<3]
+[1] 1 7
+\end{lstlisting}
+Retourne TRUE si la composante de x à un indice donnée satisfait l'inéquation x>5 ET x<3  
+\begin{lstlisting}[language=html]
+> x
+[1] 1 5 7 3
+> x>5 & x<3
+[1] FALSE FALSE FALSE FALSE
+\end{lstlisting}
+Retourne le nombre de composantes du vecteur x qui satisfont l'inéquation x>5 ET x<3
+\begin{lstlisting}[language=html]
+> x
+[1] 1 5 7 3
+> sum(x>5&x<3)
+[1] 0
+\end{lstlisting}
+Retourne la composante du vecteur y d'indice 3
+\begin{lstlisting}[language=html]
+> y
+[1]  2  3  5  7 11 13
+> y[3]
+[1] 5
+\end{lstlisting}
+On peut faire de même pour toutes les composantes :) 
+\begin{lstlisting}[language=html]
+> y
+[1]  2  3  5  7 11 13
+> length(y)
+[1] 6
+> y[1]
+[1] 2
+> y[2]
+[1] 3
+> y[4]
+[1] 7
+> y[5]
+[1] 11
+> y[6]
+[1] 13
+\end{lstlisting}
+Retourner les composantes du vecteur y qui ne sont pas d'indice 3
+\begin{lstlisting}[language=html]
+> y
+[1]  2  3  5  7 11 13
+> y[-3]
+[1]  2  3  7 11 13
+\end{lstlisting}
+On peut faire de même pour toutes les non composantes :) 
+\begin{lstlisting}[language=html]
+> y
+[1]  2  3  5  7 11 13
+> length(y)
+[1] 6
+> y[-1]
+[1]  3  5  7 11 13
+> y[-2]
+[1]  2  5  7 11 13
+> y[-4]
+[1]  2  3  5 11 13
+> y[-5]
+[1]  2  3  5  7 13
+> y[-6]
+[1]  2  3  5  7 11
+\end{lstlisting}
+Renvoi les valeurs des composantes du vecteur Y dont l'indice est défini par les composantes du vecteur X. (Bah oui, il n'y a que 6 composantes dans le vecteur Y)
+\begin{lstlisting}[language=html]
+> y
+[1]  2  3  5  7 11 13
+> length(y)
+[1] 6
+> x
+[1] 1 5 7 3
+> length(x)
+[1] 4
+> x[1]
+[1] 1
+> y[x[1]]
+[1] 2
+> x[2]
+[1] 5
+> y[x[2]]
+[1] 11
+> x[3]
+[1] 7
+> y[x[3]]
+[1] NA
+> x[4]
+[1] 3
+> y[x[4]]
+[1] 5
+> x[5]
+[1] NA
+> y[x[5]]
+[1] NA
+> x[6]
+[1] NA
+> y[x[6]]
+[1] NA
+> x
+[1] 1 5 7 3
+> length(x)
+[1] 4
+> y
+[1]  2  3  5  7 11 13
+> length(y)
+[1] 6
+> y[x]
+[1]  2 11 NA  5
+\end{lstlisting}
+Renvoi le type des composantes de x (ici, x est un vecteur de nombre)\newline
+\textbf{Note :} Types supportés par R : real, integer, complexe, numeric, vector, matrix, character, ...
+\begin{lstlisting}[language=html]
+> x
+[1] 1 5 7 3
+> class(x)
+[1] "numeric"
+> y
+[1]  2  3  5  7 11 13
+> class(y)
+[1] "numeric"
+\end{lstlisting}
+Renvoi le type des composantes de b 
+\begin{lstlisting}[language=html]
+> b
+[1]  TRUE  TRUE FALSE FALSE FALSE FALSE
+> class(b)
+[1] "logical"
+\end{lstlisting}
+Plusieurs exemples supplémentaires
+\begin{lstlisting}[language=html]
+> c <- c(2i,4i,7+5i)
+> c
+[1] 0+2i 0+4i 7+5i
+> class(c)
+[1] "complex"
+> ch <- c('a','b')
+> class(ch)
+[1] "character"
+> v <- c(a = 1, b = 2)
+> v
+a b 
+1 2 
+> class(v)
+[1] "numeric"
+> d <- vector(mode = "logical", length = 7)
+> d
+[1] FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+> class(d)
+[1] "logical"
+> mdat <- matrix(c(1,2,3, 11,12,13), nrow = 2, ncol = 3, byrow = TRUE, dimnames = list(c("row1", "row2"),c("C.1", "C.2", "C.3")))
+> mdat
+     C.1 C.2 C.3
+row1   1   2   3
+row2  11  12  13
+> class(mdat)
+[1] "matrix"
+> mlet <- matrix(c('m','e','h', 'd','i','l','a','t','i','f'), nrow = 2, ncol = 5, byrow = TRUE, dimnames = list(c("row1", "row2"),c("C.1", "C.2", "C.3","C.4","C.5")))
+> mlet
+     C.1 C.2 C.3 C.4 C.5
+row1 "m" "e" "h" "d" "i"
+row2 "l" "a" "t" "i" "f"
+> class(mlet)
+[1] "matrix"
+\end{lstlisting}
+Contraint l'objet b à être traduit en entier (TRUE = 1, FALSE = 0)
+\begin{lstlisting}[language=html]
+> b
+[1]  TRUE  TRUE FALSE FALSE FALSE FALSE
+> tradb <- as.integer(b)
+> tradb
+[1] 1 1 0 0 0 0
+\end{lstlisting}
+Contraint l'objet b à être traduit en complexe (a+bi)
+\begin{lstlisting}[language=html]
+> x
+[1] 1 5 7 3
+> tradx <- as.complex(x)
+> tradx
+[1] 1+0i 5+0i 7+0i 3+0i
+\end{lstlisting}
+Contraint l'objet b à être traduit en real (a+bi)
+\begin{lstlisting}[language=html]
+> o = 7.9
+> r <- 8.6
+> o
+[1] 7.9
+> r
+[1] 8.6
+> or <- c(o,r)
+> or
+[1] 7.9 8.6
+> class(or)
+[1] "numeric"
+> trador <- as.logical(or)
+> trador
+[1] TRUE TRUE
+> class(trador)
+[1] "logical"
+\end{lstlisting}
+Test si x est un objet de type numeric. Renvoi TRUE si vrai, sinon FALSE.
+\begin{lstlisting}[language=html]
+> x
+[1] 1 5 7 3
+> is.numeric(x)
+[1] TRUE
+> y
+[1]  2  3  5  7 11 13
+> is.logical(y)
+[1] FALSE
+> b
+[1]  TRUE  TRUE FALSE FALSE FALSE FALSE
+> is.logical(b)
+[1] TRUE
+> is.complex(b)
+[1] FALSE
+> c
+[1] 0+2i 0+4i 7+5i
+> is.complex(c)
+[1] TRUE
+> is.double(c)
+[1] FALSE
+\end{lstlisting}
+
+\subsection{Seq et Rep}
+\textcolor{white}{.}\newline
+Créer les vecteurs suivants avec rep et seq.\newline
+\textbf{Explication :} rep(binf\textcolor{red}{\textbf{:}}bsup,nb\_de\_répetition) \begin{lstlisting}[language=html]
+> rep(1:4,1)
+[1] 1 2 3 4
+
+> rep(1:4,2)
+[1] 1 2 3 4 1 2 3 4
+
+> rep(1:18, each = 1, len = 20)
+ [1]  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15
+[16] 16 17 18  1  2
+
+> rep(1:4, each = 2, times = 3)
+ [1] 1 1 2 2 3 3 4 4 1 1 2 2 3 3 4 4 1 1 2 2 3 3 4
+[24] 4
+\end{lstlisting}
+\textbf{Explication :} seq(binf\textcolor{red}{\textbf{:}}bsup,pas\_d\_itération)
+\begin{lstlisting}[language=html]
+> seq(1,4,1)
+[1] 1 2 3 4
+
+> seq(1,4,2)
+[1] 1 3
+
+> seq(1, 9, by = 2)
+[1] 1 3 5 7 9
+
+> seq(1, 6, by = 3)
+[1] 1 4
+
+> seq(1.575, 5.125, by = 0.05)
+ [1] 1.575 1.625 1.675 1.725 1.775 1.825 1.875
+ [8] 1.925 1.975 2.025 2.075 2.125 2.175 2.225
+[15] 2.275 2.325 2.375 2.425 2.475 2.525 2.575
+[22] 2.625 2.675 2.725 2.775 2.825 2.875 2.925
+[29] 2.975 3.025 3.075 3.125 3.175 3.225 3.275
+[36] 3.325 3.375 3.425 3.475 3.525 3.575 3.625
+[43] 3.675 3.725 3.775 3.825 3.875 3.925 3.975
+[50] 4.025 4.075 4.125 4.175 4.225 4.275 4.325
+[57] 4.375 4.425 4.475 4.525 4.575 4.625 4.675
+[64] 4.725 4.775 4.825 4.875 4.925 4.975 5.025
+[71] 5.075 5.125
+
+> seq(17)
+ [1]  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15
+[16] 16 17
+
+> seq(0, 1, length.out = 11)
+ [1] 0.0 0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9 1.0
+\end{lstlisting}
+Création de $y_{0}$ constituée de la suite des entiers de $-3$ à $20$ par pas de $1$.\newline
+Avec rep :
+\begin{lstlisting}[language=html]
+> y0r <- rep(-3:20, 1)
+> y0r
+ [1] -3 -2 -1  0  1  2  3  4  5  6  7  8  9 10 11
+[16] 12 13 14 15 16 17 18 19 20
+> length(y0r)
+[1] 24
+\end{lstlisting}
+Avec seq : 
+\begin{lstlisting}[language=html]
+> y0s <- seq(-3,20,1)
+> y0s
+ [1] -3 -2 -1  0  1  2  3  4  5  6  7  8  9 10 11
+[16] 12 13 14 15 16 17 18 19 20
+> length(y0s)
+[1] 24
+\end{lstlisting}
+Création de $y_{1}$ contient tout les entiers pairs entre $2$ et $18$
+\begin{lstlisting}[language=html]
+> y1s <- seq(2,18,2)
+> y1s
+[1]  2  4  6  8 10 12 14 16 18
+> length(y1s)
+[1] 9
+\end{lstlisting}
+Création de $y_{2}$ est constitué de $8$ fois de suite la valeur $4$.
+\begin{lstlisting}[language=html]
+> y2r <- rep(4,8)
+> y2r
+[1] 4 4 4 4 4 4 4 4
+> length(y2r)
+[1] 8
+\end{lstlisting}
+Création de $y_{3}$ contient $8$ nombres entre $0$ et $16$, par pas égaux.
+\begin{lstlisting}[language=html]
+> pas <- 16/8; pas
+[1] 2
+> y3_bad <-seq(0, 16, by = pas)
+> y3_bad
+[1]  0  2  4  6  8 10 12 14 16
+> length(y3_bad)
+[1] 9
+\end{lstlisting}
+\textbf{Attention : } Cette méthode est mauvaise. $16/8 = 2$, en principe c'est logique qu'on utilise un pas de $2$ mais on obtient 9 éléments la répétition avec un pas de $2$ n'est donc pas conseillée. Pour résoudre se problème, il faut crée une séquence de dont les bornes sont 0 et 16 en forçant la séquence à contenir 8 termes. Le pas sera calculé automatiquement.
+\begin{lstlisting}[language=html]
+> y3_good <- seq(0,16,length.out = 8)
+> y3_good
+[1]  0.000000  2.285714  4.571429  6.857143
+[5]  9.142857 11.428571 13.714286 16.000000
+> length(y3_good)
+[1] 8
+\end{lstlisting}
+Petite vérification : 
+\begin{lstlisting}[language=html]
+> y3 <-seq(0, 16, by = 16/8)
+> if(length(y3) == 8){
++   paste('Correct car il possède ', length(y3), 'composantes')
++ } else {
++   paste('Mauvais car il possède ', length(y3), 'composantes')
++ }
+[1] "Mauvais car il possède  9 composantes"
+> y3 <- seq(0,16,length.out = 8)
+> if(length(y3) == 8){
++   paste('Correct car il possède ', length(y3), 'composantes')
++ } else {
++   paste('Mauvais car il possède ', length(y3), 'composantes')
++ }
+[1] "Correct car il possède  8 composantes"
+\end{lstlisting}
+Extraire de $y_{3}$,  un vecteur composé du 4ème puis le 7ème élément.
+\begin{lstlisting}[language=html]
+> y3_good
+[1]  0.000000  2.285714  4.571429  6.857143
+[5]  9.142857 11.428571 13.714286 16.000000
+> length(y3_good)
+[1] 8
+> paste('Composante de y3 position 4 : ', y3_good[4])
+[1] "Composante de y3 position 4 :  6.85714285714286"
+> paste('Composante de y3 position 7 : ', y3_good[7])
+[1] "Composante de y3 position 7 :  13.7142857142857"
+> y3_ss1 <- c(y3_good[4],y3_good[7])
+> y3_ss1
+[1]  6.857143 13.714286
+> length(y3_ss1)
+[1] 2
+\end{lstlisting}
+Extraire de $y_{3}$, tous les élements sauf le 7ème.
+\begin{lstlisting}[language=html]
+> y3_good
+[1]  0.000000  2.285714  4.571429  6.857143
+[5]  9.142857 11.428571 13.714286 16.000000
+> length(y3_good)
+[1] 8
+> paste("7ème composante de y3 ", y3_good[7])
+[1] "7ème composante de y3  13.7142857142857"
+> y3_ss2 <- c(y3_good[-7])
+> y3_ss2
+[1]  0.000000  2.285714  4.571429  6.857143
+[5]  9.142857 11.428571 16.000000
+> length(y3_ss2)
+[1] 7
+\end{lstlisting}
+\subsection{Matrices}
+Posons le vecteur $y_{0}$ tel que : 
+\begin{lstlisting}[language=html]
+> y0 <- seq(-3,20,1);y0
+ [1] -3 -2 -1  0  1  2  3  4  5  6  7  8  9 10 11
+[16] 12 13 14 15 16 17 18 19 20
+> length(y0)
+[1] 24
+\end{lstlisting}
+Création de la matrice (3x8) constituée des composantes du vecteur $y_{0}$. \textcolor{blue}{Remplissage par colonne (méthode standard)}.
+\begin{lstlisting}[language=html]
+> m_c <- matrix(y0, 3, 8)
+> m_c
+     [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8]
+[1,]   -3    0    3    6    9   12   15   18
+[2,]   -2    1    4    7   10   13   16   19
+[3,]   -1    2    5    8   11   14   17   20
+> length(m_c)
+[1] 24
+> paste('Nombre de ligne de m_c =', nrow(m_c))
+[1] "Nombre de ligne de m_c = 3"
+> paste('Nombre de colonne de m_c = ', ncol(m_c))
+[1] "Nombre de colonne de m_c =  8"
+\end{lstlisting}
+Création de la matrice (3x8) constituée des composantes du vecteur $y_{0}$. \textcolor{blue}{Remplissage par ligne (byrow = par ligne).}
+\begin{lstlisting}[language=html]
+> m_l <- matrix(y0, 3, 8, byrow=TRUE)
+> m_l
+     [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8]
+[1,]   -3   -2   -1    0    1    2    3    4
+[2,]    5    6    7    8    9   10   11   12
+[3,]   13   14   15   16   17   18   19   20
+> length(m_l)
+[1] 24
+> paste('Nombre de ligne de m_l =', nrow(m_l))
+[1] "Nombre de ligne de m_l = 3"
+> paste('Nombre de colonne de m_l = ', ncol(m_l))
+[1] "Nombre de colonne de m_l =  8"
+\end{lstlisting}
+Création de la matrice m de \textbf{4 lignes} et constituée des composantes de $y_{0}$. \textcolor{blue}{Remplissage par colonne (méthode standard)}.\newline
+Le nombre de ligne fixé, il fait le reste : 
+\begin{lstlisting}[language=html]
+> m=matrix(y0, nrow = 4);m
+     [,1] [,2] [,3] [,4] [,5] [,6]
+[1,]   -3    1    5    9   13   17
+[2,]   -2    2    6   10   14   18
+[3,]   -1    3    7   11   15   19
+[4,]    0    4    8   12   16   20
+> length(m)
+[1] 24
+> paste('Nombre de ligne de m =', nrow(m))
+[1] "Nombre de ligne de m = 4"
+> paste('Nombre de colonne de m = ', ncol(m))
+[1] "Nombre de colonne de m =  6"
+\end{lstlisting}
+Création de la matrice m\_prime de \textbf{8 lignes} et constituée des composantes de $y_{0}$. \textcolor{blue}{Remplissage par colonne (méthode standard)}.
+\begin{lstlisting}[language=html]
+> m_prime=matrix(y0, nrow = 8);m_prime
+     [,1] [,2] [,3]
+[1,]   -3    5   13
+[2,]   -2    6   14
+[3,]   -1    7   15
+[4,]    0    8   16
+[5,]    1    9   17
+[6,]    2   10   18
+[7,]    3   11   19
+[8,]    4   12   20
+> length(m_prime)
+[1] 24
+> paste('Nombre de ligne de m =', nrow(m_prime))
+[1] "Nombre de ligne de m = 8"
+> paste('Nombre de colonne de m = ', ncol(m_prime))
+[1] "Nombre de colonne de m =  3"
+\end{lstlisting}
+Renvoi la composante de la matrice m présente à la position (3,3).
+\begin{lstlisting}[language=html]
+> m[3,3]
+[1] 7
+> m_prime[3,3]
+[1] 15
+\end{lstlisting}
+Balayage de la matrice m par colonne puis par ligne
+\begin{lstlisting}[language=html]
+> m
+     [,1] [,2] [,3] [,4] [,5] [,6]
+[1,]   -3    1    5    9   13   17
+[2,]   -2    2    6   10   14   18
+[3,]   -1    3    7   11   15   19
+[4,]    0    4    8   12   16   20
+> for(i in 1:nrow(m)){
++   for(j in 1:ncol(m)){
++     print(m[i,j])
++   }
++ }
+[1] -3
+[1] 1
+[1] 5
+[1] 9
+[1] 13
+[1] 17
+[1] -2
+[1] 2
+[1] 6
+[1] 10
+[1] 14
+[1] 18
+[1] -1
+[1] 3
+[1] 7
+[1] 11
+[1] 15
+[1] 19
+[1] 0
+[1] 4
+[1] 8
+[1] 12
+[1] 16
+[1] 20
+\end{lstlisting}
+Balayage de la matrice par colonne puis par ligne
+\begin{lstlisting}[language=html]
+> m
+     [,1] [,2] [,3] [,4] [,5] [,6]
+[1,]   -3    1    5    9   13   17
+[2,]   -2    2    6   10   14   18
+[3,]   -1    3    7   11   15   19
+[4,]    0    4    8   12   16   20
+> for(i in 1:ncol(m)){
++   for(j in 1:nrow(m)){
++     print(m[j,i])
++   }
++ }
+[1] -3
+[1] -2
+[1] -1
+[1] 0
+[1] 1
+[1] 2
+[1] 3
+[1] 4
+[1] 5
+[1] 6
+[1] 7
+[1] 8
+[1] 9
+[1] 10
+[1] 11
+[1] 12
+[1] 13
+[1] 14
+[1] 15
+[1] 16
+[1] 17
+[1] 18
+[1] 19
+[1] 20
+\end{lstlisting}
+\textbf{Explications : } \textbf{[}lignes\textcolor{red}{,}colonnes\textbf{]}\newline
+Retourne les composantes de la 1er et 3eme ligne pour tous les indices de colonne (de 1 à 6).
+\begin{lstlisting}[language=html]
+> vec_mat_1 <- m[c(1,3),]
+> vec_mat_1
+     [,1] [,2] [,3] [,4] [,5] [,6]
+[1,]   -3    1    5    9   13   17
+[2,]   -1    3    7   11   15   19
+\end{lstlisting}
+Idem pour les lignes 2 et 4
+\begin{lstlisting}[language=html]
+> vec_mat_12 <- m[c(2,4),]
+> vec_mat_12
+     [,1] [,2] [,3] [,4] [,5] [,6]
+[1,]   -2    2    6   10   14   18
+[2,]    0    4    8   12   16   20
+\end{lstlisting}
+Retourne les composantes de la 1er et 3eme colonne pour tous les indices de ligne (de 1 à 6).
+\begin{lstlisting}[language=html]
+> vec_mat_2 <- m[,c(1,3)]
+> vec_mat_2
+     [,1] [,2]
+[1,]   -3    5
+[2,]   -2    6
+[3,]   -1    7
+[4,]    0    8
+\end{lstlisting}
+idem pour les colonnes 2 et 4
+\begin{lstlisting}[language=html]
+> vec_mat_22 <- m[,c(2,4)]
+> vec_mat_22
+     [,1] [,2]
+[1,]    1    9
+[2,]    2   10
+[3,]    3   11
+[4,]    4   12
+\end{lstlisting}
+Renvoi les composantes de la première et troisième ligne pour la colonne d'indice 1. 
+\begin{lstlisting}[language=html]
+> m
+     [,1] [,2] [,3] [,4] [,5] [,6]
+[1,]   -3    1    5    9   13   17
+[2,]   -2    2    6   10   14   18
+[3,]   -1    3    7   11   15   19
+[4,]    0    4    8   12   16   20
+> m[c(1,3),1]
+[1] -3 -1
+\end{lstlisting}
+Renvoi les composantes de la première et troisième ligne pour la colonne d'indice 3.
+\begin{lstlisting}[language=html]
+> m
+     [,1] [,2] [,3] [,4] [,5] [,6]
+[1,]   -3    1    5    9   13   17
+[2,]   -2    2    6   10   14   18
+[3,]   -1    3    7   11   15   19
+[4,]    0    4    8   12   16   20
+> m[c(1,3),3]
+[1] 5 7
+\end{lstlisting}
+Renvoi les composantes de la première et troisième ligne pour la colonne d'indice 6.
+\begin{lstlisting}[language=html]
+> m
+     [,1] [,2] [,3] [,4] [,5] [,6]
+[1,]   -3    1    5    9   13   17
+[2,]   -2    2    6   10   14   18
+[3,]   -1    3    7   11   15   19
+[4,]    0    4    8   12   16   20
+> m[c(1,3),6]
+[1] 17 19
+\end{lstlisting}
+Renvoi les composantes de la deuxième et quatrième ligne pour la colonne d'indice 2.
+\begin{lstlisting}[language=html]
+> m
+     [,1] [,2] [,3] [,4] [,5] [,6]
+[1,]   -3    1    5    9   13   17
+[2,]   -2    2    6   10   14   18
+[3,]   -1    3    7   11   15   19
+[4,]    0    4    8   12   16   20
+> m[c(2,4),2]
+[1] 2 4
+\end{lstlisting}
+Renvoi les composantes de la deuxième et quatrième ligne pour la colonne d'indice 4.
+\begin{lstlisting}[language=html]
+> m
+     [,1] [,2] [,3] [,4] [,5] [,6]
+[1,]   -3    1    5    9   13   17
+[2,]   -2    2    6   10   14   18
+[3,]   -1    3    7   11   15   19
+[4,]    0    4    8   12   16   20
+> m[c(2,4),4]
+[1] 10 12
+\end{lstlisting}
+Renvoi les composantes de la deuxième et quatrième ligne pour la colonne d'indice 5.
+\begin{lstlisting}[language=html]
+> m
+     [,1] [,2] [,3] [,4] [,5] [,6]
+[1,]   -3    1    5    9   13   17
+[2,]   -2    2    6   10   14   18
+[3,]   -1    3    7   11   15   19
+[4,]    0    4    8   12   16   20
+> m[c(2,4),5]
+[1] 14 16
+\end{lstlisting}
+Renvoi les composantes de la deuxième et quatrième ligne pour la colonne d'indice 1 et 3.
+\begin{lstlisting}[language=html]
+> m
+     [,1] [,2] [,3] [,4] [,5] [,6]
+[1,]   -3    1    5    9   13   17
+[2,]   -2    2    6   10   14   18
+[3,]   -1    3    7   11   15   19
+[4,]    0    4    8   12   16   20
+> m[c(2,1),c(1,3)]
+     [,1] [,2]
+[1,]   -2    6
+[2,]   -3    5
+\end{lstlisting}
+Renvoi les composantes de la deuxième et cinquième ligne pour la colonne d'indice 1 et 5.
+
+\begin{lstlisting}[language=html]
+> m
+     [,1] [,2] [,3] [,4] [,5] [,6]
+[1,]   -3    1    5    9   13   17
+[2,]   -2    2    6   10   14   18
+[3,]   -1    3    7   11   15   19
+[4,]    0    4    8   12   16   20
+> m[c(2,5),c(1,5)]
+Error in m[c(2, 5), c(1, 5)] : indice hors limites
+\end{lstlisting}
+\textcolor{red}{Et oui, la matrice m est de dimension (4x6)}\newline
+\\
+Calcul des dimension de la matrices 
+\begin{lstlisting}[language=html]
+> nrow(m)
+[1] 4
+> ncol(m)
+[1] 6
+\end{lstlisting}
+Posons les vecteurs suivants : 
+\begin{lstlisting}[language=html]
+> y1 <- seq(2,18,2);y1;length(y1)
+[1]  2  4  6  8 10 12 14 16 18
+[1] 9
+> y2 <- rep(4,8);y2;length(y2)
+[1] 4 4 4 4 4 4 4 4
+[1] 8
+> y3 <- seq(0,16,length.out = 8);y3;length(y3)
+[1]  0.000000  2.285714  4.571429  6.857143
+[5]  9.142857 11.428571 13.714286 16.000000
+\end{lstlisting}
+
+Concatène les vecteurs y2 et y3 sous forme d'une matrice 2 lignes
+\begin{lstlisting}[language=html]
+> m_2_3 <- rbind(y2, y3);m_2_3;length(m_2_3)
+   [,1]     [,2]     [,3]     [,4]     [,5]     [,6]     [,7] [,8]
+y2    4 4.000000 4.000000 4.000000 4.000000  4.00000  4.00000    4
+y3    0 2.285714 4.571429 6.857143 9.142857 11.42857 13.71429   16
+[1] 16
+> m_1_2 <- rbind(y1, y2);m_1_2;length(m_1_2)
+Warning message:
+In rbind(y1, y2) :
+  number of columns of result is not a multiple of vector length (arg 2)
+   [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9]
+y1    2    4    6    8   10   12   14   16   18
+y2    4    4    4    4    4    4    4    4    4
+[1] 18
+\end{lstlisting}
+\textbf{Note :} Si les vecteurs que l'on tente de concaténer avec la fonction rbind ne sont pas de la même dimension, alors le logiciel recopie le nombre de composante à partir du début. Exemple : y2 est constitué de 8 composantes, y1 de 9 ; l'élément d'indice (1,9) est le premier élément du vecteur y2 (1,1).
+\begin{lstlisting}[language=html]
+> m_1_2
+   [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9]
+y1    2    4    6    8   10   12   14   16   18
+y2    4    4    4    4    4    4    4    4    4
+> m_1_2[2,9]
+y2 
+ 4 
+> m_1_2[2,1]
+y2 
+ 4 
+\end{lstlisting}
+Concatène les vecteurs y2 et y3 sous forme d'une matrice 2 colonnes
+\begin{lstlisting}[language=html]
+> m_c_2_3 <- cbind(y2, y3); m_c_2_3
+     y2        y3
+[1,]  4  0.000000
+[2,]  4  2.285714
+[3,]  4  4.571429
+[4,]  4  6.857143
+[5,]  4  9.142857
+[6,]  4 11.428571
+[7,]  4 13.714286
+[8,]  4 16.000000
+> ncol(m_c_2_3);nrow(m_c_2_3)
+[1] 2
+[1] 8
+> length(y1);length(y2)
+[1] 9
+[1] 8
+> m_c_1_2 <- cbind(y1, y2); m_c_1_2;m_c_1_2[1,2];m_c_1_2[9,2]
+Warning message:
+In cbind(y1, y2) :
+  number of rows of result is not a multiple of vector length (arg 2)
+      y1 y2
+ [1,]  2  4
+ [2,]  4  4
+ [3,]  6  4
+ [4,]  8  4
+ [5,] 10  4
+ [6,] 12  4
+ [7,] 14  4
+ [8,] 16  4
+ [9,] 18  4
+y2 
+ 4 
+y2 
+ 4 
+> ncol(m_c_1_2);nrow(m_c_1_2)
+[1] 2
+[1] 9
+\end{lstlisting}
+\textbf{Exercice}\newline
+\\
+\begin{enumerate}
+\item Créer un vecteur x qui contient les réels compris entre $0$ et $1$ par pas de $0,1$.
+\begin{lstlisting}[language=html]
+> x <- seq(0,1,0.1);x
+ [1] 0.0 0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9 1.0
+\end{lstlisting}
+\item Calculer n la longueur de $x$
+\begin{lstlisting}[language=html]
+> n <- length(x);n
+[1] 11
+\end{lstlisting}
+\item Créer un vecteur $y = 4x(1 ? x)$
+\begin{lstlisting}[language=html]
+> y <- 4*x*(1-x);y
+ [1] 0.00 0.36 0.64 0.84 0.96 1.00 0.96 0.84 0.64
+[10] 0.36 0.00
+> length(y)
+[1] 11
+\end{lstlisting}
+\item Tracer la courbe rejoignant les points $(x_{i},y_{i})$
+\begin{lstlisting}[language=html]
+plot(x,y,main="Graphe des couples (x,y)")
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.5]{ilu/ExoPlot1.png}\end{center}\end{figure}
+\item Calculer le maximum des $y_{i}$
+ \begin{lstlisting}[language=html]
+> max(y)
+[1] 1
+> min(y)
+[1] 0
+\end{lstlisting}
+\item En quel point le maximum est-il atteint? même question pour le point de minimum.
+\begin{lstlisting}[language=html]
+> which.max(y)
+[1] 6
+> y[which.max(y)]
+[1] 1
+> paste('Le maximum est atteint au point numéro ', which.max(y), ' et a pour valeur ', y[which.max(y)])
+[1] "Le maximum est atteint au point numéro  6  et a pour valeur  1"
+> paste('Le minimum est atteint au point numéro ', which.min(y), ' et a pour valeur ', y[which.min(y)])
+[1] "Le minimum est atteint au point numéro  1  et a pour valeur  0"
+\end{lstlisting}
+\item Tracer la courbe de la fonction $f(x) = 4x^{2}\times(1-x)$ sur l?intervalle $[-2, 1]$, en rouge avec  le logiciel.
+\begin{lstlisting}[language=html]
+> y = 4*x*x*(1-x);y
+ [1] 0.000 0.036 0.128 0.252 0.384 0.500 0.576 0.588 0.512 0.324
+[11] 0.000
+> plot(x,y,main = "f(x) = 4x^{2} (1-x)",xlab = "échelle des x", ylab = "échelle des y",xlim=c(- 2,1),ylim=c(-1,1),col="red")
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.5]{ilu/ExoPlot1.png}\end{center}\end{figure}
+\end{enumerate}
+\textbf{Exercice :} \newline
+Programmer l'approximation de $\pi$ de \href{https://www.craig-wood.com/nick/}{\underline{Nick Craig-Wood's}} 
+\begin{lstlisting}[language=html]
+> pi= function(n)
++ {
++   a <- 1.0
++   sa <- 1.0
++   sb <- 0.0
++   
++   for (i in 1:n)
++     {
++     a = a*((4*i-3)*(4*i-2)*(4*i-1))
++     sa =sa + (a = a/(6147814464.0*i*i*i))
++     sb = sb + a*i
++   }
++   res <- 9801.0/sqrt(8.0)/(1103.0*sa + 26390.0*sb)
++   return (res)
++ }
+> paste(pi(1))
+[1] "3.14159265358979"
+\end{lstlisting}
+
+\subsection{Notions supplémentaires Algèbre matriciel et R}
+Initialisation d'un vecteur colonne avec row bind (association de lignes) 
+\begin{lstlisting}[language=html]
+> rbind(1 ,2 ,3)
+     [,1]
+[1,]    1
+[2,]    2
+[3,]    3
+\end{lstlisting}
+Initialisation d'un vecteur ligne avec col bind (association de colonnes) 
+\begin{lstlisting}[language=html]
+> cbind(1, 2, 3)
+     [,1] [,2] [,3]
+[1,]    1    2    3
+\end{lstlisting}
+Initialisation d'une matrice avec fonction rep : \newline
+\textbf{Attention : } rep inverse les commandes (pour obtenir des lignes faire cbind/pour obtenir des colonnes faire rbind)
+\begin{lstlisting}[language=html]
+> rbind(rep(0, 3))
+     [,1] [,2] [,3]
+[1,]    0    0    0
+> cbind(rep(0, 3))
+     [,1]
+[1,]    0
+[2,]    0
+[3,]    0
+\end{lstlisting}
+Autre méthode pour initialiser (matrix(data = NA, nrow = 1, ncol = 1, byrow = FALSE,dimnames = NULL))
+\begin{lstlisting}[language=html]
+> matrix(data = 1:12, nrow = 3, ncol = 4)
+     [,1] [,2] [,3] [,4]
+[1,]    1    4    7   10
+[2,]    2    5    8   11
+[3,]    3    6    9   12
+## Version factorisée de la ligne de commande : 
+> matrix(1:12, 3, 4)
+     [,1] [,2] [,3] [,4]
+[1,]    1    4    7   10
+[2,]    2    5    8   11
+[3,]    3    6    9   12
+\end{lstlisting}
+Une matrice carrée à partir d'un vecteur : 
+\begin{lstlisting}[language=html]
+> a <- matrix (c(1,2,3,4), 2, 2, byrow=TRUE);a
+     [,1] [,2]
+[1,]    1    2
+[2,]    3    4
+> n1 <- 3;n2 <- 3;a <- matrix (rep(0, n1*n2), n1, n2);a
+     [,1] [,2] [,3]
+[1,]    0    0    0
+[2,]    0    0    0
+[3,]    0    0    0
+\end{lstlisting}
+
+Accès aux éléments d'une matrice par contrainte : 
+\begin{lstlisting}[language=html] 
+> a <- matrix (c(1,2,3,4,5,6,7,8,9,10,11,12), 2, byrow=TRUE)
+> a
+     [,1] [,2] [,3] [,4] [,5] [,6]
+[1,]    1    2    3    4    5    6
+[2,]    7    8    9   10   11   12
+> indices <- a>5 & a<9
+> indices
+      [,1]  [,2]  [,3]  [,4]  [,5]  [,6]
+[1,] FALSE FALSE FALSE FALSE FALSE  TRUE
+[2,]  TRUE  TRUE FALSE FALSE FALSE FALSE
+> a[indices]
+[1] 7 8 6
+\end{lstlisting}
+Le rapport entre l'indice \textbf{unique} et la paire d'indices (i, j) est :
+\begin{lstlisting}[language=html]
+> a <- matrix (c(1,2,3,4,5,6,7,8,9,10,11,12), 2, byrow=TRUE);a
+     [,1] [,2] [,3] [,4] [,5] [,6]
+[1,]    1    2    3    4    5    6
+[2,]    7    8    9   10   11   12
+> i <- 2
+> j <- 3
+> k = (j - 1)*nrow(a) + i
+> paste("L'élément de coordonnées ","(",i,",",j,")", "dans la matrice a est ", k )
+[1] "L'élément de coordonnées  ( 2 , 3 ) dans la matrice a est  6"
+> i <- 0
+> j <- 4
+> k = (j - 1)*nrow(a) + i
+> paste("L'élément de coordonnées ","(",i,",",j,")", "dans la matrice a est ", k )
+[1] "L'élément de coordonnées  ( 0 , 4 ) dans la matrice a est  6"
+> k <- 9
+> i <- k%%nrow(a)
+> j <- k%/%nrow(a)
+> paste ("Les coordonnées de l'indice ",k,"dans la matrice a est", "(",i,",",j,")")
+[1] "Les coordonnées de l'indice  9 dans la matrice a est ( 1 , 4 )"
+> k <- 7
+> i <- k%%nrow(a)
+> j <- k%/%nrow(a)
+> paste ("Les coordonnées de l'élément ",k,"dans la matrice a est ", "(",i,",",j,")")
+[1] "Les coordonnées de l'élément  7 dans la matrice a est  ( 1 , 3 )"
+\end{lstlisting}
+\textbf{Opérations de bases sur matrices :}
+\begin{lstlisting}[language=html]
+> a = matrix (c(1,2,3,4,5,6), 2, 3);a
+     [,1] [,2] [,3]
+[1,]    1    3    5
+[2,]    2    4    6
+> b = matrix (c(5,1,3,4,1,0), 2, 3);b
+     [,1] [,2] [,3]
+[1,]    5    3    1
+[2,]    1    4    0
+\end{lstlisting}
+Addition terme à terme
+\begin{lstlisting}[language=html]
+> a+b
+     [,1] [,2] [,3]
+[1,]    6    6    6
+[2,]    3    8    6
+\end{lstlisting}
+Soustraction terme à terme 
+\begin{lstlisting}[language=html]
+> a-b
+     [,1] [,2] [,3]
+[1,]   -4    0    4
+[2,]    1    0    6
+\end{lstlisting}
+Multiplication terme à terme
+\begin{lstlisting}[language=html]
+> a*b
+     [,1] [,2] [,3]
+[1,]    5    9    5
+[2,]    2   16    0
+\end{lstlisting}
+Division terme à terme
+\begin{lstlisting}[language=html]
+> a/b
+     [,1] [,2] [,3]
+[1,]  0.2    1    5
+[2,]  2.0    1  Inf
+\end{lstlisting}
+Multiplication matricielle
+
+\begin{lstlisting}[language=html]
+> a = matrix (c(1,2,3,4,5,6,8,9,0), 3, 3);a
+     [,1] [,2] [,3]
+[1,]    1    4    8
+[2,]    2    5    9
+[3,]    3    6    0
+> b = matrix (c(5,1,3,4,1,0,2,1,8), 3, 3);b
+     [,1] [,2] [,3]
+[1,]    5    4    2
+[2,]    1    1    1
+[3,]    3    0    8
+> a % * % b
+     [,1] [,2] [,3]
+[1,]   33    8   70
+[2,]   42   13   81
+[3,]   21   18   12
+\end{lstlisting}
+
+Déterminant 
+\begin{lstlisting}[language=html]
+> a
+     [,1] [,2] [,3]
+[1,]    1    4    8
+[2,]    2    5    9
+[3,]    3    6    0
+> det(a)
+[1] 30
+\end{lstlisting}
+Elements de diagonale d'une matrice 
+\begin{lstlisting}[language=html]
+> a
+     [,1] [,2] [,3]
+[1,]    1    4    8
+[2,]    2    5    9
+[3,]    3    6    0
+> diag(a)
+[1] 1 5 0
+\end{lstlisting}
+Trace 
+\begin{lstlisting}[language=html]
+> a
+     [,1] [,2] [,3]
+[1,]    1    4    8
+[2,]    2    5    9
+[3,]    3    6    0
+> diag(a)
+[1] 1 5 0
+> sum(diag(a))
+[1] 6
+\end{lstlisting}
+Transposée d'une matrice
+\begin{lstlisting}[language=html]
+> a
+     [,1] [,2] [,3]
+[1,]    1    4    8
+[2,]    2    5    9
+[3,]    3    6    0
+> aperm(a)
+     [,1] [,2] [,3]
+[1,]    1    2    3
+[2,]    4    5    6
+[3,]    8    9    0
+\end{lstlisting}
+Produit scalaire
+\begin{lstlisting}[language=html]
+> a
+     [,1] [,2] [,3]
+[1,]    1    4    8
+[2,]    2    5    9
+[3,]    3    6    0
+> b
+     [,1] [,2] [,3]
+[1,]    5    4    2
+[2,]    1    1    1
+[3,]    3    0    8
+> a % * % aperm(b)
+     [,1] [,2] [,3]
+[1,]   37   13   67
+[2,]   48   16   78
+[3,]   39    9    9
+\end{lstlisting}
+Norme 
+\begin{lstlisting}[language=html]
+> a
+     [,1] [,2] [,3]
+[1,]    1    4    8
+[2,]    2    5    9
+[3,]    3    6    0
+> sqrt(a % * % aperm(a))
+         [,1]     [,2]     [,3]
+[1,] 9.000000  9.69536 5.196152
+[2,] 9.695360 10.48809 6.000000
+[3,] 5.196152  6.00000 6.708204
+> sqrt(aperm(a) % * % a)
+         [,1]     [,2]      [,3]
+[1,] 3.741657 5.656854  5.099020
+[2,] 5.656854 8.774964  8.774964
+[3,] 5.099020 8.774964 12.041595
+\end{lstlisting}
+Inversion 
+\begin{lstlisting}[language=html]
+> a
+     [,1] [,2] [,3]
+[1,]    1    4    8
+[2,]    2    5    9
+[3,]    3    6    0
+> solve(a)
+     [,1] [,2]       [,3]
+[1,] -1.8  1.6 -0.1333333
+[2,]  0.9 -0.8  0.2333333
+[3,] -0.1  0.2 -0.1000000
+\end{lstlisting}
+Etudes du spectre d'une matrice :
+\begin{lstlisting}[language=html]
+> x = eigen(a)
+> x
+$values
+[1] 12.611389 -6.229530 -0.381859
+
+$vectors
+           [,1]       [,2]        [,3]
+[1,] -0.5559877 -0.5213880 -0.89035011
+[2,] -0.6914763 -0.4751874  0.44969731
+[3,] -0.4612355  0.7087675 -0.07105636
+
+> x$values # valeurs propres
+[1] 12.611389 -6.229530 -0.381859
+
+> x$vectors # vecteurs propres
+           [,1]       [,2]        [,3]
+[1,] -0.5559877 -0.5213880 -0.89035011
+[2,] -0.6914763 -0.4751874  0.44969731
+[3,] -0.4612355  0.7087675 -0.07105636
+\end{lstlisting}
+
+\subsection{Opération et fonction de base en R}
+Longueur d'un vecteur 
+\begin{lstlisting}[language=html]
+> v<-seq(10,60, by=10);v
+[1] 10 20 30 40 50 60
+> length(v)
+[1] 6
+\end{lstlisting}
+Dimension d'une matrice (ligne $\times$ colonnes )
+\begin{lstlisting}[language=html]
+> m = matrix(1,3,6);m
+     [,1] [,2] [,3] [,4] [,5] [,6]
+[1,]    1    1    1    1    1    1
+[2,]    1    1    1    1    1    1
+[3,]    1    1    1    1    1    1
+> dim(m)
+[1] 3 6
+\end{lstlisting}
+Somme
+\begin{lstlisting}[language=html]
+> v<-seq(10,60, by=10);v
+[1] 10 20 30 40 50 60
+> sum(v)
+[1] 210
+\end{lstlisting}
+Moyenne
+\begin{lstlisting}[language=html]
+> v<-seq(10,60, by=10);v
+[1] 10 20 30 40 50 60
+> mean(v)
+[1] 35
+\end{lstlisting}
+Min
+\begin{lstlisting}[language=html]
+> v<-seq(10,60, by=10);v
+[1] 10 20 30 40 50 60
+> min(v)
+[1] 10
+\end{lstlisting}
+Max
+\begin{lstlisting}[language=html]
+> v<-seq(10,60, by=10);v
+[1] 10 20 30 40 50 60
+> max(v)
+[1] 60
+\end{lstlisting}
+Min et Max du vector dans un vecteur en 2 dimensions
+\begin{lstlisting}[language=html]
+> v<-seq(10,60, by=10);v
+[1] 10 20 30 40 50 60
+> range(v)
+[1] 10 60
+\end{lstlisting}
+Écart-type
+\begin{lstlisting}[language=html]
+> v<-seq(10,60, by=10);v
+[1] 10 20 30 40 50 60
+> sd(v)
+[1] 18.70829
+\end{lstlisting}
+Médiane
+\begin{lstlisting}[language=html]
+> v<-seq(10,60, by=10);v
+[1] 10 20 30 40 50 60
+> median(v)
+[1] 35
+\end{lstlisting}
+Affichage simple
+\begin{lstlisting}[language=html]
+> v<-seq(10,60, by=10);v
+[1] 10 20 30 40 50 60
+> str(v)
+ num [1:6] 10 20 30 40 50 60
+\end{lstlisting}
+Affichage des informations sur le vecteur : min - Q1 - mediane - moyenne - Q3 - max
+\begin{lstlisting}[language=html]
+> v<-seq(10,60, by=10);v
+[1] 10 20 30 40 50 60
+> summary(v)
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+   10.0    22.5    35.0    35.0    47.5    60.0 
+\end{lstlisting}
+Affichage du vecteur sous forme de modalité : 
+\begin{lstlisting}[language=html]
+> v<-seq(10,60, by=10);v
+[1] 10 20 30 40 50 60
+> table(v)
+v
+10 20 30 40 50 60 
+ 1  1  1  1  1  1 
+\end{lstlisting}
+Indique si il y a des valeurs manquantes
+\begin{lstlisting}[language=html]
+> v<-seq(10,60, by=10);v
+[1] 10 20 30 40 50 60
+> is.na(v)
+[1] FALSE FALSE FALSE FALSE FALSE FALSE
+\end{lstlisting}
+Ajout de NA (Not Available)
+\begin{lstlisting}[language=html]
+> v<-seq(10,60, by=10);v
+[1] 10 20 30 40 50 60
+> vbis<- c(NA,v,NA,NA);vbis
+[1] NA 10 20 30 40 50 60 NA NA
+> sum(is.na(vbis))
+[1] 3
+\end{lstlisting}
+\textbf{Note :} l'option na.rm = TRUE signifie que l'on ne tient pas compte des NA. L'inverse est obtenu avec na.rm = FALSE.
+Min et Max du vector dans un vecteur en 2 dimensions
+\begin{lstlisting}[language=html]
+> vbis<- c(NA,v,NA,NA);vbis
+[1] NA 10 20 30 40 50 60 NA NA
+> range(vbis,na.rm = TRUE)
+[1] 10 60
+> vbis<- c(NA,v,NA,NA);vbis
+[1] NA 10 20 30 40 50 60 NA NA
+> range(vbis,na.rm = FALSE)
+[1] NA NA
+\end{lstlisting}
+
+
+\subsection{Statistiques simples sur les vecteurs}
+Quartiles , 4 paquets d'effectifs égaux 
+\begin{lstlisting}[language=html]
+> v<-seq(10,60, by=10);v
+[1] 10 20 30 40 50 60
+> quantile(v)
+  0%  25%  50%  75% 100% 
+10.0 22.5 35.0 47.5 60.0
+\end{lstlisting}
+Quantiles à valeurs redéfinies
+\begin{lstlisting}[language=html]
+> v<-seq(10,60, by=10);v
+[1] 10 20 30 40 50 60
+> quantile(v, probs = c(0,0.1,0.9,1))
+  0%  10%  90% 100% 
+  10   15   55   60 
+\end{lstlisting}
+
+Resumé des différentes données importantes du vecteur
+\begin{lstlisting}[language=html]
+> v<-seq(10,60, by=10);v
+[1] 10 20 30 40 50 60
+> summary(v)
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+   10.0    22.5    35.0    35.0    47.5    60.0 
+\end{lstlisting}
+Correlation linaire entre 2 vecteurs
+\begin{lstlisting}[language=html]
+> v<-seq(10,60, by=10);v
+[1] 10 20 30 40 50 60
+> w<-c(20,10,31,31,61,51);w
+[1] 20 10 31 31 61 51
+> cor(v,w)
+[1] 0.8657699
+\end{lstlisting}
+Tri 
+\begin{lstlisting}[language=html]
+> w<-c(20,10,31,31,61,51);w
+[1] 20 10 31 31 61 51
+> sort(w)
+[1] 10 20 31 31 51 61
+> w<-c(20,10,31,31,61,51);w
+[1] 20 10 31 31 61 51
+> sort(w, decreasing = T)
+[1] 61 51 31 31 20 10
+\end{lstlisting}
+Ordre : designe l'ordre des éléments dans le vecteurs sans les trier
+\begin{lstlisting}[language=html]
+> w<-c(20,10,31,31,61,51);w
+[1] 20 10 31 31 61 51
+> order(w)
+[1] 2 1 3 4 6 5
+\end{lstlisting}
+Rank : permet de définir le même numéro d'ordre pour des valeurs égales 
+\begin{lstlisting}[language=html]
+> w<-c(20,10,31,31,61,51);w
+[1] 20 10 31 31 61 51
+> rank(w, ties.method = "min")
+[1] 2 1 3 3 6 5
+\end{lstlisting}
+
+Valeurs maximale (minimale) membre à membre
+\begin{lstlisting}[language=html]
+> v<-seq(10,60, by=10);v
+[1] 10 20 30 40 50 60
+> w<-c(20,10,31,31,61,51);w
+[1] 20 10 31 31 61 51
+> u<-c(5,5,5,32,62,49);u
+[1]  5  5  5 32 62 49
+> pmax(w,v,u)
+[1] 20 20 31 40 62 60
+> pmin(w,v,u)
+\end{lstlisting}
+
+Sommes cummulées du vecteur : $u[n] = u[n]+u[n-1]$
+\begin{lstlisting}[language=html]
+> v<-seq(10,60, by=10);v
+[1] 10 20 30 40 50 60
+> cumsum(v)
+[1]  10  30  60 100 150 210
+\end{lstlisting}
+Produits cummulées du vecteur : $u[n]=u[n] \times u[n-1]$
+\begin{lstlisting}[language=html]
+> v<-seq(10,60, by=10);v
+[1] 10 20 30 40 50 60
+> cumprod(v)
+[1] 1.0e+01 2.0e+02 6.0e+03 2.4e+05 1.2e+07 7.2e+08
+\end{lstlisting}
+
+Max (min) succésifs $u[n] = \max(v[n],v[n-1])$
+\begin{lstlisting}[language=html]
+> u<-c(5,5,5,32,62,49);u
+[1]  5  5  5 32 62 49
+> cummax(u)
+[1]  5  5  5 32 62 62
+> cummin(u)
+[1] 5 5 5 5 5 5
+\end{lstlisting}
+
+\subsection{Factorielle et Coefficient binomial}
+\textbf{Fonction factorielle :}
+$$n! = n \times (n-1) \times (n-2) \times ... \times 1$$
+\begin{lstlisting}[language=html]
+> factorial(0)
+[1] 1
+> factorial(1)
+[1] 1
+> factorial(2)
+[1] 2
+> factorial(5)
+[1] 120
+> factorial(10)
+[1] 3628800
+> factorial(100)
+[1] 9.332622e+157
+\end{lstlisting}
+\textbf{Coefficient binomial}
+$$C_{n}^{k} \textrm{ ou } \binom{n}{k} $$
+est le nombre de façon de choisir $k$ éléments parmi $n$ éléments avec $n\geq k$.
+\begin{lstlisting}[language=html]
+> n <- 1
+> k <- 1
+> com <- choose(n, k)
+> paste('Nombre de façon de choisir', k ,' élément(s) parmi ', n ,' : ', com)
+[1] "Nombre de façon de choisir 1  élément(s) parmi  1  :  1"
+> n <- 1
+> k <- 2
+> com <- choose(n, k)
+> paste('Nombre de façon de choisir', k ,' élément(s) parmi ', n ,' : ', com)
+[1] "Nombre de façon de choisir 2  élément(s) parmi  1  :  0"
+> n <- 2
+> k <- 1
+> com <- choose(n, k)
+> paste('Nombre de façon de choisir', k ,' élément(s) parmi ', n ,' : ', com)
+[1] "Nombre de façon de choisir 1  élément(s) parmi  2  :  2"
+> n <- 10
+> k <- 3
+> com <- choose(n, k)
+> paste('Nombre de façon de choisir', k ,' élément(s) parmi ', n ,' : ', com)
+[1] "Nombre de façon de choisir 3  élément(s) parmi  10  :  120"
+\end{lstlisting}
+\textbf{Petit truc drôle :} le triangle de Pascal
+\begin{lstlisting}[language=html]
+> for (n in 0:10) print(choose(n, k = 0:n))
+[1] 1
+[1] 1 1
+[1] 1 2 1
+[1] 1 3 3 1
+[1] 1 4 6 4 1
+[1]  1  5 10 10  5  1
+[1]  1  6 15 20 15  6  1
+[1]  1  7 21 35 35 21  7  1
+[1]  1  8 28 56 70 56 28  8  1
+[1]   1   9  36  84 126 126  84  36   9   1
+[1]   1  10  45 120 210 252 210 120  45  10   1
+\end{lstlisting}
+\textbf{Autre petit truc drôle : } calcul de $2^{n}$
+\begin{lstlisting}[language=html]
+> n <- 10
+> for (k in 1:n){
++   print(sum(choose(k,0:k)))
++ }
+[1] 2
+[1] 4
+[1] 8
+[1] 16
+[1] 32
+[1] 64
+[1] 128
+[1] 256
+[1] 512
+[1] 1024
+\end{lstlisting}
+\textbf{Exercice :} Programmer la suite de Fibonnacci
+\begin{lstlisting}[language=html]
+> x <- seq(1,30,1)
+> x
+ [1]  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20
+[21] 21 22 23 24 25 26 27 28 29 30
+> length(x)
+[1] 30
+> y <- rep(1,30)
+> length(x)
+[1] 30
+> for(i in 1:(length(x)-2)){y[i+2] <- (y[i+1] + y[i])}
+> length(y)
+[1] 30
+> y
+ [1]      1      1      2      3      5      8     13     21
+ [9]     34     55     89    144    233    377    610    987
+[17]   1597   2584   4181   6765  10946  17711  28657  46368
+[25]  75025 121393 196418 317811 514229 832040
+\end{lstlisting}
+
+\subsection{Logique et opérations sur booléens}
+
+Définition de vecteurs de booléens
+\begin{lstlisting}[language=html]
+> A <- c(F,T,F,T);A
+[1] FALSE  TRUE FALSE  TRUE
+> B<- c(F,F,T,T);B
+[1] FALSE FALSE  TRUE  TRUE
+\end{lstlisting}
+
+\textbf{Table de vérités :}\newline
+$A\land B$
+\begin{lstlisting}[language=html]
+> A
+[1] FALSE  TRUE FALSE  TRUE
+> B
+[1] FALSE FALSE  TRUE  TRUE
+> Et <- A & B;Et
+[1] FALSE FALSE FALSE  TRUE
+> cbind(A,B,Et)
+         A     B    Et
+[1,] FALSE FALSE FALSE
+[2,]  TRUE FALSE FALSE
+[3,] FALSE  TRUE FALSE
+[4,]  TRUE  TRUE  TRUE
+\end{lstlisting}
+$A \lor B$
+\begin{lstlisting}[language=html]
+> A
+[1] FALSE  TRUE FALSE  TRUE
+> B
+[1] FALSE FALSE  TRUE  TRUE
+> Ou <- A | B;Ou
+[1] FALSE  TRUE  TRUE  TRUE
+> cbind(A,B,Ou)
+         A     B    Ou
+[1,] FALSE FALSE FALSE
+[2,]  TRUE FALSE  TRUE
+[3,] FALSE  TRUE  TRUE
+[4,]  TRUE  TRUE  TRUE
+\end{lstlisting}
+$\lnot A$
+\begin{lstlisting}[language=html]
+> A
+[1] FALSE  TRUE FALSE  TRUE
+> nonA <- !(A)
+> cbind(A,nonA)
+         A  nonA
+[1,] FALSE  TRUE
+[2,]  TRUE FALSE
+[3,] FALSE  TRUE
+[4,]  TRUE FALSE
+\end{lstlisting}
+$A \oplus B$\footnote{Ou exclusif : \textit{Le résultat est VRAI si un et un seul des opérandes A et B est VRAI} ou \textit{Le résultat est VRAI si les deux opérandes A et B ont des valeurs distinctes} ou \textit{Le résultat est VRAI si un nombre impair d'entrées est vrai (ceci est surtout applicable lorsque deux ou plusieurs opérateurs logiques XOR se cascadent } \newline
+$ p \oplus q \equiv (p\lor q )\land \lnot (p\land q) \equiv (p\land \lnot q)\lor(\lnot p \land q)$
+\begin{center}
+\begin{tabular}{|l|l|l|}
+\hline
+A & B & A $\oplus$ B \\ \hline
+0 & 0 & 0          \\ \hline
+0 & 1 & 1          \\ \hline
+1 & 0 & 1          \\ \hline
+1 & 1 & 0          \\ \hline
+\end{tabular}
+\end{center}
+}
+
+\begin{lstlisting}[language=html]
+> A
+[1] FALSE  TRUE FALSE  TRUE
+> B
+[1] FALSE FALSE  TRUE  TRUE
+> OuEx <- xor(A,B)
+> cbind(A,B,OuEx)
+         A     B  OuEx
+[1,] FALSE FALSE FALSE
+[2,]  TRUE FALSE  TRUE
+[3,] FALSE  TRUE  TRUE
+[4,]  TRUE  TRUE FALSE
+\end{lstlisting}
+Implication : $A \Rightarrow B \equiv  \lnot A \lor B$
+\begin{lstlisting}[language=html]
+> A
+[1] FALSE  TRUE FALSE  TRUE
+> B
+[1] FALSE FALSE  TRUE  TRUE
+> imp <- !A|B;imp
+[1]  TRUE FALSE  TRUE  TRUE
+> cbind(A,B,imp)
+         A     B   imp
+[1,] FALSE FALSE  TRUE
+[2,]  TRUE FALSE FALSE
+[3,] FALSE  TRUE  TRUE
+[4,]  TRUE  TRUE  TRUE
+\end{lstlisting}
+Equivalence : $A \Leftrightarrow B \equiv (\lnot A \lor B)\land (\lnot B \lor A)$
+\begin{lstlisting}[language=html]
+> A
+[1] FALSE  TRUE FALSE  TRUE
+> B
+[1] FALSE FALSE  TRUE  TRUE
+> equi <- (!A|B) & (!B|A);equi
+[1]  TRUE FALSE FALSE  TRUE
+> cbind(A,B,equi)
+         A     B  equi
+[1,] FALSE FALSE  TRUE
+[2,]  TRUE FALSE FALSE
+[3,] FALSE  TRUE FALSE
+[4,]  TRUE  TRUE  TRUE
+\end{lstlisting}
+On peut effectuer un "filtre booléen" sur les membres d'un vecteur. \newline
+Soit $t$, un vecteur qui contient tout les membres de $v$ > 30 On ne garde que les membres où TRUE a été obtenu :
+\begin{lstlisting}[language=html]
+> v<-seq(10,60, by=10);v
+[1] 10 20 30 40 50 60
+> t <- (v>30) ;v;t
+[1] 10 20 30 40 50 60
+[1] FALSE FALSE FALSE  TRUE  TRUE  TRUE
+> v <- v[(v>30)];v
+[1] 40 50 60
+\end{lstlisting}
+which : retourne les indices du vecteurs qui satisfont la condition : 
+\begin{lstlisting}[language=html]
+ > v<-seq(10,60, by=10);v
+[1] 10 20 30 40 50 60
+> which(v == 40) #trouve les indices pour lesquels le membre est égal à 30
+[1] 4
+> v[which(v == 40)] #logique
+[1] 40
+> which(v == 30)
+[1] 3
+> v[which(v == 30)]#logique
+[1] 30
+> which.max(v) #indice du max
+[1] 6
+> v[which.max(v)]
+[1] 60
+> which.min(v) #indice du min
+[1] 1
+> v[which.min(v)]
+[1] 10
+\end{lstlisting}
+Transformation d'un vecteur de booléens en vecteur d'entier
+\begin{lstlisting}[language=html]
+> A
+[1] FALSE  TRUE FALSE  TRUE
+> A <- as.integer(A);A
+[1] 0 1 0 1
+\end{lstlisting}
+all : vrai si toutes les valeurs satisfont la condition.
+\begin{lstlisting}[language=html]
+> v<-seq(10,60, by=10);v
+[1] 10 20 30 40 50 60
+> all(v > 3)
+[1] TRUE
+> all (v < 20)
+[1] FALSE
+\end{lstlisting}
+\begin{lstlisting}[language=html]
+any : vrai si au moins une valeur satisfait la condition
+> v<-seq(10,60, by=10);v
+[1] 10 20 30 40 50 60
+> any(v < 3)
+[1] FALSE
+> any(v < 20)
+[1] TRUE
+\end{lstlisting}
+\subsection{Opérations sur les ensembles}
+\begin{lstlisting}[language=html]
+unique : supprime les redondances dans un vecteur
+> H<-unique(c("e","f","g","h","h","h"))
+> H
+[1] "e" "f" "g" "h"
+\end{lstlisting}
+Soient deux ensembles $P$ et $Q$
+\begin{lstlisting}[language=html]
+> P<-c("e","f","g","h");P
+[1] "e" "f" "g" "h"
+> Q<-c("g","h","i","j");Q
+[1] "g" "h" "i" "j"
+\end{lstlisting}
+Union : $P\cup Q$
+\begin{lstlisting}[language=html]
+> union(P,Q)
+[1] "e" "f" "g" "h" "i" "j"
+\end{lstlisting}
+Intersection : $P\cap Q$
+\begin{lstlisting}[language=html]
+> intersect(P,Q)
+[1] "g" "h"
+\end{lstlisting}
+Différence non symétrique
+\begin{lstlisting}[language=html]
+> P<-c("e","f","g","h");P
+[1] "e" "f" "g" "h"
+> Q<-c("g","h","i","j");Q
+[1] "g" "h" "i" "j"
+> setdiff(P,Q)
+[1] "e" "f"
+> setdiff(Q,P)
+[1] "i" "j"
+\end{lstlisting}
+Différence symétrique
+\begin{lstlisting}[language=html]
+> P<-c("e","f","g","h");P
+[1] "e" "f" "g" "h"
+> Q<-c("g","h","i","j");Q
+[1] "g" "h" "i" "j"
+> union(setdiff(P,Q),setdiff(Q,P))
+[1] "e" "f" "i" "j"
+\end{lstlisting}
+Appartenance, membre à membre, d'un premier ensemble à un autre. Retourne un vecteur de booléen réprésentant si le i-ème membre de l'ensemble P appartient à l'ensemble Q
+\begin{lstlisting}[language=html]
+> P<-c("e","f","g","h");P
+[1] "e" "f" "g" "h"
+> H<-unique(c("e","f","g","h","h","h","a","z"));H
+[1] "e" "f" "g" "h" "a" "z"
+> H %in% P
+[1]  TRUE  TRUE  TRUE  TRUE FALSE FALSE
+> P %in% H
+[1] TRUE TRUE TRUE TRUE
+\end{lstlisting}
+
+\subsection{Les listes}
+D'après \href{http://www.r-tutor.com/r-introduction/list}{\underline{R-Tutor.com}}\newline
+\\
+A list is a generic vector containing other objects.\newline
+For example, the following variable x is a list containing copies of three vectors n, s, b, and a numeric value 3. 
+\begin{lstlisting}[language=html]
+> n = c(2, 3, 5)
+> s = c("aa", "bb", "cc", "dd", "ee")
+> b = c(TRUE, FALSE, TRUE, FALSE, FALSE)
+> x = list(n, s, b, 3);x
+[[1]]
+[1] 2 3 5
+
+[[2]]
+[1] "aa" "bb" "cc" "dd" "ee"
+
+[[3]]
+[1]  TRUE FALSE  TRUE FALSE FALSE
+
+[[4]]
+[1] 3
+\end{lstlisting}
+\textbf{List Slicing}\newline
+We retrieve a list slice with the single square bracket "[]" operator. The following is a slice containing the second member of x, which is a copy of s. 
+\begin{lstlisting}[language=html]
+> x[2]
+[[1]]
+[1] "aa" "bb" "cc" "dd" "ee"
+\end{lstlisting}
+
+With an index vector, we can retrieve a slice with multiple members. Here a slice containing the second and fourth members of x. 
+\begin{lstlisting}[language=html]
+> x[c(2, 4)]
+[[1]]
+[1] "aa" "bb" "cc" "dd" "ee"
+
+[[2]]
+[1] 3
+\end{lstlisting}
+\textbf{Member Reference}\newline
+In order to reference a list member directly, we have to use the double square bracket "[[]]" operator. The following object x[[2]] is the second member of x. In other words, x[[2]] is a copy of s, but is not a slice containing s or its copy. 
+\begin{lstlisting}[language=html]
+> x[[2]]
+[1] "aa" "bb" "cc" "dd" "ee"
+\end{lstlisting}
+We can modify its content directly. 
+\begin{lstlisting}[language=html]
+> x[[2]]
+[1] "aa" "bb" "cc" "dd" "ee"
+> x[[2]]
+[1] "aa" "bb" "cc" "dd" "ee"
+> x[[2]][1] = "ta"
+> x[[2]]
+[1] "ta" "bb" "cc" "dd" "ee"
+\end{lstlisting}
+\textbf{Named List }\newline
+We can assign names to list members, and reference them by names instead of numeric indexes.
+For example, in the following, v is a list of two members, named "bob" and "john".
+\begin{lstlisting}[language=html] 
+> v = list(bob=c(2, 3, 5), john=c("aa", "bb"))
+> v
+$bob
+[1] 2 3 5
+
+$john
+[1] "aa" "bb"
+\end{lstlisting}
+\textbf{List Slicing}\newline
+We retrieve a list slice with the single square bracket "[]" operator. Here is a list slice containing a member of v named "bob". 
+\begin{lstlisting}[language=html]
+> v["bob"]
+$bob
+[1] 2 3 5
+
+> v$bob
+[1] 2 3 5
+\end{lstlisting}
+With an index vector, we can retrieve a slice with multiple members. Here is a list slice with both members of v. Notice how they are reversed from their original positions in v. 
+\begin{lstlisting}[language=html]
+> v[c("john", "bob")]
+$john
+[1] "aa" "bb"
+
+$bob
+[1] 2 3 5
+\end{lstlisting}
+\textbf{Member Reference}\newline
+In order to reference a list member directly, we have to use the double square bracket "[[]]" operator. The following references a member of v by name. 
+\begin{lstlisting}[language=html]
+> v[["bob"]]
+[1] 2 3 5
+\end{lstlisting}
+
+A named list member can also be referenced directly with the "\$" operator in lieu of the double square bracket operator. 
+\begin{lstlisting}[language=html]
+> v$john
+[1] "aa" "bb"
+\end{lstlisting}
+\textbf{Search Path Attachment}\newline
+We can attach a list to the R search path and access its members without explicitly mentioning the list. It should to be detached for cleanup. 
+\begin{lstlisting}[language=html]
+> attach(v)
+> bob
+[1] 2 3 5
+> john
+[1] "aa" "bb"
+> detach(v)
+> bob
+Erreur : objet 'bob' introuvable
+\end{lstlisting}
+
