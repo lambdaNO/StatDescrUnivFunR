@@ -1,0 +1,1653 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{Complément Université FUN - Introduction à R}
+\section{Introduction}
+Ce document constitue une présentation succincte des bases du langage R pour l'analyse statistique interactive de données. En particulier, on s'intéressera à la représentation et la manipulation des données numériques et qualitatives, à l'importation de source de données externes et à la sauvegarde d'une session de travail.Un glossaire des principales commandes est également fourni en Annexe, ainsi qu'une liste des commandes utiles pour la modélisation.\newline
+Le logiciel \href{https://www.r-project.org/}{\underline{R}} est disponible pour Windows, Mac et Linux, et son installation ne présente en règle générale aucune difficulté. Pour plus d'informations concernant l'installation du logiciel, il peut être utile de consulter la FAQ, en particulier la section \href{https://cran.r-project.org/doc/FAQ/R-FAQ.html\#How-can-R-be-installed\_003f}{\underline{How can R be installed}} '.\newline
+L'interface de R est assez rudimentaire, et diffère des logiciels tels que Stata, SPSS ou Statistica qui offrent une vue des données comme sous un tableur (par exemple, Microsoft Excel) et des menus déroulants. Sous R, l'utilisateur écrit explicitement des commandes permettant de travailler sur les données. Notons que le logiciel RStudio fournit une interface plus conviviale que l'interface de base de R.\newline
+En termes de guide pour démarrer, le site CRAN héberge l'aide en ligne officielle, dont \href{https://cran.r-project.org/doc/manuals/r-release/R-intro.html}{\underline{An Introduction to R}}, qui décrit les principales commandes de R. La section 'Contributed' du site CRAN propose également des documents en français\footnote{http://cran.r-project.org/other-docs.html}.
+\section{Interagir avec R}
+\paragraph*{Démarrer avec R.} Quelque soit le système d'exploitation utilisé (Windows, Mac, Linux), R fonctionne comme tout autre logiciel : il suffit généralement de double-cliquer sur l'icône de l'application pour démarrer R. On dispose ensuite d'une console interactive dans laquelle on peut commencer à saisir des commandes après l'invite R $>$. Les résultats seront affichés aussitôt dans la console.
+\subsection{Interactivité et reproductibilité}
+R est avant tout un langage et un interpréteur de commandes. L'approche est interactive dans la mesure où il est possible de taper directement des commandes à l'invite R et de visualiser le résultat dans la même interface. On parlera de \underline{console} pour désigner la fenêtre interactive dans laquelle on saisit des commandes R et où l'on visualise les résultats renvoyés par R. Les graphiques sont générés dans une fenêtre graphique externe.\newline
+Il est également possible d'enregistrer une série de commandes dans un fichier script R, ayant pour extension \textit{.R} ou \textit{.r}, et de faire exécuter l'intégralité des commandes de ce script par R à l'aide de la commande \textit{source()}. Quelle que soit la plateforme, R fournit un éditeur minimal qui offre la possibilité d'envoyer interactivement des commandes dans la console, ou l'intégralité des commandes d'un script, à l'image de \textit{source()}.
+\subsection{Obtenir de l'aide}
+Le système d'aide en ligne fourni avec R est accessible via la commande \textit{help()}. Lorsque l'on connaît le nom de la
+commande R, par exemple, \textit{cmd()}, on peut taper \textit{help(cmd)} ou \textit{'cmd} (sauf dans le cas de certains opérateurs).\newline
+Sinon, on peut rechercher à partir de mots-clés en tapant \textit{help.search(cmd)}. Une alternative pour la recherche par motif consiste à utiliser \textit{apropos(cmd)}. Pour connaître toutes les commandes fournies par un package (\textit{e.g.},
+\textit{pkg}), il suffit de taper \textit{help(package =pkg)}.
+
+\section{Représentation des données sous R}
+\subsection{Variables numériques et catégorielles}
+\paragraph*{Les variables sous R.} Formellement, une telle liste de nombres est stockée dans ce que R appelle un vecteur. Par souci de simplicité, nous parlerons de variable et d'éléments d'une variable. Sur le plan statistique, les éléments seraient plutôt considérés comme des observations ou des données collectées sur chaque unité statistique.\newline
+Supposons que l'on ait demandé à 10 personnes choisies au hasard dans la rue leur âge. Voici la série de mesures recueillies, arrondies à l'entier le plus proche, ainsi que le sexe de la personne.
+\begin{center}[]
+\begin{tabular}{|l|l|l|l|l|l|l|l|l|l|l|}
+\hline
+\textbf{age}  & 18 & 27 & 34 & 18 & 24 &   & 30 & 28 & 19 & 19 \\ \hline
+\textbf{sexe} & F  & F  & M  & F  & M  & M & M  & F  & M  & F  \\ \hline
+\end{tabular}
+\end{center}
+Dans l'exemple suivant, on crée une variable appelée \textit{age} (il n'est pas recommandé d'utiliser des accents ou signes diacritiques) à laquelle on associe la liste des nombres présentés dans le tableau précédent.
+\begin{lstlisting}[language=html]
+> age <- c( 18,27,34,18,24,NA,30,28,19,19 )
+\end{lstlisting}
+Pour assigner un nom de variable à une série de valeurs, on utilise le symbole \textit{<-}. Le signe \textit{=} est valide également, mais il n'est pas recommandé de l'utiliser dans ce contexte. Les valeurs sont listées à l'intérieur d'une commande
+\textit{c()}, entre parenthèses. Toutes les commandes R utilisent le même principe : les données ou les options se trouvent mentionnées entre parenthèses. La sixième personne interrogée ayant refusé de répondre, on considère qu'il s'agit
+d'une valeur manquante que nous avons représentée par un point (.), représentée sous R par le symbole \textit{NA}. Pour
+afficher le contenu de la variable \textit{age}, il suffit de taper son nom :
+\begin{lstlisting}[language=html]
+> age
+ [1] 18 27 34 18 24 NA 30 28 19 19
+\end{lstlisting}
+En ce qui concerne le stockage de la deuxième série de mesures (variable \textit{sexe}), on notera qu'il ne s'agit pas d'une variable numérique, mais d'une série de lettres \textit{\{F, M\}}. Il serait tout à fait possible de considérer un codage numérique pour cette variable, en décidant de représenter les \textit{femmes par des 0} et les \textit{hommes par des 1}. On peut toutefois créer une variable constituée de caractères de la manière suivante :
+\begin{lstlisting}[language=html]
+> sexe <- c("F","F","M","F","M","M","M","F","M","F")
+## sexe <- c('F','F','M','F','M','M','M','F','M','F')
+> sexe
+ [1] "F" "F" "M" "F" "M" "M" "M" "F" "M" "F"
+\end{lstlisting}
+Sous R, les caractères ou chaînes de caractères sont entourés de guillemets anglo-saxons, simple ou double \textit{quote}.\newline
+\paragraph*{Nommage de variables.} On retiendra également que les noms de variable sont sensible à la casse : la variable \textit{sexe} est différente d'une variable qui serait appelée \textit{\textbf{S}exe}.\newline
+Par souci de simplicité, on ne fera pas de distinction entre les variables au sens statistique du terme, et les variables sous R. On considérera donc qu'une variable R possède un nom et contient une série de valeurs de type numérique (entier ou nombre réel) ou caractère, ce que l'on peut vérifier généralement à l'aide de \textit{mode()}. Le nombre total d'éléments contenus dans une variable, incluant les éventuelles données manquantes \textit{NA}, est obtenu avec la
+commande \textit{length()}.
+\begin{lstlisting}[language=html]
+> length(age)
+[1] 10
+> length(sexe)
+[1] 10
+> mode(age)
+[1] "numeric"
+> mode(sexe)
+[1] "character"
+\end{lstlisting}
+Supposons qu'une autre variable ait été collectée, à savoir la réponse concernant le degré d'accord des répondants vis-à-vis d'une certaine assertion (par exemple, \textit{quelle est votre opinion concernant les théories selon lesquelles le climat se réchauffe et entraînera à terme de grosses difficultés pour vivre sur Terre}). Les 5 modalités de réponse proposées aux participants suivent le principe d'une échelle de Likert\footnote{
+Une échelle de Likert (du nom du psychologue américain Rensis Likert1) est une échelle de jugement répandue dans les questionnaires psychométriques par laquelle la personne interrogée exprime son degré d'accord ou de désaccord vis-à-vis d'une affirmation (l'énoncé). \newline L'échelle contient en général cinq ou sept choix de réponse qui permettent de nuancer le degré d'accord. Le texte des étiquettes est variable, par exemple :
+\begin{enumerate}
+\item Tout à fait d'accord
+\item D'accord
+\item Ni en désaccord ni d'accord
+\item Pas d'accord
+\item Pas du tout d'accord
+\end{enumerate}
+Pour les échelles impaires, le niveau central permet de n'exprimer aucun avis, tandis que les échelles paires (par exemple à quatre modalités) sont dites « à choix forcé ». À chaque réponse, il est possible d'attribuer une note (positive ou négative) qui permet un traitement quantitatif des données, pour calculer par exemple la moyenne (et l'écart-type) des réponses données par l'échantillon interrogé.\newline
+L'échelle de Likert est beaucoup utilisée en psychologie sociale et clinique, sciences de gestion (notamment en marketing), sondages, etc.	}. Les données ont été recueillies au format
+numérique, de \textit{1="Pas du tout d'accord"} à \textit{5="Tout à fait d'accord"}. Appelons cette variable \textit{opin}.
+\begin{lstlisting}[language=html]
+> opin <- c(1,3,2,1,4,1,5,3,2,2)
+> opin
+ [1] 1 3 2 1 4 1 5 3 2 2
+\end{lstlisting}
+La commande \textit{factor()} permet de faire connaître à R la nature qualitative de cette variable, et d'associer à chaque modalité ou niveau du facteur (\textit{levels}) des étiquettes textuelles plus informatives. Par défaut, la commande \textit{factor()} ne fait qu'ajouter des niveaux à une variable, les niveaux retenus correspondant aux valeurs uniques, triées par ordre lexicographique, présentes dans la variable.
+\begin{lstlisting}[language=html]
+> factor(opin)
+ [1] 1 3 2 1 4 1 5 3 2 2
+Levels: 1 2 3 4 5
+\end{lstlisting}
+Il est possible d'associer des étiquettes à chacun de ces niveaux, en respectant l'ordre de présentation des niveaux
+à l'aide de l'option \textit{labels=}. La commande \textit{nlevels} renverra le nombre de niveaux d'une variable de type
+\textit{factor}.
+\begin{lstlisting}[language=html]
+> opin <- factor(opin, labels =c("Pas du tout d'accord","Moyennement d'accord","Sans opinion","Assez d'accord","Tout à fait d'accord"))
+> opin
+ [1] Pas du tout d'accord Sans opinion        
+ [3] Moyennement d'accord Pas du tout d'accord
+ [5] Assez d'accord       Pas du tout d'accord
+ [7] Tout à fait d'accord Sans opinion        
+ [9] Moyennement d'accord Moyennement d'accord
+5 Levels: Pas du tout d'accord ... Tout à fait d'accord
+> nlevels(opin)
+[1] 5
+\end{lstlisting}
+La commande \textit{levels()} permet de lister les niveaux d'une variable qualitative, ou d'en modifier les valeurs.
+L'exemple ci-dessous montre comment il est possible d'agréger les deux dernières modalités de la variable.
+\begin{lstlisting}[language=html]
+> levels(opin)
+[1] "Pas du tout d'accord" "Moyennement d'accord"
+[3] "Sans opinion"         "Assez d'accord"      
+[5] "Tout à fait d'accord"
+> levels(opin)[4:5]
+[1] "Assez d'accord"       "Tout à fait d'accord"
+> levels(opin)[4:5] <- "Assez ou tout a fait d'accord"
+> opin
+ [1] Pas du tout d'accord         
+ [2] Sans opinion                 
+ [3] Moyennement d'accord         
+ [4] Pas du tout d'accord         
+ [5] Assez ou tout a fait d'accord
+ [6] Pas du tout d'accord         
+ [7] Assez ou tout a fait d'accord
+ [8] Sans opinion                 
+ [9] Moyennement d'accord         
+[10] Moyennement d'accord         
+4 Levels: Pas du tout d'accord ... Assez ou tout a fait d'accord
+\end{lstlisting}
+Il est possible d'indiquer à R que les niveaux de la variable qualitative sont ordonnées (on parle parfois de variable ordinale, contrairement aux variables nominales dont les modalités ne sont pas ordonnées, comme la couleur des yeux par exemple).
+\begin{lstlisting}[language=html]
+> factor(opin, ordered = TRUE)
+ [1] Pas du tout d'accord         
+ [2] Sans opinion                 
+ [3] Moyennement d'accord         
+ [4] Pas du tout d'accord         
+ [5] Assez ou tout a fait d'accord
+ [6] Pas du tout d'accord         
+ [7] Assez ou tout a fait d'accord
+ [8] Sans opinion                 
+ [9] Moyennement d'accord         
+[10] Moyennement d'accord         
+4 Levels: Pas du tout d'accord < ... < Assez ou tout a fait d'accord
+\end{lstlisting}
+La variable \textit{sexe} manipulée précédemment pourrait tout aussi bien être convertie en facteur :
+\begin{lstlisting}[language=html]
+> sexe <- factor(sexe)
+> sexe
+ [1] F F M F M M M F M F
+Levels: F M
+> levels(sexe)
+[1] "F" "M"
+\end{lstlisting}
+On notera que le premier niveau est \textit{F}. Si l'on souhaite que celui-ci soit \textit{M}, il suffit d'utiliser la commande \textit{relevel} et d'indiquer la catégorie de référence en option.
+\begin{lstlisting}[language=html]
+> sexe <- relevel(sexe, ref = "M")
+> sexe
+ [1] F F M F M M M F M F
+Levels: M F
+\end{lstlisting}
+\paragraph*{Les facteurs sous R.} Les niveaux des facteurs sont déterminés à partir des valeurs uniques identifiées
+dans une variable. L'ordre des niveaux d'un facteur suit l'ordre lexicographique : nombres, lettres en minuscules/
+majuscules. Par exemple, \textit{factor(c("1","oui","Oui","Non","non","3"))}.
+\begin{lstlisting}[language=html]
+> test
+[1] 1   oui Oui Non non 3  
+Levels: 1 3 non Non oui Oui
+> sort(test)
+[1] 1   3   non Non oui Oui
+Levels: 1 3 non Non oui Oui
+\end{lstlisting}
+R supprime automatiquement les valeurs manquantes de la liste des niveaux, sauf si l'on indique
+l'option \textit{exclude = NULL}; dans ce cas, les valeurs manquantes figureront comme un niveau à part.
+\subsection{Indexation d'observations}
+Il existe deux moyens d'accéder aux éléments d'une variable : renseigner le ou les numéros d'observation ou utiliser
+un filtre ou une condition à vérifier. On appellera cette dernière approche l'indexation sur critères.\newline
+Pour accéder individuellement aux éléments d'une variable, on écrit le nom de la variable suivi du numéro d'élément
+entre crochets. La première observation de la variable \textit{age} vaut ainsi :
+\begin{lstlisting}[language=html]
+> age[1]
+[1] 18
+\end{lstlisting}
+Il est possible de désigner plusieurs éléments, en les insérant dans une liste via \textit{c()}.
+\begin{lstlisting}[language=html]
+> age[c(1,2,3)]
+[1] 18 27 34
+> sexe[c(1,2,3)]
+[1] F F M
+Levels: M F
+\end{lstlisting}
+Lorsque les éléments que l'on souhaite afficher sont successifs (ici, les observations 1 à 3), L'expression ci-dessus
+peut se simplifier en utilisant la notation ci-dessous, dans laquelle on indique l'élément de départ et l'élément
+d'arrivée. L'expression ci-dessus est donc strictement équivalente à \textit{sexe[1:3]}.
+\begin{lstlisting}[language=html]
+> age[1:3]
+[1] 18 27 34
+> sexe[1:3]
+[1] F F M
+Levels: M F
+\end{lstlisting}
+\paragraph*{Motifs réguliers.}
+R dispose de deux commandes, \textit{rep()} et \textit{seq()}, qui permettent de générer des séquences de nombres suivant un motif particulier. Par exemple, \textit{seq(1,10,by=2)} renvoie la liste des 5 premiers nombres impairs, alors que \textit{rep(c(1,3),2)} répète la liste \textit{(1,3)} deux fois.\newline
+On peut vérifier la présence de données manquantes grâce à \textit{is.na()}, ce qui nous permet également d'introduire un autre type de données R : les \textit{variables booléennes}, c'est-à-dire des variables ne prenant que deux valeurs, vrai
+(\textit{TRUE}) ou faux (\textit{FALSE}), et que l'on retrouvera dans les tests logiques.
+\begin{lstlisting}[language=html]
+> age
+ [1] 18 27 34 18 24 NA 30 28 19 19
+> is.na(age)
+ [1] FALSE FALSE FALSE FALSE FALSE  TRUE FALSE FALSE FALSE
+[10] FALSE
+\end{lstlisting}
+Le résultat produit par R est de même longueur que la variable \textit{age} puisque R teste si chaque élément de cette variable est égal à \textit{NA}. L'expression \textit{age == NA}, où le symbole \textit{==} désigne le test d'égalité logique (à ne pas confondre avec \textit{=}) produirait le même résultat. Puisque la commande \textit{which()} renvoie le numéro du ou des éléments remplissant une certaine condition logique, on peut combiner \textit{which()} et \textit{is.na()} pour obtenir le numéro de l'observation manquante dans la variable \textit{age}.
+\begin{lstlisting}[language=html]
+> age
+ [1] 18 27 34 18 24 NA 30 28 19 19
+> which(is.na(age))
+[1] 6
+\end{lstlisting}
+Les observations disponibles pour ces deux variables ont été recueillies sur la même unité statistique. Il est donc naturel de se demander quel est le sexe de la personne n'ayant pas renseigné son âge. Plutôt que \textit{sexe[6]}, on pourra préférer utiliser l'expression suivante :
+\begin{lstlisting}[language=html]
+> age
+ [1] 18 27 34 18 24 NA 30 28 19 19
+> sexe
+ [1] "F" "F" "M" "F" "M" "M" "M" "F" "M" "F"
+> sexe[which(is.na(age))]
+[1] "M"
+\end{lstlisting}
+\paragraph*{Tests logiques sous R.}
+ Les opérateurs logiques sous R sont les suivants : \textit{==} (égalité), \textit{!=} (non égalité), \textit{!}
+(négation), \textit{\&} (et), \textit{|} (ou), \textit{>} (supérieur à), \textit{>=} (supérieur ou égal à), \textit{<} (inférieur à), \textit{<=} (inférieur ou égal à).\newline
+\\
+Un autre exemple d'indexation critériée consisterait à lister le sexe des individus dont l'âge est supérieur à 25 ans, par exemple. Le test logique à vérifier est alors : \textit{age > 25}, ou \textit{age >= 25} si l'on souhaite inclure la valeur 25 et toutes les observations vérifiant cette condition seront inclues dans le résultat renvoyé par R. Voici un exemple d'application :
+\begin{lstlisting}[language=html]
+> age
+ [1] 18 27 34 18 24 NA 30 28 19 19
+> sexe
+ [1] "F" "F" "M" "F" "M" "M" "M" "F" "M" "F"
+> sexe[which(age>25)]
+[1] "F" "M" "M" "F"
+\end{lstlisting}
+\subsection{Commandes R et opérations sur des variables}
+Un aspect important de R est que les commandes opèrent généralement sur l'ensemble des éléments d'une variable. Il n'est pas nécessaire de construire des boucles pour itérer une opération sur chacun des éléments.\newline
+La plupart des opérations arithmétiques de base sont disponibles sous R : addition, soustraction, division, etc. Par exemple \textit{1+2} renverra 3. Il faut toutefois faire attention à la représentation des nombres réels en machine dont R offre par ailleurs des commandes permettant de travailler avec l'ensemble des éléments d'une variable, comme par exemple \textit{sum()} qui renvoie la somme des valeurs stockées dans une variable numérique :
+\begin{lstlisting}[language=html]
+> sum(age)
+[1] NA
+\end{lstlisting}
+On voit que le résultat renvoyé ne correspond pas vraiment au résultat escompté, et que R se contente de renvoyer la
+valeur \textit{NA}. Comme il y a une valeur manquante, R ne sait pas comment on doit la traiter et rappelle à l'utilisateur que la série de valeurs dont on essaye de calculer la somme n'est pas complètement observée. On peut alors effectuer le calcul en ignorant la 6$^{\textrm{ème}}$ observation.
+\begin{lstlisting}[language=html]
+> sum(age[-6])
+[1] 217
+\end{lstlisting}
+Mais en fait la commande \textit{sum()} dispose d'une option permettant d'effectuer le calcul en ignorant les valeurs manquantes.
+\begin{lstlisting}[language=html]
+> sum(age, na.rm = TRUE)
+[1] 217
+\end{lstlisting}
+Il est bien entendu possible d'appliquer des opérations de manière séquentielle, par exemple calculer le carré des âges des individus, puis la somme de ces carrés, mais ce type d'opération peut être réalisé en une seule fois comme le montre l'exemple suivant :
+\begin{lstlisting}[language=html]
+> sum(age^2, na.rm = TRUE)
+[1] 5515
+\end{lstlisting}
+Dans l'exemple suivant, on montre comment, après avoir remplacé la donnée manquante pour l'âge par la moyenne des âges de l'échantillon, il est possible de réaliser des opérations arithmétiques simples, qui opèrent toujours sur l'ensemble des éléments manipulés.
+\begin{lstlisting}[language=html]
+> age
+ [1] 18 27 34 18 24 NA 30 28 19 19
+> age[is.na(age)]<-mean(age, na.rm = TRUE)
+> age
+ [1] 18.00000 27.00000 34.00000 18.00000 24.00000 24.11111
+ [7] 30.00000 28.00000 19.00000 19.00000
+> n <- length(age) ## Nombre d'observations
+> n
+[1] 10
+> age - mean(age) ## Ecart à la moyenne
+ [1] -6.1111111  2.8888889  9.8888889 -6.1111111 -0.1111111
+ [6]  0.0000000  5.8888889  3.8888889 -5.1111111 -5.1111111
+> (age - mean(age))^2 ## Carrés des écarts à la moyenne
+ [1] 37.34567901  8.34567901 97.79012346 37.34567901
+ [5]  0.01234568  0.00000000 34.67901235 15.12345679
+ [9] 26.12345679 26.12345679
+> sum((age - mean(age))^2)/(n-1)
+[1] 31.4321
+> sqrt(sum((age - mean(age))^2)/(n-1))
+[1] 5.606434
+\end{lstlisting}
+
+Évidemment, inutile de calculer un écart-type manuellement puisque R dispose déjà d'une commande \textit{sd()} pour réaliser ce calcul :
+\begin{lstlisting}[language=html]
+> sd(age)
+[1] 5.606434
+\end{lstlisting}
+
+Des commandes similaires et très utiles lorsqu'il s'agit de résumer la distribution d'une variable numérique à l'aide
+des principaux indicateurs de tendance centrale et de dispersion sont : \textit{range()} (\textit{min()} et \textit{max()}), \textit{mean()},\textit{median()}, \textit{var()}, \textit{IQr()}). Plus généralement, la commande : \textit{summary()} fournit de manière compacte la plupart de ces indicateurs concernant la distribution d'une variable numérique, ou un tableau d'effectifs dans le cas d'une variable qualitative. La commande \textit{summary()} fonctionne avec une ou plusieurs variables (voir section suivante).\newline
+Notons que tous les résultats renvoyés par R peuvent être stockés dans des variables également, ce qui permet de sauvegarder des résultats intermédiaires, ou de les réutiliser plus tard.
+\begin{lstlisting}[language=html]
+> res <- sum(age , na.rm = TRUE)
+> res
+[1] 241.1111
+\end{lstlisting}
+
+On peut visualiser l'ensemble des variables présentes dans l'espace de travail ('workspace') grâce à \textit{ls()}.
+\begin{lstlisting}[language=html]
+> ls()
+[1] "age"  "n"    "opin" "res"  "sexe"
+\end{lstlisting}
+
+\paragraph*{Suppression de variables.}
+On retiendra que toute altération permanente ou suppression de variables est définitive. Les données d'origine sont définitivement enlevées de l'espace de travail.
+\begin{lstlisting}[language=html]
+> ls()
+[1] "age"  "n"    "opin" "res"  "sexe"
+> rm(n,res)
+> ls()
+[1] "age"  "opin" "sexe"
+\end{lstlisting}
+
+\subsection{Tableaux de données hétérogènes}
+
+Plutôt que de travailler avec des variables isolées comme précédemment, lorsque les données ont été collectées sur les mêmes unités statistiques il est plus intéressant de constituer une véritable structure de données, appelée data frame sous R. Il s'agit d'un tableau rectangulaire dans lequel les variables sont arrangées en colonnes et les observations en lignes, et les variables peuvent être de différents types, numériques ou catégorielle, contrairement à des structures de données plus simples définies par la commande \textit{matrix()}\footnote{es objets R de type \textit{matrix()} ne peuvent contenir que des données du même type, par exemple trois variables numériques arrangées en colonnes.}.\newline
+La commande \textit{data.frame()} s'utilise de manière assez simple : on lui fournit la liste des variables à inclure dans le tableau de données. Éventuellement, les variables peuvent être renommées directement lors de la construction du data frame, comme illustré dans l'exemple suivant.
+\begin{lstlisting}[language=html]
+> sexe
+ [1] "F" "F" "M" "F" "M" "M" "M" "F" "M" "F"
+> age
+ [1] 18 27 34 18 24 NA 30 28 19 19
+> d <- data.frame(age, sex = sexe)
+> d
+   age sex
+1   18   F
+2   27   F
+3   34   M
+4   18   F
+5   24   M
+6   NA   M
+7   30   M
+8   28   F
+9   19   M
+10  19   F
+\end{lstlisting}
+
+Un data frame comprend des dimensions (\textit{dim()}) fournit le nombre de lignes et le nombre de colonnes), des noms
+de variables (\textit{names()}) et des numéros d'observations, \textit{rownames()} (qui servent d'identifiants uniques), et une description du type de variables présentes dans le data frame est obtenue à l'aide de la commande \textit{str()}.
+\begin{lstlisting}[language=html]
+> dim(d)
+[1] 10  2
+> nrow(d)
+[1] 10
+> ncol(d)
+[1] 2
+> names(d)
+[1] "age" "sex"
+> colnames(d)
+[1] "age" "sex"
+> rownames(d)
+ [1] "1"  "2"  "3"  "4"  "5"  "6"  "7"  "8"  "9"  "10"
+> str(d)
+'data.frame':	10 obs. of  2 variables:
+ $ age: num  18 27 34 18 24 NA 30 28 19 19
+ $ sex: Factor w/ 2 levels "F","M": 1 1 2 1 2 2 2 1 2 1
+\end{lstlisting}
+Pour accéder à une variable spécifique dans un data frame, on utilisera le nom du data frame, suivi du symbole
+\textit{\$} et du nom de la variable. Ainsi l'expression \textit{d\$age} peut se lire comme \textit{la variable age dans le data frame d}.\newline
+Le principe d'indexation des variables vu à la section précédente reste applicable dans le cas des data frame, naturellement. Cependant, comme il s'agit d'un tableau, l'indexation des observations se fait à partir des lignes du tableau : on notera \textit{[i,j]} la $i^{\textrm{eme}}$ observation pour la jeme variable. Ainsi, \textit{d[1,1]} désignera l'âge du premier individu, \textit{d[c(1,2,3),1]} l'âge des 3 premiers individus, et \textit{d[1:2,1:2]} renverra toutes les données recueillies sur les deux premiers individus. Dans ce dernier cas, il n'est pas nécessaire de préciser les numéros de colonne si elles sont toutes inclues dans la sélection ; on pourra donc écrire\textit{d[1:2,]} au lieu de \textit{d[1:2,1:2]}.
+\begin{lstlisting}[language=html]
+> d$age
+ [1] 18 27 34 18 24 NA 30 28 19 19
+> d$age[1:2]
+[1] 18 27
+> d$age[1:7]
+[1] 18 27 34 18 24 NA 30
+\end{lstlisting}
+Puisque les colonnes d'un data frame sont nommées, il est tout à fait possible de remplacer l'expression \textit{d[1:2,1]}
+par \textit{d[1:2,"age"]}, ce qui facilite la relecture, ou permet de bien travailler sur la variable '''''' en cas de changement de position des variables dans le data frame.\newline
+Il est également possible d'ajouter ou de supprimer des variables dans un data frame :
+\begin{lstlisting}[language=html]
+> d$var1 <- 1:10
+> d[1:3,]
+  age sex var1
+1  18   F    1
+2  27   F    2
+3  34   M    3
+> d[,3] <- NULL
+> d[1:3,]
+  age sex
+1  18   F
+2  27   F
+3  34   M
+> d$opinion <- opin
+> str(d)
+'data.frame':	10 obs. of  3 variables:
+ $ age    : num  18 27 34 18 24 ...
+ $ sex    : Factor w/ 2 levels "F","M": 1 1 2 1 2 2 2 1 2 1
+ $ opinion: Factor w/ 4 levels "Pas du tout d'accord",..: 1 3 2 1 4 1 4 3 2 2
+> d
+        age sex                       opinion
+1  18.00000   F          Pas du tout d'accord
+2  27.00000   F                  Sans opinion
+3  34.00000   M          Moyennement d'accord
+4  18.00000   F          Pas du tout d'accord
+5  24.00000   M Assez ou tout a fait d'accord
+6  24.11111   M          Pas du tout d'accord
+7  30.00000   M Assez ou tout a fait d'accord
+8  28.00000   F                  Sans opinion
+9  19.00000   M          Moyennement d'accord
+10 19.00000   F          Moyennement d'accord
+\end{lstlisting}
+
+Comme on l'a dit plus haut, il est également possible d'utiliser \textit{summary()} pour obtenir un résumé détaillé de la
+distribution de chaque variable d'un data frame.
+\begin{lstlisting}[language=html]
+> summary(d)
+      age        sex                            opinion 
+ Min.   :18.00   F:5   Pas du tout d'accord         :3  
+ 1st Qu.:19.00   M:5   Moyennement d'accord         :3  
+ Median :24.06         Sans opinion                 :2  
+ Mean   :24.11         Assez ou tout a fait d'accord:2  
+ 3rd Qu.:27.75                                          
+ Max.   :34.00 
+\end{lstlisting}
+\section{Importer des données}
+\subsection{Données texte simple}
+La commande \textit{read.table()} permet d'importer sous R des données stockées dans un format proche de celui du data frame, c'est-à-dire où les variables sont arrangées en colonnes et les observations en ligne. Voici un exemple d'aperçu des données précédentes lorsqu'elles sont sauvegardées dans un tel format (seules les trois premières lignes du fichier sont affichées).\newline
+Chaque valeur est séparée par un espace : il s'agit du séparateur de champ. La première ligne du fichier \textit{données.txt} contient le nom des variables. Toutes les chaînes de caractères sont entourées de
+quotes anglo-saxonnes.
+\begin{lstlisting}[language=html]
+"age" "sexe" "opinion"
+18 "F" "Pas du tout d'accord"
+27 "F" "Sans opinion"
+\end{lstlisting}
+Pour importer ce fichier, on utilisera une instruction du type :
+\begin{lstlisting}[language=html]
+> f <- read.table("données.txt",header = TRUE, sep="",dec=".")
+> f
+  age  sexe              opinion
+1  18 FALSE Pas du tout d'accord
+2  27 FALSE         Sans opinion
+\end{lstlisting}
+\textbf{Note : }On peut remarquer que R considère \textit{"F"} comme la variable booléenne \textit{False}.\newline
+\\
+Certaines des options par défaut ont été renseignées explicitement, comme par exemple le délimiteur décimal (\textit{dec = }). Il est surtout important d'indiquer à R si le fichier contient une ligne d'en-tête ou pas (\textit{header =}). Dans les cas plus simples où il n'y a qu'une série de valeurs à importer sous R, la commande \textit{scan()} fonctionne sur le même principe.
+
+\subsection{Données au format CSV}
+Les données exportées depuis un tableur de type Excel au format CSV peuvent être importées sous R à l'aide de la
+commande \textcolor{blue}{\textit{read.csv()}, si le séparateur de champ est une virgule}, ou \textcolor{red}{\textit{read.csv2()}, si le séparateur de champ est un point-virgule}. Voici un exemple d'aperçu des données précédentes lorsqu'elles sont sauvegardées dans un tel format (seules les trois premières lignes du fichier sont affichées). Ici, le séparateur de champ est une virgule (dans ce cas, le séparateur décimal est obligatoirement un point).
+\begin{lstlisting}[language=html]
+"age","sexe","opinion"
+18,"F","Pas du tout d'accord"
+27,"F","Sans opinion"
+\end{lstlisting}
+
+Pour importer ce fichier, on utilisera une instruction du type :
+\begin{lstlisting}[language=html]
+> f <- read.csv("données.csv")
+> f
+  age  sexe              opinion
+1  18 FALSE Pas du tout d'accord
+2  27 FALSE         Sans opinion
+\end{lstlisting}
+Que ce soit avec \textit{read.table()} ou \textit{read.csv()}, les données manquantes sont généralement considérées des valeurs absentes dans le fichier. Tout autre symbole signalant des valeurs manquantes doit être explicitement renseigné dans l'option \textit{na.strings =}.
+
+\paragraph*{XLS ou CSV.}
+Il est également possible de lire directement des fichiers Excel, voire une sous-partie d'une feuille de calcul (par exemple, une zone de plage \textit{A2:C5}, soit 12 cellules au total), à l'aide de packages spécialisés. Cela dit, comme il est tout aussi simple d'exporter les données au format CSV depuis Excel, et que ce type de format de données pose moins de problème de compatibilité de version entre les logiciels et les systèmes d'exploitation, on préférera généralement le format CSV.
+
+\subsection{Données enregistrées à partir d'autres logiciels statistiques}
+Le package \textit{foreign} contient des commandes permettant d'importer des sources de données enregistrées à partird'autres logiciels statistiques. En particulier, les données au format SPSS, Stata et SAS peuvent chargées sous R à l'aide des commandes \textit{read.spss()} (dans ce cas, il ne faut surtout pas oublier de rajouter l'option \textit{to.data.frame =} ), \textit{read.dta()} et \textit{xport()}.
+
+\section{Installer des packages additionnels}
+\paragraph*{Installation de packages.} 
+Il est également possible d'installer des packages en utilisant les menus déroulant de l'interface R. Il suffit généralement d'indiquer le nom du ou des packages à installer, et de choisir un site pour le téléchargement des packages (il est conseillé de choisir un serveur proche de l'endroit où l'on se trouve pour améliorer la rapidité de téléchargement).\newline
+R offre l'essentiel des commandes permettant de décrire, modéliser et représenter graphiquement des jeux de données multivariables. Il existe cependant tout un écosystème de commandes additionnelles, regroupées par thème dans ce que l'on appelle des packages. La liste complète de ces packages est disponible sur le site \textbf{CRAN}, mais il existe également des lots de packages regroupés par domaine (graphiques, plans d'expérience, sondages, données géospatiales, etc.) que l'on trouvera sur la page \href{https://cran.r-project.org/web/views/}{\underline{Task View}}.
+Pour installer un package, la commande à utiliser est \textit{install.packages()}, et souvent il sera nécessaire d'ajouter l'option \textit{depencies = "Depends"} si le package à installer dépend de commandes fournies dans d'autres packages externes. Dans ce cours, par exemple, les packages \textit{prettyR} et \textit{gplots} seront utilisés et pourront être installés de la manière suivante.
+
+\begin{lstlisting}[language=html]
+> install.packages(c("prettyR","gplots"),dep="Depends")
+\end{lstlisting}
+Pour connaître l'ensemble des commandes disponibles dans un package, il suffit de taper l'instruction suivante :
+\begin{lstlisting}[language=html]
+> help(package = MASS)
+\end{lstlisting}
+
+\section{Les fonctionnalités graphiques}
+R offre trois principaux systèmes graphiques : le système graphique de base, utilisé dans le cadre de ce cours, \href{http://lattice.r-forge.r-project.org/}{\underline{lattice}} et \href{http://ggplot2.org/}{\underline{ggplot2}}.\newline
+Le chapitre 4 du manuel \href{cran.r-project.org/doc/contrib/Paradis-rdebuts_fr.pdf}{\underline{R pour les débutants}} de E. Paradis fournit un aperçu relativement complet des différentes commandes graphiques et des outils de personnalisation et de gestion des fenêtres graphiques.
+
+\section{Les outils statistiques}
+Ci-dessous figure une liste des principales commandes R pour les mesures et tests d'association entre 2 ou plusieurs variables numériques et/ou qualitatives. Pour chaque commande, seules les options obligatoires ou essentielles sont présentées. Les autres sont à rechercher dans l'aide en ligne. Dans tous les cas, les variables \textit{x} et \textit{y} sont considérées comme des variables numériques, \textit{z} est une variable qualitative ou facteur (de même que \textit{z1} et \textit{z2}), \textit{s} une variable censurée (à droite) et construite à l'aide de la commande \textit{Surv()}, et \textit{cmd} désigne n'importe quelle commande R permettant d'opérer sur une variable numérique, par exemple \textit{mean}. Enfin, \textit{mod} et \textit{tab} désignent respectivement le résultat d'un modèle linéaire ou d'un tableau de contingence stocké dans une variable auxiliaire.
+
+\subsection{Comparaison de moyennes}
+\begin{description}
+\item[tapply(x, z, cmd, \dots)] : Application d'une commande \textit{cmd} à une variable numérique \textit{x} pour chacun des niveaux du facteur \textit{z}.
+\item[aggregate(y $\sim$ z, data=, cmd, \dots)] : Application d'une commande \textit{cmd} à une variable numérique \textit{x} pour chacun des niveaux du facteur \textit{z}.
+\item[t.test(x, y, \dots)] : Test de Student en supposant l'égalité des variances (option \textit{var.equal = TRUE}) ou non, pour échantillons indépendants ou appariés (option \textit{paired = TRUE}).
+\item[wilcox.test(x, y, \dots)] : Test de Wilcoxon pour échantillons indépendants ou appariés (option \textit{paired = TRUE}).
+\item[lm(y $\sim$ z, data = , subset = , \dots)] : Modèle linéaire (analyse de variance à un ou plusieurs facteurs à effets fixes). Cette commande permet d'estimer les paramètres du modèle.
+\item[drop1(mod, test= , \dots) ] : Comparaison de modèles emboîtés, permettant de construire les tests de Fisher-Sndecor (option \textit{test = "F"}) pour les effets principaux.
+\item[aov(y $\sim$ z, data=, subset=, \dots)] : ANOVA à un ou plusieurs facteurs à effets fixes, avec ou sans mesures répétées (option \textit{Error =}).
+\item[model.tables(mod, \dots) : ] Résumé de synthèse des effets (écarts des moyennes de groupe à la moyenne générale) sous forme de tableau.
+\item[plot.design(y $\sim$ z, data = , fun = )] : Résumé de synthèse des effets (écarts des moyennes de groupe à la moyenne générale) sous forme de graphique.
+\item[replications(y $\sim$ z, data= )] : Nombre d'unités statistiques allouées dans chaque traitement (croisement des niveaux de deux ou plusieurs facteurs), incluant les interactions.
+\item[pairwise.t.test(x, z, \dots)] : Tests de Student pour des paires de moyenne (cas indépendants ou appariés)\footnote{
+\textbf{Quelle est la différence entre tests pour échantillons indépendants et appariés '}\newline	
+Une étude peut produire des mesures appariées ou totalement indépendantes. Le test statistique doit être choisi en fonction.\newline
+Par exemple, nous sommes intéressés par l'étude de l'effet d'un traitement médical sur le taux d'insuline. Voici deux dispositifs expérimentaux possibles permettant d'apporter une réponse à cette question :
+\begin{itemize}
+\item Le taux d'insuline est mesuré sur 30 patients avant et après le traitement médical. Les données sont donc organisées par paires (chaque patient est associé à deux mesures). Dans cette situation, il serait approprié d'utiliser un test t de Student pour échantillons appariés.
+\item Le taux d'insuline est mesuré sur 30 patients recevant un placebo et 30 autres patients recevant un traitement médical. Dans ce cas, toutes les mesures sont indépendantes (chaque patient n'est associé qu'à une mesure unique). \textit{UnInsulin rate is measured on 30 patients receiving a placebo and 30 other patients receiving the medical treatment. In this case, all of the measurements are independent}. Dans cette situation, il serait approprié d'utiliser un test t de Student pour échantillons indépendants.
+\end{itemize}
+}, avec correction des degrés de significativité (option \textit{p.adjust.method =}).
+\item[pairwise.wilcox.test(x, z, \dots) :] : Tests de Wilcoxon simultanés pour des paires de moyenne (cas indépendants ou appariés), avec correction des degrés de significativité.
+\end{description}
+\subsection{Tableaux de contingence}
+\begin{description}
+\item[table(z1, z2, useNA =, ...)] : Tableau d'effectifs pour une ou deux variables. L'affichage des valeurs manquantes est géré par l'option \textit{useNA = "always"}.
+\item[prop.table(tab, margin = )] : Fréquences relatives d'un tableau créé par \textit{table()} par rapport à l'effectif total, ou aux totaux lignes(\textit{margin = 1}) ou colonnes (\textit{margin = 2}).
+\item[margin.table(tab, margin = )] : Calcul des totaux lignes (\textit{margin = 1}) ou colonnes (\textit{margin = 2}) d'un tableau de contingence construit à l'aide de \textit{table()}.
+\item[chisq.test(tab, \dots)] : Test du chi-deux pour un tableau de contingence construit à l'aide de \textit{table()}.
+\item[fisher.test(tab, \dots)] : Test exact de Fisher pour un tableau de contingence construit à l'aide de \textit{table()}. Usage alternatif : \textit{fisher.test(z1,z2,\dots)}.
+\item[mcnemar.test(z1, z2, \dots)] : Test de McNemar pour un tableau de contingence construit à l'aide de \textit{table()}, dans le cas de deux échantillons appariés.
+\item[pairwise.prop.test(tab,\dots)] : Tests multiples de deux proportions, avec correction des degrés de significativité (option
+\textit{p.adjust.method = }, par défaut méthode de Bonferroni\footnote{
+Lorsque vous réalisez de multiples tests de significativité statistique sur les mêmes données, l'ajustement de Bonferroni peut être appliqué pour qu'il soit plus "difficile" à ces tests d'être statistiquement significatifs. Par exemple, lorsque vous étudiez les coefficients de corrélation multiple d'une matrice de corrélation, il peut être inapproprié d'accepter et d'interpréter les corrélations statistiquement significatives au niveau 0,05, étant donné que vous effectuez de multiples tests. Précisément, c'est la probabilité d'erreur alpha d'accepter en se trompant le coefficient de corrélation observé comme non-égal-à-zéro alors que le fait (dans la population) qu'il soit égal à zéro peut être supérieur à $0,05$ dans ce cas.\newline
+L'ajustement de Bonferroni est en général effectué en rapportant le niveau alpha (généralement fixé à $0,05$, $0,01$, \dots) au nombre de tests effectués. Par exemple, supposez que vous réalisez des tests multiples des corrélations individuelles à partir de la même matrice de corrélation. Le niveau de significativité ajusté de Bonferroni pour chacune des corrélations serait :\newline
+$$0,05 / 5 = 0,01$$
+Chaque test ayant des résultats avec une valeur $p$ inférieure à 0,01 est considéré comme statistiquement significatif ; les corrélations avec une valeur de probabilité supérieure à 0,01 (incluant celles avec des valeurs p entre 0,01 et 0,05) sont considérées non-significatives.  
+}).
+\end{description}
+\subsection{Corrélation et régression linéaire}
+\begin{description}
+\item[cor(x, y, method =, use = , \dots)] : Calcul du coefficient de corrélation de Pearson (ou Spearman, avec \textit{method = "spearman"} ). L'option \textit{use = "pairwise"} est utile en cas de données manquantes.
+\item[cor.test(x, y, method =, use = , \dots)] : Test de significativité du coefficient de corrélation linéaire de Pearson (ou Spearman, avec \textit{method = "spearman"}).
+\item[lm(y $\sim$ x, data=, subset=, \dots)] : Modèle linéaire (régression linéaire simple et multiple). Cette commande permet d'estimer les paramètres du modèle.
+\item[summary(mod)] : Tableau des coefficients de régression et test de Student associés pour un modèle de régression linéaire à un ou plusieurs facteurs.
+\item[anova(mod, \dots)] : Tableau d'analyse de variance associé à un modèle de régression linéaire à un ou plusieurs facteurs.
+\item[coef(mod)] : Valeurs des coefficients de régression pour un modèle de régression linéaire à un ou plusieurs facteurs.
+\item[fitted(mod, \dots)] : Valeurs prédites pour l'ensemble des observations utilisées lors de la construction du modèle de régression.
+\item[resid(mod, \dots)] : Valeurs résiduelles (différence entre valeurs observées et valeurs prédites) d'un modèle de régression linéaire.
+\item[predict(mod, newdata= , \dots)] : Valeurs prédites pour un modèle de régression à partir de données non nécessairement observées. Par défaut, cette commande renvoie les valeurs ajustées.
+\end{description}
+\subsection{Régression logistique}
+\begin{description}
+\item[glm(y $\sim$ x, data =, subset = , family = , \dots)] : Modèle linéaire généralisé (p. ex., régression logistique, \textit{family = binomial(logit)}). Cette commande permet d'estimer les paramètres du modèle.
+\item[summary(mod),anova(mod, test=, \dots)] : Identique au cas de la régression linéaire simple ou multiple (tableau d'analyse de déviance au lieu de variance).
+\item[coef(mod). predict(mod, newdata=, type=, \dots)] : Coefficients de régression et valeurs prédites sur l'échelle du log-odds ou sous forme de probabilités individuelles (\textit{type = "response"}).
+\end{description}
+\subsection{Données de survie}
+\begin{description}
+\item[Surv(time =, event = , \dots)] : Construction d'une variable censurée associant un temps d'observation (\textit{times =}) à un statut relatif à l'événement d'intérêt.
+\item[survfit(s $\sim$ 1, \dots)] : Médiane de survie et intervalle de confiance à 95\% dans le cas d'un (\textit{s$\sim$1}) ou plusieurs (\textit{s$\sim$z}) échantillons.
+\item[summary(s, times=, \dots)] : Tableau des valeurs de la fonction de survie (l'option \textit{times =} permet de limiter l'affichage à certaines valeurs de temps).
+\item[survdiff(s $\sim$ z. data=, \dots)] : Test d'égalité de 2 ou plusieurs fonctions de survie par le test du log-rank (par défaut) ou de Gehan-Wilcoxon (\textit{rho = 1}).
+\item[plot(s, conf.int=, fun=, \dots)] : Courbe de Kaplan-Meier pour un ou plusieurs échantillons, avec IC à 95 \% (utiliser \textit{conf.int = 0} pour les supprimer).
+\item[coxph(s $\sim$ z, data =, subset =, strata =, \dots)] : Modèle de régression de Cox (risques proportionnels), éventuellement stratifié sur une variable de type facteur (\textit{strata = }).
+\item[summary(mod),anova(mod),coef(mod)] : Tableau des coefficients de régression avec tests de Wald associés et tableau d'analyse de déviance (statistique du chi-deux).
+\end{description}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\chapter{Complément Université FUN : Gestion des données avec R - Data Management}
+\section{Introduction}
+La gestion des données sous R n'est pas aussi évidente qu'il n'y paraît au premier abord. C'est essentiellement dû au fait que l'on ne \textit{voit pas} les données comme sur un tableur de type Excel. Toutefois, \textbf{R} offre des outils puissants de recodage des variables et de reformatage des tableaux de données, et permet de lire quasiment tous les formats de fichiers de données utilisés dans le domaine statistique.
+\section{Importation de fichiers CSV}
+\subsection{Structure du fichier de données}
+Considérons le fichier de données \textit{smp2.csv} qui regroupe les données sur l'étude de santé mentale en prison. Ce fichier comporte 26 variables et 799 observations (individus ou unités statistiques). Il s'agit d'un fichier de type CSV (\textit{\textbf{C}omma \textbf{S}eparated \textbf{V}alues}) que l'on peut ouvrir avec un tableur de type Excel ou n'importe quel éditeur de texte.\newline
+Souvent d'ailleurs, lorsque l'on double-clique sur un fichier portant cette extension (.csv), c'est l'application Excel (ou Open Office, par exemple) qui est proposée pour lire ce fichier. Voici à quoi ressemble ce fichier en mode texte :
+\begin{figure}[h]\begin{center}\includegraphics[scale=0.5]{ilu/1.png}\end{center}\end{figure}
+Ce fichier est structuré de la manière suivante : sur la première ligne figure le nom des variables (\textcolor{red}{En-tête (header)}).\newline
+Les données de chaque individu pour chacune de ces variables sont reportées sur une ligne séparée (\textcolor{green}{Observations}).\newline
+Les données (nom de variable sur la première ligne, ou valeur prise par une variable pour un individu sur les lignes suivantes), appelé 'champ', sont séparées par un même symbole, appelé \textcolor{blue}{Séparateurs de champ}, ici un point-virgule. D'autres séparateurs de champ peuvent être utilisés, par exemple des virgules, des taquets de tabulation ou de simples espaces.\newline
+\\
+Le séparateur décimal quant à lui permet d'indiquer à \textbf{R} comment sont représentés les nombres à virgules. Par défaut, \textbf{R} utilise la notation anglo-saxonne (le séparateur décimal est alors un point, par exemple \textit{9.2}), sauf dans
+le cas de la commande \textit{read.csv2()} où l'on considère que le séparateur décimal suit la notation française (une virgule, comme dans \textit{9,2}). \newline
+Évidemment, il y a des situations \textbf{impossibles} : utiliser comme séparateur de champs des virgules imposera le point comme séparateur décimal, autrement \textbf{R} n'a aucun moyen d'identifier correctement le nombre de champs présents sur chaque ligne du fichier.\newline
+\\
+Si aucune ligne d'en-tête n'est présente, il faudra préciser l'option \textit{header = FALSE}, et éventuellement fournir le nom des variables sous forme de liste via l'option \textit{col.names =}. Cela dit il est tout aussi simple d'utiliser la commande \textit{colnames()} après avoir importé le fichier.\newline
+\\
+Pour importer des fichiers \textit{CSV} sous \textbf{R}, on utilise la commande \textit{read.csv()} ou \textit{read.csv2()}, qui reposent en fait sur la commande \textit{read.table()}, mais avec des options par défaut : \textcolor{red}{\textbf{sep = ; et dec = ,} dans le cas de read.csv2()}, et \textcolor{blue}{\textbf{sep = , et dec = .} dans le cas de read.csv()}. \newline
+Dans tous les cas, on suppose que \textit{header = TRUE}, c'est-à-dire que le fichier comporte bien une ligne d'en-tête.\newline
+\\
+Avant d'importer un fichier, il faut s'assurer que R connaît l'endroit où ce fichier a été enregistré. Pour cela, deux solutions : 
+\begin{itemize}
+\item soit l'on indique le chemin d'accès complet au fichier.
+\item soit on change le répertoire de travail courant pour indiquer le répertoire dans lequel le fichier a été enregistré. 
+\end{itemize}
+Dans le premier cas, on aura donc une instruction du style :
+\begin{lstlisting}[language=html]
+smp <- read.csv2("/Users/chl/mooc/smp2.csv")
+\end{lstlisting}
+qui signifie que sur un Mac, le fichier \textit{smp2.csv} se trouve dans le sous-répertoire mooc du répertoire Documents du compte utilisateur.\newline
+Sous Windows, on utilisera par exemple C:/utilisateur/chl/mooc/smp2.csv. \newline
+Dansle second cas, on utilisera soit la commande setwd() pour définir le répertoire de travail, soit le menu disponible dans le gestionnaire de fichiers de RStudio, comme l'illustre la figure suivante.
+\begin{figure}[H]\begin{center}\includegraphics[scale=1]{ilu/2.png}\end{center}\end{figure}
+En supposant que le répertoire de travail ait correctement été indiqué, voici comment l'on peut charger les données \textit{smp2.csv} :
+\begin{lstlisting}[language=html]
+smp <- read.csv2("smp2.csv")
+\end{lstlisting}
+Concernant la structure du fichier de données une fois qu'il a été importé, il est conseillé de \textbf{taper systématiquement} ces 3 commandes qui permettent de 
+\begin{enumerate}
+\item vérifier la taille du tableau de données (nombre de lignes et nombre de colonnes, correspondant, respectivement, au nombre d'individus et de variables).
+\item le nom des variables (ce qui permet, entre autres, de s'assurer que la ligne d'en-tête a bien été lue correctement).
+\item et le type de représentation des variables (int ou double pour les variables numériques, char ou factor pour les variables qualitatives).
+\end{enumerate}
+Voici ce que donnent ces commandes pour le fichier \textit{smp2.csv}.
+\begin{lstlisting}[language=html]
+> smp <- read.csv2("smp2.csv")
+> dim(smp) ## Dimensions
+[1] 799  26
+> names(smp) ## Noms des variables du HEADER
+ [1] "age"          "prof"         "duree"       
+ [4] "discip"       "n.enfant"     "n.fratrie"   
+ [7] "ecole"        "separation"   "juge.enfant" 
+[10] "place"        "abus"         "grav.cons"   
+[13] "dep.cons"     "ago.cons"     "ptsd.cons"   
+[16] "alc.cons"     "subst.cons"   "scz.cons"    
+[19] "char"         "rs"           "ed"          
+[22] "dr"           "suicide.s"    "suicide.hr"  
+[25] "suicide.past" "dur.interv"  
+> str(smp) ## Structure du Data Frame (type + qq valeurs)
+'data.frame': 799 obs. of  26 variables:
+ $ age         : int  31 49 50 47 23 34 24 52 42 45 ...
+ $ prof        : Factor w/ 8 levels "agriculteur",..: 3 NA 7 6 8 6 3 2 6 6 ...
+ $ duree       : int  4 NA 5 NA 4 NA NA 5 4 NA ...
+ $ discip      : int  0 0 0 0 1 0 0 0 1 0 ...
+ $ n.enfant    : int  2 7 2 0 1 3 5 2 1 2 ...
+ $ n.fratrie   : int  4 3 2 6 6 2 3 9 12 5 ...
+ $ ecole       : int  1 2 2 1 1 2 1 2 1 2 ...
+ $ separation  : int  0 1 0 1 1 0 1 0 1 0 ...
+ $ juge.enfant : int  0 0 0 0 NA 0 1 0 1 0 ...
+ $ place       : int  0 0 0 1 1 0 1 0 0 0 ...
+ $ abus        : int  0 0 0 0 0 0 0 0 1 1 ...
+ $ grav.cons   : int  1 2 2 1 2 1 5 1 5 5 ...
+ $ dep.cons    : int  0 0 0 0 1 0 1 0 1 0 ...
+ $ ago.cons    : int  1 0 0 0 0 0 0 0 0 0 ...
+ $ ptsd.cons   : int  0 0 0 0 0 0 0 0 0 0 ...
+ $ alc.cons    : int  0 0 0 0 0 0 0 0 1 1 ...
+ $ subst.cons  : int  0 0 0 0 0 0 1 0 1 0 ...
+ $ scz.cons    : int  0 0 0 0 0 0 0 0 0 0 ...
+ $ char        : int  1 1 1 1 1 1 1 1 4 1 ...
+ $ rs          : int  2 2 2 2 2 1 3 2 3 2 ...
+ $ ed          : int  1 2 3 2 2 2 3 2 3 2 ...
+ $ dr          : int  1 1 2 2 2 1 2 2 1 2 ...
+ $ suicide.s   : int  0 0 0 1 0 0 3 0 4 0 ...
+ $ suicide.hr  : int  0 0 0 0 0 0 1 0 1 0 ...
+ $ suicide.past: int  0 0 0 0 1 0 1 0 1 0 ...
+ $ dur.interv  : int  NA 70 NA 105 NA NA 105 84 78 60 ...
+\end{lstlisting}
+\subsubsection*{XLS ou CSV : }
+Il est également possible de lire directement des fichiers Excel, voire une sous-partie d'une feuille de calcul (par exemple, une zone de plage A2:C5, soit 12 cellules au total), à l'aide de packages spécialisés. Cela dit, comme il est tout aussi simple d'exporter les données au format CSV depuis Excel, et que ce type de format de données pose moins de problème de compatibilité de version entre les logiciels et les systèmes d'exploitation, on préférera généralement le format CSV.
+\subsection{Le concept data frame}
+Une fois importé dans R, le fichier de données devient un tableau rectangulaire appelé \textit{data frame} dans le jargon technique R. \newline
+Ici, notre tableau de données est accessible via le data frame \textit{smp}, qui est le nom de variable à laquelle nous avons associé les données lors de la lecture avec \textit{read.csv2()}.
+\begin{lstlisting}[language=html]
+> class(smp)
+[1] "data.frame"
+\end{lstlisting}
+Il s'agit en fait d'une structure de données à deux dimensions (\textit{lignes = observations, colonnes = variables}) contenant des données potentiellement de type mixte (nombres et chaînes de caractères). Une colonne comprendra ainsi toujours des objets du même type (par exemple des nombres pour dénoter les valeurs prises par une variable numérique), mais les différentes colonnes pourront contenir des objets de type différents (des nombres dans l'une, des caractères dans l'autre). Qui plus est, chaque ligne est identifiée par un identificateur unique, appelé \textit{rowname}.
+\begin{lstlisting}[language=html]
+> rownames(smp)[1:10] #Noms des 10 premières lignes
+ [1] "1"  "2"  "3"  "4"  "5"  "6"  "7"  "8"  "9"  "10"
+> colnames(smp)[1:10] #Noms des 10 premières colonnes
+ [1] "age"         "prof"        "duree"       "discip"     
+ [5] "n.enfant"    "n.fratrie"   "ecole"       "separation" 
+ [9] "juge.enfant" "place"  
+\end{lstlisting}
+Il est important de s'assurer que les données sont bien représentées comme on le souhaite, en particulier que les variables qualitatives avec un déterminé de modalités (ou niveaux) sont bien traitées comme telle par \textbf{R}. En l'occurence, leur type doit être \textit{factor}. C'est le cas de la variable \textit{prof} dans le data frame \textit{smp}.
+\begin{lstlisting}[language=html]
+## Sur la variable prof : 
+> class(smp$prof)
+[1] "factor"
+> summary(smp$prof)
+       agriculteur            artisan              autre 
+                 6                 90                 31 
+             cadre            employe            ouvrier 
+                24                135                227 
+prof.intermediaire        sans emploi               NA's 
+                58                222                  6 
+## Sur l'ensemble du Data Frame 
+> summary(smp) ## Résumé des données
+      age                       prof         duree      
+ Min.   :19.0   ouvrier           :227   Min.   :1.000  
+ 1st Qu.:28.0   sans emploi       :222   1st Qu.:4.000  
+ Median :37.0   employe           :135   Median :5.000  
+ Mean   :38.9   artisan           : 90   Mean   :4.302  
+ 3rd Qu.:48.0   prof.intermediaire: 58   3rd Qu.:5.000  
+ Max.   :83.0   (Other)           : 61   Max.   :5.000  
+ NA's   :2      NA's              :  6   NA's   :223    
+     discip         n.enfant        n.fratrie     
+ Min.   :0.000   Min.   : 0.000   Min.   : 0.000  
+ 1st Qu.:0.000   1st Qu.: 0.000   1st Qu.: 2.000  
+ Median :0.000   Median : 1.000   Median : 3.000  
+ Mean   :0.232   Mean   : 1.755   Mean   : 4.287  
+ 3rd Qu.:0.000   3rd Qu.: 3.000   3rd Qu.: 6.000  
+ Max.   :1.000   Max.   :13.000   Max.   :21.000  
+ NA's   :6       NA's   :26                       
+     ecole         separation      juge.enfant    
+ Min.   :1.000   Min.   :0.0000   Min.   :0.0000  
+ 1st Qu.:1.000   1st Qu.:0.0000   1st Qu.:0.0000  
+ Median :2.000   Median :0.0000   Median :0.0000  
+ Mean   :1.866   Mean   :0.4226   Mean   :0.2771  
+ 3rd Qu.:2.000   3rd Qu.:1.0000   3rd Qu.:1.0000  
+ Max.   :5.000   Max.   :1.0000   Max.   :1.0000  
+ NA's   :5       NA's   :11       NA's   :5       
+     place             abus          grav.cons    
+ Min.   :0.0000   Min.   :0.0000   Min.   :1.000  
+ 1st Qu.:0.0000   1st Qu.:0.0000   1st Qu.:2.000  
+ Median :0.0000   Median :0.0000   Median :4.000  
+ Mean   :0.2285   Mean   :0.2778   Mean   :3.643  
+ 3rd Qu.:0.0000   3rd Qu.:1.0000   3rd Qu.:5.000  
+ Max.   :1.0000   Max.   :1.0000   Max.   :7.000  
+ NA's   :7        NA's   :7        NA's   :4      
+    dep.cons         ago.cons        ptsd.cons     
+ Min.   :0.0000   Min.   :0.0000   Min.   :0.0000  
+ 1st Qu.:0.0000   1st Qu.:0.0000   1st Qu.:0.0000  
+ Median :0.0000   Median :0.0000   Median :0.0000  
+ Mean   :0.3967   Mean   :0.1665   Mean   :0.2165  
+ 3rd Qu.:1.0000   3rd Qu.:0.0000   3rd Qu.:0.0000  
+ Max.   :1.0000   Max.   :1.0000   Max.   :1.0000  
+                                                   
+    alc.cons        subst.cons        scz.cons     
+ Min.   :0.0000   Min.   :0.0000   Min.   :0.0000  
+ 1st Qu.:0.0000   1st Qu.:0.0000   1st Qu.:0.0000  
+ Median :0.0000   Median :0.0000   Median :0.0000  
+ Mean   :0.1865   Mean   :0.2653   Mean   :0.0826  
+ 3rd Qu.:0.0000   3rd Qu.:1.0000   3rd Qu.:0.0000  
+ Max.   :1.0000   Max.   :1.0000   Max.   :1.0000  
+                                                   
+      char             rs              ed       
+ Min.   :1.000   Min.   :1.000   Min.   :1.000  
+ 1st Qu.:1.000   1st Qu.:1.000   1st Qu.:1.000  
+ Median :1.000   Median :2.000   Median :2.000  
+ Mean   :1.512   Mean   :2.057   Mean   :1.866  
+ 3rd Qu.:2.000   3rd Qu.:3.000   3rd Qu.:3.000  
+ Max.   :4.000   Max.   :3.000   Max.   :3.000  
+ NA's   :96      NA's   :103     NA's   :107    
+       dr          suicide.s        suicide.hr    
+ Min.   :1.000   Min.   :0.0000   Min.   :0.0000  
+ 1st Qu.:1.000   1st Qu.:0.0000   1st Qu.:0.0000  
+ Median :2.000   Median :0.0000   Median :0.0000  
+ Mean   :2.153   Mean   :0.7942   Mean   :0.2013  
+ 3rd Qu.:3.000   3rd Qu.:1.0000   3rd Qu.:0.0000  
+ Max.   :3.000   Max.   :5.0000   Max.   :1.0000  
+ NA's   :111     NA's   :41       NA's   :39      
+  suicide.past      dur.interv    
+ Min.   :0.0000   Min.   :  0.00  
+ 1st Qu.:0.0000   1st Qu.: 48.00  
+ Median :0.0000   Median : 60.00  
+ Mean   :0.2841   Mean   : 61.89  
+ 3rd Qu.:1.0000   3rd Qu.: 75.00  
+ Max.   :1.0000   Max.   :120.00  
+ NA's   :14       NA's   :50   
+\end{lstlisting}
+Par contre, la variable \textit{abus} est une variable binaire, qui prend les valeurs $0$ et $1$, et on pourrait dans certains cas vouloir la traiter comme un facteur en associant les modalités 0 et 1 aux étiquettes \textit{Non} et \textit{Oui} afin de faciliter la lecture des tableaux et des graphiques.
+\begin{lstlisting}[language=html]
+> class(smp$abus)
+[1] "integer"
+> table(smp$abus,useNA = "always")
+
+   0    1 <NA> 
+ 572  220    7 
+\end{lstlisting}
+Ceci peut se réaliser à l'aide de la commande \textit{factor()}, comme dans l'exemple ci-dessous.
+\begin{lstlisting}[language=html]
+> smp$abus <- factor(smp$abus, levels = c(0,1), labels = c("Non", "Oui"))
+> class(smp$abus)
+[1] "factor"
+> summary(smp$abus)
+ Non  Oui NA's 
+ 572  220    7 
+\end{lstlisting}
+
+\subsubsection*{Autre approche pour la gestion des data frame.}
+Les packages \underline{\href{http://datatable.r-forge.r-project.org/}{data.table}} et \underline{\href{http://cran.rstudio.com/web/packages/dplyr/vignettes/introduction.html}{dplyr}} offrent des commandes spécifiques pour lire des fichiers de données de type \textit{CSV} et les représenter dans des structures identiques aux data frame standard de \textbf{R}, mais en apportant des petites améliorations pour leur manipulation.
+\subsection{Indexation d'éléments dans un data frame}
+On peut désigner n'importe quel objet dans un data frame par sa position en termes de \textit{n° de ligne} et de \textit{n° de colonne}.\newline
+Par exemple, la profession (colonne n°2) du 3ème individu (ligne n°3) s'obtiendra ainsi :
+\begin{lstlisting}[language=html]
+> smp[3,2]
+[1] prof.intermediaire
+8 Levels: agriculteur artisan autre cadre employe ... sans emploi
+\end{lstlisting}
+Il est également possible d'utiliser le nom des variables, à la place de leur numéro, par exemple \textit{smp[3,"prof"]}, voire même le \textit{rowname} de l'unité statistique d'intérêt, soit ici \textit{smp["3","prof"]} puisque les \textit{rowname} sont simplement constitués des numéros de rang des observations dans le data frame.
+
+\begin{lstlisting}[language=html]
+> smp[3,"prof"]
+[1] prof.intermediaire
+8 Levels: agriculteur artisan autre cadre employe ... sans emploi
+
+> smp["3","prof"]
+[1] prof.intermediaire
+8 Levels: agriculteur artisan autre cadre employe ... sans emploi
+\end{lstlisting}
+
+En d'autres termes, un data frame n'est rien d'autre qu'une structure tabulaire contenant des variables arrangées en colonnes qui portent des noms (\textit{names()}, ou plus généralement \textit{colnames()}) et des observations en lignes, elles-même nommées (\textit{rownames()}).\newline
+Considérons l'illustration ci-dessous (à gauche) :
+
+\begin{figure}[H]\begin{center}\includegraphics[scale=1]{ilu/3.png}\end{center}\end{figure}
+
+La variable \textit{a} est le nom d'un data frame contenant 4 variables : \textit{score} (un score numérique sur une échelle allant de 1 à 5), \textit{gender} (le sexe de l'individu, où M = homme et F = femme), \textit{IQ} (le quotient intellectuel de l'individuel) et \textit{SES} (le statut socio-économique de l'individu, codé en trois classes, A, B et C).\newline 
+Le premier individu est donc un homme (M) de QI global 92 (IQ), dont la classe socio-économique (SES) est C et ayant un score de 1 point. \newline
+Comme illustré dans la figure de droite, cette organisation par ligne/colonne permet d'associer à chaque individu l'ensemble des valeurs observées pour cet individu sur chaque variable. Qui plus est, il est possible de retourner les valeurs prises par une variable selon les valeurs observées sur une ou plusieurs autres variables. Par exemple, il est très simple de retourner une liste des scores de tous les individus dont le sexe vaut \textit{M} en tapant simplement une instruction du type : 
+\begin{lstlisting}[language=html]
+a[a$gender == "M", "score"]
+\end{lstlisting}
+L'expression \textit{a\$gender == "M"} correspond à un test logique, et le résultat renvoyé, pour chaque élément testé, prend la valeur \textit{TRUE} (vrai) ou \textit{FALSE} (faux) selon que la condition est vérifiée ou non.\newline 
+Cela permet de retenir dans le data frame a que les lignes pour lesquelles la variable gender prend la valeur \textit{M}. Ensuite, on filtre les colonnes de \textit{a} en indiquant \textit{"score"} comme nom de variable.\newline
+En fait, au lieu d'utiliser des numéros d'observation comme dans l'exemple précédent avec le data frame \textit{smp}, on adresse ici des individus ou des lignes selon les valeurs observées pour certaines variables par ces mêmes individus.\newline
+Ce principe général d'indexation est schématisé ci-dessous :
+\begin{figure}[H]\begin{center}\includegraphics[scale=1]{ilu/4.png}\end{center}\end{figure}
+Supposons donc que nous ayons une liste de trois numéros \textit{(1, 3, 4)}, stockés dans une variable appelée \textit{idx}. Il peut s'agir, par exemple, de trois individus dont on connaît le numéro de position dans le tableau de données et pour lesquels on aimerait vérifier les données enregistrées. Les données qui nous intéressent sont celles de la variable \textit{x}, qui contient 5 éléments (numérotés de 1 à 5, mais également nommées \textit{a, b, \dots, e}, comme dans le cas des \textit{rowname} d'un data frame). Alors, il est possible d'obtenir directement la 1ère, la 3ème et la 4ème valeur de \textit{x} en utilisant l'une
+des notations suivantes : 
+\begin{center}
+\textit{x[c(1,3,4)]}, \textit{x[idx]}, ou enfin \textit{x[g]}. 
+\end{center}
+Dans cette dernière construction, on utilise une
+variable auxiliaire \textit{g} ne contenant que des valeurs booléennes (\textit{T} pour vrai et \textit{F} pour faux) ; en d'autres termes, on ne
+demande à renvoyer les valeurs de x que lorsque g vaut TRUE (abbrégé T). Une formulation équivalente serait :
+\begin{center}
+\textit{g <- c("T","F","T","T","F")} et \textit{x[which(g == "T")]}. 
+\end{center}
+Voir l'aide en ligne de la commande \textit{which()} pour décortiquer le résultat produit par cette commande.
+\section{Autres sources de données}
+\subsection{Fichier binaire RData}
+Les fichiers R portent l'extension \textit{.RData} ou \textit{.rda} et peuvent être lus avec la commande \textit{load()}. Ils sont généralement utiles pour sauvegarder des fichiers de données dans un format compressé (prenant moins de place sur le disque), et plus rapides à charger. On peut également utiliser ce format pour enregistrer n'importe quel objet \textbf{R} (une variable ou un tableau par exemple), voire plusieurs variables en même temps. Lorsque la commande \textit{load()} a été exécutée, le nom de la ou des variables sauvegardées dans le fichier apparaissent dans l'espace de travail, ce que l'on peut vérifier en tapant :
+\begin{lstlisting}[language=html]
+ls()
+\end{lstlisting}
+C'est le format utilisé par R pour sauvegardé l'espace de travail lorsque l'on ferme une sessions R. Dans ce cas, R
+enregistre toutes les variables contenues dans l'espace de travail dans un fichier nommé \textit{.RData} (c'est donc un fichier masqué dans la plupart des explorateurs de fichiers). Lorsque l'on démarre R dans un certain répertoire de travail, si un tel fichier s'y trouve présent, il est automatiquement chargé par \textbf{R}.\newline
+En fait, plutôt que de laisser \textbf{R} enregistrer l'espace de travail à la fin de la session, on peut utiliser la commande \textit{save.image()} pour sauvegarder l'espace de travail dans un fichier spécifique.
+\subsubsection*{Historique des commandes.}
+Il est également possible de sauvegarder l'intégralité des commandes tapées durant une session à l'aide de la commande \textit{savehistory()}.
+\subsection{Fichier SPSS et Stata}
+Le package foreign dispose de deux commandes permettant de charger des fichiers enregistrés au format \textbf{SPSS} (fichier \textit{.sav}) ou \textbf{Stata} (fichier \textit{.dta}) : \textit{read.spss()} et \textit{read.dta()}. Il est nécessaire de 'charger le package' en tapant : 
+\begin{lstlisting}[language=html]
+library(foreign)
+\end{lstlisting}
+avant de pouvoir utiliser ces commandes. Dans le cas de \textbf{SPSS}, il est nécessaire de rajouter l'option \textit{to.data.frame = TRUE} afin d'obtenir un data frame et non pas simplement une liste de variables.
+\subsection{Base de données relationnelles et autres formats}
+Certains packages permettent de se connecter directement sur des bases de données de type \textbf{MySQL} ou \textbf{PostgreSQL} (voire même \textbf{MongoDB}, \textbf{Redis}, ou \textbf{sqlite}). Dans ce cas, le mode d'interaction avec les données est légèrement différent car on utilise alors le langage de requête propre au langage, à moins d'utiliser des packages qui permettent d'assurer la conversion à partir des commandes R habituelles telles que \textit{subset()}.\newline
+Il existe également des packages spécialisés dans le chargement et le traitement des fichiers de type \textbf{XML}, \textbf{JSON},
+\textbf{HDF5}, etc.\newline
+Généralement il suffit de chercher sur le site \underline{\href{http://cran.r-project.org/}{CRAN}} ou sur \underline{\href{http://www.rseek.org/}{rseek.org}}.
+\section{Techniques plus avancées}
+Il existe bien d'autres méthodes pour interagir avec des tableaux de données sous \textbf{R}. Citons en particulier trois situations assez fréquentes :
+\begin{itemize}
+\item \textit{combiner ensemble différentes sources de données :} pour associer deux tableaux de données disposant d'un identificateur commun (par exemple, une colonne avec des identifiants uniques pour les individus, le nom de variable dans chacun des tableaux n'étant pas nécessairement le même), on utilisera la commande \textit{merge()} qui permet de fusionner deux data frame A et B en un seul et même data frame.\newline
+Selon les options choisies, \textit{all.x = TRUE}, \textit{all.y = TRUE} ou \textit{all = TRUE}, on conservera toutes les lignes du tableau A
+et les colonnes de B seront ajoutées à A même si certaines observations ne sont pas présentes dans B, ou c'est le tableau B qui servira de base de fusion, ou enfin toutes les observations de A et de B seront associées, même si elles ne sont pas en complètes correspondance entre les deux tableaux.
+\item \textit{aggréger des données :} à partir de données individuelles, pour construire des données de synthèse (par exemple des moyennes pour chaque groupe) il est possible d'utiliser la commande \textit{tapply()} ou \textit{aggregate()}. Cette dernière présente l'avantage de retourner ses résultats sous forme de data frame, qu'il est possible d'exploiter ensuite pour continuer les analyses statistiques ou faire des représentations graphiques.\newline
+Le package \underline{\href{http://plyr.had.co.nz/}{plyr}} ou sa version plus récente, \underline{\href{http://cran.rstudio.com/web/packages/dplyr/vignettes/introduction.html}{dplyr}}, fournit des options nettement plus améliorées pour ce type d'opérations.
+\item \textit{transformer des données :} dans ce qui a été présenté sur les data frame, on considère explicitement que les valeurs prises par une variables sont regroupées dans une même colonne, et que donc chaque colonne représente des variables bien distinctes. Il arrive parfois que l'on stocke dans chaque colonne d'un tableau les valeurs observées pour chaque modalité ou niveau pris par une variable qualitative (l'exemple typique est une série de mesures répétées chez les mêmes individus à trois périodes différentes, et pour lequel on se retrouve avec un tableau à 4 colonnes, ou en plus d'une colonne d'identifiant unique pour les individus, on dispose de 3 colonnes regroupant les mesures collectées chez chaque individu pour une même période). Dans
+ce cas, le package \textit{reshape2} permet de transformer ce type de tableau, dit en format \textit{wide}, en un data frame au format \textit{long} comprenant trois colonnes : 
+\begin{itemize}
+\item une colonne id désignant les identifiants individus
+\item une colonne variable contenant les niveaux de la variable manipulée (par exemple, période1, période2 et période3) 
+\item une colonne value contenant les mesures associées à chaque individu pour chacune des trois périodes.
+\end{itemize}
+\end{itemize}
+\subsection*{Informations supplémentaires}
+Pour plus d'informations, il peut être utile de consulter l'une des références suivantes :
+\begin{enumerate}
+  \item Spector, P (2008). \textit{Data Manipulation with R}. Springer
+  \item \underline{\href{http://www.cookbook-r.com/Manipulating_data/}{R Cookbook / Manipulating Data}}
+  \item Muenchen, B. \underline{\href{http://www.r4stats.com/books/free-version/}{R for SAS and SPSS Users}}
+\end{enumerate}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\chapter{Complément Université FUN - Le langage R Markdown}
+\section{Introduction}
+R Markdown offre une syntaxe simplifiée pour mettre en forme des documents contenant à la fois du texte, des instructions \textbf{R} et le résultat fourni par \textbf{R}  lors de l'évaluation de ces instructions. En ce sens, il s'agit d'un outil permettant de produire des rapports d'analyse détaillés et commentés, plutôt que de simples scripts \textbf{R}  incluant quelques commentaires.\newline
+Ce langage est basé sur \underline{\href{http://www.daringfireball.net/projects/markdown/syntax}{Markdown}}. Il s'apprend très rapidement, ne nécessite rien dautre qu'un éditeur texte et il peut être utilisé sur le forum de discussion pour formater les messages, en particulier les instructions ou les blocs d'instructions \textbf{R}.\newline
+\underline{\href{http://rmarkdown.rstudio.com/}{R Markdown v2}} est la nouvelle implémentation disponible depuis 2014 dans le logiciel \underline{\href{http://www.rstudio.com/}{RStudio}}. Initialement, la possibilité de transformer du texte contenant des instructions R en document HTML ou PDF reposait sur les packages \underline{\href{http://www.yihui.name/knitr/}{knitr}} et \underline{\href{https://github.com/rstudio/markdown}{markdown}}, mais à présent il n'existe plus qu'\underline{\href{https://github.com/rstudio/rmarkdown}{un seul package}} qui se charge de gérer la conversion desdocuments R Markdown (extension .Rmd ou .rmd) en documents PDF, HTML ou DOCX.\newline
+Les principales différences et les éventuels problèmes de compatibilité entre les deux versions sont décrites sur la page suivante : \underline{\href{http://rmarkdown.rstudio.com/authoring_migrating_from_v1.html}{Migrating from R Markdown v1}}.
+\section{Les bases du langage}
+Markdown est un langage permettant de baliser du texte simple à l'aide de symboles prédéfinis, un peu à l'image des balises HTML, afin de produire une sortie enrichie avec des titres, des paragraphes, etc.\newline
+Il s'agit donc principalement de rédiger un document de type texte, dans un éditeur approprié (éviter MS Word), et d'insérer des symboles simples afin de signaler les mots à mettre en surbrillance ou la délimitation des titres de section, par exemple.\newline
+On trouvera une description détaillée des caractéristiques du langage sur les sites suivants :
+\begin{itemize}
+  \item \underline{\href{https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet}{Markdown Cheatsheet}}
+  \item \underline{\href{http://shiny.rstudio.com/articles/rm-cheatsheet.html}{The R Markdown Cheatsheet}}  
+  \item \underline{\href{https://enacit1.epfl.ch/markdown-pandoc/}{Élaboration et conversion de documents avec Markdown et Pandoc}}
+\end{itemize}
+Par ailleurs, RStudio fournit un petit mémento des principales commandes, cf. le petit bouton d'aide (') apparaissant à côté du bouton de compilation Knit HTML (ou Knit PDF selon l'option activée par défaut).
+\begin{figure}[H]\begin{center}\includegraphics[scale=1]{ilu/bl.png}\end{center}\end{figure}
+\subsection{Syntaxe et mise en forme d'un document}
+Les titres de sections sont préfixés d'un ou plusieurs \#, selon le niveau de profondeur du titre. Par exemple, pour un titre de niveau 1, on écrira \#Titre de niveau 1, alors que pour un titre de niveau 2 on écrira \#\# Titre de niveau 2 (à ne pas confondre avec le symbole de commentaire des scripts R).\newline
+Au niveau des éléments de texte, la mise en gras s'effectue en encadrant le texte par ** et la mise en italique par *. Pour utiliser une police à espacement fixe (monospace), on encadrera le texte avec des deux quotes simples inversées ('). Par exemple, pour écrire ce texte en gras et cette instruction R, 
+\begin{lstlisting}[language=html]
+smp <- read.csv2("smp2.csv"),
+\end{lstlisting}
+on s'est contenté d'écrire : pour écrire ce texte **en gras** et cette instruction R, \textit{'smp <- read.csv2("smp2.csv")'}\newline
+Les instructions R sont encadrées par ??{r} et ?? (appelé ?code chunk?), comme ci-dessous :
+
+\begin{figure}[H]\begin{center}\includegraphics[scale=1]{ilu/bm.png}\end{center}\end{figure}
+
+C'est aussi cool car ça comprend aussi le \LaTeX. Il faudra cependant ajouter le HEADER suivant : 
+\begin{lstlisting}[language=html]
+---
+#### Générer e document : 
+title: "X4M0020 : Rapport de TP - n°1"
+author: "LATIF Mehdi - 419"
+date: "22 Mars 2017"
+header-includes:
+   - \usepackage{bbm}
+   - \usepackage{threeparttable}
+   - \usepackage{booktabs}
+   - \usepackage{expex}
+#### On choisie la sortie
+output: 
+    - pdf_document
+    ###- html_document
+#### Des infos 
+###http://rmarkdown.rstudio.com/lesson-1.html
+###https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet
+\end{lstlisting}
+
+
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.5]{ilu/bmd.png}\end{center}\end{figure}
+
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.5]{ilu/bmd1.png}\end{center}\end{figure}
+
+Si l'on souhaite  déclarer une fonction qui soit évaluée mais non affichée, on écrit : 
+
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.5]{ilu/bmd2.png}\end{center}\end{figure}
+
+Le paramètres suivants permettent de gérer l'affichage ou non des lignes de code et écrire ainsi le tout dans un unique document :
+
+\begin{lstlisting}[language=html]
+```{r, echo=FALSE,eval=TRUE}
+\end{lstlisting}
+
+
+\subsection{Génération du document final}
+
+La génération du document final se fait en cliquant sur le bouton \textit{Knit HTML} (ou \textit{Knit PDF} selon l'option choisie).\newline
+Dans le cas du format PDF, il est nécessaire d'avoir un système LaTeX installé sur le système. Le fichier \textit{HTML} est sauvegardé dans le répertoire de travail courant et peut être affiché dans un navigateur web ou envoyé par email : les feuilles de style ou les images étant inclues avec le document HTML, il n'est pas nécessaire de les sauvegarder ou de les transmettre avec la page HTML.\newline
+Dans le cas où l'on souhaiterait générer le document à partir de R directement, sans passer par RStudio, il suffit
+d'utiliser la commande \textit{render()} du package \textit{rmarkdown}. Ce package peut être installé de la manière suivante :
+\begin{lstlisting}[language=html]
+install.packages("rmarkdown")
+\end{lstlisting}
+
+\subsection{Les options de personnalisation}
+Parmi les principales options de personnalisation, on distinguera :
+\begin{itemize}
+  \item  pour le format HTML : la possibilité d'insérer une table des matières en début de document, utiliser la coloration syntaxique pour l'affichage des commandes R, modifier la feuille de style pour le rendu de la page HTML, modifier la taille des images (hauteur/largeur) et ajouter une légende.
+  \item pour le format PDF : la possibilité d'insérer une table des matières en début de document et de numéroter les titres de section, modifier la taille des images (hauteur/largeur) et ajouter une légende.
+\end{itemize}
+ 
+Ces options se gèrent directement à partir du bouton situé à la droite du bouton de compilation Knit HTML (ou \textit{Knit PDF} selon l'option activée par défaut).
+
+\begin{figure}[H]\begin{center}\includegraphics[scale=1]{ilu/bn.png}\end{center}\end{figure}
+
+\subsection{Gestion des figures et des tableaux}
+Pour insérer une image externe, on utilise la construction suivante, en supposant que le fichier image s'appelle fichier.png :
+\begin{lstlisting}[language=html]
+![légende](fichier.png)
+\end{lstlisting}
+La gestion des figures générées directement à partir de commandes R se fait à l'aide des options dans les "code chunks". Souvent, on ajoutera une option \textit{echo = FALSE} pour ne pas afficher les instructions \textbf{R} et simplement afficher le résultat produit par \textbf{R}.\newline Les autres options disponibles sont celles du package \textit{knitr} (par exemple, \textit{fig.align = TRUE} pour l'alignement de la figure, seulement dans le cas HTML).
+En ce qui concerne les tableaux, il est possible d'utiliser le package \textit{xtable} qui permet de convertir au format HTML des tableaux simples (par exemple, ceux produits à l'aide de la commande \textit{summary()} pour des data frame ou des modèles de régression). Voici un exemple d'application :
+
+\begin{lstlisting}[language=html]
+n <- 100
+x <- rnorm(n)
+y <- 2*x + rnorm(n)
+out <- lm(y ~ x)
+library(xtable)
+tab <- xtable(summary(out)$coef, digits=c(0, 2, 2, 1, 2))
+###################################################
+> tab
+% latex table generated in R 3.3.3 by xtable 1.8-2 package
+% Mon Aug 21 18:31:05 2017
+\begin{table}[ht]
+\centering
+\begin{tabular}{rrrrr}
+  \hline
+ & Estimate & Std. Error & t value & Pr($>$$|$t$|$) \\ 
+  \hline
+(Intercept) & -0.08 & 0.10 & -0.7 & 0.46 \\ 
+  x & 2.03 & 0.10 & 20.4 & 0.00 \\ 
+   \hline
+\end{tabular}
+\end{table}
+###################################################
+> print(tab, type="html")
+<!-- html table generated in R 3.3.3 by xtable 1.8-2 package -->
+<!-- Mon Aug 21 18:32:19 2017 -->
+<table border=1>
+<tr> <th>  </th> <th> Estimate </th> <th> Std. Error </th> <th> t value </th> <th> Pr(&gt;|t|) </th>  </tr>
+  <tr> <td align="right"> (Intercept) </td> <td align="right"> -0.08 </td> <td align="right"> 0.10 </td> <td align="right"> -0.7 </td> <td align="right"> 0.46 </td> </tr>
+  <tr> <td align="right"> x </td> <td align="right"> 2.03 </td> <td align="right"> 0.10 </td> <td align="right"> 20.4 </td> <td align="right"> 0.00 </td> </tr>
+   </table>
+\end{lstlisting}
+On obtient alors ce tableau : 
+
+\begin{table}[ht]
+\centering
+\begin{tabular}{rrrrr}
+  \hline
+ & Estimate & Std. Error & t value & Pr($>$$|$t$|$) \\ 
+  \hline
+(Intercept) & -0.08 & 0.10 & -0.7 & 0.46 \\ 
+  x & 2.03 & 0.10 & 20.4 & 0.00 \\ 
+   \hline
+\end{tabular}
+\end{table}
+
+Dans ce cas, on prendra soin de rajouter l'option \textit{results = "asis"} puisque l'on demande explicitement à la commande \textit{print()} de fournir un résultat de type HTML.\newline
+Il existe d'autres packages permettant des rendus plus élaborés ou plus complexes, bien que souvent réservés au format PDF, en particulier : \textit{Hmisc, texreg, stargazer, apsrtable, rapport, pander, reporttools, ou brew}.
+\section{Pour aller plus loin}
+Il est conseillé de se familiariser progressivement avec l'usage de la syntaxe Markdown et les \underline{\href{https://yihui.name/knitr/options/}{options knitr}}. Un bon
+tutoriel (en anglais) est disponible sur la page suivante : \underline{\href{http://kbroman.org/knitr_knutshell/}{knitr in a knutshell}}.\newline
+Pour des documents plus complexes, il est généralement nécessaire de recourir au format PDF et d'exploiter au maximum les possibilités du package knitr et des options LaTeX ; voir, par exemple, \newline\underline{\href{onepager.togaware.com/KnitRO.pdf}{Data Science with R Documenting with KnitR}}.
+
+\section{Références}
+\begin{itemize}
+  \item Grandud, C. (2013). \underline{\href{https://github.com/christophergandrud/Rep-Res-Book}{Reproducible Research with R and RStudio}}. Chapman \& Hall/CRC
+  \item Xie, Y. (2013). \underline{\href{https://github.com/yihui/knitr-book/}{Dynamic documents with R and knitr}}. Chapman \& Hall/CRC
+\end{itemize}
+
+\section{Markdown Cheatsheet}
+\textit{https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet}
+\subsection{Headers}
+\begin{lstlisting}[language=html]
+# H1
+## H2
+### H3
+#### H4
+##### H5
+###### H6
+
+Alternatively, for H1 and H2, an underline-ish style:
+
+Alt-H1
+======
+
+Alt-H2
+------
+\end{lstlisting}
+\subsection{Emphasis}
+
+\begin{lstlisting}[language=html]
+Emphasis, aka italics, with *asterisks* or _underscores_.
+
+Strong emphasis, aka bold, with **asterisks** or __underscores__.
+
+Combined emphasis with **asterisks and _underscores_**.
+
+Strikethrough uses two tildes. ~~Scratch this.~~
+\end{lstlisting}
+
+\subsection{Lists}
+
+\begin{lstlisting}[language=html]
+1. First ordered list item
+2. Another item
+??* Unordered sub-list. 
+1. Actual numbers don't matter, just that it's a number
+??1. Ordered sub-list
+4. And another item.
+
+???You can have properly indented paragraphs within list items. Notice the blank line above, and the leading spaces (at least one, but we'll use three here to also align the raw Markdown).
+
+???To have a line break without a paragraph, you will need to use two trailing spaces.??
+???Note that this line is separate, but within the same paragraph.??
+???(This is contrary to the typical GFM line break behaviour, where trailing spaces are not required.)
+
+* Unordered list can use asterisks
+- Or minuses
++ Or pluses
+\end{lstlisting}
+
+\subsection{Links}
+
+\begin{lstlisting}[language=html]
+[I'm an inline-style link](https://www.google.com)
+
+[I'm an inline-style link with title](https://www.google.com "Google's Homepage")
+
+[I'm a reference-style link][Arbitrary case-insensitive reference text]
+
+[I'm a relative reference to a repository file](../blob/master/LICENSE)
+
+[You can use numbers for reference-style link definitions][1]
+
+Or leave it empty and use the [link text itself].
+
+URLs and URLs in angle brackets will automatically get turned into links. 
+http://www.example.com or <http://www.example.com> and sometimes 
+example.com (but not on Github, for example).
+
+Some text to show that the reference links can follow later.
+
+[arbitrary case-insensitive reference text]: https://www.mozilla.org
+[1]: http://slashdot.org
+[link text itself]: http://www.reddit.com
+\end{lstlisting}
+\subsection{Images}
+\begin{lstlisting}[language=html]
+Here's our logo (hover to see the title text):
+
+Inline-style: 
+![alt text](https://github.com/adam-p/markdown-here/raw/master/src/common/images/icon48.png "Logo Title Text 1")
+
+Reference-style: 
+![alt text][logo]
+
+[logo]: https://github.com/adam-p/markdown-here/raw/master/src/common/images/icon48.png "Logo Title Text 2"
+
+
+\end{lstlisting}
+
+\subsection{Code and Syntax Highlighting}
+Code blocks are part of the Markdown spec, but syntax highlighting isn't. However, many renderers -- like Github's and Markdown Here -- support syntax highlighting. Which languages are supported and how those language names should be written will vary from renderer to renderer. Markdown Here supports highlighting for dozens of languages (and not-really-languages, like diffs and HTTP headers); to see the complete list, and how to write the language names, see the highlight.js demo page (\textit{http://softwaremaniacs.org/media/soft/highlight/test.html}).
+
+\begin{lstlisting}[language=html]
+Inline `code` has `back-ticks around` it.
+\end{lstlisting}
+
+Inline \textit{code} has \textit{back-ticks} around it.\newline
+\\
+Blocks of code are either fenced by lines with three back-ticks $```$, or are indented with four spaces. I recommend only using the fenced code blocks -- they're easier and only they support syntax highlighting.
+
+\begin{lstlisting}[language=html]
+```javascript
+var s = "JavaScript syntax highlighting";
+alert(s);
+```
+ 
+```python
+s = "Python syntax highlighting"
+print s
+```
+ 
+```
+No language indicated, so no syntax highlighting. 
+But let's throw in a <b>tag</b>.
+```
+
+var s = "JavaScript syntax highlighting";
+alert(s);
+
+s = "Python syntax highlighting"
+print s
+
+No language indicated, so no syntax highlighting in Markdown Here (varies on Github). 
+But let's throw in a <b>tag</b>.
+\end{lstlisting}
+
+\subsection{Tables}
+Tables aren't part of the core Markdown spec, but they are part of GFM and Markdown Here supports them. They are an easy way of adding tables to your email -- a task that would otherwise require copy-pasting from another application.
+
+\begin{lstlisting}[language=html]
+Colons can be used to align columns.
+
+| Tables        | Are           | Cool  |
+| ------------- |:-------------:| -----:|
+| col 3 is      | right-aligned | $1600 |
+| col 2 is      | centered      |   $12 |
+| zebra stripes | are neat      |    $1 |
+
+There must be at least 3 dashes separating each header cell.
+The outer pipes (|) are optional, and you don't need to make the 
+raw Markdown line up prettily. You can also use inline Markdown.
+
+Markdown | Less | Pretty
+--- | --- | ---
+*Still* | `renders` | **nicely**
+1 | 2 | 3
+\end{lstlisting}
+
+\subsection{Blockquotes}
+
+\begin{lstlisting}[language=html]
+> Blockquotes are very handy in email to emulate reply text.
+> This line is part of the same quote.
+
+Quote break.
+
+> This is a very long line that will still be quoted properly when it wraps. Oh boy let's keep writing to make sure this is long enough to actually wrap for everyone. Oh, you can *put* **Markdown** into a blockquote. 
+
+
+\end{lstlisting}
+
+\subsection{Inline HTML}
+
+\begin{lstlisting}[language=html]
+<dl>
+  <dt>Definition list</dt>
+  <dd>Is something people use sometimes.</dd>
+
+  <dt>Markdown in HTML</dt>
+  <dd>Does *not* work **very** well. Use HTML <em>tags</em>.</dd>
+</dl>
+\end{lstlisting}
+
+\subsection{Horizontal Rule}
+
+\begin{lstlisting}[language=html]
+Three or more...
+
+---
+
+Hyphens
+
+***
+
+Asterisks
+
+___
+
+Underscores
+\end{lstlisting}
+
+\subsection{Line Breaks}
+
+\begin{lstlisting}[language=html]
+My basic recommendation for learning how line breaks work is to experiment and discover -- hit <Enter> once (i.e., insert one newline), then hit it twice (i.e., insert two newlines), see what happens. You'll soon learn to get what you want. "Markdown Toggle" is your friend. 
+\end{lstlisting}
+
+Here's a line for us to start with.\newline
+\\
+This line is separated from the one above by two newlines, so it will be a \textit{separate paragraph}.\newline
+\\
+This line is also a separate paragraph, but\dots\newline
+This line is only separated by a single newline, so it's a separate line in the \textit{same paragraph}.
+
+\subsection{Youtube videos}
+
+They can't be added directly but you can add an image with a link to the video like this:
+
+\begin{lstlisting}[language=html]
+<a href="http://www.youtube.com/watch?feature=player_embedded&v=YOUTUBE_VIDEO_ID_HERE
+" target="_blank"><img src="http://img.youtube.com/vi/YOUTUBE_VIDEO_ID_HERE/0.jpg" 
+alt="IMAGE ALT TEXT HERE" width="240" height="180" border="10" /></a>
+\end{lstlisting}
+Or, in pure Markdown, but losing the image sizing and border:
+\begin{lstlisting}[language=html]
+[![IMAGE ALT TEXT HERE](http://img.youtube.com/vi/YOUTUBE_VIDEO_ID_HERE/0.jpg)](http://www.youtube.com/watch?v=YOUTUBE_VIDEO_ID_HERE)
+\end{lstlisting}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\chapter{Compléments : Test, valeur critique et p-value - Arthur Charpentier}
+\url{http://freakonometrics.hypotheses.org/2462}\newline
+\textbf{Twitter : } \href{https://twitter.com/freakonometrics?lang=fr}{@freakonometrics}\newline
+\\
+Un petit complément suite au cours de mercredi dernier, pour insister sur l'importance de $p$-value dans la lecture de la sortie d'un test.\newline
+\\
+\subsection*{Les erreurs dans un test statistique}
+Mais avant, rappelons qu'un test est une prise de décision: accepter ou rejeter une hypothèse. Et qu'on peut commettre une erreur. Ou pour être plus précis, on peut commettre deux types d'erreur : 
+\begin{itemize}
+\item accepter l'hypothèse alors que cette dernière est fausse
+\item rejeter l'hypothèse alors que cette dernière était vraie
+\end{itemize}
+Pour reprendre une terminologie plus médicale, un test de grossesse peut dire à une femme qu'elle n'est pas enceinte, alors qu'elle l'est; ou dire qu'elle l'est, alors qu'elle ne l'est pas.\newline
+\\
+Formellement, on a deux probabilités,
+\begin{itemize}
+\item la probabilité d'accepter à tort notre hypothèse (on parlera d'erreur de second espèce), 
+\item la probabilité de rejeter à tort notre hypothèse (on parlera d'erreur de première espèce) 
+\end{itemize}
+
+Dans un monde idéal on voudrait que les deux probabilités soient aussi petites que possibles\dots  Mais c'est impossible, et le plus souvent, baisser une des probabilités se fait en augmentant l'autre. Les cas extrêmes étant 
+\begin{itemize}
+\item avoir un test de grossesse qui déclare tout le monde enceinte: on ne rejette alors jamais à tort (on ne rejette jamais tout court en fait), mais on a un fort taux d'acceptation à tort,
+\item avoir un test de grossesse qui ne déclare personne enceinte: on n'accepte jamais à tort (car on n'accepte jamais) mais on a un fort taux de rejet à tort.
+\end{itemize}
+Bref, on a un arbitrage à faire entre deux types d'erreurs. Souvent, en pratique on va demander à contrôler l'erreur de première espèce (i.e.  de l'ordre de 5\%), et on chercher a un test qui, à  donné, possède la plus faible erreur de première espèce. Voilà en gros pour la théorie: on se donne un seuil de significativité , qui correspond à la probabilité d'erreur de premier type. Et on va chercher à tester si une hypothèse $H_{1}$.
+
+
+
+\begin{center}
+\begin{tabular}{c|c|c|}
+\cline{2-3}
+                                                & \textbf{$H_{0}$ est vraie} & \textbf{$H_{1}$ est vraie} \\ \hline
+\multicolumn{1}{|c|}{\textbf{Accepter $H_{0}$}} & OK                         & Erreur - Type 2            \\ \hline
+\multicolumn{1}{|c|}{\textbf{Rejeter $H_{0}$}}  & Erreur - Type 1            & OK                         \\ \hline
+\end{tabular}
+\end{center}
+
+\subsection*{La "Valeur critique"}
+
+La notion de valeur critique a été introduite dans Neyman \& Pearson (1928). Cette valeur dépend de la forme de l'hypothèse alternative, en particulier savoir si le test est bilatéral, unilatéral à gauche, ou unilatéral à droite. Pour un test donné, la valeur critique peut-être vue comme la valeur limite a partir de laquelle on pourra rejeter $H_{0}$ avec un seuil de significativité donné.
+
+\subsection*{Le $p$-value}
+
+La $p$-value a été introduite dans Gibbons \& Pratt (1975), meme si on peut retrouve l'idée beaucoup plus tôt, comme Pearson (1900), qui propose de calculer \textit{'the probability that the observed value of the chi-square statistic would be exceeded under the null hypothesis'}. La $p$-value est la probabilité, sous $H_{0}$, d'obtenir une statistique aussi extrême (pour ne pas dire aussi grande) que la valeur observée sur l'échantillon. Aussi, pour un seuil de significativité  donné, on compare $p$ et $\alpha$, afin d'accepter, ou de rejeter $H_{0}$,
+\begin{itemize}
+\item si $p \leq \alpha$, on va rejeter l'hypothèse $H_{0}$ (en faveur de $H_{1}$)
+\item si $p > \alpha$, on va rejeter $H_{1}$ (en faveur de $H_{0}$).
+\end{itemize}
+On peut alors interpréter la $p$-value comme le plus petit seuil de significativité pour lequel l'hypothèse nulle est acceptée. Gibbons \& Pratt (1975) reviennent longuement sur les interprétations, et surtout les mauvaises interprétations, de cette $p$-value.
+
+\subsection*{Valeur critique VS $p$-value}
+
+Si on formalise un peu, on peut vouloir tester $H_{0} : \theta = \theta_{0}$ contre $H_{1} : \theta > \theta_{0}$ (par exemple). De manière très générale, on dispose d'une statistique de test $T$ qui a pour loi, sous $H_{0}$,$F_{\theta_{0}}(\cdot)$ (que l'on supposera continue). Notons qu'on peut considérer une hypothèse alternative de la forme $H_{1} : \theta \neq \theta_{0}$, c'est juste plus pénible parce qu'il faut travailler sur $|T|$ , et calculer des probabilités à gauche, ou à droite. Donc pour notre exemple, on va prendre un test unilatéral.\newline
+Dans l'approche classique (telle que présentée dans tous les cours de statistiques), on se donne un seuil d'acceptation $\alpha$  petit (disons 5\%), et on cherche une valeur critique $T_{1-\alpha}$ telle que :
+$$P(T\geq T_{1-\alpha} | \theta = \theta_{0})=\alpha$$
+Pour ceux qui se souviennent de leur cours de stats, cela peut faire penser à la puissance du test, définie par :
+$$\pi(\theta | \alpha) = P(T\geq T_{1-\alpha} | \theta) = 1 - F_{\theta}(T_{1-\alpha})$$
+Formellement, la $p$-value associée au test  est la variable aléatoire  définie par :
+$$P=1-F_{\theta_{0}} = T$$
+Donc effectivement, la $p$-value et la puissance sont liées, puisque : 
+$$P(P\leq \alpha | \theta) = \pi(\theta |\alpha)$$
+autrement dit, la puissance peut-être vue comme la fonction de répartition de la $p$-value.
+
+\subsection*{Intérêt computationnel\footnote{comme par le traitement d'un ordinateur, de manière logico-algébrique  } de la $p$-value}
+
+D'un point de vue computationnel, la $p$-value est l'outil le plus important pour interpréter la sortie d'un test. \newline Commençons par un test simple, comme une comparaison de moyennes. On cherche ici à tester  $H_{0} : \mu_{X} = \mu_{Y}$contre $H_{1} : \mu_{X} > \mu_{Y} $ pour des moyennes calculées sur deux groupes. On veut savoir s'ils sont vraiment différents (ci-dessous le nombre de bonnes réponses, sur 40 questions, on travaillera ensuite sur la note sur 100).\newline
+La statistique de test est ici : 
+$$T=\frac{\bar{X}-\bar{Y}}{\sqrt{\frac{s_{X}^{2}}{n_{X}}+\frac{s_{Y}^{2}}{n_{Y}}}}$$
+et sous $H_{0}$, $T$ va suivre une loi de Student à $\nu$ degrés de liberté, où $\nu$ est donné par la relation de Welch'Satterthwaite (d'après Satterwaite (1946) et Welch (1947)) : 
+$$\nu = \frac{(\frac{s_{X}^{2}}{n_{X}}+\frac{s_{Y}^{2}}{n_{Y}})^{2}}{\frac{s_{X}^{4}}{n^{2}_{X}(n_{X}-1)} - \frac{s_{Y}^{4}}{n^{2}_{Y}(n_{Y}-1)}}$$
+Numériquement, on a ici : 
+\begin{lstlisting}[language=html]
+> Xbar=mean(X)
+> Ybar=mean(Y)
+> Sx2=var(X)
+> Sy2=var(Y)
+> nX=length(X)
+> nY=length(Y)
+> (T=(Xbar-Ybar)/sqrt(Sx2/nX+Sy2/nY))
+[1] -2.155754
+\end{lstlisting}
+
+et pour les degrés de liberté :
+\begin{lstlisting}[language=html]
+> (nu=(Sx2/nX+Sy2/nY)^2/(Sx2^2/nX^2/(nX-1)+
++ Sy2^2/nY^2/(nY-1)))
+[1] 36.35279
+\end{lstlisting}
+
+La valeur critique est obtenue en lisant dans les tables (Table de la Loi de Student avec $\alpha = 5\%$, $(1-\alpha) = 95\%$ et $k =$ \textit{Taille de l'échantillon} $= 40$, On obtient par lecture $1,684$ ) (car ici on a des probabilité pour un test bilatéral dans la table) comme on apprenait dans les cours de statistique au siècle passé. D'un point de vue informatique, on cherche à savoir si on est à gauche, ou à droite de la valeur critique 
+
+\begin{lstlisting}[language=html]
+> qt(.05,df=nu)
+[1] -1.687865
+\end{lstlisting}
+On peut aussi calculer la $p$-value,
+\begin{lstlisting}[language=html]
+> pt(T,df=nu)
+[1] 0.01889768
+\end{lstlisting}
+Si on regarde, sous \textbf{R}, il existe des fonctions de tests, pour comparer des moyennes. Et dans ce cas, la sortie est : 
+\begin{lstlisting}[language=html]
+> t.test(X,Y,alternative = "less")
+
+Welch Two Sample t-test
+
+data:  X and Y
+t = -2.1558, df = 36.353, p-value = 0.0189
+alternative hypothesis: true difference in means is less than 0
+95 percent confidence interval:
+-Inf -1.772507
+sample estimates:
+mean of x mean of y
+48.75000  56.91667
+\end{lstlisting}
+Autrement dit, on a automatiquement la $p$-value, et qui permet rapidement d'interpréter le test. \textbf{Moralité}, si on sait interpréter une $p$-value (et que l'on vérifié au préalable les conditions d'application d'un test), on peut faire tous les tests que l'on veut !\newline
+Si on veut faire un peu plus compliqué, on peut regarder la distribution des notes, et se demander si une loi $\mathcal{N} (60,15^{2})$ serait possible (par exemple, ça sera notre hypothèse $H_{0}$, l'hypothèse alternative étant que ce n'est pas cette loi). Pour faire ce test, il existe le test de Kolmogorov-Smirnov. La statistique de test est ici
+$$T=\sup\{|\widehat{F_{n}}(x)-F_{0}(x)|x\in\mathbb{R}\}$$
+où $F_{0}(\cdot)$ est la fonction de répartition de la loi $\mathcal{N} (60,15^{2})$, et $\widehat{F_{n}}(\cdot)$ est la fonction de répartition empirique
+$$\widehat{F_{n}}(x) = \frac{1}{n}\sum_{i=1}^{n}\mathbf{1}(x_{i}\leq x)$$
+La loi de $T$ n'est pas simple, ou moins simple qu'une loi de Student (cf Marsaglia, Tsang \& Wang (2003) par exemple). En revanche, on a les $p$-values automatiquement,
+\begin{lstlisting}[language=html]
+> ks.test(Y, "pnorm", 60, 15)
+
+One-sample Kolmogorov-Smirnov test
+
+data:  Y
+D = 0.1421, p-value = 0.5796
+alternative hypothesis: two-sided
+\end{lstlisting}
+Aussi, on peut accepter ici l'hypothèse nulle. On peut d'ailleurs faire un petit dessin pour s'en convaincre,
+\begin{lstlisting}[language=html]
+> Femp=function(x) mean(Y<=x)
+> plot(0:100,Vectorize(Femp)(0:100),type="s")
+> lines(0:100,pnorm(0:100,60,15),col="red")
+\end{lstlisting}
+Et ça va nous servir dans ce cours ' A priori oui \dots parce qu'on parlera du test de \textbf{Student} (pour tester si une variable dans une régression est significative), du test de \textbf{Fisher} (pour tester si plusieurs variables dans une régression sont significatives, ou plus généralement si une contrainte ' linéaire ' sur les coefficients peut être acceptée), du test de \textbf{Chow} (pour tester des ruptures dans un modèle linéaire, mais c'est un test de Fisher un peu déguisé), du test d'\textbf{Anderson-Darling} (pour tester si des résidus sont Gaussiens), du test de \textbf{Breuch-Pagan} voire le test de \textbf{White} (pour tester si les résidus peuvent être considérés de variance constante), du test de \textbf{Durbin-Watson} (pour tester s'il n'y a pas d'auto-corrélation dans la série des résidus), du test de \textbf{Dickey-Fuller} (pour tester si une série temporelle est ' ou n'est pas ' stationnaire), des tests de \textbf{Franses} (pour tester si une série peut être considérée comme saisonnière, ou pas), du test de \textbf{Ljung-Box} (pour tester si un bruit est un bruit blanc)\dots Et j'en oublie un paquet. Donc quand il est dit (dans le plan de cours) que le cours de statistique est un prérequis, il ne s'agit pas de l'avoir suivi, mais bel et bien de l'avoir compris, car on passera notre temps à utiliser des notions entrevues dans ce cours.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\chapter{Complément sur les données de survie}
+\section{Introduction à l'analyse des durées de survie - Philippe SAINT PIERRE, Université Pierre et Marie Curie}
+Le terme de durée de survie désigne le temps écoulé jusqu'à la survenue d'un événement précis. L'événement étudié (communément appelé décès) est le passage irréversible entre deux états (communément nommé vivant et décès). L'événement terminal n'est pas forcément la mort : il peut s'agir de l'apparition d'une maladie (par exemple, le temps avant une rechute ou un rejet de greffe), d'une guérison (temps entre le diagnostic et la guérison),la panne d'une machine (durée de fonctionnement d'une machine, en fiabilité) ou la survenue d'un sinistre (temps entre deux sinistres, en actuariat). [\dots]\newline
+\\
+Quelques définitions sont couramment utilisées dans les études de survie.
+\begin{itemize}
+\item Date d'origine : elle correspond à l'origine de la durée étudiée. Elle peut être la date
+de naissance, le début d'une exposition à un facteur de risque, la date d'une opération
+chirurgicale, la date de début d'une maladie ou la date d'entrée dans l'étude. Chaque
+individu peut donc avoir une date d'origine différente (pas important car c'est la durée
+qui nous intéresse).
+\item Date de point : c'est la date au-delà de laquelle on arrêtera l'étude et on ne tiendra
+plus compte des informations sur les sujets.
+\item Date des dernières nouvelles : c'est la date la plus récente où des informations sur un
+sujet ont été recueillies.
+\end{itemize}
+\textbf{Distributions de la durée de survie}\newline
+Supposons que la durée de survie $X$ soit une variable positive ou nulle et absolument continue; alors sa loi de probabilité peut être définie par l'une des cinq fonctions équivalentes suivantes :\newline
+\textit{Fonction de survie $S$} : La fonction de survie est, pour $t$ fixé, la probabilité de survivre jusqu'à l'instant $t$, c'est-à-dire : 
+$$S(t) = \mathbb{P}(X > t), \textrm{ avec } t \geq 0$$
+\textit{Fonction de répartition $S$} : La fonction de répartition (ou c.d.f. pour "cumulative distribution function") représente, pour $t$ fixé, la probabilité de mourir avant l'instant $t$, c'est-à-dire :
+$$F(t) = \mathbb{P}(X \leq t) = 1 - S(t)$$
+\underline{Remarque : } Il est arbitraire de décider que $S(t) = \mathbb{P}(X \geq t)$ ou $S(t) = \mathbb{P}(X > t)$. Cela n'a aucune importance quand la loi de X est continue car $\mathbb{P}(X > t) = P(X \geq t)$ : Dans les cas où $F$ a des sauts (quand le temps est discret, par exemple, compté en mois ou semaine), on utilise les notations suivantes :
+$$F^{-}(t) = P(X < t) \textrm{ et } F^{+}(t) = P(X \leq t)$$
+où $F^{-}$ est la limite à gauche et $F^{+}$ la limite à droite de $F$ (définitions et notations sont identiques pour la fonction $S$) : Remarquons que $F^{-} \leq F^{+}$ et $S^{-} \geq S^{+}$.\newline
+\textbf{Densité de probabilité $f$} : C'est la fonction $f(t) \geq 0$ telle que pour tout $t > 0$ :
+$$F(t) = \int_{0}^{t} f(u)\textrm{du}$$
+Si la fonction de répartition $F$ admet une dérivée au point $f$ alors 
+$$f(t) = \lim\limits_{h \rightarrow 0} \frac{\mathbb{P}(t\leq X < t+h)}{h} = F^{'}(t) = - S^{'}(t)$$
+Pour $t$ fixé, la densité de probabilité représente la probabilité de mourir dans un petit intervalle de temps après l'instant $t$.\newline
+\textit{Risque instantané $\lambda$ (ou taux de hasard)}\newline
+Le risque instantané (ou taux d'incidence), pour $t$ fixé caractérise la probabilité de mourir dans un petit intervalle de temps après $t$, conditionnellement au fait d'avoir survécu jusqu'au temps $t$ (c'est-à-dire le risque de mort instantané pour ceux qui ont survécu) :
+$$\lambda(t) = \lim\limits_{h \rightarrow 0} \frac{\mathbb{P}(t\leq X < t+h| X \geq t)}{h}  = \frac{f(t)}{S(t)} = - \ln(S(t))^{'}$$
+\textit{Taux de hasard cumulé $\Lambda$} : Le taux de hasard cumulé est l'intégrale du risque instantané $\lambda$ :
+$$ \Lambda(t) = \int_{0}^{t}\lambda(u)\textrm{du } = -\ln(S(t))$$
+On peut déduire de cette équation une expression de la fonction de survie en fonction du taux de hasard cumulé (ou du risque instantané) :
+$$S(t) = e^{-\Lambda(t)} = e^{\left( -\int_{0}^{t} \lambda(u)\textrm{du} \right)}$$
+On en déduit que 
+$$f(t) = \lambda(t)e^{\left( -\int_{0}^{t} \lambda(u)\textrm{du} \right)}$$
+\textbf{Moyenne et variance de la durée de survie} : Le temps moyen de survie $\mathbb{E}(X)$ et la variance de la durée de survie $\mathbb{V}(X)$ sont définis par les quantités suivantes (en utilisant des IPP\footnote{Intégration par parties}) :
+$$\mathbb{E}(X) = \int_{0}^{\infty} S(t)\textrm{ dt}$$
+$$\mathbb{V}(X) = 2\int_{0}^{\infty} tS(t)\textrm{ dt} - (\mathbb{E}(X))^{2}$$
+Ainsi on peut déduire l'espérance et la variance à partir de n'importe laquelle des fonctions $F, S, f, \lambda, \Lambda$ (mais pas l'inverse).\newline
+\textbf{Estimateur de Kaplan-Meier de la survie} : L'estimateur de Kaplan-Meier découle de l'idée suivante : survivre après un temps $t$ c'est
+être en vie juste avant $t$ et ne pas mourir au temps $t$; c'est-à-dire, si $t^{''} < t^{'} < t$ : 
+$$\begin{aligned}
+P(X > t) &= P(X>t', X > t) \\
+        &= P(X > t | X > t')\times P(X > t') \\
+        &= P(X > t | X > t') \times P(X > t' | X > t'') \times P(X > t'')
+\end{aligned}$$
+En considérant les temps d'événements (décès et censure) distincts $T_{(i)}$ avec  $(i = 1,  \dots , n)$ rangés par ordre croissant, on obtient :
+$$P(X > T_{(j)}) = \prod_{k=1}^{j} P(X>T_{(k)} | X>T_{(k-1)})$$
+avec $T_{(0)} = 0$, Considérons les notations suivantes :
+\begin{itemize}
+\item $Y_{i}$, le nombre d'individus à risque de subir l'événement juste avant le temps $T_{(i)}$.
+\item $d_{i}$, le nombre de décès en $T_{(i)}$
+\end{itemize}
+Alors la probabilité pi de mourir dans l'intervalle $]T_{(i-1)},T_{(i)}$sachant que l'on était vivant en $T_{(i-1)}$, i:e: $p_{i} = P(X \leq T_{(i)}| X > T_{(i-1)})$, peut être estimée par
+$$\widehat{p}_{i} = \frac{d_{i}}{Y_{i}}$$\footnote{$\widehat{p}$ ou $p$ chapeau est l'estimation de la probabilité $p$ par une certaine méthode d'approximation algébrique qui peut être le maximum de vraisemblance ou les moindres carrés utilisées en statistique. En pratique on donne une distribution statistique (ensemble de données chiffrées) et on essaie d'ajuster une fonction $\widehat{p}$ sur cette distribution.}
+Comme les temps d'événements sont supposés distincts, on a :
+\begin{itemize}
+\item $d_{i} = 0 $en cas de censure en $T_{(i)}$, i.e. quand $\delta_{i} = 0$\footnote{$\delta_{i}$ est un indicateur tel que $\delta_{i} = \mathbb{1}_{\{X_{i}\leq C_{i}\}}$.\begin{itemize}\item $\delta_{i}=1$ si l'événement est observé (d'où $T_{i} = X_{i}$). On observe les "vraies" durées ou les durées complètes.\item $\delta_{i}=0$ si l'individu est censuré (d'où $T_{i} = C_{i}$). On observe des durées incomplètes (censurées).\end{itemize}};
+\item $d_{i} = 1 $ en cas de décès en $T_{(i)}$, i.e. quand $\delta_{i} = 1$;
+\end{itemize}
+On obtient alors l'estimateur\footnote{un estimateur est une statistique permettant d'évaluer un paramètre inconnu relatif à une loi de probabilité (comme son espérance ou sa variance). Il peut par exemple servir à estimer certaines caractéristiques d'une population totale à partir de données obtenues sur un échantillon comme lors d'un sondage. La définition et l'utilisation de tels estimateurs constitue la statistique inférentielle.} de Kaplan-Meier :
+
+
+$$\widehat{S}(t) = \prod_{i = 1,\dots,n\\T_{(i)}\leq t} \left( 1 - \frac{\delta_{i}}{Y_{i}} \right) = \prod_{i = 1,\dots,n\\T_{(i)}\leq t} \left( 1 - \frac{\delta_{i}}{n-(i-1)} \right) = \prod_{i = 1,\dots,n\\T_{(i)}\leq t} \left( \frac{n-i}{n-(i-1)} \right)^{\delta_{i}}$$
+
+L'estimateur $\widehat{S}(t)$ est également appelé Produit Limite car il s'obtient comme la limite d'un produit. On montre que l'estimateur de Kaplan-Meier est un estimateur du maximum de vraisemblance. $\widehat{S}(t)$ est une fonction en escalier décroissante, continue à droite. On peut également obtenir un estimateur de Kaplan-Meier dans le cas de données tronquées mais pas dans le cas de données censurées par intervalles (car les temps de décès ne sont pas connus).\newline
+\textbf{Type de censure}
+La censure aléatoire est la plus courante. Par exemple, lors d'un essai thérapeutique, elle peut être engendrée par
+\begin{itemize}
+\item la perte de vue : le patient quitte l'étude en cours et on ne le revoit plus (à cause d'un déménagement, le patient décide de se faire soigner ailleurs). Ce sont des patients "perdus de vue".
+\item l'arrêt ou le changement du traitement : les effets secondaires ou l'inefficacité du traitement peuvent entraîner un changement ou un arrêt du traitement. Ces patients sont exclus de l'étude.
+\item la finn de l'étude : l'étude se termine alors que certains patients sont toujours vivants (ils n'ont pas subi l'événement). Ce sont des patients "exclus-vivants". Les "perdus de vue" (et les exclusions) et les "exclus-vivants" correspondent à des observations censurées mais les deux mécanismes sont de nature différente (la censure peut être informative chez les "perdus de vue").
+\end{itemize}
+\section{Institut de l'élevage - Séminaire d'épidémiologie animale - 28-30/09/2011}
+\textbf{Terminologie}
+\begin{itemize}
+\item \textbf{Date d'origine (do)} : date d'entrée dans l'étude (peut être spécifique à l'individu)
+\item \textbf{Date de point (dp)} : Date de fin de la période d'étude 
+\item \textbf{Date des dernières nouvelles (ddn)} : Date la plus récente de recueil d'information sur un individu $i$
+\item \textbf{Durée de surveillance (ds)} : délai écoulé entre la date d'origine et la date des dernières nouvelles
+\item \textbf{Temps de participation (tp)} : 
+\begin{itemize}
+\item Si ddn $\leq$ dp, alors tp = ddn - do
+\item Si dp $<$ ddn; alors tp = dp - do
+\end{itemize}
+\item \textbf{Censures} : 
+\begin{itemize}
+\item \textit{Perdu de vue} : Individu dont on ne connait pas l'état à la date de point
+\item \textit{Exclu-vivant} : Individu vivant à la date de point
+\end{itemize}
+\end{itemize}
+\textbf{Les différents types de censures}\newline
+\textit{Les censures par intervalle : } Observation périodique des individus pendant toute la durée de l'étude. Exemple : Examen des animaux dans les élevages périodiques, passage tous les six mois.
+La seule information disponible est que les événements se sont produits entre deux passages $t_{i}$ et $t_{i+1}$.\newline
+\textit{Censure à gauche :} L'évenement s'est déja produit avant la premiere observation. L'individu est généralement exclu de l'analyse.\newline
+\textit{Troncature : } Des "trous" dans le suivi des individus pendant lesquels on ne dispose d'aucune information, ni sur l'événement considéré ni sur les facteurs de risque potentiels. Impossible avec des événements "définitifs" (la mort).Trous en début de période : "Troncature a gauche" ; "troncature a droite" = censure à droite.\newline
+\\
+\textbf{Deux types de censures}\newline
+\textit{Les censures non aléatoires} : Exemple, expérience carcinogène\footnote{Qui peut provoquer un cancer.} chimique :
+\begin{itemize}
+\item Suivi pendant quatre mois de n portées de rats traités.
+\item Traitement d'une portée de rats parjour
+\item Sacrifice des survivants au bout de quatre mois (censure à droite)
+\item \textbf{Pas de perdus de vue}
+\end{itemize}
+\textit{Les censures aléatoires} Entrée aléatoire des individus dans l'étude. Exemple : Enquêtes sur population ouvertes, essai cliniques, \dots.
+\textbf{La variable analysée}\newline
+\begin{itemize}
+\item $T_{i}$ : Temps au bout duquel apparaît l'évènement (échec, décès) pour un individu $i$. C'est le \underline{Temps de survie}.
+\item $tp$ : \underline{Temps de participation}; Délai entre la date d'origine $\inf$(Date de dernière nouvelle, Date de point).
+\end{itemize}
+On peut représenter les observations pour un individu $i$ par le couple $(t_{i},\delta_{i})$ avec : 
+\begin{itemize}
+\item $t_{i} = \min(T_{i}, tp_{i})$
+\item $\delta_{i} = 1$ si $T_{i}\leq tp_{i}$ (évènement "mort"); $\delta_{i} = 0$ si $T_{i} > tp_{i}$ (censure)
+\end{itemize}
+Le temps $T_{i}$ est considéré a priori comme continu.\newline
+\\
+\textbf{Une hypothèse fondamentale sur les censures (cas de censures aléatoires)}\newline
+Il faut supposer que la durée de surveillance $ds$ et le temps au bout duquel se produit l'événement $T$ sont des variables indépendantes.\newline
+\textit{Censure non informative"} Cela signifie que les perdus de vus ne le sont pas pour des raisons liées à l'événement étudié. C'est une condition nécessaire pour que les censures ne biaisent pas les résultats (et aussi pour que la vraisemblance ne soit pas fonction des temps de censure).\newline
+Les censures non aléatoires ne posent pas de problèmes
+\textbf{Les fonctions de survie }\newline
+$T$ : \underline{Temps de survie}, est le temps au bout duquel se produit un certain évènement. Pour $t$ donné, la survie à $t$ est la probabilité que le temps de survie $T$ soit supérieur à $t$.
+$$S(t) = \mathbb{P}(X > t), \textrm{ avec } t \geq 0$$
+On désigne par $f(t)$, la densité de probabilité que l'évènement se produise à $t$ : 
+$$f(t) = \lim\limits_{h \rightarrow 0} \frac{\mathbb{P}(t\leq X < t+h)}{h}$$
+\underline{Le risque instantané} : Probabilité de mourir entre $t$ et $t+textrm{dt}$ sachant que l'individu est vivant avant $t$. On diminue l'intervalle jusqu'à le rendre infiniment petit $textrm{dt} \rightarrow 0$. On obtient alors le risque instantané de mort à $t$ : $h(t)$.\newline
+\underline{Force de mortalité} $h(t)$ aussi appelée hazard\footnote{Hazard signifie risque en anglais et non hasard} function ou fonction de risque.
+\underline{La fonction de risque cumulée} $H(t)$ (Cumulative Hazard Function) est le cumul des risques instantanés $h(t)$ sur une période données. 
+$$H(t) = \int_{0}^{t} h(u)\textrm{ du}$$
+$$S(t) = e^{-H(t)}$$
+La probabilité de mourir dans l'intervalle $[0,t]$ est donc : 
+$$P(t) = 1 - e^{-H(t)}$$
+\textbf{L'estimation de la fonction de survie }
+Il existe deux méthodes simples. Ce sont des méthodes non-paramétriques\footnote{Les tests paramétriques se basent sur des distributions statistiques supposées dans les données. Par conséquent, certaines conditions de validité doivent être vérifiées pour que le résultat d'un test paramétrique soit fiable. Par exemple, le test t de Student pour échantillons indépendants n'est fiable que si les données associées à chaque échantillon suivent une distribution normale et si les variances des échantillons sont homogènes.\newline
+Les tests non-paramétriques ne se basent pas sur des distributions statistiques. Ils peuvent donc être utilisés même si les conditions de validité des tests paramétriques ne sont pas vérifiées.}
+\begin{enumerate}
+\item La méthode actuarielle (Bohmer, 1912)
+\begin{itemize}
+\item Les temps sont discrétisés\footnote{Discrétiser une variable quantitative c'est, mathématiquement, transformer un vecteur de nombres réels en un vecteur de nombres entiers nommés "indices de classe". C'est pourquoi cette effectuer cette transformation se dit en langage courant "réaliser un découpage en classes". En statistiques, discrétiser c'est à la fois réaliser cette transformation mathématique, nommer et justifier les classes. } en intervalles (en général des intervalles égaux).
+\item Calcul de la survie au milieu de l'intervalle de chaque classe
+\item Les perdus de vue sont comptés à risque pour la moitié de l'intervalle.
+\end{itemize}
+\item La méthode de Kaplan-Meier (1958), 'Product-Iimit estimates'
+\begin{itemize}
+\item calcul de la survie à chaque mort
+\item Les perdus de vue entre deux morts sont comptabilisés à risque pour le
+premier des deux morts.
+\end{itemize}
+\end{enumerate}
+L'idée : 
+\begin{center}
+\textit{Être en vie après l'instant $t$, c'est être en vie juste avant $t$ et ne pas mourir à l'instant $t$}
+\end{center}
+Si $(t_{1},t_{2},\dots,t_{k})$ désigne une série de temps d'exposition à quelque chose, alors Probabilité de survivre au temps $t_{1}$ : 
+$$S(t_{1}) = P(T > t_{1}) = 1 ' P(T \leq t_{1})$$
+Probabilité de survivre au temps t2 : 
+$$S(t_{2}) = P(T > t_{1}) .P(T>t_{2} | T > t_{1}) = S(t_{1})[1 ' P(T\leq t_{2}| T>t_{1})]$$
+$P(T \leq t_{2}| T>t_{1})$ est la probabilité de mourir entre l'intervalle $]t_{1} ; t_{2}]$ sachant que l'on est vivant jusqu'à $t_{1}$. C'est un \underline{taux d'incidence}.
+On peut généraliser cette formule : 
+$$ S(t_{i}) = S(t_{i-1})[1 ' P(T\leq t_{i}| T>t_{i-1})]$$
+\textbf{Gestion des censures} 
+\begin{enumerate}
+\item Méthode actuarielle :
+\begin{itemize}
+\item Calcul par intervalles $[t_{i} ; t_{i+1}[$ fixés a priori
+\item On compte pour moitié les perdus de vue dans l'intervalle.
+\end{itemize}
+\item Méthode de Kaplan-Meier:
+\begin{itemize}
+\item Calcul par intervalles $[t_{i} ; t_{i+1}[$ à chaque fois que se produit un événement $t_{i}$ et avant que ne s'en produise un autre à une date ultérieure $t_{i+1}$
+\item Les perdus de vue entre $t_{i}$ et $t_{i+1}$ sont comptés à risque à $t_{i}$ mais pas à $t_{i+1}$
+\end{itemize}
+\end{enumerate}
+\textbf{L'estimation des risques}
+Le risque instantané $h(t)$ (force de mortalité)/ Lorsque les tables de survies sont calculées selon la méthode actuarielle, La fonction de risque $h(t)$ peut être estimée à l'aide de la formule suivante (Kimball, 1960)
+$$\widehat{h}(t) = \frac{m_{i}}{(t_{i}-t_{i-1})\times r_{i} \times \left(1 - \frac{m_{i}}{2r_{i}}\right)}$$
+$\widehat{h}(t)$ est l'estimation du risque instantané au milieu de l'intervalle $[t_{i-1} ; t_{i}[$, $m_{i}$ est le nombre de morts observés en $t_{i}$ et $r_{i}$ est le nombre d'individus à risque à $t_{i}$.\newline
+Le risque cumulé $H(t)$ est estimé par le cumul des taux d'incidence par intervalle $[t_{i-1} ; t_{i}[$
+$$\widehat{H}(t_{k}) = \sum_{i = t_{1}}^{t_{k}} \widehat{h}(t)\times (t_{i}-t_{i-1}) = \sum_{i = t_{1}}^{t_{k}} \frac{m_{i}}{\left( r_{i} - \frac{1}{2}m_{i}\right)}$$
+\textbf{Exemple : } Estimation des risques instantanés de pneumonie\newline
+Le taux d'incidence instantané moyen pendant la période :
+
+$$\bar{h}(t) = \frac{\sum_{t=1}^{k} \widehat{h}(t)}{k} = 0,0058$$
+Avec $k = 9$ et $k$, correspondant au nombre d'intervalles.\newline
+$\bar{h}(t) = 0,58$ cas pour $100$ animaux par jours.\newline
+$\bar{h}(t) = 0,58$ cas pour $24$ animaux sur $150$ jours.\newline
+Taux d'incidence moyen observé : 
+$$ h_{0}(t) = \frac{m}{\sum_{0}^{150}r(t)} = \frac{12}{2589} = 0,0046$$
+\textbf{Compléments sur les formules :}
+\begin{itemize}
+\item \textbf{Force de mortalité et survie : }\newline
+\textit{Fonction de densité :}
+$$f(t) = \lim\limits_{h \rightarrow 0} \frac{\mathbb{P}(t\leq X < t+h)}{h}$$
+\textit{Fonction de répartition :}
+$$F(t) = P(T \leq t)$$
+\textit{Fonction de survie :}
+$$S(t) = 1 - P(T \leq t) = P(T > t)$$
+\item \textbf{La force de mortalité :} \newline
+Probabilité de "décéder" entre $[t + dt]$ sachant que l'on était "vivant" à $t$; $h(t)$, la force de mortalité ("Hazard function")
+$$f(t) = \lim\limits_{dt \rightarrow 0} \left[\frac{\mathbb{P}(t\leq T \leq t+dt | T \geq t)}{dt}\right]$$
+\item \textbf{Relation entre force de mortalité et survie :} 
+$$
+\begin{aligned}
+h(t) & = \lim\limits_{dt \rightarrow 0} \frac{1}{dt}\left[\mathbb{P}(t\leq T \leq t+dt | T \geq t)\right]\\
+	 & = \lim\limits_{dt \rightarrow 0} \frac{1}{dt}\left[\frac{\mathbb{P}((t\leq T \leq t+dt) \cap (T \geq t))}{\mathbb{P}(T \geq t)}\right]\\
+     & = \lim\limits_{dt \rightarrow 0} \frac{1}{dt} \left[\frac{\mathbb{P}(t\leq T \leq t+dt)}{1 - \mathbb{P}(T \leq t)}\right]\\
+     & = \frac{1}{1 - \mathbb{P}(T \leq t)} \lim\limits_{dt \rightarrow 0} \left[\frac{\mathbb{P}(t\leq T \leq t+dt)}{dt}\right]
+\end{aligned}
+$$
+Donc : 
+$$h(t) = \frac{f(t)}{S(t)}$$
+\item \textbf{Relation entre la fonction de risque cumulé et la survie :}
+$$\frac{f(t)}{S(t)} = - \frac{d}{dt} \left(\ln(S(t))\right)$$
+$$S(t) = e^{-\int_{0}^{t}h(u)\textrm{du}} =e^{[-H(t)]}$$
+$H(t)$, la fonction de risque cumulé (cumulative hazard function).
+$$S(t) = e^{-\int_{0}^{t}h(u)\textrm{du}} =e^{[-H(t)]}$$
+$$H(t) = - \ln(S(t))$$
+\item \textbf{Intervalle de confiance de la fonction de Survie :}\newline
+L'intervalle n'est pas calculé sur la fonction de Survie directement mis sur une
+transformation de la Survie en raison d'une distribution non normale de la Survie.\newline
+Plusieurs transformations sont possibles :
+$$ \arcsin(\sqrt{S(t)})\textrm{, }\log(S(t))\textrm{, }\log[-\log(S(t))]\textrm{, }\log_{it}(S(t)) = \log\left(\frac{S(t)}{1-S(t)}\right)$$
+La transformation 
+$$ z(t) = \log[-\log(S(t))]$$
+est celle qui a été utilisée dans les calculs.\newline
+La variance $z(t)$ s'écrit : 
+$$\textrm{Var}(z(t)) = S_{z}^{2} = \frac{\textrm{Var}(S(t))}{(S(t)\times \ln(S(t)))^{2}}$$
+L'intervalle de confiance au seuil de $95\%$ est alors défini par les bornes 
+$$\widehat{S}(t)_{\inf} = \left[\widehat{S}(t)\right]^{\exp(-1,96\times S_{z})} \textrm{ ; }\widehat{S}(t)_{\sup} = \left[\widehat{S}(t)\right]^{\exp(+1,96\times S_{z})}$$
+\end{itemize}

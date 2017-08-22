@@ -1,0 +1,673 @@
+\textbf{Sujet :} Satisfaction Hopital.\newline
+\\
+Il s'agit d'une étude évaluant la qualité de relation et la quantité d'information reçue par le patient lors de son séjour à l'hôpital. $534$ patients ont été recrutés sur plusieurs hôpitaux de la région parisienne.\newline
+\textbf{Contenu du fichier :}
+\begin{itemize}
+\item \textit{service :} code (de 1 à 8) du service ayant accueilli le patient
+\item \textit{sexe :} sexe du patient (0 homme, 1 femme)
+\item \textit{age :} âge en années
+\item \textit{profession :}
+\begin{enumerate}
+\item agriculteur exploitant
+\item artisan, commerçant, chef d'entreprise
+\item cadre, profession intellectuelle ou artistique, profession libérale
+\item profession intermédiaire de l'enseignement, de la santé, du travail social ou de la fonction publique, technicien, contremaître, agent de maîtrise, clergé
+\item employé
+\item ouvrier
+\item étudiant, militaire, chômeur sans avoir jamais travaillé
+\item autre
+\end{enumerate}
+\item \textit{amelioration.sante :} impression d'amélioration de la santé du fait du séjour à l'hôpital (codé de 0 : aggravée, à 3 : nettement améliorée)
+\item \textit{amelioration.moral :} impression d'amélioration du moral du fait du séjour à l'hôpital (codé de 0 : aggravé, à 3 : nettement amélioré)
+\item \textit{recommander :} recommander le service à son entourage (codé 0 : non, 1 : oui, probablement, 2 : oui, sûrement)
+\item \textit{score.information :} score relatif à la qualité de l'information reçue pendant le séjour (score variant de 10 à 40)
+\item \textit{score.relation :} score relatif à la qualité des relations avec le personnel soignant pendant le séjour (score variant de 10 à 40)
+\end{itemize}
+\section{Devoir 1 : Satisfaction Hopital - Travaux sur variables, mise en relation et histogrammes}
+\textbf{Définition du répertoire et import des données.}
+
+\begin{lstlisting}[language=html]
+##Définition du répertoire de travail 
+> setwd("~/Desktop/DIVERS_TEMPLATES/R/DEVOIR/Dev_1")
+## Import des données 
+> X <- read.csv2("satisfaction_hopital.csv")
+### Alternative : read.csv2(file="satisfaction_hopital.csv")
+## Affichage de la structure du data frame
+> str(X)
+'data.frame': 534 obs. of  9 variables:
+ $ service           : int  3 3 3 3 3 3 3 3 3 3 ...
+ $ sexe              : int  0 1 1 0 1 0 0 0 0 1 ...
+ $ age               : int  41 29 83 66 84 84 60 85 28 35 ...
+ $ profession        : int  4 8 2 3 NA 6 3 3 3 3 ...
+ $ amelioration.sante: int  1 2 2 2 NA 3 2 3 3 3 ...
+ $ amelioration.moral: int  0 3 1 0 NA 3 1 1 1 2 ...
+ $ recommander       : int  1 2 2 2 NA 2 1 2 1 NA ...
+ $ score.relation    : int  36 33 40 32 NA 39 31 NA 36 NA ...
+ $ score.information : int  22 36 37 35 NA 28 30 NA 29 NA ...
+\end{lstlisting}
+
+\textbf{Pour les trois variables catégorielles du fichier, présentez les pourcentages de
+sujets relevant de chacune des modalités.}\newline
+\textbf{Fonction utilisée : }
+\begin{itemize}
+\item \textit{table()} permet de calculer les effectifs de chaque modalité d'une variable catégorielle
+\item \textit{prop.table()} permet de calculer les proportion suite à un appel de la fonction table()
+\item \textit{round()} permet d'arrondir à un certain nombre de chiffres après la virgule
+\item \textit{factor()} permet de recoder une variable catégoricielle en facteur (mode, catégories) - Les niveaux sont passés en paramètres sous forme d'un vecteur.
+\end{itemize}
+
+\begin{lstlisting}[language=html]
+## Recodage des variables catégoricielles profession
+> X$profession <- factor(X$profession,label=c("agriculteur","artisan","cadre","intermédiaire","employé","ouvrier","sans emploi","autre"))
+## Affichage des résultats 
+> table(X$profession)
+
+  agriculteur       artisan         cadre intermédiaire 
+            1            38           124            88 
+      employé       ouvrier   sans emploi         autre 
+           69            44            22            41 
+
+## Calcul de la table des proportions pour la variable (en %)           
+> tabProf <- prop.table(table(X$profession,useNA = "always"))
+> tabProf
+
+  agriculteur       artisan         cadre intermédiaire 
+  0.001872659   0.071161049   0.232209738   0.164794007 
+      employé       ouvrier   sans emploi         autre 
+  0.129213483   0.082397004   0.041198502   0.076779026 
+         <NA> 
+  0.200374532 
+## Modification de l'intitulé <NA>
+> names(tabProf)[9] <- "non déclarée"
+## Affichage des résultats 
+> tabProf
+  agriculteur       artisan         cadre intermédiaire 
+  0.001872659   0.071161049   0.232209738   0.164794007 
+      employé       ouvrier   sans emploi         autre 
+  0.129213483   0.082397004   0.041198502   0.076779026 
+ non déclarée 
+  0.200374532 
+## Affichage des pourcentages de sujets relevant de chacune des modalités
+### Deux chiffres significatifs 
+> print(round(tabProf*100,2),)
+  agriculteur       artisan         cadre intermédiaire 
+         0.19          7.12         23.22         16.48 
+      employé       ouvrier   sans emploi         autre 
+        12.92          8.24          4.12          7.68 
+ non déclarée 
+        20.04 
+
+## Idem pour la variable sexe
+> X$sexe <- factor(X$sexe,label=c("homme","femme"))
+> table(X$sexe)
+
+homme femme 
+  268   266 
+> tabSexe <- prop.table(table(X$sexe,useNA = "always"))
+> tabSexe
+
+    homme     femme      <NA> 
+0.5018727 0.4981273 0.0000000 
+> print(round(tabSexe*100,2))
+
+homme femme  <NA> 
+50.19 49.81  0.00 
+> tabSexe <- prop.table(table(X$sexe))
+> tabSex
+
+    homme     femme      <NA> 
+0.5018727 0.4981273 0.0000000 
+> print(round(tabSexe*100,2))
+
+homme femme 
+50.19 49.81 
+
+## Idem pour la variable service
+> X$service <- factor(X$service,label=c("Radiologie","Oncologie","Psychiatrie","Urgences","Neurologie","Pneumologie","Chirurgie","Cardiologie"))
+> table(X$service)
+
+ Radiologie   Oncologie Psychiatrie    Urgences 
+         65          59          70          69 
+ Neurologie Pneumologie   Chirurgie Cardiologie 
+         71          64          67          69 
+> tabService <- prop.table(table(X$service))
+> tabService
+
+ Radiologie   Oncologie Psychiatrie    Urgences 
+  0.1217228   0.1104869   0.1310861   0.1292135 
+ Neurologie Pneumologie   Chirurgie Cardiologie 
+  0.1329588   0.1198502   0.1254682   0.1292135 
+\end{lstlisting}
+
+\textbf{Pour les autres variables, donnez de façon synthétique : moyenne, médiane,
+écart-type, minimum, maximum, nombre de données disponibles (non manquantes)}
+\textbf{Fonction utilisée : }
+\begin{itemize}
+\item \textit{Package prettyR}
+\item \textit{describ()}
+\end{itemize}
+
+\begin{lstlisting}[language=html]
+
+# chargement du package prettyR : on peut utiliser la la fonction require()
+## install.packages("prettyR")
+> library(prettyR)
+## Ou require(prettyR)
+
+## Affichage de la structure du data frame
+> str(X)
+'data.frame': 534 obs. of  9 variables:
+ $ service           : Factor w/ 8 levels "Radiologie","Oncologie",..: 3 3 3 3 3 3 3 3 3 3 ...
+ $ sexe              : Factor w/ 2 levels "homme","femme": 1 2 2 1 2 1 1 1 1 2 ...
+ $ age               : int  41 29 83 66 84 84 60 85 28 35 ...
+ $ profession        : Factor w/ 8 levels "agriculteur",..: 4 8 2 3 NA 6 3 3 3 3 ...
+ $ amelioration.sante: int  1 2 2 2 NA 3 2 3 3 3 ...
+ $ amelioration.moral: int  0 3 1 0 NA 3 1 1 1 2 ...
+ $ recommander       : int  1 2 2 2 NA 2 1 2 1 NA ...
+ $ score.relation    : int  36 33 40 32 NA 39 31 NA 36 NA ...
+ $ score.information : int  22 36 37 35 NA 28 30 NA 29 NA ...
+
+# Les variables non catégoricielles sont donc les variables [3,8]
+> describe(X[,c(3,5,6,7,8,9)], num.desc=c("mean","median","sd","min","max","valid.n"))
+Description of X[, c(3, 5, 6, 7, 8, 9)] 
+
+ Numeric 
+                    mean median    sd min max valid.n
+age                58.21     60 17.81  18  97     528
+amelioration.sante  2.23      2  0.77   0   3     376
+amelioration.moral  1.68      1  0.95   0   3     383
+recommander         1.62      2  0.56   0   2     405
+score.relation     35.22     36  4.62  13  40     349
+score.information  31.91     33  6.79  13  40     358
+
+\end{lstlisting}
+
+\textbf{Histogramme du score de relation (score.relation)}\newline
+\textbf{Fonction utilisée : }
+\begin{itemize}
+\item \textit{hist()}
+\end{itemize}
+\begin{lstlisting}[language=html]
+> hist(X$score.relation, 
++      main="Histogramme de la variable score.relation",
++      xlab="score.relation",
++      ylab="Nombre de sujets",
++      col=rgb(223,27,203,maxColorValue=255))
+## Ou col=blues9 : je l'aime bien celui là
+\end{lstlisting}
+
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.5]{ilu/Dev11.png}\end{center}\end{figure}
+
+\textbf{À l'aide de deux « boxplots », représentez côte à côte la distribution du score
+de relation chez les hommes et les femmes.}\newline
+\textbf{Fonction utilisée : }
+\begin{itemize}
+\item \textit{boxplot()}
+\item \textit{which()}
+\end{itemize}
+
+\begin{lstlisting}[language=html]
+# La correction de l'université FUN
+# which() permet de d'extraire les individus qui vérifient une certaine condition
+> scorehomme <- X[which(X$sexe=="homme"),"score.relation"]
+> scorefemme <- X[which(X$sexe=="femme"),"score.relation"]
+> table(scorefemme)
+scorefemme
+21 23 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 
+ 2  1  4  4  2  7  5  8  4 10 12 10  8 11 10 18 16 34 
+> table(scorehomme)
+scorehomme
+13 21 22 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 
+ 1  2  1  2  3  1  1  4  2  6  6  5 16  9 15 13 15 27 24 30 
+> list(homme = scorehomme, femme = scorefemme)
+$homme
+  [1] 36 32 39 31 NA 36 NA 38 37 NA 34 39 NA 40 39 39 22 35 38 37 33 33
+ [23] NA 40 39 40 37 34 NA 24 NA 38 36 32 NA NA 37 NA NA 39 33 40 38 37
+ [45] 35 30 40 37 35 38 40 38 NA 36 33 NA 35 39 NA 38 40 NA 40 NA NA 30
+ [67] NA 37 39 40 40 NA 39 NA 35 35 40 39 40 33 NA 38 34 37 40 25 33 33
+ [89] NA 39 40 38 NA NA 33 NA 37 39 28 39 39 30 NA NA 35 38 NA NA 30 40
+[111] 36 31 NA 31 40 40 NA 32 NA 39 NA 33 38 36 38 38 NA 37 39 36 34 40
+[133] 29 NA NA NA 40 NA 33 35 38 35 NA 30 35 33 NA 38 40 35 36 NA 35 25
+[155] 37 39 21 28 40 34 NA 13 34 NA NA 40 40 38 NA 31 38 NA 35 33 34 NA
+[177] NA 38 28 NA NA 38 33 37 35 NA NA 40 NA 39 36 NA 32 36 38 39 NA 34
+[199] 36 40 NA NA 21 30 24 NA 38 38 NA 37 39 NA NA NA 25 31 32 NA 34 31
+[221] NA 40 NA 38 NA NA NA NA 38 NA NA 27 37 33 40 NA 40 28 NA NA 39 NA
+[243] 38 36 NA 39 NA 35 NA 37 26 NA 29 NA NA 33 38 40 NA 38 39 39 36 33
+[265] 40 NA NA NA
+
+$femme
+  [1] 33 40 NA NA NA 40 NA 40 40 28 38 NA NA 31 40 40 NA 34 40 36 40 38
+ [23] 36 40 26 32 NA 30 27 30 31 NA 28 40 25 31 NA 23 40 34 33 40 40 34
+ [45] 29 38 34 40 NA NA 34 33 21 38 NA NA 38 NA 36 NA 38 33 40 NA NA 38
+ [67] 30 33 36 39 39 40 39 27 30 39 NA NA 37 NA NA NA NA NA NA 37 NA NA
+ [89] 28 30 39 NA 25 NA 38 38 NA NA 28 33 40 28 NA 32 28 39 37 NA NA 38
+[111] NA 35 40 31 34 37 NA 35 36 38 NA NA NA NA 39 39 NA NA 29 39 32 NA
+[133] 37 34 32 36 NA 40 32 34 38 NA NA 29 NA 38 39 35 34 NA 38 35 35 40
+[155] 32 36 NA NA 35 32 NA NA NA 40 NA NA 39 NA NA NA NA NA 33 NA NA NA
+[177] NA 30 NA NA 38 40 NA NA NA NA 26 NA 25 NA NA NA NA 26 30 NA NA NA
+[199] 36 NA NA 37 36 32 37 29 21 40 39 37 35 33 NA 39 36 NA NA NA 38 NA
+[221] NA 37 40 35 NA 40 NA 39 38 NA 40 40 28 33 40 33 34 NA NA 40 NA NA
+[243] 26 NA NA 40 33 29 39 40 NA NA 25 40 32 36 40 39 37 33 40 38 NA NA
+[265] 32 30
+## Génération des boxplots
+> boxplot(list(homme = scorehomme, femme = scorefemme),
++         range = 0.3, varwidth = TRUE, names = c("homme", "femme"),
++         boxwex = 0.5, border = "blue", col = "pink",
++         horizontal = TRUE, ylab = "sexe", main = "score relation en fonction du sexe")
+
+# Ma correction
+> colors <- c("blue","pink")
+> boxplot(X$score.relation~X$sexe,col=colors,xlab="",ylab="Score de relation", main ="Distribution du score de relation en fonction du sexe.")
+\end{lstlisting}
+
+
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.5]{ilu/Dev12.png}\end{center}\end{figure}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.5]{ilu/Dev13.png}\end{center}\end{figure}
+\newpage
+
+\section{Devoir 2 : Satisfaction Hopital - Analyse de corrélation et OR entre variables}
+
+\textbf{Définition du répertoire et import des données.}
+
+\begin{lstlisting}[language=html]
+##Définition du répertoire de travail 
+> setwd("~/Desktop/DIVERS_TEMPLATES/R/DEVOIR/Dev_1")
+## Import des données 
+> X <- read.csv2("satisfaction_hopital.csv")
+### Alternative : read.csv2(file="satisfaction_hopital.csv")
+## Affichage de la structure du data frame
+> str(X)
+'data.frame': 534 obs. of  9 variables:
+ $ service           : int  3 3 3 3 3 3 3 3 3 3 ...
+ $ sexe              : int  0 1 1 0 1 0 0 0 0 1 ...
+ $ age               : int  41 29 83 66 84 84 60 85 28 35 ...
+ $ profession        : int  4 8 2 3 NA 6 3 3 3 3 ...
+ $ amelioration.sante: int  1 2 2 2 NA 3 2 3 3 3 ...
+ $ amelioration.moral: int  0 3 1 0 NA 3 1 1 1 2 ...
+ $ recommander       : int  1 2 2 2 NA 2 1 2 1 NA ...
+ $ score.relation    : int  36 33 40 32 NA 39 31 NA 36 NA ...
+ $ score.information : int  22 36 37 35 NA 28 30 NA 29 NA ...
+\end{lstlisting}
+
+\textbf{Transformation de la variable recommander en variable binaire}
+Transformez la variable « recommander » en une variable binaire « recommander.b » :
+\begin{itemize}
+\item « recommander.b » vaut 0 si « recommander » vaut 0 ou 1 ;
+\item « recommander.b » vaut 1 si « recommander » vaut 2.
+\end{itemize}
+\textbf{Fonction utilisée : }
+\begin{itemize}
+\item \textit{ifelse()}
+\end{itemize}
+\begin{lstlisting}[language=html]
+# Affichage des donnés de X$recommander
+> table(X$recommander,useNA = "always")
+
+   0    1    2 <NA> 
+  16  120  269  129 
+# Recodage de la variable 
+## Si X est supérieur strictement à 1, alors X = 1
+## Sinon X = 0
+> X$recommanderBIN <- ifelse(X$recommander > 1, 1, 0)
+# Affichage des donnés de X$recommanderBIN
+> table(X$recommanderBIN, useNA = "always")
+
+   0    1 <NA> 
+ 136  269  129 
+## Vérification 
+> table(X$recommander, X$recommanderBIN, deparse.level=2, useNA="always")
+             X$recommanderBIN
+X$recommander   0   1 <NA>
+         0     16   0    0
+         1    120   0    0
+         2      0 269    0
+         <NA>   0   0  129
+
+\end{lstlisting}
+\textbf{A l'aide d'un odds-ratio, estimez la force de l'association entre « recommander.b » et « sexe ». Estimez un intervalle de confiance de cet odds-ratio.}\newline
+\textbf{Fonctions utilisées}
+\begin{itemize}
+\item \textit{Package EPI}
+\item \textit{twoby2}
+\end{itemize}
+
+\begin{lstlisting}[language=html]
+##install.packages("Epi")
+> library(Epi)
+##ou require(Epi)
+
+# Attention au recodage des variables 
+#  x est transformée en 1-x, cf. cours
+> twoby2(1-X$recommanderBIN, 1-X$sexe)
+2 by 2 table analysis: 
+------------------------------------------------------ 
+Outcome   : 0 
+Comparing : 0 vs. 1 
+
+    0   1    P(0) 95% conf. interval
+0 130 139  0.4833    0.4241   0.5429
+1  63  73  0.4632    0.3812   0.5473
+
+                                   95% conf.
+             Relative Risk: 1.0433    0.8380
+         Sample Odds Ratio: 1.0837    0.7169
+Conditional MLE Odds Ratio: 1.0835    0.7021
+    Probability difference: 0.0200   -0.0824
+                            interval
+             Relative Risk:   1.2988
+         Sample Odds Ratio:   1.6383
+Conditional MLE Odds Ratio:   1.6745
+    Probability difference:   0.1211
+
+             Exact P-value: 0.7523 
+        Asymptotic P-value: 0.703 
+------------------------------------------------------
+\end{lstlisting}
+On peut donc en déduire que le L'odds-ratio est à  $1.0837$ et qie l'intervalle de confiance est $[0.7169,1.6383]$\newline
+\\
+\textbf{Calculez la corrélation (de Pearson) entre « score.relation » et « age ». Testez statistiquement cette corrélation (le script doit inclure la vérification éventuelle des conditions de validité de la méthode utilisée).}\newline
+\textbf{Fonctions utilisées}
+\begin{itemize}
+\item \textit{hist()}
+\item \textit{cor()}
+\item \textit{cor.test()}
+\end{itemize}
+
+On commence tout d'abord par tester la Normalité de la distribution de l'âge
+\begin{lstlisting}[language=html]
+hist(X$age, main="histogramme de l'âge", xlab="âge", ylab="fréquences",freq=F,col="blue")
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.5]{ilu/DEV21.png}\end{center}\end{figure}
+La distribution semble suivre une loi Normale. On peut donc effectuer les tests et calculs de corrélations
+\begin{lstlisting}[language=html]
+# Estimation de la corrélation entre les deux variables 
+> cor(X$score.relation, X$age, use="complete.obs")
+[1] 0.09596955
+
+# Test de la corrélation avec l'approche de Pearson
+> cor.test(X$score.relation, X$age)
+
+  Pearson's product-moment correlation
+
+data:  X$score.relation and X$age
+t = 1.796, df = 347, p-value = 0.07336
+alternative hypothesis: true correlation is not equal to 0
+95 percent confidence interval:
+ -0.009102243  0.198945290
+sample estimates:
+       cor 
+0.09596955 
+\end{lstlisting}
+La valeur de $p$ pour le test de corrélation est d'environ $7\%$. On peut en déduire que les variables ne sont pas corrélées au risque de $5\%$.\newline
+\\
+\textbf{La moyenne du score de relation est-il significativement différent chez les hommes et chez les femmes ? (le script doit inclure la vérification éventuelle des conditions de validité de la méthode utilisée)}
+
+
+\begin{lstlisting}[language=html]
+# Vérification des hypothèses du test t
+# Vérification des effectifs par groupe
+> table(X$sexe[!is.na(X$score.relation)])
+
+  0   1 
+183 166 
+
+# Vérification de l'égalité des écart-types
+### Pour les hommes
+> sd(X$score.relation[X$sexe==0],na.rm=TRUE)
+[1] 4.552311
+
+### Pour les femmes
+> sd(X$score.relation[X$sexe==1],na.rm=TRUE)
+[1] 4.697603
+> t.test(X$score.relation~X$sexe, var.equal=TRUE)
+
+  Two Sample t-test
+
+data:  X$score.relation by X$sexe
+t = 1.1166, df = 347, p-value = 0.2649
+alternative hypothesis: true difference in means is not equal to 0
+95 percent confidence interval:
+ -0.4212101  1.5275370
+sample estimates:
+mean in group 0 mean in group 1 
+       35.48087        34.92771 
+
+\end{lstlisting}
+
+La valeur de $p$ étant de $26,5\%$, on ne peut conclure sur une différence significative de la moyenne du score de relation entre les hommes et les femmes.
+\newpage
+\section{Devoir 3 : Satisfaction Hopital - Régressions linéaires et logistiques}
+
+\textbf{Définition du répertoire et import des données.}
+
+\begin{lstlisting}[language=html]
+##Définition du répertoire de travail 
+> setwd("~/Desktop/DIVERS_TEMPLATES/R/DEVOIR/Dev_1")
+## Import des données 
+> X <- read.csv2("satisfaction_hopital.csv")
+### Alternative : read.csv2(file="satisfaction_hopital.csv")
+## Affichage de la structure du data frame
+> str(X)
+'data.frame': 534 obs. of  9 variables:
+ $ service           : int  3 3 3 3 3 3 3 3 3 3 ...
+ $ sexe              : int  0 1 1 0 1 0 0 0 0 1 ...
+ $ age               : int  41 29 83 66 84 84 60 85 28 35 ...
+ $ profession        : int  4 8 2 3 NA 6 3 3 3 3 ...
+ $ amelioration.sante: int  1 2 2 2 NA 3 2 3 3 3 ...
+ $ amelioration.moral: int  0 3 1 0 NA 3 1 1 1 2 ...
+ $ recommander       : int  1 2 2 2 NA 2 1 2 1 NA ...
+ $ score.relation    : int  36 33 40 32 NA 39 31 NA 36 NA ...
+ $ score.information : int  22 36 37 35 NA 28 30 NA 29 NA ...
+\end{lstlisting}
+
+
+\textbf{Estimez le modèle de régression linéaire expliquant la variable « score.relation » par les variables « age », « sexe », « score.information », « amelioration.sante », « amelioration.moral », « profession »,  « service ». (le script doit inclure la vérification éventuelle des conditions de validité de la méthode utilisée)}
+
+\begin{lstlisting}[language=html]
+# Recodage des variables catégoricielle : profession
+> X$profession.recod <- factor(X$profession, labels = c("agriculteur","artisan","cadre","intermédiaire","employé","ouvrier","sans emploi","autre"))
+# Affichage après recodage
+> table(X$profession.recod)
+
+  agriculteur       artisan         cadre intermédiaire       employé       ouvrier   sans emploi 
+            1            38           124            88            69            44            22 
+        autre 
+           41 
+
+# Recodage des variables catégoricielle : service 
+> X$service.recod <- factor(X$service, labels = c("1","2","3","4","5","6","7","8"))
+# Affichage après recodage
+> table(X$service.recod)
+
+ 1  2  3  4  5  6  7  8 
+65 59 70 69 71 64 67 69 
+
+# Création du modèle linéaire
+> mod <- lm(score.relation~age+score.information+amelioration.sante+amelioration.moral+profession.recod+service.recod,data=X)
+> mod
+
+Call:
+lm(formula = score.relation ~ age + score.information + amelioration.sante + 
+    amelioration.moral + profession.recod + service.recod, data = X)
+
+Coefficients:
+                  (Intercept)                            age              score.information  
+                     21.01636                        0.04017                        0.28004  
+           amelioration.sante             amelioration.moral        profession.recodartisan  
+                      0.66630                        0.81897                        0.66002  
+        profession.recodcadre  profession.recodintermédiaire        profession.recodemployé  
+                     -0.48161                       -0.50178                        1.09986  
+      profession.recodouvrier    profession.recodsans emploi          profession.recodautre  
+                     -0.08707                       -0.93961                        0.52937  
+               service.recod2                 service.recod3                 service.recod4  
+                     -1.52197                        0.36776                        0.59523  
+               service.recod5                 service.recod6                 service.recod7  
+                      0.31512                       -1.38984                        0.58465  
+               service.recod8  
+                      1.53860  
+
+> drop1(mod,.~.,test="F")
+Single term deletions
+
+Model:
+score.relation ~ age + score.information + amelioration.sante + 
+    amelioration.moral + profession.recod + service.recod
+                   Df Sum of Sq    RSS    AIC F value    Pr(>F)    
+<none>                          4444.9 827.86                      
+age                 1    100.98 4545.9 832.35  6.1341  0.013873 *  
+score.information   1    882.98 5327.9 878.23 53.6357 2.786e-12 ***
+amelioration.sante  1     60.71 4505.6 829.78  3.6878  0.055864 .  
+amelioration.moral  1    134.93 4579.8 834.50  8.1960  0.004527 ** 
+profession.recod    7    113.69 4558.6 821.16  0.9866  0.441257    
+service.recod       7    224.54 4669.4 828.10  1.9485  0.062335 .  
+---
+Signif. codes:  0 ?***? 0.001 ?**? 0.01 ?*? 0.05 ?.? 0.1 ? ? 1
+
+# Condition de validité du test
+# normalité du terme de bruit (résidus du modèle)
+
+> hist(resid(mod), col="red")
+\end{lstlisting}
+
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.5]{ilu/Dev31.png}\end{center}\end{figure}
+
+L'histogramme montre que les termes de bruit semblent suivre une loi normale. On peut donc considérer que le modèle est valide.\newline
+\\
+\textbf{Estimez le modèle de régression logistique expliquant la variable « recommander.b » par les variables « age », « sexe », « score.information », « amelioration.sante », « amelioration.moral », « profession »,  « service ».  Notons que la variable « recommander.b » est une transformation de la variable « recommander» en une variable binaire où « recommander.b » vaut 0 si « recommander» vaut 0 ou 1, et 1 si « recommander» vaut 2. (le script doit inclure la vérification éventuelle des conditions de validité de la méthode utilisée)}
+
+\begin{lstlisting}[language=html]
+# Recodage des variables catégoricielle 
+> X$profession.recod <- factor(X$profession, labels = c("agriculteur","artisan","cadre","intermédiaire","employé","ouvrier","sans emploi","autre"))
+> table(X$profession.recod)
+
+  agriculteur       artisan         cadre intermédiaire       employé       ouvrier   sans emploi 
+            1            38           124            88            69            44            22 
+        autre 
+           41 
+> X$service.recod <- factor(X$service, labels = c("1","2","3","4","5","6","7","8"))
+> table(X$service.recod)
+
+ 1  2  3  4  5  6  7  8 
+65 59 70 69 71 64 67 69 
+
+# Recodage de recommander(catégoricielle) en variable binaire 
+> table(X$recommander,useNA = "always")
+
+   0    1    2 <NA> 
+  16  120  269  129 
+
+> X$recommander.recod <- ifelse(X$recommander > 1, 1,0)
+> table(X$recommander.recod, useNA = "always")
+
+   0    1 <NA> 
+ 136  269  129 
+ # Verification croisée
+> table(X$recommander, X$recommander.recod, deparse.level=2, useNA="always")
+             X$recommander.recod
+X$recommander   0   1 <NA>
+         0     16   0    0
+         1    120   0    0
+         2      0 269    0
+         <NA>   0   0  129
+
+
+# Création du modèle de régression logistique :
+> mod2 <- glm(recommander.recod~ age+sexe+score.information+amelioration.sante
++             + amelioration.moral + profession.recod + service.recod,
++             data=X, family="binomial")
+> mod2
+
+Call:  glm(formula = recommander.recod ~ age + sexe + score.information + 
+    amelioration.sante + amelioration.moral + profession.recod + 
+    service.recod, family = "binomial", data = X)
+
+Coefficients:
+                  (Intercept)                            age                           sexe  
+                   -19.271546                       0.008511                       0.513048  
+            score.information             amelioration.sante             amelioration.moral  
+                     0.107257                       0.450785                       0.248822  
+      profession.recodartisan          profession.recodcadre  profession.recodintermédiaire  
+                    15.646968                      14.868910                      14.569908  
+      profession.recodemployé        profession.recodouvrier    profession.recodsans emploi  
+                    15.337213                      15.221098                      14.499228  
+        profession.recodautre                 service.recod2                 service.recod3  
+                    14.503114                      -0.548695                      -0.581140  
+               service.recod4                 service.recod5                 service.recod6  
+                     0.446193                      -0.646415                      -0.221565  
+               service.recod7                 service.recod8  
+                    -0.644356                       0.002451  
+
+Degrees of Freedom: 313 Total (i.e. Null);  294 Residual
+  (220 observations deleted due to missingness)
+Null Deviance:      391.4 
+Residual Deviance: 326.1  AIC: 366.1
+
+
+> drop1(mod2,.~.,test="Chisq")
+Single term deletions
+
+Model:
+recommander.recod ~ age + sexe + score.information + amelioration.sante + 
+    amelioration.moral + profession.recod + service.recod
+                   Df Deviance    AIC     LRT Pr(>Chi)    
+<none>                  326.08 366.08                     
+age                 1   327.00 365.00  0.9193  0.33766    
+sexe                1   328.75 366.75  2.6692  0.10231    
+score.information   1   351.83 389.83 25.7529 3.88e-07 ***
+amelioration.sante  1   331.50 369.50  5.4255  0.01985 *  
+amelioration.moral  1   328.39 366.39  2.3101  0.12854    
+profession.recod    7   334.49 360.49  8.4100  0.29783    
+service.recod       7   333.27 359.27  7.1933  0.40903    
+---
+Signif. codes:  0 ?***? 0.001 ?**? 0.01 ?*? 0.05 ?.? 0.1 ? ? 1
+
+
+> summary(mod2)
+
+Call:
+glm(formula = recommander.recod ~ age + sexe + score.information + 
+    amelioration.sante + amelioration.moral + profession.recod + 
+    service.recod, family = "binomial", data = X)
+
+Deviance Residuals: 
+    Min       1Q   Median       3Q      Max  
+-2.2915  -0.9368   0.5172   0.8152   1.6933  
+
+Coefficients:
+                                Estimate Std. Error z value Pr(>|z|)    
+(Intercept)                   -19.271546 882.743928  -0.022   0.9826    
+age                             0.008511   0.008896   0.957   0.3387    
+sexe                            0.513048   0.315676   1.625   0.1041    
+score.information               0.107257   0.022063   4.861 1.17e-06 ***
+amelioration.sante              0.450785   0.194624   2.316   0.0205 *  
+amelioration.moral              0.248822   0.164503   1.513   0.1304    
+profession.recodartisan        15.646968 882.743616   0.018   0.9859    
+profession.recodcadre          14.868910 882.743509   0.017   0.9866    
+profession.recodintermédiaire  14.569908 882.743506   0.017   0.9868    
+profession.recodemployé        15.337213 882.743531   0.017   0.9861    
+profession.recodouvrier        15.221098 882.743563   0.017   0.9862    
+profession.recodsans emploi    14.499228 882.743684   0.016   0.9869    
+profession.recodautre          14.503114 882.743605   0.016   0.9869    
+service.recod2                 -0.548695   0.591080  -0.928   0.3533    
+service.recod3                 -0.581140   0.519131  -1.119   0.2629    
+service.recod4                  0.446193   0.606642   0.736   0.4620    
+service.recod5                 -0.646415   0.501467  -1.289   0.1974    
+service.recod6                 -0.221565   0.540690  -0.410   0.6820    
+service.recod7                 -0.644356   0.561683  -1.147   0.2513    
+service.recod8                  0.002451   0.545805   0.004   0.9964    
+---
+Signif. codes:  0 ?***? 0.001 ?**? 0.01 ?*? 0.05 ?.? 0.1 ? ? 1
+
+(Dispersion parameter for binomial family taken to be 1)
+
+    Null deviance: 391.41  on 313  degrees of freedom
+Residual deviance: 326.08  on 294  degrees of freedom
+  (220 observations deleted due to missingness)
+AIC: 366.08
+
+Number of Fisher Scoring iterations: 13
+\end{lstlisting}
+
+La conditions de validité est qu'il y a au moins  5 à 10 évenements par variable explicative.
+$$1+1+1+1+1+7+7 \textrm{ variables explicatives : } 19\times 10 = 190 < 269$$
+On peut donc considérer que le modèle est valide.

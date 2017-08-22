@@ -1,0 +1,1176 @@
+\chapter{Prise en main du logiciel R}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\chapter{Introductions aux structures de donnés et aux fonctions avec R}
+\textbf{Auteur : } \underline{\href{http://www.math.unicaen.fr/~chesneau/}{Christophe Chesneau}}\newline
+\\
+\textbf{Note : }\newline
+L'objectif de ce document est de présenter les commandes associées aux structures de données offertes par le logiciel R..\newline
+\textit{Contact :} \href{christophe.chesneau@gmail.com}{christophe.chesneau@gmail.com}\newline
+Bonne lecture !
+\section{Structures de données}
+\subsection*{Notion de data frame}
+En général, les données d'une étude statistique sont présentées sous forme matricielle. Les lignes représentent les individus observés et les colonnes les variables étudiées. Le logiciel \textbf{R}, pour ses applications les plus évoluées, travaille avec des structures de données appelées data frame.
+\subsection*{Construction de data frame}
+On peut créer une data frame en transformant une matrice numérique lorsque toutes les données sont numériques. On fait :
+\begin{lstlisting}[language=html]
+> mat = matrix(1:9, ncol = 3)
+> as.data.frame(mat)
+  V1 V2 V3
+1  1  4  7
+2  2  5  8
+3  3  6  9
+\end{lstlisting}
+On peut aussi créer une data frame en concaténant des objets de différentes natures. On fait :
+\begin{lstlisting}[language=html]
+> age = c(24, 26, 22)
+> sexe = c("H", "H", "F")
+> love = c(TRUE, FALSE, TRUE)
+> enquete = data.frame(age, sexe, love)
+> enquete
+  age sexe  love
+1  24    H  TRUE
+2  26    H FALSE
+3  22    F  TRUE
+\end{lstlisting}
+\subsection*{Désigner des facteurs}
+On peut souhaiter que certaines colonnes soient considérées comme des facteurs à plusieurs niveaux (ou à plusieurs modalités). Dans ce cas, on fait :
+\begin{lstlisting}[language=html]
+> sexe = factor(c("H", "H", "F"))
+\end{lstlisting}
+Pour connaître les niveaux de ce facteur, on fait :
+\begin{lstlisting}[language=html]
+> levels(sexe)
+[1] "F" "H"
+\end{lstlisting}
+Cela renvoie : \textit{[1] "F" "H"}. L'ordre ici est lexicographique.
+\subsection*{Attribuer des labels aux colonnes}
+On peut mettre des labels aux colonnes comme pour une liste :
+\begin{lstlisting}[language=html]
+names(enquete) = c("Age", "Sexe", "Love")
+\end{lstlisting}
+Par défaut, le logiciel \textbf{R} met comme nom, le nom de l'objet qui est dans la data frame. Éventuellement, on peut mettre des labels aux lignes en faisant :
+\begin{lstlisting}[language=html]
+row.names(enquete) = c("Jules", "Jim", "Elsa")
+> enquete
+      Age Sexe  Love
+Jules  24    H  TRUE
+Jim    26    H FALSE
+Elsa   22    F  TRUE
+\end{lstlisting}
+On aurait aussi pu faire :
+\begin{lstlisting}[language=html]
+> enquete = data.frame(Age = c(24, 26, 22), Sexe = c("H", "H", "F"),Love = c(TRUE, FALSE, TRUE))
+> enquete
+  Age Sexe  Love
+1  24    H  TRUE
+2  26    H FALSE
+3  22    F  TRUE
+\end{lstlisting}
+Une data frame peut, comme une liste, contenir d'autres listes, matrices, vecteurs \dots On peut aussi transformer une data frame en matrice par la commande \textit{as.matrix}. \textcolor{red}{Ceci est même conseillé pour faire des opérations arithmétiques}.
+\subsection*{Travailler avec une data.frame}
+On fait :
+\begin{lstlisting}[language=html]
+> str(enquete)
+'data.frame': 3 obs. of  3 variables:
+ $ Age : num  24 26 22
+ $ Sexe: Factor w/ 2 levels "F","H": 2 2 1
+ $ Love: logi  TRUE FALSE TRUE
+\end{lstlisting}
+On obtient ainsi une brève description des variables de enquete.\newline
+\textcolor{red}{On peut travailler sur une data frame comme sur une matrice.}\newline
+On considère les commandes :
+\begin{lstlisting}[language=html]
+> enquete[1:2, 2:3]
+      Sexe  Love
+Jules    H  TRUE
+Jim      H FALSE
+\end{lstlisting}
+On a ainsi extrait une une sous-data frame contenant les 1-ère et 2-ème lignes et 2$^{\textrm{ème}}$ et 3$^{\textrm{ème}}$ colonnes de la data frame enquete.\newline
+\\
+On considère les commandes :
+\begin{lstlisting}[language=html]
+> summary(enquete)
+      Age     Sexe     Love        
+ Min.   :22   F:1   Mode :logical  
+ 1st Qu.:23   H:2   FALSE:1        
+ Median :24         TRUE :2        
+ Mean   :24         NA's :0        
+ 3rd Qu.:25                        
+ Max.   :26 
+\end{lstlisting}
+On obtient alors plusieurs paramètres statistiques des variables considérées.\newline
+\\
+Une variable peut être appelée en faisant :
+\begin{lstlisting}[language=html]
+> enquete$Age
+[1] 24 26 22
+\end{lstlisting}
+On associe les labels aux colonnes d'une data frame en faisant :
+\begin{lstlisting}[language=html]
+attach(enquete)
+\end{lstlisting}
+On peut alors appeler directement les variables par leur nom :
+\begin{lstlisting}[language=html]
+> Age
+[1] 24 26 22
+\end{lstlisting}
+On détache les labels des colonnes en faisant :
+\begin{lstlisting}[language=html]
+detach(enquete)
+\end{lstlisting}
+\subsection*{Construction de tableaux de contingence avec une data frame}
+Dans la data frame enquete, les variables \textit{Sexe} et \textit{Love} sont considérées comme des facteurs. On considère alors les commandes :
+\begin{lstlisting}[language=html]
+> attach(enquete)
+> table(Sexe)
+Sexe
+F H 
+1 2 
+\end{lstlisting}
+On obtient ainsi les effectifs de l'échantillon pour chaque modalité du facteur \textit{Sexe}.\newline
+On fait :
+\begin{lstlisting}[language=html]
+> table(Sexe, Love)
+    Love
+Sexe FALSE TRUE
+   F     0    1
+   H     1    1
+\end{lstlisting}
+On obtient ainsi les effectifs de l'échantillon pour chaque couple de modalités.
+\subsection*{Exemple : data frame "Basse-Normandie"}
+\begin{lstlisting}[language=html]
+> région = c("Calvados", "manche", "Orne");région
+[1] "Calvados" "manche"   "Orne"    
+> pop = c(664000, 489500, 292337);pop
+[1] 664000 489500 292337
+> superficie = c(5548, 5938, 6103);superficie
+[1] 5548 5938 6103
+> basnor = data.frame(région,pop,superficie)
+> basnor
+    région    pop superficie
+1 Calvados 664000       5548
+2   manche 489500       5938
+3     Orne 292337       6103
+> str(basnor)
+'data.frame': 3 obs. of  3 variables:
+ $ région    : Factor w/ 3 levels "Calvados","manche",..: 1 2 3
+ $ pop       : num  664000 489500 292337
+ $ superficie: num  5548 5938 6103
+> basnor$région
+[1] Calvados manche   Orne    
+Levels: Calvados manche Orne
+> basnor$superficie
+[1] 5548 5938 6103
+> class(basnor$région)
+[1] "factor"
+> class(basnor$superficie)
+[1] "numeric"
+> basnor$superficie[1]
+[1] 5548
+> basnor$région[2]
+[1] manche
+Levels: Calvados manche Orne
+> basnor[1]
+    région
+1 Calvados
+2   manche
+3     Orne
+> class(basnor[1])
+[1] "data.frame"
+> length(basnor[1])
+[1] 1
+> basnor[[1]]
+[1] Calvados manche   Orne    
+Levels: Calvados manche Orne
+> basnor[1,2]
+[1] 664000
+> basnor[3,1]
+[1] Orne
+Levels: Calvados manche Orne
+> basnor[2:3,1:2]
+  région    pop
+2 manche 489500
+3   Orne 292337
+> basnor[2:3, ]
+  région    pop superficie
+2 manche 489500       5938
+3   Orne 292337       6103
+> basnor[, 2:3]
+     pop superficie
+1 664000       5548
+2 489500       5938
+3 292337       6103
+> basnor[basnor$superficie < 6000, ]
+    région    pop superficie
+1 Calvados 664000       5548
+2   manche 489500       5938
+> basnor[basnor$superficie < 6000, c("région", "superficie")]
+    région superficie
+1 Calvados       5548
+2   manche       5938
+\end{lstlisting}
+Pour éviter de répéter "basnor", on aurait pu attacher la data frame :
+\begin{lstlisting}[language=html]
+> attach(basnor)
+The following objects are masked _by_ .GlobalEnv:
+
+    pop, région, superficie
+
+> région
+[1] "Calvados" "manche"   "Orne"    
+> basnor[superficie < 6000, c("région", "superficie")]
+    région superficie
+1 Calvados       5548
+2   manche       5938
+> mean(superficie)
+[1] 5863
+> var(superficie)
+[1] 81225
+\end{lstlisting}
+
+\section{Lire des données}
+Considérons des données présentées dans un fichier texte intitulé \textit{donnees.txt}, lequel se trouve dans un dossier de travail intitulé TP. Dans un premier temps, on dirige le logiciel R vers le dossier TP avec la commande \textit{setwd}. Voici un exemple :
+\begin{lstlisting}[language=html]
+setwd("[...]/StatDesR/TP")
+\end{lstlisting}
+Si les données sont présentées sous la forme d'un vecteur, alors on fait :
+\begin{lstlisting}[language=html]
+donnees = scan("donnees.txt")
+\end{lstlisting}
+Si les données sont présentées sous forme matricielle avec en colonnes les variables et en lignes les individus, alors on fait :
+\begin{lstlisting}[language=html]
+donnees = read.table("donnees.txt")
+\end{lstlisting}
+On obtient alors une data frame. Les colonnes qui sont numériques restent numériques tandis que les colonnes qui sont constituées de chaînes de caractères sont transformées en facteurs.\newline
+Si le fichier texte comprend un label au-dessus de chaque colonne, on fait :
+\begin{lstlisting}[language=html]
+donnees = read.table("donnees.txt", header = T)
+\end{lstlisting}
+Ainsi, les colonnes auront le nom adéquat.\newline
+On peut aussi lire un fichier de données en ligne sur internet :
+\begin{lstlisting}[language=html]
+donnees = read.table("http://www.math.unicaen.fr/~chesneau/donnees.txt",header = T)
+\end{lstlisting}
+On peut aussi lire un fichier de données disponible dans R :
+\begin{lstlisting}[language=html]
+donnees = data(airquality)
+\end{lstlisting}
+\textcolor{red}{Les commandes scan et read.table s'adaptent à toutes les mises en forme des données grâce à de nombreuses options de lecture (sep, dec, skip\dots). Voir : \textit{help("scan")} et \textit{help("read.table")}.}
+\section{Valeurs manquantes}
+L'absence de données est indiquée par \textit{NULL}. Une valeur manquante est indiquée par \textit{NA} (pour \textbf{N}ot \textbf{A}vailable). On fait :
+\begin{lstlisting}[language=html]
+> u = c(31, 43, NA, 36, NA)
+> is.na(u)
+[1] FALSE FALSE  TRUE FALSE  TRUE
+\end{lstlisting}
+Les valeurs manquantes sont alors précisées par des \textit{TRUE}.\newline
+On considère les commandes :
+\begin{lstlisting}[language=html]
+> mean(u, na.rm = TRUE)
+[1] 36.66667
+\end{lstlisting}
+On a ainsi fait la moyenne des valeurs des éléments \textit{u} en ignorant les valeurs manquantes.\newline
+Si le fichier texte donnees contient des données manquantes, on ignore les individus correspondants en utilisant la commande \textit{na.strings} :
+\begin{lstlisting}[language=html]
+donnees = read.table("donnees.txt", header = T, na.strings = "NA")
+\end{lstlisting}
+Autrement, on peut identifier les lignes présentant des données manquantes en faisant :
+\begin{lstlisting}[language=html]
+donnees[!complete.cases(donnees), ]
+\end{lstlisting}
+On peut également créer un nouveau jeu de données sans valeur manquante en faisant :
+\begin{lstlisting}[language=html]
+donnees2 = na.omit(donnees)
+\end{lstlisting}
+\section{Les outils pour créer des fonctions}
+\textcolor{red}{Dorénavant, les commandes étant nombreuses et liées, il est préférable de les écrire dans un fichier texte, puis copier-coller celles-ci dans la fenêtre "R Console".}
+\subsection*{Les instructions conditionnelles}
+\begin{itemize}
+  \item La syntaxe de la commande \textit{if} est :
+\begin{center}
+if ( \textit{condition} ) $\{$ \textit{instruction1} $\}$ else $\{$ \textit{instruction2} $\}$
+\end{center}
+Notons que \textit{condition} qui peut valoir TRUE ou FALSE.\newline
+Si on a seulement :
+\begin{center}
+if ( \textit{condition} ) $\{$ \textit{instruction1} $\}$ 
+\end{center}
+Alors \textit{instruction1} est exécuté si \textit{condition} vaut TRUE et il ne se passe rien si \textit{condition} vaut FALSE.\newline
+Voir aussi la commande \textit{ifelse} qui s'applique à un vecteur logique.\newline
+On fait : 
+\begin{lstlisting}[language=html]
+> a = numeric()
+> vec = c(1, 3, 2, 4, 7, 5, 6, 9, 8)
+> if (mean(vec) > 6) { a = 1:9 } else { a = rev(1:9) }
+> a
+[1] 9 8 7 6 5 4 3 2 1
+\end{lstlisting}
+\item La syntaxe de \textit{for} est : 
+\begin{center}
+for (\textit{variable} in \textit{vecteur}) $\{$ \textit{instruction} $\}$
+\end{center}
+avec \textit{instruction} dépendant de la variable.\newline
+On considère les commandes :
+\begin{lstlisting}[language=html]
+> b = numeric()
+> for(i in 1:8) { b[i] = vec[i] + vec[i + 1] }
+> b
+[1]  4  5  6 11 12 11 15 1
+\end{lstlisting}
+\item La syntaxe de la commande \textit{while} est :
+\begin{center}
+while ( \textit{condition} ) $\{$ \textit{instruction} $\}$.
+\end{center}
+On fait :
+\begin{lstlisting}[language=html]
+> while (mean(vec) < 10) { vec = vec + 1 }
+> vec
+[1]  6  8  7  9 12 10 11 14 13
+\end{lstlisting}
+\item La syntaxe de la commande \textit{repeat} est :
+\begin{center}
+repeat $\{$ \textit{instruction} $\}$
+\end{center}
+L'\textit{instruction} est répétée tant que la commande \textit{break} n'est pas exécutée.\newline
+On fait :
+\begin{lstlisting}[language=html]
+> t = 1
+> repeat { t = 3 * t + 1
++ if (t >= 15.3) break
++ }
+> t
+[1] 40
+\end{lstlisting}
+\item Voir aussi la commande \textit{next} qui oblige à passer à la boucle suivante.
+\end{itemize}
+\subsection*{Construire ses propres fonctions}
+\subsubsection*{Syntaxe de la commande function.}
+Si on veut, par exemple, construire la fonction \textit{newfonction} qui s'applique à $2$ arguments \textit{arg1} et \textit{arg2}, la syntaxe de la commande function est :
+\begin{center}
+\textit{newfonction} = \textbf{function} (\textit{arg1}, \textit{arg2}) $\{$ \textit{instruction} $\}$
+\end{center}
+Ensuite on fait : \textit{newfonction}(\textit{val1}, \textit{val2}).\newline
+\\
+On considère les commandes :
+\begin{lstlisting}[language=html]
+arrangement = function(n, k) { factorial(n) / factorial(n - k) }
+\end{lstlisting}
+Ensuite on fait :
+\begin{lstlisting}[language=html]
+> arrangement(7, 3)
+[1] 210
+\end{lstlisting}
+On a ainsi calculer l'arrangement :
+$$ A_{n}^{k} = \frac{n!}{(n-k)!}$$ 
+Avec $n = 7$ et $k = 3$.\newline
+\\
+On fait :
+\begin{lstlisting}[language=html]
+courbe = function(x) { sqrt(x + exp(x)) }
+\end{lstlisting}
+Ensuite on fait :
+\begin{lstlisting}[language=html]
+> courbe(1)
+[1] 1.928285
+\end{lstlisting}
+On a ainsi calculer la valeur de la fontion :
+$$f(x) = \sqrt{x + e^{x}} \textrm{ et } x = 1$$
+\subsubsection*{Exemple avancé : fonction moyennemat.}
+\begin{enumerate}
+  \item On construit une fonction \underline{moyennemat} qui dépend d'un argument $x$ qui sera une matrice.
+  \item On ouvre une accolade.
+  \item On initialise un objet $a$ qui sera un vecteur numérique.
+  \item On déclare un objet \textit{nbcol} qui sera le nombre de colonnes de la matrice ; cet objet aura pour valeur la deuxième dimension de la matrice.
+  \item On fait un boucle qui part du numéro de la première colonne jusqu'au dernier numéro \textit{nbcol} ; pour un numéro $i$, on affecte à $a[i]$ la valeur de la moyenne de la colonne numéro $i$.
+  \item On retourne l'objet $a$ qui est un vecteur.
+  \item On ferme la fonction avec une accolade.
+\end{enumerate}
+Ceci donne :
+\begin{lstlisting}[language=html]
+moyennemat = function(x) {
+  a = numeric()
+  nbcol = dim(x)[2]
+  for (i in 1:nbcol) { 
+    a[i] = mean(x[,i])
+  }
+  return(a)
+}
+\end{lstlisting}
+On fait :
+\begin{lstlisting}[language=html]
+> mat = matrix(1:9, ncol = 3);mat
+     [,1] [,2] [,3]
+[1,]    1    4    7
+[2,]    2    5    8
+[3,]    3    6    9
+> sum(mat[,1])/nrow(mat) # moyenne de la colonne 1
+[1] 2
+> sum(mat[,2])/nrow(mat) # moyenne de la colonne 2
+[1] 5
+> sum(mat[,3])/nrow(mat) # moyenne de la colonne 3
+[1] 8
+> moyennemat(mat) # On applique la fonction pour vérifier
+[1] 2 5 8
+\end{lstlisting}
+Ainsi, la fonction \underline{moyennemat} construit un vecteur de longueur égale au nombre de colonnes de la
+matrice et dont les éléments seront les moyennes de colonnes.
+\subsubsection*{Exemple avancé : fonction compter.}
+\begin{enumerate}
+  \item On construit une fonction compter qui dépend de 2 arguments $a$ et $b$.
+  \item On ouvre une accolade.
+  \item On initialise un vecteur $d$ numérique.
+  \item On fait une boucle qui part de $1$ jusqu'au nombre qui mesure la \textit{longueur de $a$}.\newline
+  Dans cette boucle, on affecte au $i^{\textrm{ème}}$ élément de $d$ la valeur calculée ainsi : on construit un vecteur logique de même longueur que $b$ et dont le $j^{\textrm{ème}}$ élément vaudra \textit{TRUE} s'il est égale à $a[i]$ et \textit{FALSE} sinon. On applique la fonction sum à ce vecteur logique. Le résultat sera le nombre de \textit{TRUE} dans ce vecteur logique.
+  \item On donne un nom aux éléments du vecteur $d$.
+  \item On retourne le vecteur $d$.
+  \item On ferme la fonction avec une accolade.
+\end{enumerate}
+Ceci donne :
+\begin{lstlisting}[language=html]
+compter = function(a, b) {
+  d = numeric()
+  for(i in 1:length(a)) { 
+    d[i] = sum(b == a[i]) 
+  }
+  names(d) = as.character(a)
+  return(d)
+}
+\end{lstlisting}
+On fait :
+\begin{lstlisting}[language=html]
+> couleur = c("rose", "vert", "jaune");couleur
+[1] "rose"  "vert"  "jaune"
+> fleurs = c("rose", "rose", "vert", "rose", "rose", "jaune", "jaune");fleurs
+[1] "rose"  "rose"  "vert"  "rose"  "rose"  "jaune" "jaune"
+> compter(couleur, fleurs)
+ rose  vert jaune 
+    4     1     2 
+\end{lstlisting}
+
+Ainsi, la fonction compter donne le nombre de fois où les éléments d'un vecteur apparaissent dans
+un autre vecteur.
+
+\subsection*{Fonctions s'appliquant à des objets plus complexes}
+\subsubsection*{Application d'une fonction aux lignes ou colonnes d'une matrice.}
+On fait :
+\begin{lstlisting}[language=html]
+> mat = matrix(1:9, ncol = 3);mat
+     [,1] [,2] [,3]
+[1,]    1    4    7
+[2,]    2    5    8
+[3,]    3    6    9
+> apply(mat, 1, mean)
+[1] 4 5 6
+> apply(mat, 1, max)
+[1] 7 8 9
+> apply(mat, 1, min)
+[1] 1 2 3
+\end{lstlisting}
+On a alors un vecteur de longueur le nombre de lignes de mat et dont les élémens sont ici les moyennes (puis éléments maximum et minimum) des \underline{lignes} (1).\newline
+On considère les commandes :
+\begin{lstlisting}[language=html]
+> mat = matrix(1:9, ncol = 3);mat
+     [,1] [,2] [,3]
+[1,]    1    4    7
+[2,]    2    5    8
+[3,]    3    6    9
+> apply(mat, 2, mean)
+[1] 2 5 8
+> apply(mat, 2, max)
+[1] 3 6 9
+> apply(mat, 2, min)
+[1] 1 4 7
+\end{lstlisting}
+Ainsi, on obtient un vecteur de longueur le nombre de colonnes de mat et dont les éléments sont ici les moyennes (puis éléments maximum et minimum) des \underline{colonnes} (2).\newline
+\\
+On peut remplacer \textit{mean} par n'importe quelle fonction de \textbf{R} prédéterminée ou construite, qui s'applique à un vecteur.\newline
+Par exemple, on fait :
+\begin{lstlisting}[language=html]
+> mat = matrix(1:9, ncol = 3);mat
+     [,1] [,2] [,3]
+[1,]    1    4    7
+[2,]    2    5    8
+[3,]    3    6    9
+> mat[1,] # Première ligne
+[1] 1 4 7
+> (mat[1,] > 5)
+[1] FALSE FALSE  TRUE
+> mat[2,] # Seconde ligne
+[1] 2 5 8
+> (mat[2,] > 5)
+[1] FALSE FALSE  TRUE
+> mat[3,] # Troisième ligne
+[1] 3 6 9
+> (mat[3,] > 5)
+[1] FALSE  TRUE  TRUE
+> apply(mat, 1, function(x) { sum(x > 5)} )
+[1] 1 1 2
+\end{lstlisting}
+On obtient ainsi un vecteur de longueur le nombre de lignes de \textit{mat} dont la valeur des éléments est le nombre d'éléments de la ligne correspondante ayant des valeurs strictement supérieures à 5.
+
+\subsubsection*{Application d'une fonction aux éléments d'une liste.}
+On considère les commandes :
+\begin{lstlisting}[language=html]
+> liste = list(c(1, 2), c(3, 1, 2));liste
+[[1]]
+[1] 1 2
+
+[[2]]
+[1] 3 1 2
+
+> sapply(liste, mean)
+[1] 1.5 2.0
+\end{lstlisting}
+On a ainsi un vecteur de longueur le nombre d'éléments de \textit{liste} et dont la valeur de chaque élément est ici la moyenne de chaque élément de \textit{liste}.\newline
+\\
+On considère les commandes :
+\begin{lstlisting}[language=html]
+> liste = list(c(1, 2), c(3, 1, 2));liste
+[[1]]
+[1] 1 2
+
+[[2]]
+[1] 3 1 2
+
+> lapply(liste, sd)
+[[1]]
+[1] 0.7071068
+
+[[2]]
+[1] 1
+\end{lstlisting}
+On obtient ainsi une liste ayant le même nombre d'éléments que \textit{liste} et dont la valeur de chaque élément est ici le résultat de l'application de la fonction \textit{sd} aux éléments de liste (écart-type).
+\subsubsection*{Application d'une fonction aux éléments d'une data.frame.}
+On fait :
+\begin{lstlisting}[language=html]
+> Age = c(24, 26, 22);Age
+[1] 24 26 22
+> Sexe = c("H", "H", "F");Sexe
+[1] "H" "H" "F"
+> Love = c(TRUE, FALSE, TRUE);Love
+[1]  TRUE FALSE  TRUE
+> tapply(Age, Sexe, mean)
+ F  H 
+22 25 
+\end{lstlisting}
+On obtient ainsi un vecteur constitué de la moyenne des âges pour chaque modalité \textit{F}, \textit{H} de la variable \textit{Sexe}.\newline
+On peut remplacer mean par n'importe quelle fonction de R prédéterminée ou construite, qui s'applique à un vecteur.
+\subsubsection*{Fonction qui construit une liste.}
+On considère les commandes :
+\begin{lstlisting}[language=html]
+> split(Age, Sexe)
+$F
+[1] 22
+
+$H
+[1] 24 26
+\end{lstlisting}
+On a ainsi construit une liste à partir de deux arguments, le premier étant un vecteur et le second un facteur. Les éléments de la liste sont les niveaux du facteur. Chaque élément contient un vecteur dont les valeurs correspondent aux valeurs du vecteur passé comme premier argument ayant le niveau de l'élément considéré.
+\section{Exercices}
+\subsection{Enoncés}
+\subsubsection*{Exercice 1}
+Créer, avec la commande adéquate, le vecteur numérique $x$ dont les éléments sont les valeurs disponibles ici :
+\begin{center}
+http://www.math.unicaen.fr/$\sim$Echesneau/norm.txt
+\end{center}
+Préciser les paramètres statistiques élémentaires associés à $x$.
+\subsubsection*{Exercice 2}
+On considère la matrice :
+$$M = 
+\begin{pmatrix} 
+2 & 4 & 8 \\
+2 & 5 & 9 \\
+2 & 3 & 8 \\
+1 & 4 & 7 \\
+1 & 5 & 1 \\
+1 & 2 & 3
+\end{pmatrix}
+$$
+\begin{enumerate}
+  \item Créer la matrice $M$ dans \textbf{R}.
+  \item Créer une nouvelle matrice \textit{mat} obtenu en ajoutant une nouvelle colonne à $M$ d'éléments : $8; 7; 1; 2; 1; 2$.
+  \item Transformer votre matrice en data frame.
+  \item Attribuer aux colonnes les noms : \textit{cas, mois, semaine, valeur} et aux lignes, les 6 premières lettres de l'alphabet.
+  \item Extraire la $2^{\textrm{ème}}$, $4^{\textrm{ème}}$ et $6^{\textrm{ème}}$ lignes de \textit{mat}.
+  \item Ordonner les lignes de \textit{mat} suivant les valeurs des éléments de valeur.
+\end{enumerate}
+\subsubsection*{Exercice 3}
+On travaille avec le jeu de données \textit{airquality}, disponible dans \textbf{R}.
+\begin{enumerate}
+  \item Charger les données et comprendre d'où elles émanent.
+  \item Afficher les noms des variables considérées.
+  \item Afficher le nombre de lignes et de colonnes.
+  \item Calculer les paramètres statistiques de base à l'aide de la commande \textit{summary}.
+  \item Calculer la variance et l'écart-type pour les valeurs de la variable \textit{Temp}.
+  \item Extraire du jeu de données :
+  \begin{enumerate}
+    \item la $2^{\textrm{ème}}$ ligne.
+    \item la $3^{\textrm{ème}}$ colonne.
+    \item les lignes 1, 2 et 4 avec une seule commande \textit{c()}.
+    \item les lignes 3 à 6 avec la commande.
+    \item tout sauf les colonnes 1 et 2.
+    \item toutes les lignes ayant une température supérieure à 90.
+  \end{enumerate}
+  \item Insérer une nouvelle variable \textit{TooWindy} dans le jeu de données airquality qui affiche TRUE pour chaque valeur de \textit{Wind} supérieure à 10, et FALSE sinon. Puis supprimer cette nouvelle variable.
+  \item Créer un nouveau jeu de données correspondant à \textit{airquality} privée des lignes de \textit{Ozone} contenant des valeurs manquantes.
+  \item Installer le package \textit{ggplot2}. Reproduire et analyser les commandes suivantes :
+  \begin{lstlisting}[language=html]
+    library(ggplot2)
+    qplot(Temp, Ozone, data = airquality, colour = Month)
+  \end{lstlisting}
+\end{enumerate}
+\subsubsection*{Exercice 4}
+Le fichier \textit{donneesconsommation.txt} contient 300 résultats bruts d'une enquête sur la consommation des ménages en 1995 dont le résumé se trouve dans le document de l'INSEE "Enquête sur la consommation des ménages en 1995". Pour simplifier le territoire a été divisé en 3 grandes régions (GR1, GR2 et GR3) correspondant au regroupement de plusieurs Z.E.A.T. (Zones d'Étude et d'Aménagement du Territoire) suivant la nomenclature de l'INSEE :
+\begin{itemize}
+  \item GR1 : Région parisienne, Bassin parisien,
+  \item GR2 : Nord, Ouest, Sud-Ouest,
+  \item GR3 : Est, Centre Est, Méditerranée.
+\end{itemize}
+On a déterminé par ailleurs deux catégories de ménage TA1 et TA2 :
+\begin{itemize}
+  \item TA1 : ménage dont la personne de référence a un âge inférieur à 55 ans.
+  \item TA2 : ménage dont la personne de référence a un âge supérieur ou égal à 55 ans.
+\end{itemize}
+Dans chacune des 3 grandes régions, on a interrogé 50 ménages appartenant à TA1 et 50 ménages appartenant à TA2. À chaque ligne du fichier correspond un ménage.
+\begin{itemize}
+  \item 1-ère colonne : Age = TA1 ou TA2 (tranche d'âge),
+  \item 2-ème colonne : Region = GR1, GR2 ou GR3 (grande région),
+  \item 3-ème colonne : Revenu = revenu annuel du ménage (en euros),
+  \item 4-ème colonne : Loisirs = dépense annuelle en loisirs (en euros),
+  \item 5-ème colonne : Pates = dépense annuelle en pâtes alimentaires (en euros),
+  \item 6-ème colonne : Cafe = AC, BC ou MC marque de café préférée du ménage (BC = "Bon café", MC = "Mon café", AC= "Autre café"),
+  \item 7-ème colonne : Enfants = 0,1,2,. . .= nombre d'enfants de la personne de référence du ménage (mais ne vivant pas obligatoirement avec les ressources du ménage),
+  \item 8-ème colonne : Magnetoscope = 0,1 (0 si le ménage ne possède pas de magnétoscope, 1 sinon),
+  \item 9-ème colonne : Lavevaisselle = 0,1 (0 si le ménage ne possède pas de lave-vaisselle 1 sinon).
+\end{itemize}
+\begin{enumerate}
+  \item Construire une data frame \textit{conso.dat} en faisant :
+\begin{lstlisting}[language=html]
+conso.dat = read.table("http://www.math.unicaen.fr/~chesneau/
+donneesconsommation.txt", header = T)
+\end{lstlisting}
+  \item Reproduire et commenter les commandes suivantes :
+  \begin{lstlisting}[language=html]
+    attach(conso.dat)
+    str(conso.dat)
+    summary(conso.dat)
+  \end{lstlisting}
+    \item Extraire les données des individus dont la marque de café préférée est AC et ayant un revenu annuel inférieur à 15000 euros.
+  \item Extraire les données des individus ayant plus de 3 enfants, une dépense annuelle en pâtes alimentaires supérieure à 60 euros et un revenu annuel inférieur à 20000 euros.
+\end{enumerate}
+
+\subsubsection*{Exercice 5}
+Créer dans R la fonction $f : \mathbb{R}^{n} \times \mathbb{R}^{n}$ définie par :
+$$f(m,n)=\sum_{k=1}^{n} k^{m}$$
+
+
+\subsubsection*{Exercice 6}
+Créer dans R la fonction $f : \mathbb{R}^{n} \times \mathbb{R}^{n}$ définie par :
+$$f(x_{1},\dots,x_{n}) = \left(x_{1},\frac{x_{2}^{2}}{2},\dots,\frac{x_{n}^{n}}{n}\right)$$
+
+\subsubsection*{Exercice 7}
+Créer dans R la fonction $f : \mathbb{R}^{n} \times \mathbb{R}^{n-2}$ définie par :
+$$f(x_{1},\dots,x_{n}) = \left(\frac{x_{1}+x_{2}+x_{3}}{3},\frac{x_{2}+x_{3}+x_{4}}{3},\dots,\frac{x_{n-2}+x_{n-1}+x_{n}}{3}\right)$$
+
+\subsubsection*{Exercice 8}
+Créer dans R la fonction $f : \mathbb{R} \times [0;\infty[$ définie par :
+$$f(x) = \left\{
+  \begin{array}{rl}
+   \frac{1}{10}e^{-\frac{x}{10}} & \textrm{ si } x \leq 0 \\
+    0 & \textrm{sinon}
+  \end{array}
+\right.
+$$
+
+\subsubsection*{Exercice 9}
+Créer dans R la fonction $f : \mathbb{N}^{2} \times [0;1] \rightarrow [0; 1]$ définie par :
+$$f(k,n,p) = \binom{n}{k}p^{k}(1-p)^{n-k}$$
+\subsubsection*{Exercice 10}
+Créer dans R la fonction $f : \mathbb{N} \times [0;\infty[ \rightarrow [0; 1]$ définie par :
+$$f(k,\lambda) = e^{-\lambda}\frac{\lambda^{k}}{k!}$$
+\subsubsection*{Exercice 11}
+On considère la suite de réel $(u_{n})_{n\in \mathbb{N}}$ telle que $u_{0} = 0.5$ et, pour tout $n \geq 1$,
+$$u_{n} = 1 + 0.25 \cdot u_{n-1}^{2}$$
+Construire une fonction Loop d?argument $m$ qui retourne un vecteur contenant les $m$ premières valeurs de la suite : $u_{1}, u_{2}, \dots , u_{m}.$ Utiliser cette fonction pour appuyer le fait que  $(u_{n})_{n\in \mathbb{N}}$ converge vers 2.
+
+
+\subsection{Solutions}
+\subsubsection*{Exercice 1}
+\begin{lstlisting}[language=html]
+On fait :
+\begin{description}
+> x = scan("http://www.math.unicaen.fr/~chesneau/norm.txt")
+Read 500 items
+> head(x, 10)
+ [1]  1.3409620 -0.3851693  0.1937503  0.3396655 -0.1033311  0.7039116
+ [7]  1.6668049  0.6790097  0.2294325 -0.5517535
+> summary(x)
+    Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
+-3.19300 -0.59960  0.03010  0.03493  0.74610  3.02300 
+\end{lstlisting}
+
+\subsubsection*{Exercice 2}
+\begin{enumerate}
+  \item \textcolor{white}{.}\newline
+\begin{lstlisting}[language=html]
+  > vec <- c(2, 2, 2, 1, 1, 1, 4, 5, 3, 4, 5, 2, 8, 9, 8, 7, 1, 3)
+  > vec
+ [1] 2 2 2 1 1 1 4 5 3 4 5 2 8 9 8 7 1 3
+  > M = matrix(vec,ncol = 3);M
+     [,1] [,2] [,3]
+[1,]    2    4    8
+[2,]    2    5    9
+[3,]    2    3    8
+[4,]    1    4    7
+[5,]    1    5    1
+[6,]    1    2    3
+\end{lstlisting}
+\item \textcolor{white}{.}\newline
+\begin{lstlisting}[language=html]
+  > mat = cbind(M,c(8, 7, 1, 2, 1, 2));mat
+     [,1] [,2] [,3] [,4]
+[1,]    2    4    8    8
+[2,]    2    5    9    7
+[3,]    2    3    8    1
+[4,]    1    4    7    2
+[5,]    1    5    1    1
+[6,]    1    2    3    2
+\end{lstlisting}
+\item \textcolor{white}{.}\newline
+\begin{lstlisting}[language=html]
+> mat = as.data.frame(mat)
+> mat
+  V1 V2 V3 V4
+1  2  4  8  8
+2  2  5  9  7
+3  2  3  8  1
+4  1  4  7  2
+5  1  5  1  1
+6  1  2  3  2
+\end{lstlisting}
+\item \textcolor{white}{.}\newline
+\begin{lstlisting}[language=html]
+> colnames(mat) = c("cas", "mois", "semaine", "valeur")
+> mat
+  cas mois semaine valeur
+1   2    4       8      8
+2   2    5       9      7
+3   2    3       8      1
+4   1    4       7      2
+5   1    5       1      1
+6   1    2       3      2
+> rownames(mat) = letters[1:6]
+> mat
+  cas mois semaine valeur
+a   2    4       8      8
+b   2    5       9      7
+c   2    3       8      1
+d   1    4       7      2
+e   1    5       1      1
+f   1    2       3      2
+\end{lstlisting}
+\item \textcolor{white}{.}\newline
+\begin{lstlisting}[language=html]
+> matBis <- mat[c(2, 4, 6), ]
+> matBis
+  cas mois semaine valeur
+b   2    5       9      7
+d   1    4       7      2
+f   1    2       3      2
+\end{lstlisting}
+\item \textcolor{white}{.}\newline
+\begin{lstlisting}[language=html]
+> mat
+  cas mois semaine valeur
+a   2    4       8      8
+b   2    5       9      7
+c   2    3       8      1
+d   1    4       7      2
+e   1    5       1      1
+f   1    2       3      2
+> mat = mat[order(mat$valeur), ]
+> mat
+  cas mois semaine valeur
+c   2    3       8      1
+e   1    5       1      1
+d   1    4       7      2
+f   1    2       3      2
+b   2    5       9      7
+a   2    4       8      8
+\end{lstlisting}
+\end{enumerate}
+
+\subsubsection*{Exercice 3}
+
+\begin{enumerate}
+  \item \textcolor{white}{.}\newline
+\begin{lstlisting}[language=html]
+  > data(airquality)
+> ?airquality
+> str(airquality)
+'data.frame': 153 obs. of  6 variables:
+ $ Ozone  : int  41 36 12 18 NA 28 23 19 8 NA ...
+ $ Solar.R: int  190 118 149 313 NA NA 299 99 19 194 ...
+ $ Wind   : num  7.4 8 12.6 11.5 14.3 14.9 8.6 13.8 20.1 8.6 ...
+ $ Temp   : int  67 72 74 62 56 66 65 59 61 69 ...
+ $ Month  : int  5 5 5 5 5 5 5 5 5 5 ...
+ $ Day    : int  1 2 3 4 5 6 7 8 9 10 ...
+\end{lstlisting}
+
+  \textit{Daily air quality measurements in New York, May to September 1973.\newline
+  \\
+airquality\newline
+A data frame with 154 observations on 6 variables.
+\begin{itemize}
+\item (,1)  Ozone numeric Ozone (ppb)
+\item (,2)  Solar.R numeric Solar R (lang)
+\item (,3)  Wind  numeric Wind (mph)
+\item (,4)  Temp  numeric Temperature (degrees F)
+\item (,5)  Month numeric Month (1--12)
+\item (,6) Day numeric Day of month (1--31)
+\end{itemize}
+}
+
+  \item \textcolor{white}{.}\newline
+\begin{lstlisting}[language=html]
+> names(airquality)
+[1] "Ozone"   "Solar.R" "Wind"    "Temp"    "Month"   "Day" 
+\end{lstlisting}
+
+
+  \item \textcolor{white}{.}\newline
+\begin{lstlisting}[language=html]
+> dim(airquality)
+[1] 153   6
+\end{lstlisting}
+
+
+  \item \textcolor{white}{.}\newline
+\begin{lstlisting}[language=html]
+> summary(airquality)
+     Ozone           Solar.R           Wind             Temp           Month            Day      
+ Min.   :  1.00   Min.   :  7.0   Min.   : 1.700   Min.   :56.00   Min.   :5.000   Min.   : 1.0  
+ 1st Qu.: 18.00   1st Qu.:115.8   1st Qu.: 7.400   1st Qu.:72.00   1st Qu.:6.000   1st Qu.: 8.0  
+ Median : 31.50   Median :205.0   Median : 9.700   Median :79.00   Median :7.000   Median :16.0  
+ Mean   : 42.13   Mean   :185.9   Mean   : 9.958   Mean   :77.88   Mean   :6.993   Mean   :15.8  
+ 3rd Qu.: 63.25   3rd Qu.:258.8   3rd Qu.:11.500   3rd Qu.:85.00   3rd Qu.:8.000   3rd Qu.:23.0  
+ Max.   :168.00   Max.   :334.0   Max.   :20.700   Max.   :97.00   Max.   :9.000   Max.   :31.0  
+ NA's   :37       NA's   :7                                                                      
+\end{lstlisting}
+
+  \item \textcolor{white}{.}\newline
+\begin{lstlisting}[language=html]
+> var(airquality$Temp)
+[1] 89.59133
+> sqrt(var(airquality$Temp))
+[1] 9.46527
+\end{lstlisting}
+  \item \textcolor{white}{.}\newline
+  \begin{enumerate}
+  \item \textcolor{white}{.}\newline
+\begin{lstlisting}[language=html]
+> airquality[2, ]
+  Ozone Solar.R Wind Temp Month Day
+2    36     118    8   72     5   2
+\end{lstlisting}
+  \item \textcolor{white}{.}\newline
+\begin{lstlisting}[language=html]
+> head(airquality[ ,3],15)
+ [1]  7.4  8.0 12.6 11.5 14.3 14.9  8.6 13.8 20.1  8.6  6.9  9.7  9.2 10.9 13.2
+> length(airquality[,3])
+[1] 153
+\end{lstlisting}
+  \item \textcolor{white}{.}\newline
+\begin{lstlisting}[language=html]
+> airquality[c(1, 2, 4), ]
+  Ozone Solar.R Wind Temp Month Day
+1    41     190  7.4   67     5   1
+2    36     118  8.0   72     5   2
+4    18     313 11.5   62     5   4
+\end{lstlisting}
+  \item \textcolor{white}{.}\newline
+\begin{lstlisting}[language=html]
+> airquality[3:6, ]
+  Ozone Solar.R Wind Temp Month Day
+3    12     149 12.6   74     5   3
+4    18     313 11.5   62     5   4
+5    NA      NA 14.3   56     5   5
+6    28      NA 14.9   66     5   6
+\end{lstlisting}
+  \item \textcolor{white}{.}\newline
+\begin{lstlisting}[language=html]
+> head(airquality[ ,-c(1, 2)],15)
+   Wind Temp Month Day
+1   7.4   67     5   1
+2   8.0   72     5   2
+3  12.6   74     5   3
+4  11.5   62     5   4
+5  14.3   56     5   5
+6  14.9   66     5   6
+7   8.6   65     5   7
+8  13.8   59     5   8
+9  20.1   61     5   9
+10  8.6   69     5  10
+11  6.9   74     5  11
+12  9.7   69     5  12
+13  9.2   66     5  13
+14 10.9   68     5  14
+15 13.2   58     5  15
+> dim(airquality[ ,-c(1, 2)])
+[1] 153   4
+\end{lstlisting}
+  \item \textcolor{white}{.}\newline
+\begin{lstlisting}[language=html]
+> airquality[airquality$Temp>90, ]
+    Ozone Solar.R Wind Temp Month Day
+42     NA     259 10.9   93     6  11
+43     NA     250  9.2   92     6  12
+69     97     267  6.3   92     7   8
+70     97     272  5.7   92     7   9
+75     NA     291 14.9   91     7  14
+102    NA     222  8.6   92     8  10
+120    76     203  9.7   97     8  28
+121   118     225  2.3   94     8  29
+122    84     237  6.3   96     8  30
+123    85     188  6.3   94     8  31
+124    96     167  6.9   91     9   1
+125    78     197  5.1   92     9   2
+126    73     183  2.8   93     9   3
+127    91     189  4.6   93     9   4
+\end{lstlisting}
+\end{enumerate}
+\item \textcolor{white}{.}\newline
+\begin{lstlisting}[language=html]
+> airquality$TooWindy = airquality$Wind >= 10
+> table(airquality$TooWindy)
+
+FALSE  TRUE 
+   81    72 
+> airquality$TooWindy = NULL ## Réinitialisation de la variable
+> airquality$TooWindy
+NULL
+\end{lstlisting}
+\item \textcolor{white}{.}\newline
+\begin{lstlisting}[language=html]
+> aq = airquality[ !is.na(airquality$Ozone),]
+> dim(aq)
+[1] 116   6
+> head(aq,15)
+   Ozone Solar.R Wind Temp Month Day
+1     41     190  7.4   67     5   1
+2     36     118  8.0   72     5   2
+3     12     149 12.6   74     5   3
+4     18     313 11.5   62     5   4
+6     28      NA 14.9   66     5   6
+7     23     299  8.6   65     5   7
+8     19      99 13.8   59     5   8
+9      8      19 20.1   61     5   9
+11     7      NA  6.9   74     5  11
+12    16     256  9.7   69     5  12
+13    11     290  9.2   66     5  13
+14    14     274 10.9   68     5  14
+15    18      65 13.2   58     5  15
+16    14     334 11.5   64     5  16
+17    34     307 12.0   66     5  17
+\end{lstlisting}
+\item \textcolor{white}{.}\newline
+\begin{lstlisting}[language=html]
+library(ggplot2)
+qplot(Temp, Ozone, data = airquality, colour = Month)
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.4]{ilu/qplot.png}\end{center}\end{figure}
+\end{enumerate}
+\subsubsection*{Exercice 4}
+\begin{enumerate}
+  \item \textcolor{white}{?}\newline
+  \begin{lstlisting}[language=html]
+  > conso.dat = read.table("http://www.math.unicaen.fr/~chesneau/donneesconsommation.txt", header = T)
+> head(conso.dat,5)
+  Age Region Revenu Loisirs Pates Cafe Enfants Magnetoscope Lavevaisselle
+1 TA1    GR1  17655    2138    61   AC       5            1             1
+2 TA1    GR1  26572    2278    42   BC       4            1             1
+3 TA1    GR1  33227    3547    32   BC       1            1             0
+4 TA1    GR1  77655    5147    23   MC       0            1             1
+5 TA1    GR1  24469    2480    27   MC       1            0             0
+> str(conso.dat)
+'data.frame': 300 obs. of  9 variables:
+ $ Age          : Factor w/ 2 levels "TA1","TA2": 1 1 1 1 1 1 1 1 1 1 ...
+ $ Region       : Factor w/ 3 levels "GR1","GR2","GR3": 1 1 1 1 1 1 1 1 1 1 ...
+ $ Revenu       : int  17655 26572 33227 77655 24469 33421 18604 89000 6092 10794 ...
+ $ Loisirs      : int  2138 2278 3547 5147 2480 2978 2356 3752 2060 1933 ...
+ $ Pates        : int  61 42 32 23 27 21 32 27 43 27 ...
+ $ Cafe         : Factor w/ 3 levels "AC","BC","MC": 1 2 2 3 3 2 3 2 2 1 ...
+ $ Enfants      : int  5 4 1 0 1 2 1 0 3 1 ...
+ $ Magnetoscope : int  1 1 1 1 0 1 1 1 1 1 ...
+ $ Lavevaisselle: int  1 1 0 1 0 1 0 1 0 1 ...
+  \end{lstlisting}
+
+\item \textcolor{white}{?}\newline
+  \begin{lstlisting}[language=html]
+> attach(conso.dat)
+The following object is masked _by_ .GlobalEnv:
+
+    Age
+
+> str(conso.dat)
+'data.frame': 300 obs. of  9 variables:
+ $ Age          : Factor w/ 2 levels "TA1","TA2": 1 1 1 1 1 1 1 1 1 1 ...
+ $ Region       : Factor w/ 3 levels "GR1","GR2","GR3": 1 1 1 1 1 1 1 1 1 1 ...
+ $ Revenu       : int  17655 26572 33227 77655 24469 33421 18604 89000 6092 10794 ...
+ $ Loisirs      : int  2138 2278 3547 5147 2480 2978 2356 3752 2060 1933 ...
+ $ Pates        : int  61 42 32 23 27 21 32 27 43 27 ...
+ $ Cafe         : Factor w/ 3 levels "AC","BC","MC": 1 2 2 3 3 2 3 2 2 1 ...
+ $ Enfants      : int  5 4 1 0 1 2 1 0 3 1 ...
+ $ Magnetoscope : int  1 1 1 1 0 1 1 1 1 1 ...
+ $ Lavevaisselle: int  1 1 0 1 0 1 0 1 0 1 ...
+> summary(conso.dat)
+  Age      Region        Revenu          		Loisirs         	Pates       		Cafe        Enfants      	Magnetoscope    	Lavevaisselle   
+ TA1:150  GR1:100  Min.   :  5633   		Min.   : 445   	Min.   :11.00   	AC: 94   	Min.   :0.000   	Min.   :0.0000   		Min.   :0.0000  
+ TA2:150  GR2:100  1st Qu.: 14520   	1st Qu.:1197   	1st Qu.:21.00   BC:101   	1st Qu.:1.000   1st Qu.:0.0000   	1st Qu.:0.0000  
+           	GR3:100   Median : 20989   	Median :1918   	Median :26.00  MC:105   	Median :1.000   Median :1.0000   	Median :0.0000  
+                     		Mean   : 24707   	Mean   :1946   	Mean   :26.42            	Mean   :1.667   Mean   :0.5133  	Mean   :0.4333  
+                     		3rd Qu.: 30654   	3rd Qu.:2360   	3rd Qu.:30.00            	3rd Qu.:2.000   3rd Qu.:1.0000   	3rd Qu.:1.0000  
+                     		Max.   :113879   	Max.   :6395   	Max.   :61.00            		Max.   :9.000   	Max.   :1.0000   	Max.   :1.0000  
+  \end{lstlisting}
+On obtient une brève description des variables ainsi que des éléments statistiques pour les variables considérées.
+
+\item \textcolor{white}{?}\newline
+  \begin{lstlisting}[language=html]
+> conso.dat[Cafe=="AC" & Revenu <15000, ]
+    Age Region Revenu Loisirs Pates Cafe Enfants Magnetoscope Lavevaisselle
+10  TA1    GR1  10794    1933    27   AC       1            1             1
+17  TA1    GR1  12185    2288    26   AC       0            0             0
+27  TA1    GR1  14222    2185    37   AC       9            1             1
+32  TA1    GR1   6445    1823    21   AC       3            1             1
+53  TA1    GR2   7809    1773    22   AC       0            0             1
+73  TA1    GR2  13830    1822    34   AC       5            1             1
+74  TA1    GR2   7603    1585    26   AC       1            0             0
+106 TA1    GR3  14160    2093    29   AC       1            1             0
+142 TA1    GR3  13154    2061    28   AC       1            0             0
+180 TA2    GR1   5903     674    27   AC       2            0             0
+194 TA2    GR1   9920     844    21   AC       2            0             0
+201 TA2    GR2  13788     823    26   AC       2            0             0
+202 TA2    GR2   6790     445    29   AC       2            0             0
+206 TA2    GR2   6625     453    28   AC       2            0             0
+211 TA2    GR2  12880     768    24   AC       1            0             0
+215 TA2    GR2   8103     510    18   AC       0            0             0
+234 TA2    GR2   5802     512    18   AC       0            0             0
+242 TA2    GR2  10164     503    25   AC       5            0             1
+248 TA2    GR2  14133     979    29   AC       2            0             1
+250 TA2    GR2  14045     786    27   AC       2            0             0
+252 TA2    GR3   9922     686    20   AC       1            0             1
+254 TA2    GR3  11780    1029    18   AC       3            0             1
+273 TA2    GR3  14886    1216    20   AC       1            0             1
+  \end{lstlisting}
+
+
+\item \textcolor{white}{?}\newline
+  \begin{lstlisting}[language=html]
+> conso.dat[Enfants >3 & Pates >60 & Revenu <20000, ]
+  Age Region Revenu Loisirs Pates Cafe Enfants Magnetoscope Lavevaisselle
+1 TA1    GR1  17655    2138    61   AC       5            1             1
+  \end{lstlisting}
+\end{enumerate}
+
+\subsubsection*{Exercice 5}
+\begin{lstlisting}[language=html]
+> fonc1 = function(m, n){
++   x = 1:n
++   y = x^m
++   sum(y)
++ }
+> fonc1(10,2)
+[1] 1025
+\end{lstlisting}
+\subsubsection*{Exercice 6}
+  \begin{lstlisting}[language=html]
+> fonc2 = function(x){
++   n = length(x)
++   x^(1:n) / (1:n)
++ }
+> c <- seq(1,10,1);c
+ [1]  1  2  3  4  5  6  7  8  9 10
+> fonc2(c)
+ [1]          1          2          9         64        625       7776     117649    2097152   43046721 1000000000
+ \end{lstlisting}
+\subsubsection*{Exercice 7}
+  \begin{lstlisting}[language=html]
+> fonc3 = function(x){
++   n = length(x)
++   ( x[1:(n - 2)] + x[2:(n - 1)] + x[3:n] ) / 3
++ }
+> c <- seq(1,10,0.5);c
+ [1]  1.0  1.5  2.0  2.5  3.0  3.5  4.0  4.5  5.0  5.5  6.0  6.5  7.0  7.5  8.0  8.5  9.0  9.5 10.0
+> fonc3(c)
+ [1] 1.5 2.0 2.5 3.0 3.5 4.0 4.5 5.0 5.5 6.0 6.5 7.0 7.5 8.0 8.5 9.0 9.5
+\end{lstlisting}
+\subsubsection*{Exercice 8}
+  \begin{lstlisting}[language=html]
+> fonc4 = function(x) {
++   if (x < 0)
++     0
++   else
++     (1 / 10) * exp(-x / 10)
++ }
+> fonc4(-2)
+[1] 0
+> fonc4(2)
+[1] 0.08187308
+\end{lstlisting}
+Ou plus simplement : 
+  \begin{lstlisting}[language=html]
+fonc4 = function(x) {	ifelse(x >= 0, (1 / 10) * exp(-x / 10), 0)}
+\end{lstlisting}
+\subsubsection*{Exercice 9}
+  \begin{lstlisting}[language=html]
+> fonc5 = function(k, n, p) {
++   choose(n, k) * p^k * (1 - p)^(n - k)
++ }
+> fonc5(1,5,3)
+[1] 240
+> fonc5(3,3,1)
+[1] 1
+\end{lstlisting}
+\subsubsection*{Exercice 10}
+  \begin{lstlisting}[language=html]
+> fonc6 = function(k, lambda) {
++   exp(-lambda) * (lambda^k / factorial(k))
++ }
+> fonc6(5,9)
+[1] 0.06072688
+\end{lstlisting}
+
+
+\subsubsection*{Exercice 11}
+  \begin{lstlisting}[language=html]
+Loop = function(n) {
+  x = numeric()
+  x[1] = 0.5
+  for(j in 2:n)
+    x[j] = 1 + 0.25 * x[j-1]^2
+  x
+}
+
+plot(Loop(500))
+\end{lstlisting}
+
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.4 ]{ilu/plit.png}\end{center}\end{figure}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
