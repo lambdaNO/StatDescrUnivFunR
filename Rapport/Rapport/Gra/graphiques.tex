@@ -2272,7 +2272,7 @@ boxplot(survey$Height,
 )
 rug(survey$Height, side = 2)
 \end{lstlisting}
-\begin{figure}[H]\begin{center}\includegraphics[scale=0.4 ]{ilu/inc17.png}\end{center}\end{figure}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.5]{ilu/inc17.png}\end{center}\end{figure}
 \begin{lstlisting}[language=html]
 boxplot(survey$Height ~ survey$Sex,
 col = c("lightpink", "lightblue"),
@@ -2284,7 +2284,7 @@ las = 1
 )
 rug(survey$Height, side = 2)
 \end{lstlisting}
-\begin{figure}[H]\begin{center}\includegraphics[scale=0.4 ]{ilu/inc18.png}\end{center}\end{figure}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.5]{ilu/inc18.png}\end{center}\end{figure}
 Commentons les commandes qui ont permis de générer les graphiques 6.1 et 6.2. On retrouve l'utilisation désormais classiquedes arguments des fonctions graphiques. Notons l'utilisation de la fonction \textit{rug()} qui permet de représenter les données par des graduations sur les axes.
 
 \subsection{Utilisation de la fonction pie()}
@@ -2299,7 +2299,7 @@ pie(vente.tarte,
     main = "Ventes de tartes"
 )
 \end{lstlisting}
-\begin{figure}[H]\begin{center}\includegraphics[scale=0.4 ]{ilu/inc19.png}\end{center}\end{figure}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.5]{ilu/inc19.png}\end{center}\end{figure}
 Commentons les commandes qui ont permis de générer le graphique 7. Les commandes sont
 grosso modo les mêmes que pour les autres fonctions graphiques. Le camembert représente la
 proportion de tarte vendue en fonction du fruit qui la compose.
@@ -2355,7 +2355,7 @@ densityplot(~ x | y,
 xlab = " note d'algèbre ",
 col = "red")
 \end{lstlisting}
-\begin{figure}[H]\begin{center}\includegraphics[scale=0.4 ]{ilu/inc20.png}\end{center}\end{figure}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.5]{ilu/inc20.png}\end{center}\end{figure}
 Comme on devait s'y attendre, les meilleurs étudiants en analyse auraient tendance à obtenir les meilleurs résultats globaux.
 \subsection{Utilisation de la fonction bwplot()}
 La fonction \textit{bwplot()} fournit des informations globalement identiques aux graphiques précédent mais sous la forme de boîte à moustaches.
@@ -2363,7 +2363,7 @@ La fonction \textit{bwplot()} fournit des informations globalement identiques au
 bwplot(~ x | y,
 main = "note d'algèbre")
 \end{lstlisting}
-\begin{figure}[H]\begin{center}\includegraphics[scale=0.4 ]{ilu/inc21.png}\end{center}\end{figure}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.5]{ilu/inc21.png}\end{center}\end{figure}
 \subsection{Utilisation de la fonction histogram()}
 On peut vouloir extraire des informations sous la forme d'histogramme. C'est ce que permet la fonction \textit{histogram()}
 \begin{lstlisting}[language=html]
@@ -2372,7 +2372,7 @@ col = "peru",
 main = "note d'algèbre",
 xlab = "histogramme")
 \end{lstlisting}
-\begin{figure}[H]\begin{center}\includegraphics[scale=0.4 ]{ilu/inc22.png}\end{center}\end{figure}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.5]{ilu/inc22.png}\end{center}\end{figure}
 \subsection{Utilisation de l'argument panel}
 \begin{lstlisting}[language=html]
 densityplot(~ x | y, xlab = "!note d'algèbre ",
@@ -2383,7 +2383,7 @@ densityplot(~ x | y, xlab = "!note d'algèbre ",
             }
 )
 \end{lstlisting}
-\begin{figure}[H]\begin{center}\includegraphics[scale=0.4 ]{ilu/inc23.png}\end{center}\end{figure}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.5]{ilu/inc23.png}\end{center}\end{figure}
 Commentons les commandes qui ont permis de générer le graphique 10. La fonction \textit{densityplot()} produit un graphe par sous-échantillon. L'argument panel prend en argument une fonction. Dans cet exemple, nous avons construit une fonction qui fait appel à deux fonctions prédéfinies par le packaege lattice : \textit{panel.mathdensity} et \textit{panel.histogram}.\newline
 \textit{Panel} défini les analyses qui doivent être éffectuées pour chaque sous population.
 \subsection{Utilisation de la fonction xyplot()}
@@ -2407,7 +2407,7 @@ xyplot(iris$Petal.Length ~ iris$Petal.Width,
        )
 )
 \end{lstlisting}
-\begin{figure}[H]\begin{center}\includegraphics[scale=0.4 ]{ilu/inc24.png}\end{center}\end{figure}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.5]{ilu/inc24.png}\end{center}\end{figure}
 \subsection{Utilisation de la fonction splom()}
 \begin{lstlisting}[language=html]
 splom(~iris[1:3] | Species, data = iris,
@@ -2418,9 +2418,371 @@ splom(~iris[1:3] | Species, data = iris,
       )
 )
 \end{lstlisting}
-\begin{figure}[H]\begin{center}\includegraphics[scale=0.4 ]{ilu/inc25.png}\end{center}\end{figure}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.5]{ilu/inc25.png}\end{center}\end{figure}
 Commentons les commandes qui nous ont permis d'obtenir le graphique 12. La fonction
 \textit{splom()} permet donc de tracer tous les graphes bivariés d'un matrice (à l'instar de la fonction pairs()) mais permet en plus de partiotionner les graphes selon la valeur d'une autre variable (une variable qualitative par exemple).
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\chapter{beautiful graphics ggplot2}
+\textcolor{white}{.}\newline
+\textbf{Auteur : } C.J. Liu\newline
+\textbf{Date : } 11/17/2016\newline
+\textbf{Lien: } \underline{\href{https://rstudio-pubs-static.s3.amazonaws.com/228019\_f0c39e05758a4a51b435b19dbd321c23.html\#11\_area\_plots}{ici}}\newline
+
+\section{Plot One Variable - X : Continuous or Discrete}
+For \textbf{one continuous variable = Numeric} :
+\begin{itemize}
+  \item geom\_area()
+  \item geom\_density()
+  \item geom\_histogram()
+  \item geom\_freqpoly()
+  \item geom\_dotplot()
+  \item stat\_ecdf()
+  \item stat\_qq()
+\end{itemize}
+For \textbf{one discrete varaible = Factor} :
+
+\begin{itemize}
+  \item geom\_bar()
+\end{itemize}
+
+\begin{lstlisting}[language=html]
+> library(ggplot2)
+> library(dplyr)
+\end{lstlisting}
+\subsection{Area Plots}
+\textbf{alpha, color, fill, linetype, size}
+\begin{lstlisting}[language=html]
+> set.seed(1234)
+> wdata = as_data_frame(data.frame(sex = factor(rep(c("F", "M"), each=200)), weight = c(rnorm(200,55),rnorm(200,58))))
+> wdata
+# A tibble: 400 x 2
+      sex   weight
+   <fctr>    <dbl>
+ 1      F 53.79293
+ 2      F 55.27743
+ 3      F 56.08444
+ 4      F 52.65430
+ 5      F 55.42912
+ 6      F 55.50606
+ 7      F 54.42526
+ 8      F 54.45337
+ 9      F 54.43555
+10      F 54.10996
+# ... with 390 more rows
+\end{lstlisting}
+
+
+\begin{lstlisting}[language=html]
+> mu <- wdata \% > \% group_by(sex) \% > \% summarize(grp.mean = mean(weight))
+> mu
+# A tibble: 2 x 2
+     sex grp.mean
+  <fctr>    <dbl>
+1      F 54.94224
+2      M 58.07325
+\end{lstlisting}
+
+\textbf{\textcolor{red}{Genre la fonction ultra importante pour comprendre ggplot}} : \newline
+\textit{a < - ggplot(wdata, aes(x = weight))}
+
+\begin{lstlisting}[language=html]
+a <- ggplot(wdata, aes(x = weight))
+a + geom_area(stat = "bin", color = "black", fill = "#00AFBB")
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=1 ]{ilu/bg1.png}\end{center}\end{figure}
+
+\textit{a + geom\_area()} will not get right result, object \textit{y} not found. Use stat to specify the count as y.\newline
+Note that, by default \textit{y} axis corresponds to the count of weight values. If you want to change the plot in order to have the density on y axis, the R code would be as follow.
+\begin{lstlisting}[language=html]
+> a + geom\_area(aes(y = ..density..), stat = "bin")
+\end{lstlisting}
+
+\begin{figure}[H]\begin{center}\includegraphics[scale=1 ]{ilu/bg2.png}\end{center}\end{figure}
+\begin{lstlisting}[language=html]
+> data("diamonds")
+> diamonds <- as_data_frame(diamonds)
+> diamonds
+# A tibble: 53,940 x 10
+   carat       cut color clarity depth table price     x     y     z
+   <dbl>     <ord> <ord>   <ord> <dbl> <dbl> <int> <dbl> <dbl> <dbl>
+ 1  0.23     Ideal     E     SI2  61.5    55   326  3.95  3.98  2.43
+ 2  0.21   Premium     E     SI1  59.8    61   326  3.89  3.84  2.31
+ 3  0.23      Good     E     VS1  56.9    65   327  4.05  4.07  2.31
+ 4  0.29   Premium     I     VS2  62.4    58   334  4.20  4.23  2.63
+ 5  0.31      Good     J     SI2  63.3    58   335  4.34  4.35  2.75
+ 6  0.24 Very Good     J    VVS2  62.8    57   336  3.94  3.96  2.48
+ 7  0.24 Very Good     I    VVS1  62.3    57   336  3.95  3.98  2.47
+ 8  0.26 Very Good     H     SI1  61.9    55   337  4.07  4.11  2.53
+ 9  0.22      Fair     E     VS2  65.1    61   337  3.87  3.78  2.49
+10  0.23 Very Good     H     VS1  59.4    61   338  4.00  4.05  2.39
+# ... with 53,930 more rows
+\end{lstlisting}
+\begin{lstlisting}[language=html]
+> p <- ggplot(diamonds, aes(x = price, fill = cut))
+# Bar plot
+> p + geom_bar(stat = "bin")
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=1 ]{ilu/bg3.png}\end{center}\end{figure}
+\begin{lstlisting}[language=html]
+# Area plot
+> p + geom_area(stat = "bin")
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=1 ]{ilu/bg4.png}\end{center}\end{figure}
+
+\subsection{Density Plots}
+\textbf{alpha, color, fill, linetype, size}
+\begin{itemize}
+  \item scale\_color\_manual(), scale\_fill\_manual()
+  \item scale\_color\_brewer(), scale\_fill\_brewer() RColor-Brewer
+  \item scale\_color\_grey(), scale\_fill\_grey()
+\end{itemize}
+
+\begin{lstlisting}[language=html]
+# Basic plots
+> a + geom_density()
+\end{lstlisting}
+
+\begin{figure}[H]\begin{center}\includegraphics[scale=1 ]{ilu/bg5.png}\end{center}\end{figure}
+\begin{lstlisting}[language=html]
+# Add color and mean xintercept and median xintercept
+> a + geom_density(color = "black", fill = "gray") + geom_vline(aes(xintercept = mean(weight)), color = "#FC4E08", linetype = "dashed", size = 1) + geom_vline(aes(xintercept = median(weight)), color = "blue", linetype = 4, size = 1)
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=1 ]{ilu/bg6.png}\end{center}\end{figure}
+\begin{lstlisting}[language=html]
+# Change color by group
+> a + geom_density(aes(fill = sex), alpha = 0.4)
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=1 ]{ilu/bg7.png}\end{center}\end{figure}
+\begin{lstlisting}[language=html]
+# Add mean lines and color by sex
+> a + geom_density(aes(fill = sex), alpha = 0.4) + geom_vline(data = mu, aes(xintercept = grp.mean, color = sex), linetype = "dashed")
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=1 ]{ilu/bg8.png}\end{center}\end{figure}
+\begin{lstlisting}[language=html]
+# Change manually 
+# change line manually
+> a2 <- a + geom_density(aes(color = sex)) + geom_vline(data = mu, aes(xintercept = grp.mean, color = sex), linetype = "dashed") + theme_minimal()
+> a2 + scale_color_manual(values = c("#999999", "#E69F00"))
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=1 ]{ilu/bg9.png}\end{center}\end{figure}
+\begin{lstlisting}[language=html]
+> a2 + scale_color_brewer(palette = "Paired")
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=1 ]{ilu/bg10.png}\end{center}\end{figure}
+\begin{lstlisting}[language=html]
+> a2 + scale_color_grey()
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=1 ]{ilu/bg11.png}\end{center}\end{figure}
+\begin{lstlisting}[language=html]
+# Change fill\footnote{remplissage} manually
+> a3 <- a + geom_density(aes(fill = sex), alpha = 0.4) + theme_minimal()
+> a3 + scale_fill_manual(values = c("#999999", "#E69F00"))
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=1 ]{ilu/bg12.png}\end{center}\end{figure}
+\begin{lstlisting}[language=html]
+> a3 + scale_fill_brewer(palette = "Dark2")
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=1 ]{ilu/bg13.png}\end{center}\end{figure}
+\begin{lstlisting}[language=html]
+> a3 + scale_fill_grey()
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=1 ]{ilu/bg14.png}\end{center}\end{figure}
+
+\subsection{Histogram Plots}
+\textbf{identity(position\_identity()), stack(position\_stack()), dodge(position\_dodge()); Default values is "stack"}\newline
+\\
+\textbf{alpha, color, fill, linetype, size}
+\begin{lstlisting}[language=html]
+# Basic plot
+> a + geom_histogram()
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=1 ]{ilu/bg15.png}\end{center}\end{figure}
+\begin{lstlisting}[language=html]
+> a + geom_histogram(bins = 50)
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=1 ]{ilu/bg16.png}\end{center}\end{figure}
+Note that by default, stat\_bin uses 30 bins - this might not be good default. You can change the number of bins (\textit{e.g.}: bins = 50 or the bin width \textit{e.g.}: binwidth = 0.5.
+\begin{lstlisting}[language=html]
+> a + geom_histogram(bins = 50, color = "black", fill = "grey") + geom_vline(aes(xintercept = mean(weight)), color = "#FC4E07", linetype = "dashed", size = 1) + theme_minimal()
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=1 ]{ilu/bg17.png}\end{center}\end{figure}
+\begin{lstlisting}[language=html]
+> a + geom_histogram(aes(y = ..density..), bins = 50)
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=1 ]{ilu/bg18.png}\end{center}\end{figure}
+\begin{lstlisting}[language=html]
+# Change color by sex
+> a + geom_histogram(aes(color = sex), fill = "white", bins = 50) + theme_minimal()
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=1 ]{ilu/bg19.png}\end{center}\end{figure}
+\begin{lstlisting}[language=html]
+# Position adjustment "identity"(overlaid)
+> a + geom_histogram(aes(color = sex), fill = "white", bins = 50, alpha = 0.6, position = "identity")
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=1 ]{ilu/bg20.png}\end{center}\end{figure}
+\begin{lstlisting}[language=html]
+# Position adjustment "dodge" (Interleaved)
+# Add mean lines and color by sex
+> a + geom_histogram(aes(color = sex), fill = "white", alpha = 0.6, position = "dodge", bins = 50) + geom_vline(aes(xintercept = mean(weight)), linetype = "dashed")
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=1 ]{ilu/bg21.png}\end{center}\end{figure}
+\begin{lstlisting}[language=html]
+# Change fill, color manually
+# Change outline color manually
+> a + geom_histogram(aes(color = sex), fill = "white", alpha = 0.4, position = "identity", bins = 50) + scale_color_manual(values = c("#00AFBB","#E7B800"))
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=1 ]{ilu/bg22.png}\end{center}\end{figure}
+\begin{lstlisting}[language=html]
+# Change fill and outline color manually
+# a + geom_histogram(aes(color = sex), fill = "white", alpha =0.4, position = "identity", bins = 50) + scale_fill_manual(values = c("#00AFBB", "#E7B800")) + scale_color_manual(values = c("#00AFBB", "#E7B800")) 
+# wrong command, I have to assign fill first by group
+> a + geom_histogram(aes(color = sex, fill = sex), alpha =0.4, position = "identity", bins = 50) + scale_fill_manual(values = c("#00AFBB", "#E7B800")) + scale_color_manual(values = c("#00AFBB", "#E7B800"))
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=1 ]{ilu/bg23.png}\end{center}\end{figure}
+\begin{lstlisting}[language=html]
+## Combine Histogram and Density Plots
+# Plot histogram with density values on y-axis(instead of count values).
+# Add density plot with transparent density plot
+# Histogram with density plot
+
+> a + geom_histogram(aes(y = ..density..),color = "black", fill = "white") + geom_density(alpha = 0.2, fill = "#FF6666") + theme_minimal()
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=1 ]{ilu/bg24.png}\end{center}\end{figure}
+\begin{lstlisting}[language=html]
+# Color by groups
+> a + geom_histogram(aes(y = ..density.., color = sex, fill = sex),  alpha = 0.4, position = "identity") + geom_density(aes(color = sex), size =1)
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=1 ]{ilu/bg25.png}\end{center}\end{figure}
+\subsection{Frequency Polygon}
+Very close to histogram plots
+\begin{itemize}
+  \item Histogram use bars
+  \item Frequency polygons use lines.
+\end{itemize}
+\textbf{alpha, color, linetype, size}
+\begin{lstlisting}[language=html]
+# Basic plot
+> a + geom_freqpoly(bins = 30) + theme_minimal()
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=1 ]{ilu/bg26.png}\end{center}\end{figure}
+\begin{lstlisting}[language=html]
+# Change color and linetype by sex
+# Use custom color palettes
+a + geom_freqpoly(aes(color = sex, linetype = sex), bins = 30 ) +  scale_color_manual(values = c("#999999", "#E69F00"))+theme_minimal()
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=1 ]{ilu/bg27.png}\end{center}\end{figure}
+\begin{lstlisting}[language=html]
+# y density
+> a + geom_freqpoly(aes(y = ..density.., color = sex, linetype = sex), bins = 30 ) +  scale_color_manual(values = c("#999999", "#E69F00"))+theme_minimal()
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=1 ]{ilu/bg28.png}\end{center}\end{figure}
+\subsection{Dot Plots for One Variable}
+Not suitable for one variable, it?s ugly.
+\begin{lstlisting}[language=html]
+> a + geom_dotplot(aes(fill = sex))
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=1 ]{ilu/bg29.png}\end{center}\end{figure}
+\subsection{ECDF Plots}
+Empirical Cumulative Density Function\newline
+\\
+\textbf{alpha, color, linetype, size}
+\begin{lstlisting}[language=html]
+> a + stat\_ecdf(geom = "point")
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=1 ]{ilu/bg30.png}\end{center}\end{figure}
+\begin{lstlisting}[language=html]
+> a + stat\_ecdf(geom = "step")
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=1 ]{ilu/bg31.png}\end{center}\end{figure}
+\subsection{QQ Plots}
+Quantile - Quantie plots to chech whether a given data follows normal distribution.\newline
+\\
+\textbf{alpha, color, shape, size}
+\begin{lstlisting}[language=html]
+> data(mtcars)
+> mtcars <- as_data_frame(mtcars)
+> mtcars
+# A tibble: 32 x 11
+     mpg   cyl  disp    hp  drat    wt  qsec    vs    am  gear  carb
+ * <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
+ 1  21.0     6 160.0   110  3.90 2.620 16.46     0     1     4     4
+ 2  21.0     6 160.0   110  3.90 2.875 17.02     0     1     4     4
+ 3  22.8     4 108.0    93  3.85 2.320 18.61     1     1     4     1
+ 4  21.4     6 258.0   110  3.08 3.215 19.44     1     0     3     1
+ 5  18.7     8 360.0   175  3.15 3.440 17.02     0     0     3     2
+ 6  18.1     6 225.0   105  2.76 3.460 20.22     1     0     3     1
+ 7  14.3     8 360.0   245  3.21 3.570 15.84     0     0     3     4
+ 8  24.4     4 146.7    62  3.69 3.190 20.00     1     0     4     2
+ 9  22.8     4 140.8    95  3.92 3.150 22.90     1     0     4     2
+10  19.2     6 167.6   123  3.92 3.440 18.30     1     0     4     4
+# ... with 22 more rows
+\end{lstlisting}
+\begin{lstlisting}[language=html]
+> mtcars <- mutate(mtcars, cyl = as.factor(cyl))
+> mtcars
+# A tibble: 32 x 11
+     mpg    cyl  disp    hp  drat    wt  qsec    vs    am  gear  carb
+   <dbl> <fctr> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
+ 1  21.0      6 160.0   110  3.90 2.620 16.46     0     1     4     4
+ 2  21.0      6 160.0   110  3.90 2.875 17.02     0     1     4     4
+ 3  22.8      4 108.0    93  3.85 2.320 18.61     1     1     4     1
+ 4  21.4      6 258.0   110  3.08 3.215 19.44     1     0     3     1
+ 5  18.7      8 360.0   175  3.15 3.440 17.02     0     0     3     2
+ 6  18.1      6 225.0   105  2.76 3.460 20.22     1     0     3     1
+ 7  14.3      8 360.0   245  3.21 3.570 15.84     0     0     3     4
+ 8  24.4      4 146.7    62  3.69 3.190 20.00     1     0     4     2
+ 9  22.8      4 140.8    95  3.92 3.150 22.90     1     0     4     2
+10  19.2      6 167.6   123  3.92 3.440 18.30     1     0     4     4
+# ... with 22 more rows
+\end{lstlisting}
+\begin{lstlisting}[language=html]
+> p <- ggplot(mtcars, aes(sample = mpg))
+# Basic plot
+> p + stat\_qq()
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=1 ]{ilu/bg32.png}\end{center}\end{figure}
+\begin{lstlisting}[language=html]
+# Change point shapes by groups
+# Use custom color palettes
+> p + stat\_qq(aes(shape = cyl, color = cyl)) + scale_color_manual(values = c("#00AFBB", "#E7B800", "#FC4E07"))
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=1 ]{ilu/bg33.png}\end{center}\end{figure}
+
+\subsection{Bar Plots of Counts}
+For one discrete variable\newline
+\\
+\textbf{alpha, color, fill, linetype, size}
+\begin{lstlisting}[language=html]
+> data(mpg)
+> mpg <- as_data_frame(mpg)
+> mpg
+# A tibble: 234 x 11
+   manufacturer      model displ  year   cyl      trans   drv   cty   hwy
+          <chr>      <chr> <dbl> <int> <int>      <chr> <chr> <int> <int>
+ 1         audi         a4   1.8  1999     4   auto(l5)     f    18    29
+ 2         audi         a4   1.8  1999     4 manual(m5)     f    21    29
+ 3         audi         a4   2.0  2008     4 manual(m6)     f    20    31
+ 4         audi         a4   2.0  2008     4   auto(av)     f    21    30
+ 5         audi         a4   2.8  1999     6   auto(l5)     f    16    26
+ 6         audi         a4   2.8  1999     6 manual(m5)     f    18    26
+ 7         audi         a4   3.1  2008     6   auto(av)     f    18    27
+ 8         audi a4 quattro   1.8  1999     4 manual(m5)     4    18    26
+ 9         audi a4 quattro   1.8  1999     4   auto(l5)     4    16    25
+10         audi a4 quattro   2.0  2008     4 manual(m6)     4    20    28
+# ... with 224 more rows, and 2 more variables: fl <chr>, class <chr>
+\end{lstlisting}
+\begin{lstlisting}[language=html]
+> ggplot(mpg, aes(fl)) + geom_bar(fill = "steelblue") + theme_minimal()
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=1 ]{ilu/bg34.png}\end{center}\end{figure}
+
+
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

@@ -1,3 +1,49 @@
+
+\subsubsection{Pour les variables catégoricielles}
+[2,24]
+
+
+
+\begin{lstlisting}[language=html]
+
+\end{lstlisting}
+
+
+\begin{lstlisting}[language=html]
+
+\end{lstlisting}
+
+
+\begin{lstlisting}[language=html]
+
+\end{lstlisting}
+
+
+\begin{lstlisting}[language=html]
+
+\end{lstlisting}
+
+
+\begin{lstlisting}[language=html]
+
+\end{lstlisting}
+
+
+\begin{lstlisting}[language=html]
+
+\end{lstlisting}
+
+
+\begin{lstlisting}[language=html]
+
+\end{lstlisting}
+
+
+\begin{lstlisting}[language=html]
+
+\end{lstlisting}
+
+
 \begin{lstlisting}[language=html]
 
 \end{lstlisting}
@@ -10,115 +56,16 @@
 
 
 
-\newpage
 
-\section{LAB 2 : Indexation critériée d'observations, sélection de variables, graphiques univariés}
 
-Dans cette deuxième session, nous allons nous intéresser à la sélection indexée d'observations ou à la restriction d'un tableau de données à un certain nombre de variables, ce qui est souvent plus pratique, soit pour faire des analyses statistiques, soit pour faire des représentations graphiques.
-\subsection*{Récupération du code épuré du précédent lab}
-\textbf{Note : } il existe deux possibilités pour chargé un fichier : 
-\begin{enumerate}
-\item Appuyer sur le bouton source sachant que le script est déjà écrit dans le workspace
-\item Utiliser la fonction load pour charger des données : ex : \textit{load("smp\_lab2.rda")}
-\end{enumerate}
+
+
+
 
 \begin{lstlisting}[language=html]
-> smp <- read.csv2("../DONNEES/smp2.csv")
-> ##Affichage des variables
-> names(smp)
- [1] "age"          "prof"         "duree"        "discip"       "n.enfant"     "n.fratrie"    "ecole"       
- [8] "separation"   "juge.enfant"  "place"        "abus"         "grav.cons"    "dep.cons"     "ago.cons"    
-[15] "ptsd.cons"    "alc.cons"     "subst.cons"   "scz.cons"     "char"         "rs"           "ed"          
-[22] "dr"           "suicide.s"    "suicide.hr"   "suicide.past" "dur.interv"  
-> ##Synthèse des variables
-> str(smp)
-'data.frame': 799 obs. of  26 variables:
- $ age         : int  31 49 50 47 23 34 24 52 42 45 ...
- $ prof        : Factor w/ 8 levels "agriculteur",..: 3 NA 7 6 8 6 3 2 6 6 ...
- $ duree       : int  4 NA 5 NA 4 NA NA 5 4 NA ...
- $ discip      : int  0 0 0 0 1 0 0 0 1 0 ...
- $ n.enfant    : int  2 7 2 0 1 3 5 2 1 2 ...
- $ n.fratrie   : int  4 3 2 6 6 2 3 9 12 5 ...
- $ ecole       : int  1 2 2 1 1 2 1 2 1 2 ...
- $ separation  : int  0 1 0 1 1 0 1 0 1 0 ...
- $ juge.enfant : int  0 0 0 0 NA 0 1 0 1 0 ...
- $ place       : int  0 0 0 1 1 0 1 0 0 0 ...
- $ abus        : int  0 0 0 0 0 0 0 0 1 1 ...
- $ grav.cons   : int  1 2 2 1 2 1 5 1 5 5 ...
- $ dep.cons    : int  0 0 0 0 1 0 1 0 1 0 ...
- $ ago.cons    : int  1 0 0 0 0 0 0 0 0 0 ...
- $ ptsd.cons   : int  0 0 0 0 0 0 0 0 0 0 ...
- $ alc.cons    : int  0 0 0 0 0 0 0 0 1 1 ...
- $ subst.cons  : int  0 0 0 0 0 0 1 0 1 0 ...
- $ scz.cons    : int  0 0 0 0 0 0 0 0 0 0 ...
- $ char        : int  1 1 1 1 1 1 1 1 4 1 ...
- $ rs          : int  2 2 2 2 2 1 3 2 3 2 ...
- $ ed          : int  1 2 3 2 2 2 3 2 3 2 ...
- $ dr          : int  1 1 2 2 2 1 2 2 1 2 ...
- $ suicide.s   : int  0 0 0 1 0 0 3 0 4 0 ...
- $ suicide.hr  : int  0 0 0 0 0 0 1 0 1 0 ...
- $ suicide.past: int  0 0 0 0 1 0 1 0 1 0 ...
- $ dur.interv  : int  NA 70 NA 105 NA NA 105 84 78 60 ...
-> ##Résumé des principaux indicateurs statistique sur les variables.
-> summary(smp)
-      age                       prof         duree           discip         n.enfant        n.fratrie     
- Min.   :19.0   ouvrier           :227   Min.   :1.000   Min.   :0.000   Min.   : 0.000   Min.   : 0.000  
- 1st Qu.:28.0   sans emploi       :222   1st Qu.:4.000   1st Qu.:0.000   1st Qu.: 0.000   1st Qu.: 2.000  
- Median :37.0   employe           :135   Median :5.000   Median :0.000   Median : 1.000   Median : 3.000  
- Mean   :38.9   artisan           : 90   Mean   :4.302   Mean   :0.232   Mean   : 1.755   Mean   : 4.287  
- 3rd Qu.:48.0   prof.intermediaire: 58   3rd Qu.:5.000   3rd Qu.:0.000   3rd Qu.: 3.000   3rd Qu.: 6.000  
- Max.   :83.0   (Other)           : 61   Max.   :5.000   Max.   :1.000   Max.   :13.000   Max.   :21.000  
- NA's   :2      NA's              :  6   NA's   :223     NA's   :6       NA's   :26                       
-     ecole         separation      juge.enfant         place             abus          grav.cons    
- Min.   :1.000   Min.   :0.0000   Min.   :0.0000   Min.   :0.0000   Min.   :0.0000   Min.   :1.000  
- 1st Qu.:1.000   1st Qu.:0.0000   1st Qu.:0.0000   1st Qu.:0.0000   1st Qu.:0.0000   1st Qu.:2.000  
- Median :2.000   Median :0.0000   Median :0.0000   Median :0.0000   Median :0.0000   Median :4.000  
- Mean   :1.866   Mean   :0.4226   Mean   :0.2771   Mean   :0.2285   Mean   :0.2778   Mean   :3.643  
- 3rd Qu.:2.000   3rd Qu.:1.0000   3rd Qu.:1.0000   3rd Qu.:0.0000   3rd Qu.:1.0000   3rd Qu.:5.000  
- Max.   :5.000   Max.   :1.0000   Max.   :1.0000   Max.   :1.0000   Max.   :1.0000   Max.   :7.000  
- NA's   :5       NA's   :11       NA's   :5        NA's   :7        NA's   :7        NA's   :4      
-    dep.cons         ago.cons        ptsd.cons         alc.cons        subst.cons        scz.cons     
- Min.   :0.0000   Min.   :0.0000   Min.   :0.0000   Min.   :0.0000   Min.   :0.0000   Min.   :0.0000  
- 1st Qu.:0.0000   1st Qu.:0.0000   1st Qu.:0.0000   1st Qu.:0.0000   1st Qu.:0.0000   1st Qu.:0.0000  
- Median :0.0000   Median :0.0000   Median :0.0000   Median :0.0000   Median :0.0000   Median :0.0000  
- Mean   :0.3967   Mean   :0.1665   Mean   :0.2165   Mean   :0.1865   Mean   :0.2653   Mean   :0.0826  
- 3rd Qu.:1.0000   3rd Qu.:0.0000   3rd Qu.:0.0000   3rd Qu.:0.0000   3rd Qu.:1.0000   3rd Qu.:0.0000  
- Max.   :1.0000   Max.   :1.0000   Max.   :1.0000   Max.   :1.0000   Max.   :1.0000   Max.   :1.0000  
-                                                                                                      
-      char             rs              ed              dr          suicide.s        suicide.hr      suicide.past   
- Min.   :1.000   Min.   :1.000   Min.   :1.000   Min.   :1.000   Min.   :0.0000   Min.   :0.0000   Min.   :0.0000  
- 1st Qu.:1.000   1st Qu.:1.000   1st Qu.:1.000   1st Qu.:1.000   1st Qu.:0.0000   1st Qu.:0.0000   1st Qu.:0.0000  
- Median :1.000   Median :2.000   Median :2.000   Median :2.000   Median :0.0000   Median :0.0000   Median :0.0000  
- Mean   :1.512   Mean   :2.057   Mean   :1.866   Mean   :2.153   Mean   :0.7942   Mean   :0.2013   Mean   :0.2841  
- 3rd Qu.:2.000   3rd Qu.:3.000   3rd Qu.:3.000   3rd Qu.:3.000   3rd Qu.:1.0000   3rd Qu.:0.0000   3rd Qu.:1.0000  
- Max.   :4.000   Max.   :3.000   Max.   :3.000   Max.   :3.000   Max.   :5.0000   Max.   :1.0000   Max.   :1.0000  
- NA's   :96      NA's   :103     NA's   :107     NA's   :111     NA's   :41       NA's   :39       NA's   :14      
-   dur.interv    
- Min.   :  0.00  
- 1st Qu.: 48.00  
- Median : 60.00  
- Mean   : 61.89  
- 3rd Qu.: 75.00  
- Max.   :120.00  
- NA's   :50     
-
-> ##Création d'une variable qualitative
-> gauss <- factor(smp$n.enfant)
-> levels(gauss)
- [1] "0"  "1"  "2"  "3"  "4"  "5"  "6"  "7"  "8"  "9"  "10" "11" "13"
-> ##Concaténation de plusieurs mode
-> levels(gauss)[6:13]<-"5+"
-> levels(gauss)
-[1] "0"  "1"  "2"  "3"  "4"  "5+"
-> table(gauss)
-gauss
-  0   1   2   3   4  5+ 
-214 220 125 101  55  58 
-
-> #POUR LES VARIABLES NUMERIQUES
+     > #POUR LES VARIABLES NUMERIQUES
 > ##Accès direct à des données dans une variable
-> smp$age[1]
-[1] 31
+
 > ##Accès direct à des données dans un dataframe
 > ### Accès à l'observation 1 de la variable 1
 > names(smp)
