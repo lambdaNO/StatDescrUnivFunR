@@ -1,0 +1,1233 @@
+\chapter{Graphiques de base - Pr Jean R. Lobry}
+\section{Introduction}
+\subsection{Le graphique de Charles Minard}
+\begin{flushright}
+\textit{Un bon croquis vaut mieux qu'un long discours.} - \textbf{Napoléon Bonaparte}
+\end{flushright}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.55]{ilu/lob1.png}\end{center}\end{figure}
+\textbf{Charles Joseph Minard} (né le 27 mars 1781 à Dijon, Côte-d'Or, et mort le 24 novembre 1870 à Bordeaux, Gironde) est un ingénieur civil français célèbre pour ses inventions dans le domaine de la traduction graphique et cartographique appliquée au génie civil et aux statistiques. Plus méconnus mais néanmoins réels sont sa réflexion et son apport sur l'utilité collective et son analyse de la tarification des équipements publics (péage).
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.35]{ilu/lob2.png}\end{center}\end{figure}
+Par une ironie de l'histoire, le graphique statistique considéré par beaucoup comme étant le meilleur jamais produit illustre la désastreuse campagne de Russie conduite par Napoléon en 1812.\newline
+Ce graphique est de l'ingéenieur français Charles Minard (1781-1870).\newline
+Le graphique représente le nombre de survivants de l'armée par l'épaisseur des bandes sur la carte de la campagne, à l'aller et au retour. La température pendant la retraite est indiquée au bas de la figure.\newline
+\textit{Carte figurative des pertes successives en hommes de l'armée
+\\
+française dans la campagne de Russie 1812-1813.}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.7]{ilu/lob3.png}\end{center}\end{figure}
+\textbf{Exemple : } \underline{\href{http://www.datavis.ca/gallery/re-minard.php}{Reprises du graphique de Charles Minard.}}
+\subsection{Importance des représentations graphiques}
+Un mauvais graphique peut avoir des conséquences
+catastrophiques comme par exemple, l'explosion de la navette spatiale Challenger
+\begin{figure}[H]\begin{center}\includegraphics[scale=4]{ilu/lob4.png}\end{center}\end{figure}
+On peut (aussi) faire de mauvais graphiques sous R : 
+\begin{lstlisting}[language=html]
+orf <- read.table("http://pbil.univ-lyon1.fr/R/donnees/ORingFailure.txt", header = TRUE)
+str(orf)
+'data.frame': 23 obs. of  2 variables:
+ $ Temperature: int  66 70 69 68 67 72 73 70 57 63 ...
+ $ Failures   : int  0 1 0 0 0 0 0 0 1 1 ...
+  head(orf,3)
+  Temperature Failures
+1          66        0
+2          70        1
+3          69        0
+ plot(
++   orf[orf$Failure > 0 & orf$Temperature '= 70, ],
++   pch = 19,xlim = c(45,80),ylim = c(0,3.5),cex = 1.5,
++   las = 1,
++   xlab = "Température des joints circulaires, degrés Fahrenheit",
++   ylab = "Nombre d'incidents", xaxs = "i",yaxs = "i",xaxt = "n",yaxt = "n",
++   main = "Incidents en fonction de la température\n Vols avec incidents"
++   )
+ points(c(70,70), c(0.95,1.05), pch = 19, cex = 1.5)
+ axis(1, at = seq(45,80,by = 5), tick = FALSE)
+ axis(2, at = 0:3, las = 1, tick = FALSE)
+ abline(h = 0:3)
+ for( i in seq(45,80,by = 5)) segments(i,0,i,3)
+ text(53, 3, "STS 51-C", pos = 3, cex = 0.8)
+ text(77, 2, "61-A", pos = 3, cex = 0.8)
+ text(57, 1, "41-B", pos = 3, cex = 0.8)
+ text(58, 1, "61-C", pos = 1, cex = 0.8)
+ text(63, 1, "41-C", pos = 3, cex = 0.8)
+ text(72, 1, "41-D", pos = 3, cex = 0.8)
+ text(72, 1, "STS-2", pos = 1, cex = 0.8)
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.5]{ilu/lob5.png}\end{center}\end{figure}
+Les options par défaut des fonctions graphiques de \textbf{R} sont étudiées pour donner de bons résultats.
+\begin{lstlisting}[language=html]
+plot(orf$Temperature, jitter(orf$Failure), cex = 1.5,
+     las = 1, xlab = "Temperature des joints circulaires, degres Fahrenheit",
+     ylab = "Nombre d'incidents",
+     main = "Vols avec et sans incidents")
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.5]{ilu/lob6.png}\end{center}\end{figure}
+\subsection{Les grandes familles de fonctions graphiques}
+\textbf{R} est un très bon environnement pour produire de façon reproductible des graphiques statistiques de haute qualité. On peut classer les fonctions graphiques en plusieurs catégories :
+\begin{itemize}
+\item Les fonctions liées format de sortie des graphiques.
+\item Les fonction permettant d'interagir avec les graphiques.
+\item Les fonctions graphiques de bas niveau pour retoucher un graphique existant.
+\item Les fonctions graphiques de haut niveau.
+\end{itemize}
+\paragraph{Les fonctions de format de sortie des graphiques}
+Il existe de nombreuses fonctions pour ouvrir un nouveau périphérique graphique (\textit{e.g.} pdf(), jpeg(), postscipt(), x11(), png(), gnome(), quartz(), xfig(), bitmap(), pictex()). Elles ne sont pas toutes disponibles pour tous les systèmes d'exploitation.\newline
+Pour en savoir plus voir \textit{?Devices}. Le dispositif utilisé par défaut est donné par \textit{getOption("device")}.\newline
+\textbf{Exemple } d'utilisation pour sauvegarder un graphique dans un fichier au format PDF :
+\begin{lstlisting}[language=html]
+pdf("monfichier.pdf")
+plot(0)
+dev.off()
+\end{lstlisting}
+\paragraph{Les fonctions interactives}
+Ces fonctions permettent de retoucher " à la main " un graphique, tout en conservant le résultat pour sa reproductibilité ultérieure.
+\begin{itemize}
+  \item \textit{locator()} permet de récupérer les coordonnées des points lorsque en cliquant dessus.
+  \item \textit{identify()} permet d'identifier des points. Donne le rang des points dans le jeu de données.
+\end{itemize}
+\paragraph{Les fonctions graphiques de bas niveau}
+Ces fonctions permettent de retoucher un graphique déjà existant (\textit{e.g.} points(), abline(), arrows(), lines(), seqments(), polygon(), rect(), box(), axis(), title(), rug(), grid(), legend(), text(), mtext()).\newline
+Par exemple pour ajouter une légende :
+\begin{lstlisting}[language=html]
+ t3var <- read.csv2("data.csv",header = TRUE,sep="")
+ str(t3var)
+'data.frame': 66 obs. of  3 variables:
+ $ SEXE   : Factor w/ 2 levels "f","h": 2 1 1 1 1 1 1 2 1 2 ...
+ $ POIDS  : int  60 57 51 55 50 50 48 72 52 64 ...
+ $ TAILLES: int  170 169 172 174 168 161 162 189 160 175 ...
+ head(t3var,3)
+  SEXE POIDS TAILLES
+1    h    60     170
+2    f    57     169
+3    f    51     172
+ plot(t3var$TAILLES,t3var$POIDS, pch = ifelse(t3var$SEXE == "h", 1, 19))
+ legend("topleft", inset = 0.01, c("Homme","Femme"), pch = c(1, 19))
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.5]{ilu/lob7.png}\end{center}\end{figure}
+\paragraph{Les fonctions graphiques de haut niveau}
+Ce sont celles que l'on utilise le plus souvent parce qu'elles donnent un graphique complet. Elles sont très nombreuses (\textit{e.g.} plot(), hist(), dotchart(), stripchart(), pie(), barplot(), boxplot(), curve(), sunflowerplot(), symbols(), pairs(), stars(), assocplot(), mosaicplot(), coplot(), contour(), image(), persp()).\newline
+Nous allons envisager ci-après quelques fonctions graphiques de haut niveau trés utilisés en analyse exploratoire des données.
+\section{Variables numériques}
+\subsection{Variables discrètes et variables continues}
+On parle également de variables \textbf{quantitatives}, elles sont représentées par une valeur numérique (numeric()).\newline
+On distingue parfois :
+\begin{itemize}
+\item les variables quantitatives \textbf{discrètes}, ne pouvant prendre qu'un nombre fini de valeurs (par exemple le nombre de jambes d'un individu).
+\item les variables quantitatives \textbf{continues}, pouvant prendre un nombre infini de valeurs (par exemple la taille d'un individu).
+\end{itemize}
+Cette distinction est un peu artificielle puisque les variables continues \textit{stricto sensu} n'existent pas à cause de la précision limitée des intruments de mesure.\newline
+Illustrons ce point.
+\paragraph{Taille de 237 étudiants} \textcolor{white}{.}\newline
+Intéressons nous à la taille de 237 étudiants disponibles dans le jeu de données \textit{survey} de la bibliothèque \textit{MASS}. Utilisons un histogramme pour représenter ces données.
+\begin{lstlisting}[language=html]
+ library(MASS)
+ data(survey)
+ names(survey)
+ [1] "Sex"    "Wr.Hnd" "NW.Hnd" "W.Hnd"  "Fold"   "Pulse"  "Clap"   "Exer"   "Smoke" 
+[10] "Height" "M.I"    "Age"  
+ hist( survey$Height, col = grey(0.9), border = grey(0.2),
+      main = paste("Taille de", nrow(survey), "étudiants"),
+      xlab = "Taille [cm]",
+      ylab = "Effectifs",
+      labels = TRUE, las = 1, ylim = c(0, 50))
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.5]{ilu/lob8.png}\end{center}\end{figure}
+Nous avons utilisé ici des fréquences absolues, on préfère généralement utiliser des fréquences relatives \textit{(proba = TRUE)} pour pouvoir superposer facilement des distributions de référence, par exemple :
+\begin{lstlisting}[language=html]
+hist( survey$Height, col = grey(0.9), border = grey(0.2),
+      main = paste("Taille de", nrow(survey), "étudiants"),
+      xlab = "Taille [cm]",
+      proba = TRUE)
+x <- seq(from = min(survey$Height, na.rm=T), to = max(survey$Height, na.rm=T),
+         length = 100)
+lines(x, dnorm(x, mean(survey$Height, na.rm = TRUE), sd(survey$Height,
+                                                        na.rm = TRUE)))
+mtext("Ajustement (mauvais) a une loi normale")
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.5]{ilu/lob9.png}\end{center}\end{figure}
+Le problème des histogrammes est que le choix du découpage en intervalles est assez arbitraire. On peut le contrôler avec le paramètre \textit{break} de la fonction \textit{hist()}, par exemple :
+\begin{lstlisting}[language=html]
+hist( survey$Height, col = grey(0.9), border = grey(0.2),
+      main = paste("Taille de", nrow(survey), "étudiants"),
+      xlab = "Taille [cm]",
+      proba = TRUE, breaks = seq(from = 150, to = 200, length = 15))
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.5]{ilu/lob10.png}\end{center}\end{figure}
+On a plus l'impression dans ce dernier cas que la distribution est bimodale. Le choix du découpage en intervalle est un problème délicat qui risque de biaiser fortement notre perception des données. Avec des intervalles de même effectifs on aurait :
+\begin{lstlisting}[language=html]
+isohist <- function(x, nclass, ...){
+  breaks <- quantile(x, seq(from = 0, to = 1, length = nclass + 1),
+                     na.rm = TRUE)
+  invisible(hist(x, breaks = breaks, ...))
+}
+isohist(survey$Height, 10, col = grey(0.9), border = grey(0.2),
+        main = paste("Taille de", nrow(survey), "étudiants"),
+        xlab = "Taille [cm]",
+        proba = TRUE)
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.5]{ilu/lob11.png}\end{center}\end{figure}
+De nos jours, on préfère utiliser des estimateurs locaux de la densité des points et explorer différentes échelles. Par exemple :
+\begin{lstlisting}[language=html]
+hist( survey$Height, col = grey(0.9), border = grey(0.8),
+      main = paste("Taille de", nrow(survey), "étudiants"),
+      xlab = "Taille [cm]",
+      proba = TRUE)
+lines(density(survey$Height, na.rm = TRUE), lwd = 2)
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.5]{ilu/lob12.png}\end{center}\end{figure}
+Le paramètre important de la fonction \textit{density()} est le paramètre \textit{adjust} :
+\begin{itemize}
+  \item \textit{adjust = 1} : C'est la valeur par défaut, celle que nous avons utilisée dans le graphe précédent.
+  \item \textit{adjust < 1} : On regarde les choses de près, on va vers la nature discrète de la variable.
+  \item \textit{adjust > 1} : On regarde les choses de loin, on veut lisser le signal pour voir la variable comme étant continue.
+\end{itemize}
+\begin{lstlisting}[language=html]
+hist( survey$Height, col = grey(0.9), border = grey(0.8),
+      main = paste("Taille de", nrow(survey), "étudiants"),
+      xlab = "Taille [cm]",
+      proba = TRUE)
+lines(density(survey$Height, na.rm = TRUE, adjust = 0.60), lwd = 2)
+mtext("adjust = 0.15")
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.5]{ilu/lob13.png}\end{center}\end{figure}
+\begin{lstlisting}[language=html]
+hist( survey$Height, col = grey(0.9), border = grey(0.8),
+      main = paste("Taille de", nrow(survey), "étudiants"),
+      xlab = "Taille [cm]",
+      proba = TRUE)
+lines(density(survey$Height, na.rm = TRUE, adjust = 2), lwd = 2)
+mtext("adjust = 2")
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.5]{ilu/lob14.png}\end{center}\end{figure}
+Un autre avantage des estimateurs locaux de la densité par rapport aux histogrammes est qu'il permettent de superposer facilement plusieurs distributions :
+\begin{lstlisting}[language=html]
+par(lend="butt")
+ng <- sum(survey$Sex == "Male", na.rm = TRUE)
+nf <- sum(survey$Sex == "Female", na.rm = TRUE)
+n <- ng + nf
+dst <- density(survey$Height, na.rm = TRUE)
+dstg <- density(survey$Height[survey$Sex == "Male"], na.rm = TRUE)
+dstf <- density(survey$Height[survey$Sex == "Female"], na.rm = TRUE)
+hist( survey$Height, col = grey(0.9), border = grey(0.8),
+      main = paste("Taille de", nrow(survey), "étudiants"),
+      xlab = "Taille [cm]",
+      proba = TRUE, ylim = c(0, max(dst$y)))
+lines(dstg$x, ng/n*dstg$y, lwd = 3, col = "darkblue")
+lines(dstf$x, nf/n*dstf$y, lwd = 3, lty = 2, col = "darkred")
+lines(dst$x, dst$y)
+legend("topright", inset = 0.01, legend = c("Filles", "Garcons","Total"),
+       col = c("darkred","darkblue","black"),
+       lty = c(2, 1,1), lwd = 2, pt.cex = 2)
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.5]{ilu/lob15.png}\end{center}\end{figure}
+\subsection{Variables discrètes}
+\subsubsection{Diagramme en bâtons}
+Quand la nature discrète de la variable étudiée ne fait pas de doute, on utilise en général un diagramme en bâtons :
+\begin{lstlisting}[language=html]
+library(ade4)
+data(deug)
+plot(table(deug$tab$Option1), main = paste("Notes de", nrow(deug$tab),
+                                           "étudiants"),
+     las = 1, xlab = "note (Option 1)", ylab = "Nombre d'étudiants")
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.5]{ilu/lob16.png}\end{center}\end{figure}
+On peut considérer les diagramme en bâtons comme une forme dégénérée des estimateurs locaux de densité quand le paramètre \textit{adjust} est très petit :
+\begin{lstlisting}[language=html]
+plot(table(deug$tab$Option1), main = paste("Notes de", nrow(deug$tab),
+                                           "étudiants"),
+     las = 1, xlab = "note (Option 1)", ylab = "Nombre d'étudiants")
+dst <- density(deug$tab$Option1, adjust = 0.1)
+lines(dst$x, max(table(deug$tab$Option1))*dst$y/max(dst$y), col = "red")
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.5]{ilu/lob17.png}\end{center}\end{figure}
+Les paramètres graphiques \textit{lend} (line end : fin des lignes) et \textit{lwd} (line width : épaisseur des lignes) permettent de contrôler l'aspect terminal des bâtons et l'épaisseur des bâtons :
+\begin{lstlisting}[language=html]
+plot(table(deug$tab$Option1), main = paste("Notes de", nrow(deug$tab),
+                                           "étudiants"),
+     las = 1, xlab = "note (Option 1)", ylab = "Nombre d'étudiants",
+     lwd = 5, lend = "square")
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.5]{ilu/lob18.png}\end{center}\end{figure}
+\subsection{Variables continues}
+\subsubsection{Boîte à moustaches}
+Nous avons déjà vu l'utilisation pour les variables continues des histogrammes et des estimateurs de la densité locale. On peut également utiliser une représentation en boîte à moustaches :
+\begin{lstlisting}[language=html]
+boxplot( survey$Pulse, col = grey(0.8),
+         main = paste("Rythme cardiaque de", nrow(survey), "étudiants"),
+         ylab = "Pulsations/minutes", las = 1)
+rug(survey$Pulse, side = 2)
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.5]{ilu/lob19.png}\end{center}\end{figure}
+La signification est explicitée dans le graphique suivant :
+\begin{lstlisting}[language=html]
+boxplot( survey$Pulse, col = grey(0.8),
+         main = paste("Rythme cardiaque de", nrow(survey), "étudiants"),
+         ylab = "Pulsations/minutes", las = 1)
+rug(survey$Pulse, side = 2)
+abline( h = median(survey$Pulse, na.rm = TRUE), col = "navy")
+text(1.35, 70, "Médiane", col = "navy")
+Q1 <- quantile(survey$Pulse, probs = 0.25, na.rm = TRUE)
+abline( h = Q1, col = "darkred")
+text(1.25, 62, "Q1 : premier quartile", col = "darkred")
+Q3 <- quantile(survey$Pulse, probs = 0.75, na.rm = TRUE)
+abline( h = Q3, col = "darkred")
+text(1.25, 83, "Q3 : troisième quartile", col = "darkred")
+arrows(x0 = 0.7,y0 =quantile(survey$Pulse, probs = 0.75, na.rm = TRUE),x1 = quantile(survey$Pulse, probs = 0.25, na.rm = TRUE),y1 = quantile(survey$Pulse, probs = 0.25, na.rm = TRUE),length = 0.1,code = text(0.7, 69, "h", pos = 2))
+mtext("L'écart inter-quartile h contient 50 % des individus", side = 1)
+abline( h = Q1-1.5*(Q3-Q1), col = "darkgreen")
+text(1.35, 42, "Q1 -1.5 h", col = "darkgreen")
+abline( h = Q3+1.5*(Q3-Q1), col = "darkgreen")
+text(1.35, 104, "Q3 +1.5 h", col = "darkgreen")
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.5]{ilu/lob20.png}\end{center}\end{figure}
+Les boîtes à moustaches permettent de comparer facilement des groupes d'individus, par exemple ici les garçons et les filles :
+\begin{lstlisting}[language=html]
+boxplot(survey$Pulse~survey$Sex, col = c("lightpink","lightblue"),
+        main = paste("Rythme cardiaque de", nrow(survey), "étudiants"),
+        ylab = "Pulsations/minutes", las = 1)
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.5]{ilu/lob21.png}\end{center}\end{figure}
+Une extension intéressante des boîtes à moustaches consiste à ajouter des encoches pour représenter un intervalle de confiance pour la médiane de chaque groupe :
+\begin{lstlisting}[language=html]
+boxplot( survey$Pulse~survey$Sex, col = c("lightpink","lightblue"),
+         main = paste("Rythme cardiaque de", nrow(survey), "étudiants"),
+         ylab = "Pulsations/minutes", las = 1, notch = TRUE)
+\end{lstlisting}
+
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.5]{ilu/lob22.png}\end{center}\end{figure}
+
+Ainsi, nous n'avons pas d'indication forte qu'il y ait une différence du rythme cardiaque entre les filles et les garçons. Pour ce qui est de la taille on trouve que les garçons sont significativement plus grands que les filles.
+\begin{lstlisting}[language=html]
+boxplot( survey$Height~survey$Sex, col = c("lightpink","lightblue"),
+         main = paste("Taille de", nrow(survey), "étudiants"),
+         ylab = "Taille [cm]", las = 1, notch = TRUE)
+\end{lstlisting}
+
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.5]{ilu/lob23.png}\end{center}\end{figure}
+\subsubsection{Diagrammes en violon}
+Les diagrammes en violon essayent de combiner les avantages des boîtes à moustaches et des estimateurs de la densité locale, par exemple : 
+\begin{lstlisting}[language=html]
+library(sm)
+library(vioplot)
+par(las = 1)
+vioplot(survey$Height['is.na(survey$Height)], h = 1.5, names ="",
+        col = "lightblue")
+title(main = paste("Taille de", nrow(survey), "étudiants"))
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.5]{ilu/lob24.png}\end{center}\end{figure}
+\section{Variables qualitatives}
+\subsection{Variables nominales et ordonnées}
+Les variables \textbf{qualitatives} sont toutes les variables à valeur non numérique (\textit{e.g.} bleu, blanc, rouge) et codéees par les \textit{factor()}.Les variables qualitatives peuvent être :
+\begin{itemize}
+  \item \textbf{nominales} sans ordre particulier : un simple nom.
+  \item \textbf{ordonnées} avec un ordre : un peu, beaucoup, passionnément, à la folie.
+\end{itemize}
+La règle est simple : s'il y a un ordre, vos graphiques doivent \textbf{impérativement} le respecter.
+\subsection{Variables qualitatives nominales}
+Nous allons illustrer le cas des variables qualitatives non ordonnées avec un jeu de données réelles portant sur $592$ étudiants (extrait de Snee, R. D. (1974) Graphical \textit{display of two-way contingency tables. The American Statistician}, \textbf{28} :9-12). Pour chaque étudiant on a observé 3 variables qualitatives :
+\begin{enumerate}
+  \item la couleur des cheveux
+  \item la couleur des yeux
+  \item le sexe
+\end{enumerate}
+\begin{lstlisting}[language=html]
+ genet <- read.table("http://pbil.univ-lyon1.fr/R/donnees/qualitatif.txt",
++                     header=TRUE)
+ summary(genet)
+   cheveux          yeux          sexe    
+ Blond :127   Bleu    :215   Femelle:328  
+ Marron:286   Marron  :220   Male   :264  
+ Noir  :108   Noisette: 93                
+ Roux  : 71   Vert    : 64 
+\end{lstlisting}
+\subsubsection{Diagrammes en secteurs}
+Intéressons nous à la couleur des cheveux. On peut représenter les données sous la forme d'un diagramme en secteurs avec la fonction \textit{pie()} :
+\begin{lstlisting}[language=html]
+pie(table(genet$cheveux), col = c("yellow", "chocolate4", "black", "orangered"),
+    main = "Couleur des cheveux de 592 étudiants")
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.5]{ilu/lob25.png}\end{center}\end{figure}
+Mais c'est une mauvaise idée. En effet, la documentation de la fonction \textit{pie()} nous dit :
+
+\begin{center}
+\textit{Pie charts are a very bad way of displaying information. The eye is good at judging linear measures and bad at judging relative areas. A bar chart or dot chart is a preferable way of displaying this type of data.\footnote{
+  Les Pie charts sont une très mauvaise façon d'afficher L'½il est bon pour juger les mesures linéaires mauvais pour juger les aires relatives. Un graphique à barres ou à point est préférable pour afficher ce type de données.
+}}
+\end{center}
+On peut s'en convaincre facilement à l'aide de l'exemple suivant :
+\begin{lstlisting}[language=html]
+set.seed(01071966)
+data <- rep(10,10) + rep( 2*runif(5), rep(2,5)) + rep(c(-2,2),5)
+data <- 100*data/sum(data) # as percentage
+names(data) <- letters[1:10]
+par(mfrow = c(1, 2))
+pie(data, main = "Diagramme en secteur")
+dotchart(data, xlim = c(0, 14), pch = 19, main = "Graphe de Cleveland")
+par(mfrow = c(1, 1))
+\end{lstlisting}
+
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.5]{ilu/lob26.png}\end{center}\end{figure}
+\textbf{Note : } le \textit{set.seed()} le vrai aléatoire n'existe pas donc il existe différent moteur d'aléatoire. La fonction set.seed permet de fixer ce moteur pour tout ce qui contient un processus "aléatoire". L'avantage est de pouvoir obtenir du code reproductible pour les fois où l'on fait appel à un processus aléatoire (simulation, bootstrap....).  Sinon à chaque fois que l'on fait tourner le code tu obtiens un résultat (un peu) différent. Grâce à ça le résultat est reproductible d'une session à l'autre, d'un ordinateur à l'autre.
+\subsubsection{Diagrammes en secteurs - graphe de Cleveland}
+Il faut donc éviter d'utiliser des diagrammes en secteurs. Avec notre exemple sur la couleur des cheveux de 592 étudiants, On voit par exemple que l'écart entre les Noir et les Roux est plus important que l'écart entre les Blond et les Noir. On ne le voit pas avec un diagramme en secteurs.
+\begin{lstlisting}[language=html]
+data <- sort(as.numeric(table(genet$cheveux)))
+par(mfrow = c(1, 2))
+pie(data, col = c("orangered", "black", "yellow2", "chocolate4"), cex = 1.5)
+dotchart(data, xlim = c(0, max(data)), pch = 21, bg = c("orangered","black","yellow2","chocolate4"), cex = 1.5)
+par(mfrow=c(1,1))
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.5]{ilu/lob27.png}\end{center}\end{figure}
+\subsubsection{Graphe de Cleveland}
+Quand le nombre de modalités est important, on a tout intérêt à les classer en fonction de leur fréquence pour faciliter les comparaisons. Illustrons ceci avec un jeu de données consistant en un échantillon de 93 voitures sur lesquelles on a observé une variable qualitative non-ordonnéee : le nom du constructeur.
+\begin{lstlisting}[language=html]
+library(MASS)
+data(Cars93)
+par(mfrow=c(1,2))
+dotchart(as.numeric(table(Cars93$Manufacturer)), pch=19, cex = 0.8,
+         main="Dans le desordre")
+dotchart(sort(as.numeric(table(Cars93$Manufacturer))), pch=19, cex = 0.8,
+         main = "Dans l'ordre")
+par(mfrow=c(1,1))
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.5]{ilu/lob28.png}\end{center}\end{figure}
+\subsection{Variables qualitatives ordinales}
+Les passagers du Titanic pouvaient voyager en première classe (\textit{1st}), en seconde classe (\textit{2nd}) ou en troisième classe (\textit{3rd}). La variable classe est donc une variable qualitative ordinales dont les trois modalités sont \textit{1st, 2nd} et \textit{3rd}.
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.5]{ilu/lob29.png}\end{center}\end{figure}
+Récupérons les données historiques nous donnant le nombre de voyageur de chaque classe :
+\begin{lstlisting}[language=html]
+ data(Titanic)
+ classe <- apply(Titanic, 1, sum)[1:3]
+ classe
+1st 2nd 3rd 
+325 285 706 
+\end{lstlisting}
+Il y avait donc 323 passagers en première classe, 285 en seconde classe et 706 en troisième classe.
+\begin{lstlisting}[language=html]
+pie(classe,main="Don't try this at home kids'")
+\end{lstlisting}
+\textcolor{red}{\textit{Horreur ' La premiere classe jouxte la troisième classe '}}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.5]{ilu/lob30.png}\end{center}\end{figure}
+Il faut préserver l'ordre des modalités, c'est facile avec un diagramme de Cleveland :
+\begin{lstlisting}[language=html]
+dotchart(rev(classe), main="Classe des passagers du Titanic", pch = 19,
+         xlim = c(0,max(classe)), cex = 1.5)
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.5]{ilu/lob31.png}\end{center}\end{figure}
+\section{Croisement de variables}
+\subsection{Croisement qualitatif qualitatif}
+\subsubsection{Tables de contingence} 
+Quand on croise deux variables qualitatives on obtient une table de contingence, par exemple :
+\begin{lstlisting}[language=html]
+ genet <- read.table("http://pbil.univ-lyon1.fr/R/donnees/qualitatif.txt",header=TRUE)
+ (tc <- table(genet[,1:2]))
+        yeux
+cheveux  Bleu Marron Noisette Vert
+  Blond    94      7       10   16
+  Marron   84    119       54   29
+  Noir     20     68       15    5
+  Roux     17     26       14   14
+\end{lstlisting}
+On peut utiliser la fonction \textit{balloonplot()} pour faire une représentation directe des données :
+\begin{lstlisting}[language=html]
+library(gdata)
+library(gtools)
+library(gplots)
+balloonplot(tc, dotsize=10)
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.5]{ilu/lob32.png}\end{center}\end{figure}
+\subsubsection{Tables de contingence : hypothèse d'indépendance} 
+Sous l'hypothèse d'indépendance entre les deux variables, on déduit facilement les effectifs attendus :
+$$\begin{aligned}
+P(A\cap B) & = P(A)P(B) \\
+ & = \frac{n_{A}}{n} \times \frac{n_{B}}{n}
+\end{aligned}$$
+Et ainsi : 
+$$n_{A\cap B} = \frac{n_{A}\times n_{B}}{n}$$
+Graphiquement :
+\begin{lstlisting}[language=html]
+par(mfrow = c(1,2))
+balloonplot(tc, dotsize=8, main = "Observé")
+balloonplot(as.table(chisq.test(tc)$expected), dotsize=8, main = "Attendu")
+par(mfrow=c(1,1))
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.5]{ilu/lob33.png}\end{center}\end{figure}
+Les représentations directes ne permettent pas de faire facilement des comparaisons. Pour visualiser les écarts par rapport à l'hypothèse d'indépendance, on peut utiliser la fonction \textit{mosaicplot()} :
+\begin{lstlisting}[language=html]
+mosaicplot(tc, shade = TRUE, las =1,
+           main = paste("Yeux et cheveux de", nrow(genet),"étudiants"))
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.5]{ilu/lob34.png}\end{center}\end{figure}
+\subsection{Croisement numérique qualitatif}
+Nous avons vu deux façon de représenter la distribution d'une variable numérique en fonction d'une variable qualitative :
+\begin{enumerate}
+\item Avec des estimateurs de la densité locale.
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.5]{ilu/lob15.png}\end{center}\end{figure}
+\item Avec des boîtes à moustache.
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.5]{ilu/lob23.png}\end{center}\end{figure}
+\end{enumerate}
+A noter l'option \textit{varwidth = TRUE} qui permet de conserver graphiquement l'information sur les effectifs des groupes dans le cas d'une représentation avec des boîtes à moustaches.
+\begin{lstlisting}[language=html]
+boxplot(deug$tab$Algebra~deug$result, at = c(1, 5, 6, 2, 3, 4),
+        col = grey(0.8), xlab = "Resultat final", ylab = "Note en Algebre",
+        varwidth = TRUE,
+        main = paste("Notes de", nrow(deug$tab),"étudiants"))
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.5]{ilu/lob35.png}\end{center}\end{figure}
+\subsection{Croisement numérique numérique}
+\subsubsection{Les nuages de points}
+On utilise classiquement un nuage de points, où chaque point représente un individu. Exemple :
+\begin{lstlisting}[language=html]
+plot(x = deug$tab$Proba, y = deug$tab$Algebra, pch = 20,
+     main = paste("Notes de", nrow(deug$tab),"étudiants"),
+     xlab = "Note en Probabilité", ylab = "Note en Algèbre", las = 1)
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.5]{ilu/lob36.png}\end{center}\end{figure}
+\subsubsection{Le problème de la superposition des points}
+La principale difficulté des nuages de points vient de la gestion de la superposition des points. Nous allons illustrer ce point avec un exemple simple : la taille et la longueur du majeur de 3000 criminels (les données du test t de Student).
+\paragraph{Un nuage de points trompeur}
+\begin{lstlisting}[language=html]
+data(crimtab)
+crimtab.dft <- as.data.frame(crimtab)
+str(crimtab.dft)
+'data.frame': 924 obs. of  3 variables:
+ $ Var1: Factor w/ 42 levels "9.4","9.5","9.6",..: 1 2 3 4 5 6 7 8 9 10 ...
+ $ Var2: Factor w/ 22 levels "142.24","144.78",..: 1 1 1 1 1 1 1 1 1 1 ...
+ $ Freq: int  0 0 0 0 0 0 1 0 0 0 ...
+head(crimtab.dft,3)
+  Var1   Var2 Freq
+1  9.4 142.24    0
+2  9.5 142.24    0
+3  9.6 142.24    0
+
+expand.dft <- function(x, na.strings = "NA", as.is = FALSE, dec = ".") {
+   DF <- sapply(1:nrow(x), function(i) x[rep(i, each = x$Freq[i]), ],
+                simplify = FALSE)
+   DF <- subset(do.call("rbind", DF), select = -Freq)
+   for (i in 1:ncol(DF))
+   {
+     DF[[i]] <- type.convert(as.character(DF[[i]]),
+                             na.strings = na.strings,
+                             as.is = as.is, dec = dec)
+   }
+   DF
+ }
+ crimtab.raw <- expand.dft(crimtab.dft)
+ x <- crimtab.raw[,1]
+ y <- crimtab.raw[,2]
+ plot(x, y, las = 1, main = "3000 criminels", ylab = "Taille [cm]",
+      xlab = "Majeur gauche [cm]")
+\end{lstlisting}
+
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.5]{ilu/lob37.png}\end{center}\end{figure}
+\paragraph{Tournesol (sunflower)}
+Premier palliatif possible : utiliser la représentation donnée par \textit{sunflowerplot()} : en cas de superposition on trace autant de rayons qu'il y a de superpositions, d'où le nom de tournesol.
+\begin{lstlisting}[language=html]
+sunflowerplot(crimtab.raw, las = 1, main = "3000 criminels",
+ylab = "Taille [cm]", xlab = "Majeur gauche [cm]", size = 1/20)
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.5]{ilu/lob38.png}\end{center}\end{figure}
+Deuxième palliatif possible : utiliser des symboles dont la surface est proportionnelle au nombre de points superposés.
+\begin{lstlisting}[language=html]
+xyg <- expand.grid(as.numeric(rownames(crimtab)),
+                   as.numeric(colnames(crimtab)))
+symbols(x = xyg[,1], y = xyg[,2], circles = sqrt(as.vector(crimtab)),
+        inches = 0.2, bg = rgb(0.5,0.5,0.5,0.5), xlab = "x", ylab ="y", las=1,
+        main = "Avec des symboles de taille variable")
+\end{lstlisting}
+
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.5]{ilu/lob39.png}\end{center}\end{figure}
+
+Troisième palliatif possible : bruiter les données ' C'est une solution qui semble paradoxale à première vue puisque l'on dégrade l'information mais qui donne souvent de bons résultats du point de vue de la perception globale de l'information.
+\begin{lstlisting}[language=html]
+par(mfrow = c(1,2))
+plot(x, y, main = "Sans bruitage")
+plot(jitter(x), jitter(y), main = "Avec bruitage")
+\end{lstlisting}
+
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.5]{ilu/lob40.png}\end{center}\end{figure}
+Quatrième palliatif possible : utiliser un estimateur de la densité locale des points (comme density() mais en 2 dimensions). On peut utiliser la fonction kde2d() de la bibliothèque MASS.
+\begin{lstlisting}[language=html]
+edl <- kde2d(x,y, n = 100)
+image(edl, main = "Avec un estimateur de la densite locale",
+      xlab = "x", ylab = "y")
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.5]{ilu/lob41.png}\end{center}\end{figure}
+\begin{lstlisting}[language=html]
+contour(edl, main = "Avec un estimateur de la densite locale", xlab = "x",
+ylab = "y")
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.5]{ilu/lob42.png}\end{center}\end{figure}
+\begin{lstlisting}[language=html]
+filled.contour(edl, main = "Avec un estimateur de la densite locale",
+xlab = "x", ylab = "y", color = terrain.colors)
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.5]{ilu/lob43.png}\end{center}\end{figure}
+\begin{lstlisting}[language=html]
+filled.contour(edl, main = "Avec un estimateur de la densite locale",
+xlab = "x", ylab = "y", color = heat.colors)
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.5]{ilu/lob44.png}\end{center}\end{figure}
+\begin{lstlisting}[language=html]
+filled.contour(edl, main = "Avec un estimateur de la densite locale",
+xlab = "x", ylab = "y", color = topo.colors)
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.5]{ilu/lob45.png}\end{center}\end{figure}
+\begin{lstlisting}[language=html]
+filled.contour(edl, main = "Avec un estimateur de la densite locale",
+xlab = "x", ylab = "y", color = cm.colors)
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.5]{ilu/lob46.png}\end{center}\end{figure}
+\begin{lstlisting}[language=html]
+smoothScatter(x,y)
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.5]{ilu/lob47.png}\end{center}\end{figure}
+
+\begin{lstlisting}[language=html]
+persp(edl, xlab = "x", ylab = "y", zlab = "density", theta = 45, phi = 20,
+main = "Avec un estimateur de la densite locale")
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.5]{ilu/lob48.png}\end{center}\end{figure}
+\textbf{Note : } Les valeurs de $\theta$ et $\varphi$ permettent d'orienter le graphique.
+\begin{lstlisting}[language=html]
+library(rgl)
+persp3d(edl, xlab = "x", ylab = "y", zlab = "density", theta = 45, phi = 20,
+      main = "Avec un estimateur de la densite locale")
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.5]{ilu/lob49.png}\end{center}\end{figure}
+\section{Courbes}
+
+\subsection{Tracé d'une fonction}
+On peut utiliser \textit{curve()} pour représenter des fonctions :
+\begin{lstlisting}[language=html]
+f <- function(x) { sin(x) + sin(0.9*x) }
+curve(f, from = 0, to = 50*pi, n = 1000, main = "Battements", ylim = c(-3,3), col = "purple")
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.5]{ilu/lob50.png}\end{center}\end{figure}
+\subsection{Série "Temporelles"}
+On peut utiliser des courbes pour représenter l'évolution d'une variable au cours du temps (où d'une autre variable) :
+\begin{lstlisting}[language=html]
+data(sunspots)
+plot(sunspots, main = "Évolution de la densité de taches solaires",
+     xlab = "Temps", ylab = "Taches solaires")
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.5]{ilu/lob51.png}\end{center}\end{figure}
+La représentation graphique précédente n'est pas bonne. Il faut que les courbes suivent au plus près la direction de la première ou de la deuxième bissectrice.
+\begin{lstlisting}[language=html]
+n <- 4
+wd <- seq( start(sunspots)[1], end(sunspots)[1], length = n+1)
+opar <- par(no.readonly = TRUE)
+par(mfrow = c(n,1), mar = c(3,3,1,1))
+for( i in 1:(length(wd)-1))
+{
+  plot( window(sunspots, wd[i], wd[i+1]), ylab = "", xlab = "", las = 1,
+        ylim = c(0,max(sunspots)))
+}
+par(mfrow=c(1,1))
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.5]{ilu/lob52.png}\end{center}\end{figure}
+On voit maintenant que les montées et descentes ne sont pas symétriques. On peut aussi lisser le signal avec divers outils, par exemple :
+\begin{lstlisting}[language=html]
+opar <- par(no.readonly = TRUE)
+par(mfrow = c(n,1), mar = c(3,3,1,1))
+for( i in 1:(length(wd)-1))
+{
+  plot( 
+    window(sunspots, wd[i], wd[i+1]), 
+    ylab = "", xlab = "", las = 1, col ="darkgrey",lwd = 0.8,
+    ylim = c(0,max(sunspots)))
+  
+    lines(lowess(window(sunspots, wd[i], wd[i+1]), f = 0.025), 
+    lwd = 1.3,col="red")
+}
+par(mfrow=c(1,1))
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.5]{ilu/lob53.png}\end{center}\end{figure}
+
+\section{Les paramètres graphiques}
+\subsection{Sauvegarde des paramètres graphiques}
+Les options des graphiques sont consultables et contrôlables avec la fonction \textit{par()} que l'on utilise typiquement de la façon suivante :
+\begin{lstlisting}[language=html]
+# On sauvegarde les options graphiques modifiables :
+old.par <- par(no.readonly = TRUE)
+# ...
+# ... plein de modifications des options graphiques,
+# ... par exemple par(mfrow = c(1, 2))
+# ...
+# On restaure les options graphiques précédentes :
+par(old.par)
+\end{lstlisting}
+\subsection{mfrow}
+Le paramètre \textit{mfrow} permet de disposer simultanément plusieurs graphiques.
+\begin{lstlisting}[language=html]
+par(mfrow = c(2,3))
+for(i in 1:6) plot(0, main = i)
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.5]{ilu/lob54.png}\end{center}\end{figure}
+\subsection{col*}
+Les paramètres \textit{col*} contrôlent la couleur des éléments du graphique.
+\begin{lstlisting}[language=html]
+par(mfrow = c(2,3))
+par(col = "red")
+plot(0, main = "col = \"red\"", sub = "sous-titre")
+par(col = "black", col.axis = "red")
+plot(0, main = "col.axis = \"red\"", sub = "sous-titre")
+par(col.axis = "black", col.lab = "red")
+plot(0, main = "col.lab = \"red\"", sub = "sous-titre")
+par(col.lab = "black", col.main = "red")
+plot(0, main = "col.main = \"red\"", sub = "sous-titre")
+par(col.main = "black", col.sub = "red")
+plot(0, main = "col.sub = \"red\"", sub = "sous-titre")
+par(col.sub = "black", fg = "red")
+plot(0, main = "fg = \"red\"", sub = "sous-titre")
+par(mfrow=c(1,1))
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.5]{ilu/lob55.png}\end{center}\end{figure}
+\subsection{mar}
+Ce paramètre contrôle les marges, exprimées en lignes de texte, du graphique qui par défaut sont :
+\begin{enumerate}
+  \item En bas : 5 lignes : une ligne pour les graduations (ticks), une ligne pour les étiquettes des graduations, une ligne vide, une ligne de légende, une ligne vide.
+  \item À gauche 4 lignes : une ligne pour les graduations, une ligne pour les labels des graduations, une ligne vide, une ligne de légende.
+  \item En haut : 4 lignes pour le titre.
+  \item À droite : 2 lignes vides.
+\end{enumerate}
+plus d'une bordure vide d'un dixième de ligne tout autour. Graphiquement :
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.5]{ilu/lob56.png}\end{center}\end{figure}
+Pour ajouter une ligne à la marge de gauche, on utiliserait :
+\begin{lstlisting}[language=html]
+par(mfrow=c(1,1))
+par(mar = par("mar") + c(0, 1, 0, 0))
+plot(0, xlab = "xlab", ylab = "Une légende un peu bavarde\nsur deux lignes",
+     main = "main")
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.5]{ilu/lob57.png}\end{center}\end{figure}
+\subsection{usr}
+Ce paramètre donne les coordonnées extrêmes de la région utile du graphique, par exemple :
+\begin{lstlisting}[language=html]
+plot(1:10,main = par("usr"))
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.5]{ilu/lob58.png}\end{center}\end{figure}
+Ces paramètres contrôlent la taille relative des chaînes de caractères, notez que les marges s'adaptent automatiquement à la taille des caractères :
+\begin{lstlisting}[language=html]
+par(mfrow=c(2,2))
+for(cex in seq(from = 0.8, to = 1.2, length = 4))
+{
+  par(cex=cex)
+  plot(0, main = paste("cex =", round(cex,1)))
+}
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.5]{ilu/lob59.png}\end{center}\end{figure}
+\subsection{bg}
+La couleur de fond du graphique, attention les fonctions graphiques de haut niveau comme plot() ou points() ont un argument de même nom pour donner la couleur de remplissage des points :
+\begin{lstlisting}[language=html]
+par(mfrow=c(1,1))
+par(bg = "lightblue")
+plot(rnorm(100),rnorm(100), pch = 21, bg = "yellow")
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.5]{ilu/lob60.png}\end{center}\end{figure}
+\subsubsection{las}
+Le paramètre las contrôle le style des étiquettes des axes. A noter l'option \textit{las = 1} qui permet de lire tous les étiquettes facilement car elles sont alors horizontales.
+\begin{lstlisting}[language=html]
+par(bg = "white")
+par(mfrow=c(2,2))
+for(i in 0:3) plot(0,las=i,main=paste("las =",i), font.axis = 2,
+                   col.axis = "red")
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.5]{ilu/lob61.png}\end{center}\end{figure}
+
+\subsection{xpd}
+Le paramètre xpd permet de déborder de la région utile du graphique, par exemple :
+
+\begin{lstlisting}[language=html]
+par(mfrow=c(1,1))
+plot(0)
+abline(h=0)
+par(xpd=NA)
+abline(h=0.5,col="red",lwd=2)
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.5]{ilu/lob62.png}\end{center}\end{figure}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\chapter{Source inconnue - Les graphiques}
+\textbf{R} propose de nombreux outils graphiques pour l'analyse et la visualisation des données. On
+peut avoir un aperçu des possibilités graphiques de \textbf{R} grâce à la commande \textit{demo(graphics)}.\newline
+Le tableau des fonctions graphiques haut niveaux fournit une liste non exhaustive des fonctions graphiques disponibles sous \textbf{R}.\newline
+Par l'intermédiaire d'exemple, nous allons illustrer l'utilisation de certaines de ces fonctions.
+\section{Gestion des fenêtres graphiques}
+Lorsqu'une fonction graphique est exécutée,\textbf{R} ouvrira une fenêtre graphique et y affichera le graphe. On peut spécifier le dispositif de gestion des fenêtres. La liste des dispositifs graphiques disponibles dépend du système d'exploitation.\newline
+\\
+Sous Mac, pour créer une nouvelle fenêtre graphique, on utilise la commande \textit{get("quartz")()}.\newline
+Sous PC, pour créer une nouvelle fenêtre graphique, on utilise la commande \textit{X11()}.\newline
+Tant sur Mac que sur PC, pour sélectionner une des fenêtres, on utilise la commande \textit{dev.set()}. Par exemple, pour sélectionner la fenêtre graphique numéro $i$, on tape la commande \textit{dev.set($i$)}. Si on souhaite connaître le numéro de la fenêtre active, on tape la commande \textit{dev.cur()}.
+\section{Partitionner un graphique}
+\textbf{R}propose deux manières de partitionner les graphiques.
+\begin{enumerate}
+  \item La commande \textit{split.screen(c(1, 2))} va diviser le graphique en deux parties qu'on sélectionnera avec les commandes sreen(1) et screen(2).
+  \begin{lstlisting}[language=html]
+  split.screen(c(1,2))
+  screen(1)
+  plot(1,col="red")
+  screen(2)
+  plot(2,col="blue")
+  \end{lstlisting}
+  \begin{figure}[H]\begin{center}\includegraphics[scale=0.5]{ilu/inc1.png}\end{center}\end{figure}
+  \item La fonction \textit{layout()} partitionne le graphique actif en plusieurs parties sur lesquelles sont affichés les graphes successivement. Cette fonction a pour argument une matrice de valeurs entières qui indiquent le numéro des sous-fenêtres. Pour visualiser la partition crée, on utilise la fonction \textit{layout.show} avec, en argument, le nombre de sousfenêtres. Par exemple, si on veut diviser la fenêtre en quatre parties égales, on tapera la commande suivante \textit{layout(matrix(1:4, 2, 2))}; et pour visualiser la partition crée, on utilisera la commande \textit{layout.show(4)}.
+
+  \begin{lstlisting}[language=html]
+    layout(matrix(1:4, 2, 2))
+    layout.show(4)
+  \end{lstlisting}
+  \begin{figure}[H]\begin{center}\includegraphics[scale=0.5]{ilu/inc2.png}\end{center}\end{figure}
+
+  \begin{lstlisting}[language=html]
+    layout(matrix(1:6, 3, 2))
+    layout.show(6)
+  \end{lstlisting}
+  \begin{figure}[H]\begin{center}\includegraphics[scale=0.5]{ilu/inc3.png}\end{center}\end{figure}
+
+  \begin{lstlisting}[language=html]
+    mat = matrix(c(1:3, 3), 2, 2)
+    layout(mat)
+    layout.show(3)
+  \end{lstlisting}
+  \begin{figure}[H]\begin{center}\includegraphics[scale=0.5]{ilu/inc4.png}\end{center}\end{figure}
+\end{enumerate}
+\section{Les fonctions graphiques principales : High-level plotting commands}
+\begin{description}
+\item[plot(x)] Graphe des valeurs de x (sur l'axe des y) ordonnées sur l'axe des x
+\item[plot(x, y)] Graphe bivarié de x (sur l'axe des x) et y (sur l'axe des y)
+\item[sunflowerplot(x, y)] Idem que plot() mais les points superposées sont dessinées sous forme de fleurs dont le nombre de pétales représente le nombre de points
+\item[pie(x)] Graphe en \textit{camembert}
+\item[boxplot(x)] Graphe \textit{boites à moustaches}
+\item[coplot(x$\sim$y | z)] Graphe bivarié de x et y pour chaque valeur ou intervalle de valeurs de z
+\item[interaction.plot(f1, f2, y)] Si $f1$ et $f2$ sont des facteurs, graphe des moyennes de y (sur l'axe des y) en fonction des valeurs de $f1$ (sur l'axe des x) et de $f2$ (différentes courbes) ; l'option \textit{fun} permet de choisir la statistique résumée de y (par défaut \textit{fun = mean})
+\item[matplot(x,y)] Graphe bivarié de la 1ère colonne de x contre la 1$^{\textrm{ère}}$ de y, la 2$^{\textrm{ème}}$ de x contre la 2$^{\textrm{ème}}$ de y, etc.
+\item[fourfoldplot(x)] Visualise, avec des quarts de cercles, l'association entre deux variables dichotomiques pour différentes populations (x doit être un \textit{array} avec \textit{dim = c(2, 2, k)} ou une matrice avec \textit{dim = c(2, 2)} si $k = 1$
+\item[assocplot(x)] Graphe de Cohen?Friendly indiquant les déviations de l'hypothèse d'indépendance des lignes et des colonnes dans un tableau de contingence à deux dimensions
+\item[mosaicplot(x)] Si x est une matrice ou un data.frame, graphe en mosaïque des résidus d'une régression log-linéaire sur une table de contingence
+\item[Pairs(x)] Dessine tous les graphes bivariés entre les colonnes de x
+\item[hist(x)] Histogramme des fréquences de x
+\item[barplot(x)] Histogramme des valeurs de x
+\item[qqnorm(x)] Quantiles de x en fonction des valeurs attendues selon une loi normale
+\item[qqplot(x, y)] Quantiles de y en fonction des quantiles de x
+\item[contour(x, y, z)] Courbes de niveau (les données sont interpolées pour tracer les courbes), x et y doivent être des vecteurs et z une matrice telle que \textit{dim(z)=c(length(x), length(y))} (x et y peuvent être omis)
+\item[filled.contour(x, y, z)] Idem mais les aires entre les contours sont colorées, et une légende des couleurs est également dessinée
+\item[image(x, y, z)] Idem mais en couleur (les données sont tracées)
+\item[persp(x, y, z)] Idem mais en 3-D (les données sont tracées)
+\item[stars(x)] si x est une matrice ou un data.frame, dessine un graphe en segments ou en étoile où chaque ligne de x est représentée par une étoile et les colonnes par les longueurs des branches
+\item[symbols(x, y, \dots)] dessine aux coordonnées données par x et y des symboles (cercles, carrés, rectangles, étoiles, thermomètres ou "boxplots") dont les tailles, couleurs, \dots sont spécifiées par des arguments supplémentaires
+\item[termplot(mod.obj)] graphe des effets (partiels) d'un modèle de régression (mod.obj)
+\end{description}
+À chaque fonction graphique principale sont associés des paramètres consultables via \textit{l'aide en ligne} de .\textbf{R} Certains de ces paramètres sont identiques pour plusieurs fonctions graphiques dont voici les principales (les valeurs par défaut sont également présentées) :
+\begin{description}
+\item[add = FALSE] si TRUE superpose le graphe au graphe existant (s'il y en a un)
+\item[axes = TRUE] si FALSE ne trace pas les axes ni le cadre
+\item[type="p"] le type de graphe qui sera dessiné, \textit{"p"} : points, \textit{"l"} : lignes, \textit{"b"} : points connectés par des lignes, \textit{"o"} : idem mais les lignes recouvrent les points, \textit{"h"} : lignes verticales, \textit{"s"} : escaliers, les données étant représentées par le sommet des lignes verticales, \textit{"S"} : idem mais les données étant représentées par le bas des lignes verticales
+\item[xlim=, ylim=] fixe les limites inférieures et supérieures des axes
+\item[xlab=, ylab=] annotations des axes, doivent être des variables de mode caractère
+\item[main="texte"] titre principal, doit être une variable de mode caractère
+\item[sub="texte"]sous-titre (écrit dans une police plus petite)
+\end{description}
+\section{Les fonctions graphiques secondaires': Low-level plotting commands}
+\textbf{R} propose un ensemble de fonctions graphiques dites «'secondaires'» qui ont une action sur un graphe déjà existant. Nous présentons dans le tableau suivant. les fonctions graphiques secondaires principales.
+\begin{description}
+\item[points(x, y)] Ajoute des points (l'option \textit{type=} peut être utilisée)
+\item[lines(x, y)] Idem mais avec des lignes
+\item[text(x, y, labels, \dots)] Ajoute le texte spécifié par labels au coordonnées (x,y). Un usage typique sera: \textit{plot(x, y, type="n"); text(x, y, names)}
+\item[mtext(text, side=3, line=0, \dots)] Ajoute le texte spécifié par text dans la marge spécifiée par \textit{side} (cf. \textit{axis()} plus bas) ; line spécifie la ligne à partir du cadre de traçage
+\item[segments(x0, y0, x1, y1)] Trace des lignes des points \textit{(x0,y0)} aux points \textit{(x1,y1)}
+\item[arrows(x0, y0, x1, y1, angle=30, code=2)] Idem avec des flèches aux points \textit{(x0, y0)} si \textit{code=2}, aux points \textit{(x1,y1)} si \textit{code=1}, ou aux deux si \textit{code=3}; angle contrôle l'angle de la pointe par rapport à l'axe
+\item[abline(a,b)] Trace une ligne de pente \textit{b} et ordonnée à l'origine \textit{a}
+\item[abline(h=y)] Trace une ligne horizontale sur l'ordonnée \textit{y}
+\item[abline(v=x)] Trace une ligne verticale sur l'abscisse \textit{x}
+\item[abline(lm.obj)] Trace la droite de régression donnée par \textit{lm.obj}
+\item[rect(x1, y1, x2, y2)] Trace un rectangle délimité à gauche par \textit{x1}, à droite par \textit{x2}, en bas par \textit{y1} et en haut par \textit{y2}
+\item[polygon(x, y)] Trace un polygone reliant les points dont les coordonnées sont données par \textit{x} et \textit{y}
+\item[legend(x, y, legend)] Ajoute la légende au point de coordonnées \textit{(x,y)} avec les symboles données par \textit{legend}
+\item[title()] Ajoute un titre et optionnellement un sous-titre
+\item[axis(side, vect)] Ajoute un axe en bas \textit{(side=1)}, à gauche
+\textit{(2)}, en haut \textit{(3)} ou à droite \textit{(4)} ; \textit{vect} (optionnel) indique les abscisses (ou ordonnées) où les graduations seront tracées
+\item[rug(x)] Dessine les données \textit{x} sur l'axe des \textit{x} sous forme de petits traits verticaux
+\item[locator(n, type="n", \dots)] retourne les coordonnées (x y) après que l'utilisateur ait cliqué $n$ fois sur le graphe avec la souris ; également trace des symboles (type=\textit{"p"}) ou des lignes (type=\textit{"l"}) en fonction de paramètres graphiques optionnels (\dots) ; par défaut ne trace rien (type=\textit{"n"})
+\end{description}
+\section{Les paramètres graphiques}
+La présentation des graphiques peut-être améliorer grâce aux paramètres graphiques. Il y a 68 paramètres graphiques. La liste détaillé de ces paramètres peut-être obtenu grâce à la
+commande \textit{?par}. Voici une liste de paramètres graphiques couramment utilisés.
+\begin{description}
+\item[adj] Contrôle la justification du texte ($0$ à gauche, $0.5$ centré, $1$ à droite)
+\item[bg] Spécifie la couleur de l'arrière-plan (ex : \textit{bg="red", bg="blue"}, \dots). La liste des 657 couleurs disponibles est affichée avec \textit{colors()}.
+\item[bty] Contrôle comment le cadre est tracé, valeurs permises : \textit{"o", "l", "7", "c","u"} ou \textit{"]"} (le cadre ressemblant au caractère correspondant) ; bty=\textit{"n"} supprime le cadre
+\item[cex] Une valeur qui contrôle la taille des caractères et des symboles par rapport au défaut ; les paramètres suivants ont le même contrôle pour les nombres sur les axes, \textit{cex.axis}, les annotations des axes, \textit{cex.lab}, le titre, \textit{cex.main}, le sous-titre, \textit{cex.sub}
+\item[col] Contrôle la couleur des symboles ; comme pour cex il y a : \textit{col.axis, col.lab, col.main, col.sub}
+\item[font] Un entier qui contrôle le style du texte ($1$ : normal, $2$ : italique, $3$ : gras, $4$ : gras italique) ; comme pour \textit{cex} il y a : \textit{font.axis, font.lab, font.main, font.sub}
+\item[las] Un entier qui contrôle comment sont disposées les annotations des axes ($0$ : parallèles aux axes, $1$ : horizontales, $2$ : perpendiculaires aux axes, $3$ : verticales)
+\item[lty] Contrôle le type de ligne tracée, peut être un entier ($1$ : continue, $2$ : tirets, $3$ : points, $4$ : points et tirets alternés, $5$ : tirets longs, $6$ : tirets courts et longs alternés), ou ensemble de $8$ caractères maximum (entre \textit{"0"} et \textit{"9"}) qui spécifie alternativement la longueur, en points ou pixels, des éléments tracés et des blancs, par exemple \textit{lty="44"} aura le même effet que \textit{lty=2}
+\item[lwd] Une valeur numérique qui contrôle la largeur des lignes
+\item[mar] Un vecteur de 4 valeurs numériques qui contrôle l'espace entre les axes et
+le bord de la figure de la forme c(bas, gauche, haut, droit), les valeurs par défaut sont \textit{c(5.1, 4.1, 4.1, 2.1)}
+\item[mfcol] Un vecteur de forme \textit{c(nr,nc)} qui partitionne la fenêtre graphique en une matrice de \textit{nr} lignes et \textit{nc} colonnes, les graphes sont ensuite dessinés en colonne
+\item[mfrow] Idem mais les graphes sont ensuite dessinés en ligne
+\item[pch] Contrôle le type de symbole, soit un entier entre $1$ et $25$, soit n'importe quel caractère entre guillemets
+\item[ps] Un entier qui contrôle la taille en points du texte et des symboles
+\item[pty] Un caractère qui spécifie la forme du graphe, \textit{"s"} : carrée, \textit{"m"} : maximale
+\item[tck] Une valeur qui spécifie la longueur des graduations sur les axes en fraction du plus petit de la largeur ou de la hauteur du graphe ; si \textit{tck=1} une grille est tracée
+\item[tcl] Une valeur qui spécifie la longueur des graduations sur les axes en fraction de la hauteur d'une ligne de texte (défaut \textit{tcl=-0.5})
+\item[xaxt] si \textit{xaxt="n"} l'axe des x est défini mais pas tracé (utile avec \textit{axis(side=1, \dots)})
+\item[yaxt] si \textit{yaxt="n"} l'axe des y est défini mais pas tracé (utile avec \textit{axis(side=2,\dots)})
+\end{description}
+Nous allons illustrer le potentiel graphique de à travers les fonctions \textit{plot()}, \textit{pie()}, \textit{boxplot(x,y)} et \textit{hist()}
+\section{Exemple d'utilisation de fonctions graphiques de R}
+\subsection{Utilisation de la fonction plot()}
+\textbf{Initialisation}
+\begin{lstlisting}[language=html]
+C1 = matrix(rnorm(200, sd = 0.5), ncol = 2)
+C2 = matrix(rnorm(200, mean = 1, sd = 0.5), ncol = 2)
+mat = rbind(C1, C2)
+\end{lstlisting}
+\textbf{Graphiques}
+\begin{lstlisting}[language=html]
+plot(C1)
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.4]{ilu/inc5.png}\end{center}\end{figure}
+\begin{lstlisting}[language=html]
+plot(C1, col = "blue")
+points(C2, col = "red")
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.4]{ilu/inc6.png}\end{center}\end{figure}
+\begin{lstlisting}[language=html]
+plot(C1, col = "blue",
+     xlim = range(mat[ ,1]),
+     ylim = range(mat[ ,2]),
+     main = "représentation d'un nuage de points",
+     xlab = "X1", ylab = "X2"
+)
+points(C2, col = "red")
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.4]{ilu/inc7.png}\end{center}\end{figure}
+\begin{lstlisting}[language=html]
+plot(1,
+     xlim = range(mat[ ,1]),
+     ylim = range(mat[ , 2]),
+     main = "représentation d'un nuage de points",
+     xlab = "X1", ylab = "X2",
+     bty = "l", tcl = -.25
+)
+rect(-3, -3, 3, 3, col = "cornsilk")
+points(C1, col = "blue", pch = 22, bg = "red")
+points(C2, col = "red", pch = 25, bg = "yellow")
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.4]{ilu/inc8.png}\end{center}\end{figure}
+
+Commentons les commandes qui ont permis de générer les graphiques 1.1, 1.2, 1.3 et 1.4.\newline
+Le graphiqe 1.1 présente le graphe de base de la fonction \textit{plot()}.
+\textit{C1} est une matrice composée de deux vecteurs. La fonction \textit{plot()} trace le graphe bivarié de la première colonne de \textit{C1} sur la deuxième colonne de \textit{C1}. On aurait également pu taper la commande suivante : \textit{plot(C1[ ,1], C1[ ,2])}.\newline
+On peut spécifier la couleur des points grâce à l'option \textit{col}. La liste des couleurs disponibles (657 couleurs) est fournit par la fonction \textit{colors()}. Le graphique 1.2 présente, en plus de l'utilisation de l'option col, l'utilisation de la fonction \textit{points()}. Cette fonction permet de rajouter des points à un graphique existant. Un problème subsiste : La longueur des axes ne s'adapte pas au nuage de points complet ; mais juste au nuage de points du premier plot.\newline
+Le graphique 1.3 propose une réponse à ce problème grâce aux options \textit{xlim} et \textit{ylim}. Notons que la fonction \textit{range()} retourne le minimum et le maximum des arguments rentrés en paramètre. On peut par ailleurs donner des noms aux axes grâce aux options \textit{xlab} et \textit{ylab} et un titre au graphique grâce à l'option \textit{main}.\newline
+Comme l'illustre le graphique 1.4, La fonction \textit{plot()}, grâce à sa flexibilité, fournit un outil au pouvoir esthétique performant. Nous avons, dans un premier temps, définit l'architecture du graphique. L'option \textit{bty} contrôle la forme du cadre tandis que l'option \textit{tcl} spécifie la longueur des graduations. La fonction \textit{rect()} trace un rectangle délimité par les quatre premiers arguments rentrés en paramètres. Une fois l'architecture du graphique achevé, il ne reste plus qu'à placer les points via la fonction \textit{points()}. Notons l'utilisation des options \textit{pch} et \textit{bg} qui spécifie respectivement la forme et la couleur de fond des points.
+\subsection{Utilisation de la fonction plot() dans le cadre d'une data.frame}
+\begin{lstlisting}[language=html]
+plot(iris[ ,1:4],
+     bg = c("red", "green3","blue")[iris[ ,5]],
+     pch = c(21, 25, 24)[iris[ ,5]],
+     main = "Iris de Fisher",
+     labels =
+       c("Longueur\nSepale",
+         "Largeur\nSepale",
+         "Longueur\nPetale",
+         "Largeur\nPetale"
+       )
+)
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.4]{ilu/inc9.png}\end{center}\end{figure}
+Commentons les commandes qui ont permis de générer le graphique 2. Les données d'\textit{Iris} sont stockées dans une data.frame. Dans le cadre d'une data.frame, la fonction \textit{plot()} ne se contente pas de tracer le graphe bivarié du premier élément de la data.frame sur le deuxième mais trace tous les graphes bivariés. On peut obtenir le même résultat sur une matrice si on utilise la fonction \textit{pairs()}.
+\begin{lstlisting}[language=html]
+matrice_iris <- iris
+pairs(matrice_iris[ ,1:4],
+      bg = c("red", "green3", "blue")[iris[ ,5]],
+      pch = c(21, 25, 24)[iris[ ,5]],
+      main = "Iris de Fisher - Matrice",
+      labels = c("Longueur\nSepale",
+                 "Largeur\nSepale",
+                 "Longueur\nPetale",
+                 "Largeur\nPetale")
+)
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.4]{ilu/inc10.png}\end{center}\end{figure}
+
+\subsection{Utilisations de la fonction sunflowerplot() : Un exemple fleuri}
+Une difficulté des nuages de points vient de la superposition des points. Une manière sympathique d'appréhender ce problème est proposée par la fonction \textit{sunflowerplot()}.
+\begin{lstlisting}[language=html]
+n = 500
+x = rpois(n, lambda = 2)
+y = rpois(n , lambda = 2)
+layout(t(matrix(1:2)))
+plot(x, y, pch = 19, main = "un nuage de point trompeur")
+sunflowerplot(x, y, pch = 19, main = "un nuage de points moins trompeur")
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.4]{ilu/inc11.png}\end{center}\end{figure}
+Commentons les commandes qui ont permis de générer le graphique 3. Le nombre de pétale indique le nombre de superposition. Notons que la fonction \textit{rpois()} génère des données aléatoires suivant une loi de poisson.
+
+\subsection{Utilisation de la fonction hist()}
+Intéressons nous à la taille de 237 étudiants de DEUG MASS disponibles dans le jeu de données survey du packages MASS. Nous reprenons ici l'analyse de J.R Lobry du tutorial  \textit{Programmation Statistique avec R - Graphique de base } (présenté plus haut).
+\begin{lstlisting}[language=html]
+library(MASS)
+data(survey)
+mat = matrix(c(1:2), 1, 2)
+layout(mat)
+hist(survey$Height, col = "yellow", border = "red",
+main = paste("Taille de", nrow(survey), " étudiants"),
+xlab = "Taille [cm]", ylab = "Effectifs", ylim = c(0, 50),
+labels = TRUE)
+hist(survey$Height, breaks = seq(from = 150, to = 200, length = 20),
+col = "green3", border = "sienna",
+main = paste("Taille de", nrow(survey), " étudiants"),
+xlab = "Taille [cm]", ylab = "densité",
+proba = TRUE, labels = TRUE, ylim = c(0, 0.06))
+x = seq(from = 150, to = 200, length = 100)
+lines(x, dnorm(x, mean(survey$Height, na.rm = TRUE),
+sd(survey$Height, na.rm = TRUE)
+)
+)
+mtext("Ajustement à une loi normale")
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.4]{ilu/inc12.png}\end{center}\end{figure}
+
+Commentons les commandes qui ont permis de générer le graphique 4. Une première étape consiste, via la fonction \textit{library()}, à charger le package MASS dans lequel est stocké le jeu de données à analyser (\textit{survey}). On souhaite illustrer les résultats de l'analyse par deux histogrammes présenter sur le même graphique ; on utilise donc la fonction \textit{layout()}.\newline
+Nous constatons au premier appel de la foncton hist des similarités avec la fonction plot dans l'utilisation des paramètres (\textit{col, xlab, ylab, main, \dots}). Certaines options sont spécifiques à la fonction \textit{hist} : L'option \textit{labels = TRUE} affiche les fréquences absolues au sommet de chaque barre. Comme l'illustre le deuxième histogramme, on peut préférer utiliser les fréquences relatives, (\textit{proba = TRUE}) ; ceci facilitant la superposition de distributions de référence (\textit{lines()}).\newline
+Le problème des histogrammes est que le choix du découpage en intervalles est assez arbitraire. On peut le contrôler avec le paramètre breaks comme l'illustre les commandes du deuxième histogramme.\newline
+Le choix du découpage en intervalle est un problème délicat qui risque de biaiser notre perception des données. L'histogramme est donc un outil délicat à manipuler. De nos jours, on préfère utiliser des estimateurs locaux de la densité des points et explorer différentes échelles ; ce qu'illustrent les graphiques 5.1, 5.2, 5.3 et 5.4.
+\begin{lstlisting}[language=html]
+adj = 0.5
+dst = density(survey$Height, na.rm = TRUE, adjust = adj)
+hist(survey$Height,
+     breaks = seq(from = 150, to = 200, length = 20),
+     col = "yellow", border = "red",
+     main = paste("Taille de", nrow(survey), " étudiants"),
+     xlab = "Taille [cm]", ylab = "densité",
+     proba = TRUE, labels = TRUE, ylim = c(0, 0.06))
+lines(dst$x, dst$y, lwd = 2)
+mtext(paste("adjust = ", adj))
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.4]{ilu/inc13.png}\end{center}\end{figure}
+\begin{lstlisting}[language=html]
+adj = 1
+dst = density(survey$Height, na.rm = TRUE, adjust = adj)
+hist(survey$Height,
+     breaks = seq(from = 150, to = 200, length = 20),
+     col = "yellow", border = "red",
+     main = paste("Taille de", nrow(survey), " étudiants"),
+     xlab = "Taille [cm]", ylab = "densité",
+     proba = TRUE, labels = TRUE, ylim = c(0, 0.06))
+lines(dst$x, dst$y, lwd = 2)
+mtext(paste("adjust = ", adj))
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.4]{ilu/inc14.png}\end{center}\end{figure}
+\begin{lstlisting}[language=html]
+adj = 1.5
+dst = density(survey$Height, na.rm = TRUE, adjust = adj)
+hist(survey$Height,
+breaks = seq(from = 150, to = 200, length = 20),
+col = "yellow",
+border = "red",
+main = paste("Taille de", nrow(survey), " étudiants"),
+xlab = "Taille [cm]", ylab = "densité",
+proba = TRUE, labels = TRUE, ylim = c(0, 0.06))
+lines(dst$x, dst$y, lwd = 2)
+mtext(paste("adjust = ", adj))
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.4]{ilu/inc15.png}\end{center}\end{figure}
+\begin{lstlisting}[language=html]
+ng = sum(survey$Sex == "Male", na.rm = TRUE)
+nf = sum(survey$Sex == "Female", na.rm = TRUE)
+n <- ng + nf
+dst = density(survey$Height, na.rm = TRUE)
+dstg = density(survey$Height[survey$Sex ==
+"Male"], na.rm = TRUE )
+dstf = density(survey$Height[survey$Sex ==
+"Female"], na.rm = TRUE )
+hist(survey$Height, col = "yellow",
+border = "red",
+main= paste("Taille de", nrow(survey),
+"étudiants" ),
+xlab = "Taille [cm]", proba = TRUE,
+ylim = c(0, max(dst$y))
+)
+lines(dstg$x, ng/n * dstg$y, lwd = 3,
+col = "darkblue" )
+lines(dstf$x, nf/n * dstf$y, lwd = 3, lty = 3,
+col = "darkred" )
+lines(dst$x, dst$y)
+legend(185, 0.04, legend = c("Filles", "Garcons"),
+col = c("darkred", "darkblue"),
+lty = c(3, 1), lwd = 2, pt.cex = 2 )
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.4]{ilu/inc16.png}\end{center}\end{figure}
+Commentons les commandes qui ont permis de générer les graphiques 5.1, 5.2, 5.3 et 5.4. Le
+paramètre important de la fonction \textit{density()} est le paramètre \textit{adjust} : La valeur par défaut du paramètre adjust est $1$. Si \textit{adjust} est inférieur à $1$, on s'intéresse aux petites variations, à la nature discrète de la variable. En revanche, si \textit{adjust} est supérieur $1$, on lisse le signal on s'intéresse aux comportement global de la variable, aux grosses variations.\newline
+Un autre avantage des estimateurs locaux de la densité par rapport aux histogrammes est qu'il permette de superposer facilement plusieurs distributions. En effet, il peut être intéressant de distinguer les filles des garçons.
+\subsection{Utilisation de la fonction boxplot()}
+\begin{lstlisting}[language=html]
+boxplot(survey$Height,
+        col = "sienna",
+        main = paste("Taille de", nrow(survey),
+                     "etudiants"
+        ),
+        ylab = "Taille",
+        las = 1
+)
+rug(survey$Height, side = 2)
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.5]{ilu/inc17.png}\end{center}\end{figure}
+\begin{lstlisting}[language=html]
+boxplot(survey$Height ~ survey$Sex,
+col = c("lightpink", "lightblue"),
+main = paste("Taille de", nrow(survey),
+"etudiants"
+),
+ylab = "Taille",
+las = 1
+)
+rug(survey$Height, side = 2)
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.5]{ilu/inc18.png}\end{center}\end{figure}
+Commentons les commandes qui ont permis de générer les graphiques 6.1 et 6.2. On retrouve l'utilisation désormais classiquedes arguments des fonctions graphiques. Notons l'utilisation de la fonction \textit{rug()} qui permet de représenter les données par des graduations sur les axes.
+
+\subsection{Utilisation de la fonction pie()}
+\begin{lstlisting}[language=html]
+names(vente.tarte) = c("Cerise", "Framboise ", "Pomme",
+                       "Abricot", "Pêche", "Fraise"
+)
+pie(vente.tarte,
+    col = c("tan", "green3", " plum",
+            " royalblue", "red", "peru"),
+    border = NA,
+    main = "Ventes de tartes"
+)
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.5]{ilu/inc19.png}\end{center}\end{figure}
+Commentons les commandes qui ont permis de générer le graphique 7. Les commandes sont
+grosso modo les mêmes que pour les autres fonctions graphiques. Le camembert représente la
+proportion de tarte vendue en fonction du fruit qui la compose.
+\section{Les packages grid et lattice}
+Les packages \textit{grid} et \textit{lattice} proposent un outil de visualisation de données multivariées particulièrement adaptées pour l'exploration de relations ou d'interactions entre variables.\newline  
+L'idée principale derrière le package lattice est celle des graphes multiples conditionnés : Un graphe bivarié entre deux variables sera découpé en plusieurs graphes en fonction des valeurs d'une troisième variable.\newline
+La plupart des fonctions de lattice prennent pour argument principal une formule, par exemple $\sim x| y$ . $y\sim x | z$ signifie que le graphe de y en fonction de x sera dessiné en plusieurs sous graphes en fonction des valeurs de z.\newline
+Le tableau ci-dessous indique les principales fonctions du package lattice.
+\begin{description}
+\item[barchart($\sim$y | x)] Histogramme des valeurs de y en fonction de celles de x
+\item[bwplot(($\sim$y | x )] Graphe «!boites à moustaches!»
+\item[densityplot($\sim$ x)] Graphe de fonctions de densité
+\item[dotplot(y $\sim$ x)] Graphe de Cleveland (graphes superposés ligne par ligne et colonne par colonne)
+\item[histogram($\sim$ x)] Histogrammes des fréquences de x
+\item[qqmath($\sim$ x)] Quantiles de x en fonction des valeurs attendues selon une distribution théorique
+\item[stripplot(y $\sim$ x)] Graphe unidimensionnel, x doit être numérique, y peut être un facteur
+\item[qq(y $\sim$ x)] Quantiles pour comparer deux distributions, x doit être numérique, y peut être numérique, caractère ou facteur mais doit avoir deux \textit{niveaux}
+\item[xyplot(y $\sim$ x)] Graphes bivariés (avec de nombreuses fonctionnalités)
+\item[levelplot(z$\sim$x*y)] Graphe en couleur des valeurs de z aux coordonnées fournies par x et y (x, y et z sont tous de même longueur)
+\item[splom($\sim$ x)] Matrice de graphes bivariés
+\item[parallel($\sim$ x)] Graphe de coordonnées parallèles
+\end{description}
+
+Pour accéder aux fonctions du package lattice, il faut au préalable chargé le package en mémoire via la commande \textit{library(lattice)}.
+
+\begin{lstlisting}[language=html]
+library(lattice)
+\end{lstlisting}
+Pour illustrer l'utilisation des fonctions \textit{densityplot()}, \textit{bwplot()}, \textit{histogram()}, \textit{xyplot()} et \textit{splom()}, nous allons utiliser le jeu de données deug disponible dans le package \textit{ade4}. Deug fournit les résultats de 104 étudiants sur 9 matières (Algebra, Analysis, Proba, Informatic, Economy, Option1, Option2, English, Sport). Deug fournit également les résultats globaux pour chacun des étudiants (A, B, C, D). On souhaite évaluer l'impact de la note d'algèbre sur le résultat global.
+\begin{lstlisting}[language=html]
+library(ade4)
+data("deug")
+x = deug$tab$Algebra
+y = deug$result
+> x
+  [1] 40 37 37 63 55 50 49 42 20 53 62 42 36 40 38 44 48 31 47 52 50 31 60 49
+ [25] 50 42 42 42 56 55 41 41 47 48 50 46 36 50 41 53 54 39 70 38 37 58 58 46
+ [49] 47 48 46 35 65 68 66 37 41 52 42 54 46 47 56 40 40 34 35 38 40 58 53 17
+ [73] 48 47 50 37 35 37 55 41 34 38 43 41 46 72 50 53 46  9 39 33 39 40 27 62
+ [97] 51 45 57 60 48 44 47 44
+> y
+  [1] C- B  B  A  B  C- B  B  D  A  B  B  A  C- B  B  A  D  B  A+ A  B  B  B 
+ [25] B  B  C- B  B  B  B  B  B  B  B  C- D  D  D  B  B  B  A  B  C- B  B  B 
+ [49] B  B  B  D  A+ A  A  C- B  A  C- A  B  B  B  C- C- D  B- C- C- A  B  D 
+ [73] A  B  B  C- C- C- A  C- C- C- B  B  B  A  B  A  A  D  D  B- C- C- D  A 
+ [97] B  B  B  B  B  B  B  B 
+Levels: D A A+ C- B- B
+\end{lstlisting}
+L'objectif de cette étude est de découper les valeurs des notes d'analyse suivant les résultats finaux des 104 étudiants. On souhaite donc découper l'ensemble des valeurs de x en tranches et, pour chacune de ces tranches, construire une une courbe de densité (\textit{densityplot()}), une boîte à moustaches (\textit{bwplot()}), un histogramme (\textit{histogram()}). Ces fonctions sont dans le package \textit{lattice}.
+\subsection{Utilisation de la fonction densityplot()}
+\begin{lstlisting}[language=html]
+densityplot(~ x | y,
+xlab = " note d'algèbre ",
+col = "red")
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.5]{ilu/inc20.png}\end{center}\end{figure}
+Comme on devait s'y attendre, les meilleurs étudiants en analyse auraient tendance à obtenir les meilleurs résultats globaux.
+\subsection{Utilisation de la fonction bwplot()}
+La fonction \textit{bwplot()} fournit des informations globalement identiques aux graphiques précédent mais sous la forme de boîte à moustaches.
+\begin{lstlisting}[language=html]
+bwplot(~ x | y,
+main = "note d'algèbre")
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.5]{ilu/inc21.png}\end{center}\end{figure}
+\subsection{Utilisation de la fonction histogram()}
+On peut vouloir extraire des informations sous la forme d'histogramme. C'est ce que permet la fonction \textit{histogram()}
+\begin{lstlisting}[language=html]
+histogram(~ x | y,
+col = "peru",
+main = "note d'algèbre",
+xlab = "histogramme")
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.5]{ilu/inc22.png}\end{center}\end{figure}
+\subsection{Utilisation de l'argument panel}
+\begin{lstlisting}[language=html]
+densityplot(~ x | y, xlab = "!note d'algèbre ",
+            panel = function(x, ...)
+            {
+              panel.mathdensity(dmath=dnorm, args=list(mean=mean(x), sd=sd(x)), col="red")
+              panel.histogram(x, breaks = NULL, col = "peru")
+            }
+)
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.5]{ilu/inc23.png}\end{center}\end{figure}
+Commentons les commandes qui ont permis de générer le graphique 10. La fonction \textit{densityplot()} produit un graphe par sous-échantillon. L'argument panel prend en argument une fonction. Dans cet exemple, nous avons construit une fonction qui fait appel à deux fonctions prédéfinies par le packaege lattice : \textit{panel.mathdensity} et \textit{panel.histogram}.\newline
+\textit{Panel} défini les analyses qui doivent être éffectuées pour chaque sous population.
+\subsection{Utilisation de la fonction xyplot()}
+\begin{lstlisting}[language=html]
+xyplot(iris$Petal.Length ~ iris$Petal.Width,
+       groups=iris$Species,
+       type = c("p", "smooth"),
+       col = 2:4,
+       xlab = "longueur des pétales",
+       ylab = "largeur des pétales",
+       main = "Les iris de Fisher",
+       span = 0.75,
+       key = list(
+         x = 0.15,
+         y = 0.85,
+         points=list(
+           col=2:4,
+           pch = 1
+         ),
+         text= list(levels(iris$Species))
+       )
+)
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.5]{ilu/inc24.png}\end{center}\end{figure}
+\subsection{Utilisation de la fonction splom()}
+\begin{lstlisting}[language=html]
+splom(~iris[1:3] | Species, data = iris,
+      pscales = 0,
+      varnames = c("Sepal\nLength",
+                   "Sepal\nWidth",
+                   "Petal\nLength"
+      )
+)
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.5]{ilu/inc25.png}\end{center}\end{figure}
+Commentons les commandes qui nous ont permis d'obtenir le graphique 12. La fonction
+\textit{splom()} permet donc de tracer tous les graphes bivariés d'un matrice (à l'instar de la fonction pairs()) mais permet en plus de partiotionner les graphes selon la valeur d'une autre variable (une variable qualitative par exemple).

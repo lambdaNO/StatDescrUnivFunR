@@ -1,0 +1,1186 @@
+\chapter{Introduction aux graphiques avec R - Christophe Chesneau}
+\textbf{Auteur : }\underline{\href{http://www.math.unicaen.fr/~7Echesneau/}{Christophe Chesneau}}
+\section{Point de départ}
+\textbf{Note : } Dans \textbf{Rstudio}, la fonction \textit{colors()} nous affiche la totalité des couleurs disponibles pour réaliser de jolis graphiques.\newline
+\\
+Pour avoir un aperçu des possibilités graphiques du logiciel R, on fait :
+\begin{lstlisting}[language=html]
+demo(graphics)
+\end{lstlisting}
+Taper sur la touche "Entrée" pour faire défiler plusieurs graphiques.\newline
+On obtient, entre autre, ceux là :
+\begin{figure}[H]
+\begin{center}
+\begin{tabular}{cc}
+\includegraphics[scale=0.25]{ilu/gra1.png} &
+\includegraphics[scale=0.25]{ilu/gra2.png} \\
+\includegraphics[scale=0.25]{ilu/gra3.png} &
+\includegraphics[scale=0.25]{ilu/gra4.png} \\
+\end{tabular}
+\end{center}
+\end{figure}
+Une fois que plus rien ne s'affiche, on fait :
+\begin{lstlisting}[language=html]
+dev.off()
+\end{lstlisting}
+Ces graphiques sont obtenus à l'aide de commandes. On en distingue trois sortes :
+\begin{itemize}
+\item celles qui \textcolor{red}{\textbf{créent}} une figure graphique dans une fenêtre,
+\item celles qui \textcolor{red}{\textbf{ajoutent}} une figure graphique à la fenêtre existante,
+\item celles qui \textcolor{red}{\textbf{modifient}} les paramètres du graphisme.
+\end{itemize}
+Pour illustrer ces commandes, on considèrera dès que possible le jeu de données "enquete" :
+\begin{lstlisting}[language=html]
+> enquete = read.table("http://www.math.unicaen.fr/~chesneau/enquete.txt",header = T)
+> enquete
+   poids couleur nb
+1   66.8    Bleu  2
+2   50.0   Rouge  1
+3   56.8    Noir  0
+4   74.0   Blanc  4
+5   46.1   Blanc  0
+6   55.7    Noir  1
+7   53.2    Bleu  2
+8   54.4    Noir  2
+9   54.4    Bleu  1
+10  55.1    Bleu  1
+> attach(enquete)
+> str(enquete)
+'data.frame': 10 obs. of  3 variables:
+ $ poids  : num  66.8 50 56.8 74 46.1 55.7 53.2 54.4 54.4 55.1
+ $ couleur: Factor w/ 4 levels "Blanc","Bleu",..: 2 4 3 1 1 3 2 3 2 2
+ $ nb     : int  2 1 0 4 0 1 2 2 1 1
+
+> enquete$poids
+ [1] 66.8 50.0 56.8 74.0 46.1 55.7 53.2 54.4
+ [9] 54.4 55.1
+> enquete$couleur
+ [1] Bleu  Rouge Noir  Blanc Blanc Noir  Bleu 
+ [8] Noir  Bleu  Bleu 
+Levels: Blanc Bleu Noir Rouge
+> enquete$nb
+ [1] 2 1 0 4 0 1 2 2 1 1
+\end{lstlisting}
+
+\section{Créer un ou plusieurs graphiques}
+\subsection{La commande stripchart}
+L'utilisation de base est \textit{stripchart($x$)}, où $x$ désigne un vecteur numérique.\newline
+On affiche alors les valeurs ordonnées des éléments de $x$ sur un axe permettant de juger de la dispersion des valeurs.\newline
+On fait :
+\begin{lstlisting}[language=html]
+stripchart(poids)
+\end{lstlisting}
+Cela renvoie :
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.4]{ilu/gra5.png}\end{center}\end{figure}
+\subsection{La commande dotchart}
+L'utilisation de base est \textit{dotchart($x$)}, où $x$ désigne un vecteur numérique.\newline
+La valeur de chaque élément de $x$ est affichée sur une ligne différente.Pour faciliter l'étude de la dispersion des valeurs, il convient d'ordonner les valeurs.\newline
+On fait :
+\begin{lstlisting}[language=html]
+dotchart(poids)
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.4]{ilu/gra6.png}\end{center}\end{figure}
+
+\begin{lstlisting}[language=html]
+dotchart(sort(poids))
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.4]{ilu/gra7.png}\end{center}\end{figure}
+\textcolor{red}{Notons que, si plusieurs graphiques se succèdent, seul le dernier apparait.}
+\subsection{La commande plot}
+\subsubsection{Utilisation de base}
+L'utilisation de base est \textit{plot($x, y$)}, où $x$ et $y$ sont des vecteurs de même longueur.\newline
+On construit alors un nuage de points dont le $i$-ème point est de coordonnées $(x[i], y[i])$.\newline
+Si un seul vecteur $y$ est indiqué, on un nuage de points dont le $i$-ème point est de coordonnées $(i, y[i])$.\newline
+On fait :
+\begin{lstlisting}[language=html]
+plot(poids)
+\end{lstlisting}
+Cela renvoie :
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.4]{ilu/gra8.png}\end{center}\end{figure}
+On fait :
+\begin{lstlisting}[language=html]
+plot(c(4, 1, 2, 6, 5, 9, 7, 10, 3, 8), poids)
+\end{lstlisting}
+Cela renvoie :
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.4]{ilu/gra9.png}\end{center}\end{figure}
+\subsubsection{Options graphiques}
+Il existe des options dans \textit{plot} permettant de changer les paramètres graphiques. On les active en rajoutant une ou plusieurs commandes dans \textit{plot}. Par exemple, on fait :
+\begin{lstlisting}[language=html]
+plot(poids, type = "l", lty = 2, axes = F, main = "poids des personnes")
+\end{lstlisting}
+Cela renvoie :
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.4]{ilu/gra10.png}\end{center}\end{figure}
+Quelques options sont présentées ci-dessous.
+\paragraph{Option : type.} On considère les commandes \textit{type = "c"}
+\begin{itemize}
+\item si \textit{c = p}, seul le nuage de point est construit (p est l'option par défaut),
+\item si \textit{c = n}, seul l'encadrement est tracé,
+\item si \textit{c = l}, les points sont reliés par une ligne,
+\item si \textit{c = h}, des lignes verticales sont tracées,
+\item si \textit{c = o} ou si \textit{c = b}, les points sont marqués et reliés par une ligne.
+\end{itemize}
+On considère les commandes :
+\begin{lstlisting}[language=html]
+plot(poids, type = "o")
+\end{lstlisting}
+Cela renvoie :
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.4]{ilu/gra11.png}\end{center}\end{figure}
+\paragraph{Option : xlab.} 
+Les commandes \textit{xlab = "string"} et \textit{ylab = "string"}, où string est une chaine de caractères, donnent un nom aux axes des coordonnées. Par défaut, ce sont les noms de $x$ et $y$.\newline
+On considère les commandes :
+\begin{lstlisting}[language=html]
+plot(poids, type = "b", xlab = "numero")
+\end{lstlisting}
+Cela renvoie :
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.4]{ilu/gra12.png}\end{center}\end{figure}
+\paragraph{Option : pch.} 
+Les commandes \textit{pch = $n$}, où $n$ est un entier ou un caractère, changent la nature des points du graphique.\newline
+On considère les commandes :
+\begin{lstlisting}[language=html]
+plot(poids, pch = 4, xlab = "numero")
+\end{lstlisting}
+Cela renvoie :
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.4]{ilu/gra13.png}\end{center}\end{figure}
+
+On fait :
+\begin{lstlisting}[language=html]
+plot(poids, type = "b", pch = "a", xlab = "numero")
+\end{lstlisting}
+Cela renvoie :
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.4]{ilu/gra14.png}\end{center}\end{figure}
+
+\paragraph{Option : xlim.} 
+Les commandes \textit{xlim = c(a, b)} et/ou \textit{ylim = c(a, b)}s, où a et b sont deux nombres réels, imposent des limites aux axes.\newline
+On considère les commandes :
+\begin{lstlisting}[language=html]
+plot(poids, type = "b", xlab = "numero", xlim = c(-10, 20), ylim = c(30,90))
+\end{lstlisting}
+Cela renvoie :
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.4]{ilu/gra15.png}\end{center}\end{figure}
+\paragraph{Option : xaxt.} 
+Les commandes \textit{xaxt = "n"} et/ou \textit{yaxt = "n"} effacent à la fois les tirets qui marquent les axes et les valeurs qui correspondent à ces tirets.\newline
+On fait :
+\begin{lstlisting}[language=html]
+plot(poids, type = "b", xlab = "numero", xlim= c(-10, 20), ylim = c(30, 90), xaxt="n",yaxt="n")
+\end{lstlisting}
+Cela renvoie :
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.4]{ilu/gra16.png}\end{center}\end{figure}
+\paragraph{Option : col.} 
+Les commandes \textit{col = "string"}, où string est une couleur : red, yellow, green, blue. . . ajoutent de la couleur.\newline
+On fait :
+\begin{lstlisting}[language=html]
+plot(poids, type = "b", xlab = "numero", xlim= c(-10, 20), ylim = c(30, 90), xaxt="n",yaxt="n")
+\end{lstlisting}
+Cela renvoie :
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.4]{ilu/gra17.png}\end{center}\end{figure}
+On peut aussi utiliser :
+\begin{itemize}
+\item des fonctions générant des couleurs par les commandes \textit{col = rainbow($n$), col = heat.color($n$),col = terrain.colors($n$), col = topo.colors($n$), col = cm.colors($n$)}, où $n$ désigne un entier.
+\begin{lstlisting}[language=html]
+plot(poids, pch = 19, xlab = "numero", col = rainbow(10))
+\end{lstlisting}
+Cela renvoie :
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.4]{ilu/gra18.png}\end{center}\end{figure}
+\item des codes hexadécimaux avec les 2 premières uintés pour le rouge, les deux suivantes pour le vert et les deux dernières pour le bleu : \textit{col = "\#120019", col = "\#123418", col = "\#1200FF"}\dots
+\begin{lstlisting}[language=html]
+plot(poids, pch = 19, xlab = "numero", col = "#1200FF")
+\end{lstlisting}
+Cela renvoie :
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.4]{ilu/gra19.png}\end{center}\end{figure}
+\end{itemize}
+\paragraph{Option : cex.} 
+Les commandes \textit{cex = $l$}, où $l$ est un réel positif, multiplient la taille des caractères contenus dans la fenêtre par $l$. De même, les commandes \textit{cex.axis = $l$} multiplient la taille des caractères indiquant les étiquettes des axes par $l$.\newline
+On fait :
+\begin{lstlisting}[language=html]
+plot(poids, pch = "a", xlab = "numero", cex = 3)
+\end{lstlisting}
+Cela renvoie :
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.4]{ilu/gra20.png}\end{center}\end{figure}
+\paragraph{Option : lty.} 
+Les commandes \textit{lty = $m$}, où $m$ est un entier, changent la nature des lignes qui relient les points.\newline
+On considère les commandes :
+\begin{lstlisting}[language=html]
+plot(poids, type = "l", lty = 2)
+\end{lstlisting}
+Cela renvoie :
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.4]{ilu/gra21.png}\end{center}\end{figure}
+\begin{lstlisting}[language=html]
+plot(poids, type = "l", lty = 24)
+\end{lstlisting}
+Cela renvoie :
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.4]{ilu/gra22.png}\end{center}\end{figure}
+\paragraph{Option : axes.}
+Les commandes \textit{axes = F} effacent l'entourage de la fenêtre.\newline
+On fait : 
+\begin{lstlisting}[language=html]
+plot(poids, type = "l", lty = 2, axes = F)
+\end{lstlisting}
+Cela renvoie :
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.4]{ilu/gra23.png}\end{center}\end{figure}
+\paragraph{Option : main.}
+Les commandes \textit{main = "string"}, où string est une chaîne de caractères, mettent un titre au graphe.\newline
+On fait :
+\begin{lstlisting}[language=html]
+plot(poids, type = "l", main = "poids des personnes")
+\end{lstlisting}
+Cela renvoie :
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.4]{ilu/gra24.png}\end{center}\end{figure}
+\paragraph{Option : lwd.}
+Les commandes \textit{lwd = $m$}, où $m$ est un entier, changent l'épaisseur des lignes/traits du graphe.\newline
+On fait :
+\begin{lstlisting}[language=html]
+plot(poids, type = "l", lwd = 5)
+\end{lstlisting}
+Cela renvoie :
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.4]{ilu/gra25.png}\end{center}\end{figure}
+\textcolor{red}{Pour plus de détails sur les options de plot, faire help("plot"). Cela vaut aussi pour les commandes à venir.}
+\subsection{La commande curve}
+La commande curve sert à confectionner rapidement certaines courbes représentatives de fonctions. On peut notamment l'utiliser pour représenter la densité et la fonction de répartition des lois d'une
+variable à densité.\newline
+Pour dessiner la courbe représentative d'une fonction $f(x)$ entre $a$ et $b$, on fait :
+\begin{lstlisting}[language=html]
+curve(f(x), a, b)
+\end{lstlisting}
+On considère les commandes :
+\begin{lstlisting}[language=html]
+curve(sin(x), -3, 10)
+\end{lstlisting}
+Cela renvoie :
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.4]{ilu/gra26.png}\end{center}\end{figure}
+On considère les commandes :
+\begin{lstlisting}[language=html]
+fonc = function(x) { sin(cos(x) * exp( -x / 2)) }
+curve(fonc, -8, 7)
+\end{lstlisting}
+Cela renvoie :
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.4]{ilu/gra27.png}\end{center}\end{figure}
+On peut augmenter le nombre de points $n$ à discrétiser entre $a$ et $b$ en faisant :
+\begin{lstlisting}[language=html]
+curve(fonc, -8, 7, n = 2001)
+\end{lstlisting}
+Cela renvoie :
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.4]{ilu/gra28.png}\end{center}\end{figure}
+On peut changer l'épaisseur de la courbe en faisant :
+\begin{lstlisting}[language=html]
+curve(fonc, -8, 7, lwd = 5)
+\end{lstlisting}
+Cela renvoie :
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.4]{ilu/gra29.png}\end{center}\end{figure}
+\textcolor{red}{La plupart des options de plot (col, lwd. . . ) peuvent aussi être rajoutées dans curve.}
+\subsection{La commande barplot}
+\subsubsection{Utilisation de base}
+Pour un vecteur $x$ à $n$ éléments, les commandes \textit{barplot($x$)} donnent $n$ barres verticales, la $i$-ème barre étant de hauteur proportionnelle à $x[i]$. On fait :
+\begin{lstlisting}[language=html]
+barplot(poids)
+\end{lstlisting}
+Cela renvoie :
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.4]{ilu/gra30.png}\end{center}\end{figure}
+\subsubsection{Utilisation en statistique}
+La commande barplot peut servir à :
+\begin{itemize}
+\item représenter la série brute de données issues d'une variable quantitative (quand l'effectif n'est pas trop grand) en confectionnant un diagramme en barres ou un diagramme en bandeaux.
+\item représenter la distribution d'une variable qualitative (en effectifs et/ou en fréquence). On rappelle que cette distribution s'obtient en associant à chaque modalité $m_{i}$ que peut prendre la variable, l'effectif $n_{i}$ et/ou la fréquence $n_{i}/n$. Dans ce cas, on a toujours en abscisse, les modalités pouvant être prises par la variable et, en ordonnée, l'effectif ou la fréquence. (\textbf{\textcolor{red}{Attention à ne pas oublier la fonction table()}}).\newline
+On fait :
+\begin{lstlisting}[language=html]
+barplot(table(couleur))
+\end{lstlisting}
+Cela renvoie :
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.4]{ilu/gra31.png}\end{center}\end{figure}
+\item représenter la distribution en effectif et/ou en fréquence d'une variable discrète. (\textbf{\textcolor{red}{Attention à ne pas oublier la fonction table()}}).\newline
+On fait :
+\begin{lstlisting}[language=html]
+barplot(table(nb))
+\end{lstlisting}
+Cela renvoie :
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.4]{ilu/gra32.png}\end{center}\end{figure}
+\end{itemize}
+\subsubsection{Options graphiques}
+Comme pour \textit{plot}, il existe des options dans \textit{barplot} permettant de changer les paramètres graphiques. On les active en rajoutant une ou plusieurs commandes dans barplot.\newline
+Par exemple, on fait :
+\begin{lstlisting}[language=html]
+barplot(poids, xlim = c(-3, 33), width = 0.8)
+\end{lstlisting}
+Cela renvoie :
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.4]{ilu/gra33.png}\end{center}\end{figure}
+
+Quelques options sont présentées ci-dessous.
+\paragraph{Option : space.} Les commandes \textit{space = $l$}, où $l$ est un nombre réel, changent l'écartement entre les barres qui seront espacées de $l$ fois la largeur moyenne des barres.\newline
+On fait :
+\begin{lstlisting}[language=html]
+barplot(poids, space = 2)
+\end{lstlisting}
+Cela renvoie :
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.4]{ilu/gra34.png}\end{center}\end{figure}
+
+\paragraph{Option : xlim.} 
+Les commandes \textit{xlim = c($a$, $b$)} et/ou \textit{ylim = c($a$, $b$)}, où $a$ et $b$ sont deux nombres réels, imposent des limites aux axes.\newline
+On fait :
+\begin{lstlisting}[language=html]
+barplot(poids, xlim = c(-3, 13), ylim = c(0, 100))
+\end{lstlisting}
+Cela renvoie :
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.4]{ilu/gra35.png}\end{center}\end{figure}
+
+\paragraph{Option : width. } \underline{Si l'option xlim a été utilisée}, on peut spécifier la largeur des barres par \textit{width = $d$}, où $d$ est la largeur souhaitée.\newline
+On considère les commandes :
+\begin{lstlisting}[language=html]
+barplot(poids, xlim = c(-3, 33), width = 0.8)
+\end{lstlisting}
+Cela renvoie :
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.4]{ilu/gra36.png}\end{center}\end{figure}
+
+\paragraph{Option : names.arg.} Les commandes \textit{names.arg = string}, où string est un vecteur de chaîne de caractères, attribuent le nom du $i$-ème élément de string à la $i$-ème barre.
+On considère les commandes :
+\begin{lstlisting}[language=html]
+prenoms = c("Karen", "Elodie", "Paul", "Paul", "Elsa", "Karen", "Aurelie",
+"Elsa", "Karen", "Sophie")
+barplot(poids, space = 2, names.arg = prenoms)
+\end{lstlisting}
+Cela renvoie :
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.4]{ilu/gra37.png}\end{center}\end{figure}
+Si les prénoms attribués prennent trop de place, c'est pourquoi ils ne sont pas tous affichés. 
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.4]{ilu/gra38.png}\end{center}\end{figure}
+Une solution est :
+\begin{lstlisting}[language=html]
+prenoms = c("Karen", "Elodie", "Paul", "Paul", "Elsa", "Karen", "Aurelie",
+"Elsa", "Karen", "Sophie")
+barplot(poids, space = 2, names.arg = prenoms)
+\end{lstlisting}
+Cela renvoie :
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.4]{ilu/gra39.png}\end{center}\end{figure}
+\paragraph{Option : horiz.}
+Les commandes \textit{horiz = $L$}, où $L$ est \textit{TRUE} ou \textit{FALSE}, tracent les barres à l'horizontale si \textit{L = TRUE} et à la verticale sinon.\newline
+On fait :
+\begin{lstlisting}[language=html]
+barplot(poids, horiz = TRUE)
+\end{lstlisting}
+Cela renvoie :
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.4]{ilu/gra40.png}\end{center}\end{figure}
+\textcolor{red}{La plupart des options de plot (col, lwd\dots ) peuvent aussi être rajoutées dans barplot.}
+\subsection{La commande pie}
+La commande basique est \textit{pie($x$)}, où $x$ est un vecteur de longueur $l$. Elle constitue un diagramme à $p$ secteurs. Elle est principalement utilisée pour représenter la distribution d'une variable qualitative à $l$ modalités.\newline
+On fait :
+\begin{lstlisting}[language=html]
+pie(table(couleur))
+\end{lstlisting}
+Cela renvoie :
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.4]{ilu/gra41.png}\end{center}\end{figure}
+\subsection{La commande hist}
+La commande basique est \textit{hist($x$)} ou \textit{hist(x, prob = TRUE)}, où $x$ est un vecteur de longueur $n$.
+Cette commande :
+\begin{itemize}
+\item construit automatiquement une suite de $l$ classes adjacentes $[\eta_{0},\eta_{1}],]\eta_{1},\eta_{2}],\dots,]\eta_{l?1},\eta_{l}]$ telles que l'ensemble des valeurs de $x$ est inclus dans $[\eta_{0},\eta_{l}]$ et ceci suivant une règle dite de Sturges\footnote{
+  La règle de Sturges est une formule mathématique proposée par Herbert Sturges (1882-1958). Elle sert à découper une plage de valeurs en tranches pour en faire la description statistique : tableaux de fréquences, histogramme, \dots.\newline
+  \textbf{Formulation :} Soit un échantillon de $N$ valeurs observées. On souhaite représenter la répartition, ou distribution, de ces données dans leur plage de valeurs. Pour ce faire, on découpe la plage en un certain nombre $k$ de tranches ? ou classes ? afin de recueillir le nombre d'observations par tranche. Ces nombres, les fréquences, peuvent être affichés dans un graphique en colonnes appelé « histogramme ».\newline
+  Sturges a proposé une valeur approximative pour le nombre $k$ en fonction de la taille $N$ de l'échantillon :
+$$k = 1+\log_{2}(N)$$
+  Le résultat ne sera pas, en général, entier. Il donne une appréciation de ce qui ferait un bon découpage.  \newline
+  \textbf{Formule alternative : } La plupart des calculatrices ne comportant pas de touche pour le $\log_{2}$, on peut utiliser la base 10, en profitant du fait que $\log_{10}(2) = 0,30103 \approx 3/10$.
+$$ k=1+\log_{10}(N)\times \frac{10}{3}$$
+\textit{Anyway, \textbf{R} le fait automatiquement.}
+}.
+Par défaut, les classes sont de même amplitude.
+\item calcule automatiquement la distribution en effectifs de série des données $x$ dans les classes ci-dessus, \textit{ie} la série des $n_{j}$ où $n_{j}$ est l'effectif des données qui appartiennent à la classe $]\eta_{j?1},\eta_{j}]$.
+\item construit $l$ rectangles accolés. On distingue alors 2 possibilités :
+\begin{itemize}
+\item Par défaut; si \textit{prob = FALSE} : la hauteur du rectangle pour la classe $j$ est égale à $n_{j}$. Il s'agit alors d'un histogramme des effectifs. Sur le graphe, les ordonnées sont notées (Frequency) alors qu'en réalité, il s'agit bien des effectifs.
+\item Si prob = TRUE : la hauteur $h_{j}$ du rectangle pour la classe $j$ est égale à $f_{j}/a_{j}$ où $f_{j} = n_{j}/n$ fréquence de la classe $j$ et où $a_{j} = \eta_{j} ? \eta_{j?1}$ amplitude de la classe $j$. Il s'agit alors d'un histogramme des fréquences. Sur le graphe, les ordonnées sont indiquées (Density).
+\end{itemize}
+\end{itemize}
+On fait :
+\begin{lstlisting}[language=html]
+hist(poids)
+\end{lstlisting}
+Cela renvoie :
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.4]{ilu/gra42.png}\end{center}\end{figure}
+On considère les commandes :
+\begin{lstlisting}[language=html]
+hist(poids, prob = TRUE)
+\end{lstlisting}
+Cela renvoie :
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.4]{ilu/gra43.png}\end{center}\end{figure}
+\subsubsection{Options graphiques}
+Comme pour \textit{plot}, il existe des options dans \textit{hist} permettant de changer les paramètres graphiques. On les active en rajoutant une ou plusieurs commandes dans hist. \newline
+Par exemple, on fait :
+\begin{lstlisting}[language=html]
+hist(poids, breaks = c(45, 60, 75), prob = T)
+\end{lstlisting}
+Cela renvoie :
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.4]{ilu/gra44.png}\end{center}\end{figure}
+Quelques options sont présentées ci-dessous.
+\paragraph{Option : break.}
+Les commandes \textit{breaks = $x$}, où $x$ est un vecteur numérique, donnent les extrémités des classes.\newline
+On considère les commandes :
+\begin{lstlisting}[language=html]
+hist(poids,breaks = c(45, 60, 75))
+\end{lstlisting}
+Cela renvoie :
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.4]{ilu/gra45.png}\end{center}\end{figure}
+On considère les commandes :
+\begin{lstlisting}[language=html]
+hist(poids,breaks = c(45, 60, 75), prob = TRUE)
+\end{lstlisting}
+Cela renvoie :
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.4]{ilu/gra46.png}\end{center}\end{figure}
+Notons que l'histogramme obtenu a même allure que le précédent mais on se trouve dans le deuxième cas et les hauteurs des rectangles sont maintenant des densités.\newline
+On fait :
+\begin{lstlisting}[language=html]
+hist(poids,breaks = c(45, 50, 70, 75))
+\end{lstlisting}
+Cela renvoie :
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.4]{ilu/gra47.png}\end{center}\end{figure}
+
+Ainsi, le fait que les classes ne soient plus d'amplitudes égales active l'option \textit{prob = TRUE}.
+\paragraph{Option : right. } 
+Les commandes \textit{right = $L$}, où $L$ est TRUE ou FALSE, considèrent des intervalles de la forme $]\eta_{j?1},\eta_{j}]$ si \textit{$L$ = TRUE}, sinon de la forme $[\eta_{j?1},\eta_j[$.\newline
+On fait :
+\begin{lstlisting}[language=html]
+hist(poids, right = FALSE)
+\end{lstlisting}
+Cela renvoie :
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.4]{ilu/gra48.png}\end{center}\end{figure}
+On fait :
+\begin{lstlisting}[language=html]
+hist(poids,right = TRUE)
+\end{lstlisting}
+Cela renvoie :
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.4]{ilu/gra49.png}\end{center}\end{figure}
+\textcolor{red}{La plupart des options de plot (col, lwd\dots) peuvent aussi être rajoutées dans hist.}
+\subsection{La commande boxplot}
+La commande basique est \textit{boxplot($x$)}, où $x$ est un vecteur de longueur $n$. Elle construit la boîte à moustaches de $x$.\newline
+On fait :
+\begin{lstlisting}[language=html]
+boxplot(poids)
+\end{lstlisting}
+Cela renvoie :
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.4]{ilu/gra50.png}\end{center}\end{figure}
+Pour construire une boîte à moustaches de $x$ pour chaque élément d'un vecteur $y$, on fait : \textit{boxplot(x $\sim$ y)}.\newline
+On fait :
+\begin{lstlisting}[language=html]
+boxplot(poids ~ couleur)
+\end{lstlisting}
+Cela renvoie :
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.4]{ilu/gra51.png}\end{center}\end{figure}
+
+\subsection{Avoir plusieurs graphiques sur la même fenêtre}
+Les commandes \textit{par(mfrow = c(k, l))}, où $k$ et $l$ sont des entiers, servent à découper l'écran en $k$ lignes et $l$ colonnes.\newline
+Lorsque plusieurs commandes créant un graphique se succèdent, ces graphiques se positionnent par ligne sur les cases ainsi créées.\newline
+Si on veut qu'ils se positionnent par colonne, on fait \textit{par(mfcol = c(k, l))}.\newline
+On fait :
+\begin{lstlisting}[language=html]
+par(mfrow = c(2, 1))
+hist(poids)
+plot(poids)
+\end{lstlisting}
+Cela renvoie :
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.4]{ilu/gra52.png}\end{center}\end{figure}
+\begin{lstlisting}[language=html]
+par(mfcol = c(1, 2))
+hist(poids)
+plot(poids)
+\end{lstlisting}
+Cela renvoie :
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.4]{ilu/gra53.png}\end{center}\end{figure}
+Pour revenir à la configuration de départ, on fait \textit{par(mfrow = c(1, 1))}.
+
+\subsection{Avoir plusieurs graphiques successifs}
+Les commandes \textit{par(ask = TRUE)} affichent plusieurs graphiques successivement.
+On considère les commandes :
+\begin{lstlisting}[language=html]
+par(ask = TRUE)
+hist(poids)
+plot(poids)
+\end{lstlisting}
+Cela renvoie successivement les graphiques. Il faut entrer ?+? pour afficher le suivant.\newline
+Pour revenir à la configuration de départ, on fait \textit{par(ask = FALSE)}.
+\section{Additionner un graphique à un graphique existant}
+\subsection{La commande points}
+L'utilisation de base est \textit{points($x$, $y$)}, où $x$ et $y$ sont 2 vecteurs de même longueur. Cela ajoute à la figure existante un nuage de points associé à $(x, y)$.\newline
+On fait :
+\begin{lstlisting}[language=html]
+plot(poids)
+points(c(2, 2, 6.3), c(55, 60, 70), cex = 2, pch = 5, col = "red")
+\end{lstlisting}
+Cela renvoie :
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.4]{ilu/gra54.png}\end{center}\end{figure}
+\subsection{La commande lines}
+L'utilisation de base est \textit{lines($x$, $y$)}, où $x$ et $y$ sont 2 vecteurs de même longueur. Cela ajoute à la figure existante une ligne reliant les points du nuage de points associé à $(x, y)$.\newline
+On fait :
+\begin{lstlisting}[language=html]
+plot(poids)
+lines(1:8, rep(60, 8) + c(-10, 10), lty = 3,col="blue")
+\end{lstlisting}
+Cela renvoie :
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.4]{ilu/gra55.png}\end{center}\end{figure}
+\subsection{La commande text}
+L'utilisation de base est \textit{text($x$, $y$, string)}, où $x$ et $y$ sont 2 vecteurs de même longueur, et string est un vecteur chaîne de caractères.
+Cela attribue le nom du $i$-ème élément de string au point de coordonnées $(x[i], y[i])$.\newline
+On fait :
+\begin{lstlisting}[language=html]
+plot(poids)
+text(7, 72, paste("moyenne = ", mean(poids)))
+\end{lstlisting}
+Cela renvoie :
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.4]{ilu/gra56.png}\end{center}\end{figure}
+On considère les commandes :
+\begin{lstlisting}[language=html]
+prenoms = c("Karen", "Elodie", "Paul", "Paul", "Elsa", "Karen", "Aurelie",
+            "Elsa", "Karen", "Sophie")
+plot(poids)
+text(poids + c(rep(-1, 4), 1, rep(-1, 5)), prenoms, cex = 0.7)
+\end{lstlisting}
+Cela renvoie :
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.4]{ilu/gra57.png}\end{center}\end{figure}
+\subsection{La commande abline}
+\begin{itemize}
+\item \textit{abline($h = y$)} trace une ligne horizontale de coordonnée $y$.
+\item \textit{abline($v = x$)} trace une ligne verticale de coordonnée $x$.
+\item \textit{abline($a, b$)} trace la droite d'équation : $y = a + bx$.
+\end{itemize}
+On fait :
+\begin{lstlisting}[language=html]
+plot(poids)
+abline(h = 65)
+\end{lstlisting}
+Cela renvoie :
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.4]{ilu/gra58.png}\end{center}\end{figure}
+On fait :
+\begin{lstlisting}[language=html]
+plot(poids)
+abline(v = 6)
+\end{lstlisting}
+Cela renvoie :
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.4]{ilu/gra59.png}\end{center}\end{figure}
+On fait :
+\begin{lstlisting}[language=html]
+plot(poids)
+abline(0,8,col="blue")
+\end{lstlisting}
+Cela renvoie :
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.4]{ilu/gra60.png}\end{center}\end{figure}
+\subsection{Les commandes curve(f(x), add = TRUE)}
+Les commandes \textit{curve($f(x)$, add = TRUE)} ajoutent à la fenêtre courante le graphe de la fonction $f(x)$.\newline
+On fait :
+\begin{lstlisting}[language=html]
+plot(poids)
+curve(60 + sin(7 * x), add = T)
+\end{lstlisting}
+Cela renvoie :
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.4]{ilu/gra61.png}\end{center}\end{figure}
+\subsection{La commande segments}
+Les commandes \textit{segments($x1$, $y1$, $x2$, $y2$)}, où $x1$, $y1$, $x2$ et $y2$ sont des vecteurs, tracent des segments entre les points de coordonnées : $(x1[i], y1[i])$ et $(x2[i], y2[i])$.\newline
+On fait :
+\begin{lstlisting}[language=html]
+plot(poids)
+segments(c(4, 8), c(55, 60), c(2, 10), c(70, 65))
+\end{lstlisting}
+Cela renvoie :
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.4]{ilu/gra62.png}\end{center}\end{figure}
+Si on remplace \textit{segments} par \textit{arrows}, on trace des flèches entre les points de coordonnées : $(x1[i], y1[i])$ et $(x2[i], y2[i])$.
+On considère les commandes :
+\begin{lstlisting}[language=html]
+plot(poids)
+arrows(c(4, 8), c(55, 60), c(2, 10), c(70, 65))
+\end{lstlisting}
+Cela renvoie :
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.4]{ilu/gra63.png}\end{center}\end{figure}
+\subsection{La commande title}
+Les commandes \textit{title(string)} ajoutent un titre qui est la chaîne de caractères string.\newline
+On fait :
+\begin{lstlisting}[language=html]
+plot(poids)
+title(paste("Graphique du poids des", length(poids), "personnes"))
+\end{lstlisting}
+Cela renvoie :
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.4]{ilu/gra64.png}\end{center}\end{figure}
+\subsection{La commande axis}
+Les commandes \textit{axis($k$, vec1, labels = vec2)}, où
+\begin{itemize}
+\item $k$ est 1, 2, 3 ou 4 (1 correspond à l'axe des $x$, 2 à l'axe des $y$, 3 à l'axe du sommet de la fenêtre et 4 à l'axe à droite de la fenêtre),
+\item vec1 est un vecteur qui indique où les tirets doivent être marqués,
+\item vec2 un vecteur de chaine de caractères qui donne le nom de chacun des tirets,
+\end{itemize}
+changent la configuration de l'axe correspondant à $k$.\newline
+\textbf{Avant d'utiliser} \textit{axis}, il faut inclure dans le plot \textit{xaxt = "n"} et/ou \textit{yaxt = "n"} pour effacer l'écriture automatique des étiquettes des axes.\newline
+On fait :
+\begin{lstlisting}[language=html]
+plot(poids, xaxt = "n")
+axis(1, 1:10, 1:10)
+\end{lstlisting}
+Cela renvoie :
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.4]{ilu/gra65.png}\end{center}\end{figure}
+On considère les commandes :
+\begin{lstlisting}[language=html]
+plot(poids, yaxt = "n")
+axis(2, 1:100, 1:100)
+\end{lstlisting}
+Cela renvoie :
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.4]{ilu/gra66.png}\end{center}\end{figure}
+\subsection{La commande legend}
+Les commandes \textit{legend($x$, $y$, legend)} ajoutent une légende de contenu legend au point de coordonnées $(x, y)$.\newline
+On fait :
+\begin{lstlisting}[language=html]
+plot(poids, type = "l")
+lines(c(2, 3, 5), c(50, 48, 62), col = "red")
+legend(8, 65, legend = c("poids", "ajout"), fill = c("black", "red"))
+\end{lstlisting}
+Cela renvoie :
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.4]{ilu/gra67.png}\end{center}\end{figure}
+Plus simplement, on peut faire \textit{$x$ = "string"} et ignorer $y$, où string est l'endroit où l'on veut mettre la légende : \textit{bottomright, bottom, bottomleft, left, topleft, top, topright, right} et \textit{center}
+On considère les commandes :
+\begin{lstlisting}[language=html]
+plot(poids, type = "l")
+lines(c(2, 3, 5), c(50, 48, 62), col = "red")
+legend("topleft", legend = c("poids", "ajout"), fill = c("black", "red"))
+\end{lstlisting}
+Cela renvoie :
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.4]{ilu/gra68.png}\end{center}\end{figure}
+\subsection{La commande grid}
+Une fois le graphique affiché, on peut mettre un quadrillage au fond en faisant \textit{grid()}. De nombreuses options graphiques existent alors (\textit{lwd, lty}\dots).\newline
+On fait :
+\begin{lstlisting}[language=html]
+plot(poids, type = "o")
+grid(lwd = 2)
+\end{lstlisting}
+Cela renvoie :
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.4]{ilu/gra69.png}\end{center}\end{figure}
+On considère les commandes :
+\begin{lstlisting}[language=html]
+plot(poids, type = "o")
+grid(lwd = 2,col="turquoise")
+\end{lstlisting}
+Cela renvoie :
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.4]{ilu/gra70.png}\end{center}\end{figure}
+\subsection{Les problèmes d'échelles}
+Quand on ajoute une ou plusieurs figures dans une figure existante, il n'est pas sûr que celles-ci rentrent dans le cadre. Pour éviter cet inconvénient, il faut préciser les limites inférieures et supérieures de l'ordonnée en utilisant un vecteur \textit{vec} de longueur 2 qui donne cette information et écrire dans \textit{plot}, les commandes \textit{ylim = vec}. Si on veut agir sur l'échelle des $x$, on utilise \textit{xlim = vec}.\newline
+Une figure $j$ est généralement définie par un couple de vecteurs $(x_{j},y_{j})$. On calcule alors \textit{limx = range($x1$, $x2$,\dots)} et \textit{limy = range($y1$, $y2$,\dots)}.\newline
+On trace le cadre du graphique en faisant :
+\begin{lstlisting}[language=html]
+plot(x1, y1, xlim = limx, ylim = limy, type = "n")
+\end{lstlisting}
+On peut alors ajouter des figures avec les commandes déjà vues.
+
+\section{ggplot2 : pour commencer}
+Il existe des outils évolués pour faire des graphiques sophistiqués avec le logiciel \textbf{R}.\newline
+Quelques exemples "pas à pas" utilisant la librairie ggplot2 avec le jeu de données "enquete" sont présentés ci-dessous.\newline
+En premier lieu, on fait :
+\begin{lstlisting}[language=html]
+library(ggplot2)
+\end{lstlisting}
+On fait :
+\begin{lstlisting}[language=html]
+ggplot(enquete, aes(x = 1:10, y = poids)) + geom_point()
+\end{lstlisting}
+Cela renvoie :
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.4]{ilu/gra71.png}\end{center}\end{figure}
+On considère les commandes :
+\begin{lstlisting}[language=html]
+ggplot(enquete, aes(x = 1:10, y = poids)) + geom_point(aes(color = nb))
+\end{lstlisting}
+Cela renvoie :
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.4]{ilu/gra72.png}\end{center}\end{figure}
+On considère les commandes :
+\begin{lstlisting}[language=html]
+p1 = ggplot(enquete, aes(x = 1:10, y = poids)) + geom_point(aes(color = nb, shape = couleur))
+p1
+\end{lstlisting}
+Cela renvoie :
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.4]{ilu/gra73.png}\end{center}\end{figure}
+On considère les commandes :
+\begin{lstlisting}[language=html]
+p1 + scale_x_continuous(name = "individus")
+\end{lstlisting}
+Cela renvoie :
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.4]{ilu/gra74.png}\end{center}\end{figure}
+On fait :
+\begin{lstlisting}[language=html]
+ggplot(enquete, aes(x = couleur, y = poids)) + geom_boxplot()
+\end{lstlisting}
+Cela renvoie :
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.4]{ilu/gra75.png}\end{center}\end{figure}
+\textcolor{red}{Avec ggplot2 et du travail, d'autres graphiques sophistiqués sont possibles. La documentation est disponible \underline{\href{http://docs.ggplot2.org/current/}{ici}}}
+\section{Pour finir}
+De nombreuses librairies, non présentées ici, permettent de faire des graphiques évolués. Citons entre autre \textit{graphics, lattice, grid} et \textit{plotrix}.\newline
+On termine avec un simple et joli camembert utilisant la librairie \textit{plotrix} :
+\begin{lstlisting}[language=html]
+library(plotrix)
+pie3D(table(couleur), explode = 0.1, labelcex = 1,labels=levels(couleur))
+\end{lstlisting}
+Cela renvoie :
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.4]{ilu/gra76.png}\end{center}\end{figure}
+\section{Exercices}
+\subsection{Enoncés}
+\subsubsection{Exercice 1. }\textcolor{white}{.}\newline
+On considère les 2 fonctions :
+$$f(x)=x^{2} -6x -3 \textrm{ et } g(x) = x^{2} + x - 1$$
+Proposer des commandes R permettant d'obtenir une représentation graphique.
+\subsubsection{Exercice 2. }\textcolor{white}{.}\newline
+On considère le jeu de données "enquete" :
+\begin{lstlisting}[language=html]
+enquete = read.table("http://www.math.unicaen.fr/~chesneau/enquete.txt",header = T)
+attach(enquete)
+\end{lstlisting}
+\begin{enumerate}
+\item Proposer des commandes R permettant d'obtenir un histogramme des fréquence de \textit{poids} par ordre décroissant: 
+\item Proposer des commandes R permettant d'obtenir un histogramme des fréquence et des effectifs de \textit{couleur} : 
+\item Proposer des commandes R permettant d'obtenir un histogramme des fréquence et des effectifs triés de \textit{couleur} 
+\end{enumerate}
+
+\subsubsection{Exercice 3. }\textcolor{white}{.}\newline
+On considère le jeu de données "nba" :
+\begin{lstlisting}[language=html]
+nba = read.table("http://www.math.unicaen.fr/~chesneau/nba.txt", header = T, sep = ",")
+attach(nba)
+\end{lstlisting}
+On dispose :
+\begin{itemize}
+\item de l'identité du joueur (variable \textit{Joueur}),
+\item de leur rôle sur le terrain (variable \textit{X2}),
+\item de leur taille (variable \textit{X1}),
+\item de leur poids (variable \textit{Y}),
+\item de leur âge (variable \textit{X3}).
+\end{itemize}
+\begin{enumerate}
+\item Préciser la nature des variables étudiées.
+\item Renommer les labels des variables par : \textit{joueur, role, taille, poids} et \textit{age}.
+\item Représenter la dispersion des poids des basketteurs avec la commande \textit{stripchart}, puis sa distribution avec la commande \textit{hist}.
+\item Représenter la distribution des tailles des basketteurs avec la commande \textit{hist}.
+\item Représenter la distribution de la variable role avec la commande \textit{pie}.
+\item étudier graphiquement les paramètres statistiques de \textit{poids} en fonction de \textit{role}.
+\item étudier graphiquement les paramètres statistiques de \textit{poids} en fonction de \textit{age}.
+\item étudier graphiquement les paramètres statistiques de \textit{taille} en fonction de \textit{age}.
+\item Représenter le nuage de points associés à (\textit{taille}, \textit{poids}). Sur ce même graphique, tracer la fonction :
+$$f(x) = e^{-4.59678}x^{2.28551}\textrm{, } x \in [66,88].$$
+\item Proposer des commandes \textbf{R} utilisant la librairie ggplot2 permettant d'obtenir un graphique mettant en relation les variables \textit{poids} (ordonnées), \textit{taille} en abscisses et en légende, \textit{role} et \textit{age}.
+\item Commenter les commandes suivantes et le graphique obtenu :
+\begin{lstlisting}[language=html]
+ggplot(nba, aes(x = taille, y = poids)) + geom_point(shape=1)
+   + geom_smooth(, se = FALSE)
+\end{lstlisting}
+\end{enumerate}
+\subsubsection{Exercice 4. }\textcolor{white}{.}\newline
+Soit $\nu > 0$, On appelle "densité associée à la loi de Student $\mathcal{T(\nu)}$" la fonction :
+$$f_{\nu}(x) = \frac{1}{\sqrt{\nu\pi}}\frac{\Gamma\left(\frac{\nu+1}{2}\right)}{\Gamma\left(\frac{\nu}{2}\right)}\left(1 + \frac{x^{2}}{\nu}\right)^{\frac{\nu+1}{2}}\textrm{, }x\in \mathbb{R}$$
+où $\Gamma$ désigne la fonction gamma d'Euler définie par :
+$$\Gamma(x) = \int_{0}^{\infty} t^{x-1}e^{-t}\textrm{dt, } x>0$$
+\begin{enumerate}
+\item Créer dans R la fonction \textit{tdens(x, nu)} représentant la fonction $f_{\nu}(x)$.
+\item à partir de cette fonction R, proposer des commandes R permettant d'obtenir le graphique des densités associées à la loi de Student pour $\nu =1$,$\nu =2$,$\nu =5$ et $\nu =16$ 
+\end{enumerate}
+\subsubsection{Exercice 5. }\textcolor{white}{.}\newline
+Soient
+\begin{itemize}
+\item $x$ le vecteur numérique dont les éléments sont disponibles \underline{\href{http://www.math.unicaen.fr/~chesneau/norm.txt}{ici}} :
+\item la fonction f représentant $f : \mathbb{R} \rightarrow [0,+\infty[$
+$$f(x) = \frac{1}{\sqrt{2\pi}}e^{-\frac{x^{2}}{2}}$$
+\end{itemize}
+\begin{enumerate}
+\item Proposer des commandes permettant d'obtenir sur un même graphique, l'histogramme de $x$ et la fonction $f$ (abscisses $x$, ordonnées : fréquence $f(x)$) ainsi qu'une approximation de la fonction $f$.
+\item Proposer des commandes permettant d'obtenir les mêmes graphiques séparément, alignés de manière verticale.
+\end{enumerate}
+\subsubsection{Exercice 6. }\textcolor{white}{.}\newline
+Reproduire et comprendre l'enjeu des commandes suivantes :
+\begin{lstlisting}[language=html]
+x = rnorm(18)
+y = rnorm(18)
+plot(x, y, xlab = "", ylab = "", xlim = c(-2, 2), ylim = c(-2, 2), pch = 22,
+col = "red", bg = "yellow", bty = "l", tcl = 0.4, main = "Nuage de points")
+grid(lwd = 1)
+\end{lstlisting}
+\subsubsection{Exercice 7. }\textcolor{white}{.}\newline
+Reproduire et comprendre l'enjeu des commandes suivantes :
+\begin{lstlisting}[language=html]
+plot(1, 1, xlim = c(1, 5.5), ylim = c(0, 7), type = "n", xlab = "", ylab = "")
+text(1:5, rep(6, 5), labels = c(0:4), cex = 1:5, col = 1:5)
+points(1:5, rep(5, 5), cex = 1:5, col = 1:5, pch = 0:4)
+text((1:5) + 0.4, rep(5, 5), cex = 0.6, (0:4))
+points(1:5, rep(4, 5), cex = 2, pch = (5:9))
+text((1:5) + 0.4, rep(4, 5), cex = 0.6, (5:9))
+points(1:5, rep(3, 5), cex = 2, pch = (10:14))
+text((1:5) + 0.4, rep(3, 5), cex = 0.6, (10:14))
+points(1:5, rep(2, 5), cex = 2, pch = (15:19))
+text((1:5) + 0.4, rep(2, 5), cex = 0.6, (15:19))
+points((1:6)*0.8 + 0.2, rep(1, 6), cex = 2, pch = (20:25))
+text((1:6)*0.8 + 0.5, rep(1, 6), cex = 0.6, (20:25))
+\end{lstlisting}
+\subsection{Solutions}
+\subsubsection{Exercice 1. }\textcolor{white}{.}\newline
+\begin{lstlisting}[language=html]
+#Nous déclarons les fonctions.
+f= function(x){
+  x^2 - 6*x - 3
+}
+g = function(x){
+  x^2 + x - 1 
+}
+# On trace la première fonction f(x) et définissons l'environnement graphique
+curve(f(x), -12, 12, col = "red", xlab = "x", ylab = "y", lwd = 2,
+      main = "Graphiques de f(x) et g(x)")
+# Nous ajoutons la grid
+grid()
+# Nous ajoutons la fonction g(x)
+curve(g(x), col = "blue", lwd = 2, add = TRUE)
+# Nous ajoutons la légende
+legend("topright", col = c("red", "blue"), lty=1, legend = c("f(x)", "g(x)"))
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.4]{ilu/gra77.png}\end{center}\end{figure}
+
+\subsubsection{Exercice 2. }\textcolor{white}{.}\newline
+\begin{lstlisting}[language=html]
+#Import des données 
+enquete = read.table("http://www.math.unicaen.fr/~chesneau/enquete.txt",header = T)
+#Affichage des données du data frame
+str(enquete)
+attach(enquete)
+#On définit trois nouveaux objets (les variables du dataframe), sur lesquels on pourra faire appel directement
+#Pas besoin de faire enquete$poids ...
+\end{lstlisting}
+\begin{enumerate}
+\item On fait :
+\begin{lstlisting}[language=html]
+bppoids = barplot(
+  sort(poids, decreasing = T), 
+  ylim = c(0, 80), 
+  main = "Poids",
+  col = heat.colors(10) ## Dégradé à 10 nuances
+)
+text(
+  bppoids, 
+  sort(poids, decreasing=T) + 1.5, ## Permet d'afficher les résultats textuels (1,5 unité au dessus des graphes) 
+  sort(poids, decreasing = T)
+)
+
+axis(
+  1, 
+  at = bppoids,
+  labels = order(poids, decreasing = T)
+)
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.4]{ilu/gra78.png}\end{center}\end{figure}
+\item On fait :
+\begin{lstlisting}[language=html]
+tcoul = table(couleur) # On récupère les effectifs de couleurs et on les stock dans un vecteur (Blanc : 2, Bleu : 4, Noir : 3, Rouge : 1)
+bpcoul = barplot(
+  tcoul, 
+  ylim = c(0,10), 
+  main = "Couleur choisie",
+  col = heat.colors(4) ## Dégradé à 4 nuances
+)
+text(
+  bpcoul, 
+  tcoul + 0.5, 
+  tcoul
+)
+## On va rajouter l'axe de droite correspondant aux fréquences
+axis(
+  4, 
+  at = (0:10),
+  labels = seq(0, 1, by = 0.1)
+)
+## Et on rajoute des tirets pour sous chaque barre pointants vers le nom de la couleur
+axis(
+  1, 
+  at = bpcoul,
+  labels = names(tcoul)
+)
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.4]{ilu/gra79.png}\end{center}\end{figure}
+\item On fait :
+\begin{lstlisting}[language=html]
+tcoul = table(couleur)
+bpcoulbis = 
+  barplot(
+    sort(tcoul, decreasing = T), 
+    ylim = c(0, 10),
+    main = "Couleur choisie", 
+    col = heat.colors(4)
+)
+text(
+  bpcoulbis, 
+  sort(tcoul, decreasing = T) + 0.5, 
+  sort(tcoul, decreasing = T)
+)
+axis(
+  4, 
+  at = (0:10), 
+  labels = seq(0, 1, by = 0.1)
+)
+axis(
+  1, 
+  at = bpcoulbis, 
+  labels = names(tcoul)[order(tcoul, decreasing = T)]
+)
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.4]{ilu/gra80.png}\end{center}\end{figure}
+\end{enumerate}
+
+
+\subsubsection{Exercice 3. }\textcolor{white}{.}\newline
+\begin{lstlisting}[language=html]
+nba = read.table("http://www.math.unicaen.fr/~chesneau/nba.txt",header = T, sep = ",")
+\end{lstlisting}
+\begin{enumerate}
+\item On fait : 
+\begin{lstlisting}[language=html]
+> str(nba)
+'data.frame': 505 obs. of  5 variables:
+ $ Joueur: Factor w/ 505 levels "Aaron\xa0Brooks",..: 360 198 391 438 480 253 99 297 432 499 ...
+ $ X2    : Factor w/ 3 levels "C","F","G": 3 3 3 3 3 3 3 3 3 3 ...
+ $ X1    : int  69 69 71 71 71 71 72 72 72 72 ...
+ $ Y     : int  180 185 175 176 195 157 180 205 175 185 ...
+ $ X3    : int  29 24 22 20 25 30 25 27 28 30 ...
+\end{lstlisting}
+On dispose alors de la nature des variables considérées ($X2$ est une variable qualitative avec 3 modalités "C", "F" et "G", $X1$ est une variable qualitative à valeurs entières, idem pour $Y$ et $X3$).
+\item On fait :
+\begin{lstlisting}[language=html]
+## Etat initial.
+> names(nba)
+[1] "Joueur" "X2"     "X1"     "Y"      "X3"    
+> names(nba) = c("joueurs", "role", "taille", "poids", "age")
+## Surcharge des noms des variables
+> names(nba)
+[1] "joueurs" "role"    "taille"  "poids"   "age"   
+#On définit de nouveaux objets 
+attach(nba)
+\end{lstlisting}
+\item 
+\begin{itemize}
+
+\item Pour représenter simplement la dispersion des \textit{poids} des basketteurs, on fait :
+\begin{lstlisting}[language=html]
+stripchart(poids)
+\end{lstlisting}
+Cela renvoie :
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.4]{ilu/gra81.png}\end{center}\end{figure}
+\item La distribution associée est donnée par les commandes :
+\begin{lstlisting}[language=html]
+hist(poids)
+\end{lstlisting}
+Cela renvoie :
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.4]{ilu/gra82.png}\end{center}\end{figure}
+\end{itemize}
+\item Pour représenter simplement la distribution des \textit{tailles} des basketteurs, on fait :
+\begin{lstlisting}[language=html]
+hist(taille)
+\end{lstlisting}
+Cela renvoie :
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.4]{ilu/gra83.png}\end{center}\end{figure}
+
+\item La distribution de la variable \textit{role} avec la commande pie peut être représentée avec les commandes :
+\begin{lstlisting}[language=html]
+pie(table(role),col = heat.colors(3))
+\end{lstlisting}
+Cela renvoie :
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.4]{ilu/gra84.png}\end{center}\end{figure}
+
+\item Les paramètres statistiques de \textit{poids} en fonction de \textit{role} peuvent se visualiser avec des boîtes à moustaches :
+\begin{lstlisting}[language=html]
+boxplot(poids~role,col = topo.colors(3))
+\end{lstlisting}
+Cela renvoie :
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.4]{ilu/gra85.png}\end{center}\end{figure}
+
+\item Les paramètres statistiques de \textit{poids} en fonction de \textit{age} peuvent se visualiser avec des boîtes à moustaches :
+\begin{lstlisting}[language=html]
+range(names(table(age)))
+[1] "15" "40"
+nb <- 40-15
+boxplot(poids~age,col=terrain.colors(nb))
+\end{lstlisting}
+Cela renvoie :
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.4]{ilu/gra86.png}\end{center}\end{figure}
+\item Les paramètres statistiques de \textit{taille} en fonction de \textit{age} peuvent se visualiser avec des boîtes à moustaches :
+\begin{lstlisting}[language=html]
+range(names(table(age)))
+[1] "15" "40"
+nb <- 40-15
+boxplot(taille~age,col=rainbow(nb))
+\end{lstlisting}
+Cela renvoie :
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.4]{ilu/gra87.png}\end{center}\end{figure}
+\item Pour construire le nuage de points associé à (taille, poids), on fait :
+\begin{lstlisting}[language=html]
+plot(taille, poids)
+\end{lstlisting}
+Cela renvoie :
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.4]{ilu/gra88.png}\end{center}\end{figure}
+On trace la fonction demandée en faisant :
+\begin{lstlisting}[language=html]
+h = function(x){
+  exp(-4.59678)*x^(2.28551)
+}
+curve(h, 66, 88, col = "red", lwd = 2, add = TRUE)
+\end{lstlisting}
+Cela renvoie :
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.4]{ilu/gra89.png}\end{center}\end{figure}
+\item On propose les commandes :
+\begin{lstlisting}[language=html]
+library(ggplot2)
+
+ggplot(nba, aes(x = taille, y = poids)) +
+  geom_point(aes(color = age, shape = role))
+\end{lstlisting}
+Cela renvoie :
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.4]{ilu/gra90.png}\end{center}\end{figure}
+
+\item On construit le nuage de points associé à (taille, poids) et on trace une courbe estimée qui ajuste au mieux ce nuage.
+\begin{lstlisting}[language=html]
+library(ggplot2)
+
+ggplot(nba, aes(x = taille, y = poids)) + geom_point(shape=1) + geom_smooth(, se = FALSE,method = 'loess')
+\end{lstlisting}
+Cela renvoie :
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.4]{ilu/gra91.png}\end{center}\end{figure}
+\end{enumerate}
+
+
+\subsubsection{Exercice 4. }\textcolor{white}{.}\newline
+
+\begin{enumerate}
+\item On propose les commandes :
+\begin{lstlisting}[language=html]
+tdens = function(x, nu) {
+  (1 / sqrt(nu * pi)) * (gamma((nu + 1)/2) / gamma(nu / 2)) * (1 + x^2 / nu)^(-(nu + 1) / 2)
+}
+\end{lstlisting}
+\item On fait :
+\begin{lstlisting}[language=html]
+## On ajoute les 4 courbes pour des valeurs de nu différentes
+### nu = 1 + Les paramètres de la fenêtre graphique
+curve(tdens(x, 1), xlim = c(-6, 6), ylim = c(0, 0.38), col = "#0C99F9", lwd = 3,
+      ylab = "", main = "Densités associées à la loi de Student")
+### nu = 2
+curve(tdens(x, 2), col = "#F0CF99", lwd = 3, add = TRUE)
+### nu = 5
+curve(tdens(x, 5), col = "#CFFFF9", lwd = 3, add = TRUE)
+### nu = 16
+curve(tdens(x, 16), col = "#CC00F9", lwd = 3, add = TRUE)
+## On trace les axes de centrage
+abline(h = 0, lty = 2)
+abline(v = 0, lty = 2)
+## On ajoute les légende
+legend("topright",
+       legend = c(
+         expression(paste(nu, "=1")),
+         expression(paste(nu, "=2")),
+         expression(paste(nu, "=5")),
+         expression(paste(nu, "=16"))),
+       lwd = 3, col = c("#0C99F9", "#F0CF99", "#CFFFF9", "#CC00F9"))
+\end{lstlisting}
+Cela renvoie :
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.4]{ilu/gra92.png}\end{center}\end{figure}
+\end{enumerate}
+\subsubsection{Exercice 5. }\textcolor{white}{.}\newline
+\begin{enumerate}
+  \item On propose les commandes suivantes :
+\begin{lstlisting}[language=html]
+## Le séparateur de variable ici est un espace.
+x = scan("http://www.math.unicaen.fr/~chesneau/norm.txt", sep = " ")
+hist(
+  x, 
+  main = "Histogramme de x et fonction f", 
+  ylab = "Fréquence",
+  freq = FALSE, 
+  col = cm.colors(14)
+)
+f = function(x) { 
+  (1/sqrt(2 * pi)) * exp(- x^2 / 2) 
+}
+curve(f, 
+      -4, 
+      4, 
+      col = "darkblue", 
+      lwd = 2, 
+      add = T)
+legend(
+  "topleft", 
+  col = c(cm.colors(1), "darkblue"), 
+  lty = 1,
+  legend = c("histogramme", "fonction f")
+)
+
+\end{lstlisting}
+Cela renvoie :
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.4]{ilu/gra93.png}\end{center}\end{figure}
+
+\item On propose les commandes suivantes :
+\begin{lstlisting}[language=html]
+par(mfrow = c(2,1))
+hist(
+  x, 
+  main = "Histogramme de x", 
+  ylab = "Fréquence", 
+  freq = FALSE,
+  col = cm.colors(14)
+)
+legend(
+  "topleft", 
+  fill = cm.colors(2), 
+  legend = "histogramme"
+)
+curve(f, 
+      -4, 
+      4, 
+      col = "darkblue", 
+      lwd = 2, 
+      main = "fonction f"
+)
+legend(
+  "topleft", 
+  fill = "darkblue", 
+  legend = "fonction f"
+)
+
+par(mfrow = c(1,1)) ## A ne pas oublier sinon on est dans la ... pour les graphiques suivants
+\end{lstlisting}
+Cela renvoie :
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.4]{ilu/gra94.png}\end{center}\end{figure}
+\end{enumerate}
+
+\subsubsection{Exercice 6. }\textcolor{white}{.}\newline
+
+\begin{lstlisting}[language=html]
+x = rnorm(18)
+y = rnorm(18)
+plot(x, y, xlab = "", ylab = "", xlim = c(-2, 2), ylim = c(-2, 2), pch = 22,
+col = "red", bg = "yellow", bty = "l", tcl = 0.4, main = "Nuage de points")
+grid(lwd = 1)
+\end{lstlisting}
+
+On simule 18 points dont les coordonnées sont des réalisations d'un couple de variables aléatoires réelles (X, Y ), avec X et Y suivant chacune la loi normale $\mathcal{N}(\mu,\sigma^{2})$ où $\mu = 0$ et $\sigma^{2}=1$. \newline
+Ensuite, on représente le nuage de points en utilisant des options graphiques spécifiques sur le format des points. \newline
+Pour finir, on met un quadrillage au fond du graphique. Cela renvoie :
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.4]{ilu/gra95.png}\end{center}\end{figure}
+
+
+\subsubsection{Exercice 7. }\textcolor{white}{.}\newline
+\begin{lstlisting}[language=html]
+plot(1, 1, xlim = c(1, 5.5), ylim = c(0, 7), type = "n", xlab = "", ylab = "")
+text(1:5, rep(6, 5), labels = c(0:4), cex = 1:5, col = 1:5)
+points(1:5, rep(5, 5), cex = 1:5, col = 1:5, pch = 0:4)
+text((1:5) + 0.4, rep(5, 5), cex = 0.6, (0:4))
+points(1:5, rep(4, 5), cex = 2, pch = (5:9))
+text((1:5) + 0.4, rep(4, 5), cex = 0.6, (5:9))
+points(1:5, rep(3, 5), cex = 2, pch = (10:14))
+text((1:5) + 0.4, rep(3, 5), cex = 0.6, (10:14))
+points(1:5, rep(2, 5), cex = 2, pch = (15:19))
+text((1:5) + 0.4, rep(2, 5), cex = 0.6, (15:19))
+points((1:6)*0.8 + 0.2, rep(1, 6), cex = 2, pch = (20:25))
+text((1:6)*0.8 + 0.5, rep(1, 6), cex = 0.6, (20:25))
+\end{lstlisting}
+En utilisant plusieurs commandes graphiques usuelles, on a : 
+
+\begin{enumerate}
+  \item  créer un graphique vide (dans lequel on a)
+  \item afficher les chiffres $0, 1, 2, 3$ et $4$, avec une taille croissante et des couleurs changeantes,
+  \item  afficher les "points" codés $0, 1, 2, 3$ et $4$ dans l'option pch, toujours avec une taille croissante et des couleurs changeantes,
+  \item afficher les "points" codés $5, 6, 7, 8$ et $9$ dans l'option pch,
+  \item afficher les "points" codés $10, 11, 12, 13$ et $14$ dans l'option pch,
+  \item afficher les "points" codés $15, 16, 17, 18$ et $19$ dans l'option pch,
+  \item afficher les "points" codés $20, 21, 22, 23, 24$ et $25$ dans l'option pch.
+\end{enumerate}
+
+Cela renvoie :
+
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.4]{ilu/gra96.png}\end{center}\end{figure}
+

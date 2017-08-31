@@ -348,6 +348,7 @@ abline(h=0.5,col="red",lwd=2)
 ############################################################
 
 library(ggplot2)
+library(ggplot)
 library(dplyr)
 
 set.seed(1234)
@@ -935,3 +936,314 @@ blank_theme <- theme_minimal() + theme(
 library(scales)
 
 p+ scale_fill_brewer("Blues") + blank_theme + geom_text(aes(y = value/3 + c(0, cumsum(value)[-length(value)]),label = percent(value/100)), size = 5)
+
+library(maps)
+china = map_data('world2', region = "China")
+ggplot(china, aes(x = long, y = lat, group = group)) + geom_polygon(fill = 'white', color = 'black')
+
+  # WTF, why Taiwan is outside of china??
+  
+h <- ggplot(economics, aes(date, unemploy))
+h + geom_path(size = 0.8, color = "#E46726") + theme_minimal()
+
+# combine path, ribbon and rectangle
+h + geom_rect(aes(xmin = as.Date('1980-01-01'), ymin = -Inf, xmax = as.Date('1985-01-01'), ymax = Inf), fill = "#A29B32", color = "#D8DA9E", size = 1.5) + geom_ribbon(aes(ymin = unemploy - 900, ymax = unemploy + 900), fill = "#F3BF94") + geom_path(size = 0.8, color = "#E46726") + theme_minimal()
+
+# Add line segments and curve between points (x1, y1) and (x2, y2):
+  # Create scatter plot
+  i <- ggplot(mtcars, aes(wt, mpg)) + geom_point()
+# Add segment
+i + geom_segment(aes(x = 2, y = 15, xend = 3, yend = 15))
+
+library(grid)
+i + geom_segment(aes(x = 5, y = 30, xend = 3.5, yend = 25), arrow = arrow(length = unit(0.5, "cm")))
+
+# Add curves
+i + geom_curve(aes(x = 2, y = 15, xend =3, yend = 15))
+
+ToothGrowth$dose <- as.factor(ToothGrowth$dose)
+p <- ggplot(ToothGrowth, aes(x = dose, y = len, fill = dose)) + geom_boxplot()
+
+# Change title and axis labels
+p <- p + labs(title = "Plot of length \n by dose", x = "Dose (mg)", y = "Teeth length")
+print(p)
+
+# Change the appearance of labels.
+# values for face are one of 'plain', 'italic', 'bold' and 'bold.italic'
+p + theme(
+  plot.title = element_text(color = 'red', size = 12, face = 'bold.italic'),
+  axis.title.x = element_text(color = 'blue', size = 12, face = 'bold'),
+  axis.title.y = element_text(color = '#993333', size = 12, face = 'bold')
+)
+
+# Hide labels
+p + theme(
+  plot.title = element_blank(),
+  axis.title.x = element_blank(),
+  axis.title.y = element_blank()
+)
+
+# Change the legend title
+# use labs and scale functions to update the legend
+p + labs(fill = "Dose (mg)")
+
+# Legen position and Appearance
+# Convert the variable dose form numeric to factor variable
+ToothGrowth$dose <- as.factor(ToothGrowth$dose)
+p <- ggplot(ToothGrowth, aes(x = dose, y = len, fill = dose)) + geom_boxplot()
+
+# Change the legend positions: 'left', 'right', 'top', 'bottom', 'none'
+p + theme(legend.position = 'top')
+
+# Legend position as numeric vector c(x,y)
+p + theme(legend.position = c(0.8, 0.2))
+
+# Remove the legend 
+p + theme(legend.position = 'none')
+
+# Change the appearance of legend title and labels
+p + theme(legend.title = element_text(color = 'blue'),legend.text = element_text(color = 'red'))
+
+# Change the legend box background color
+p + theme(legend.background = element_rect(fill = 'lightblue'))
+
+# Change the order of legend items
+p + scale_x_discrete(limits = c("2", "0.5", "1"))
+
+# Set legend title and labels
+p + scale_fill_discrete(name = "Dose", labels = c("A", "B", "C"))
+
+# gyudes(): set or remove the legend for a specific aestheic
+mtcars$cyl <- as.factor(mtcars$cyl)
+mtcars$gear <- as.factor(mtcars$gear)
+# Plot with multiple aestheics
+p <- ggplot(data = mtcars, aes(x = mpg, y = wt, color = cyl, size = qsec, shape = gear)) + geom_point()
+print(p)
+
+# Change the order of  guides using guide_legend()
+p + guides(color = guide_legend(order = 1),
+           size = guide_legend(order = 2),
+           shape = guide_legend(order = 3)
+)
+
+# Remove a legend for a particular aestheic(color and size)
+p + guides(color = F, size = F)
+
+library(wesanderson)
+# Convert dose and cyl columns from numeric to factor variables
+ToothGrowth$dose <- as.factor(ToothGrowth$dose)
+mtcars$cyl <- as.factor(mtcars$cyl)
+# Box plot 
+bp <- ggplot(ToothGrowth, aes(x=dose, y=len)) + geom_boxplot(aes(fill = dose))
+# Scatter plot 
+sp <- ggplot(mtcars, aes(x=wt, y=mpg)) + geom_point(aes(color = cyl))
+
+bp + scale_fill_manual(values = wes_palette(n = 3, name = "GrandBudapest"))
+
+sp + scale_color_manual(values = wes_palette(n = 3, name = "Darjeeling"))
+
+# Gradient between two colors
+# The graphs are colored using the qsec continuouse variable:
+sp2 <- ggplot(mtcars, aes(x = wt, y = mpg)) + geom_point(aes(color = qsec))
+print(sp2)
+
+# Change the low and high colors
+# Sequnetial color scheme
+sp2 + scale_color_gradient(low = "blue", high = "red")
+
+# Diverging color scheme
+mid <- mean(mtcars$qsec)
+sp2 + scale_color_gradient2(midpoint = mid, low = 'blue', mid = "white", high = "red", space = "Lab")
+
+# Load data and convert dose to a factor variable 
+data("ToothGrowth") 
+ToothGrowth$dose <- as.factor(ToothGrowth$dose) 
+# Box plot 
+p <- ggplot(ToothGrowth, aes(x=dose, y=len, group=dose)) + geom_boxplot(aes(fill=dose))
+print(p)
+
+p + facet_grid(supp ~ .)
+
+p + facet_grid(.~ supp)
+
+p + facet_grid(dose ~ supp)
+
+library(cowplot)
+library(gridExtra)
+
+data("ToothGrowth")
+ToothGrowth$dose <- as.factor(ToothGrowth$dose)
+
+data("economics")
+data("diamonds")
+my3cols <- c("#E7B800", "#2E9FDF", "#FC4E07")
+
+p <- ggplot(ToothGrowth, aes(x = dose, y = len))
+
+# boxplot
+bxp <- p + geom_boxplot(aes(color = dose)) + scale_color_manual(values = my3cols)
+
+print(bxp)
+
+# Dot plot(dp)
+dp <- p + geom_dotplot(aes(color = dose, fill = dose), binaxis = 'y', stackdir = 'center') + scale_color_manual(values = my3cols) + scale_fill_manual(values = my3cols)
+print(dp)
+
+# line plot
+lp <- ggplot(economics, aes(x = date, y = psavert)) + geom_line(color = '#E46726')
+print(lp)
+
+# Add gridlines
+bxp + background_grid(major = 'xy', minor = 'none')
+
+# Use theme_gray()
+bxp + theme_gray()
+
+plot_grid(bxp,dp,lp, labels = c('A','B','C'), ncol=2, nrow = 2)
+
+ggdraw() + 
+  draw_plot(bxp, x = 0, y = 0.5, width = 0.5 , height = 0.5) +
+  draw_plot(dp, x = 0.5, y = 0.5, width = 0.5, height = 0.5) + 
+  draw_plot(lp, x = 0, y = 0, width = 1, height = 0.5) +
+  draw_plot_label(label = c("A","B","C"), x= c(0, 0.5, 0), y = c(1,1,0.5), size = 15)
+
+# Save multi-figure plots
+plot2by2 <- plot_grid(bxp,dp,lp, labels = c('A','B','C'), ncol=2, nrow = 2)
+
+library(gridExtra)
+my5cols <- c("#6D9EC1", "#646567", "#A29B32", "#E46726", "#F3BF94")
+
+# create a bar plot
+data("diamonds")
+brp <- ggplot(diamonds, aes(x = clarity)) + geom_bar(aes(fill = cut)) + scale_fill_manual(values = my5cols)
+
+grid.arrange(bxp, dp, lp, brp, ncol = 2, nrow = 2)
+
+grid.arrange(bxp, arrangeGrob(dp, brp), ncol = 2)
+
+grid.arrange(brp, bxp, dp, ncol = 2, nrow = 2, layout_matrix = rbind(c(1,1),c(2,3)))
+
+# Use common legend for multiple graphs.
+# 1. Get plot legend
+get_legend <- function(myggplot){ 
+  require(gridExtra) 
+  tmp <- ggplot_gtable(ggplot_build(myggplot)) 
+  leg <- which(sapply(tmp$grobs, function(x) x$name) == "guide-box") 
+  legend <- tmp$grobs[[leg]] 
+  return(legend)
+}
+
+# 2. Save the legend from the dot plot
+legend <- get_legend(dp)
+
+# 3. Remove the legend from the box plot and the dot plot
+bxp2 <- bxp + theme(legend.position = "none")
+dp2 <- dp + theme(legend.position = "none")
+
+# 4. Arrange bxp2, dp2 and the legend with a specific width
+grid.arrange(bxp2, dp2, legend, ncol = 3, widths = c(2.3,2.3,0.8))
+
+set.seed(1234)
+x <- c(rnorm(350, mean = -1), rnorm(350, mean = 1.5), rnorm(350, mean = 4))
+y <- c(rnorm(350, mean = -0.5), rnorm(350, mean = 1.7), rnorm(350, mean = 2.5))
+group <- as.factor(rep(c(1, 2, 3), each = 350))
+df2 <- data.frame(x, y, group) 
+head(df2)
+
+library(gridExtra)
+# Scatter plot of x and y variables and color by groups 
+scatterPlot <- ggplot(df2, aes(x, y)) + geom_point(aes(color = group)) + scale_color_manual(values = my3cols) + theme(legend.position=c(0,1), legend.justification=c(0,1))
+# Marginal density plot of x (top panel) 
+xdensity <- ggplot(df2, aes(x)) + geom_density(aes(fill = group), alpha=.8) + scale_fill_manual(values = my3cols) + theme(legend.position = "none")
+# Marginal density plot of y (right panel) 
+ydensity <- ggplot(df2, aes(y)) + geom_density(aes(fill=group), alpha=.8) + scale_fill_manual(values = my3cols) + theme(legend.position = "none") + coord_flip()
+
+blankPlot <- ggplot()+geom_blank()+ theme_void()
+
+grid.arrange(xdensity, blankPlot, scatterPlot, ydensity, ncol=2, nrow=2, widths=c(4, 1.4), heights=c(1.4, 4))
+
+library(ggExtra)
+ggMarginal(scatterPlot)
+
+# Marginal histogram plot
+ggMarginal(scatterPlot, type = "histogram", fill = "#6D9EC1", color= "#BFD5E3")
+
+
+# Create a transparent theme object
+transparent_theme <- theme(axis.title.x = element_blank(), axis.title.y = element_blank(), axis.text.x = element_blank(), axis.text.y = element_blank(), axis.ticks = element_blank(), panel.grid = element_blank(), axis.line = element_blank(), panel.background = element_rect(fill = "transparent",colour = NA), plot.background = element_rect(fill = "transparent",colour = NA))
+
+p1 <- scatterPlot
+# box plot of the x variable
+p2 <- ggplot(df2, aes(factor(1),x)) + geom_boxplot(width = 0.3) + coord_flip() + transparent_theme
+# box plot of the y variable
+p3 <- ggplot(df2, aes(factor(1), y)) + geom_boxplot(width = 0.3) + transparent_theme
+
+# Create the external graphical elements
+# called a 'grop' in Grid terminology
+p2_grob = ggplotGrob(p2)
+p3_grob = ggplotGrob(p3)
+
+# Insert p2_grob inside the scatter plot
+xmin <- min(x); xmax <- max(x)
+ymin <- min(y); ymax <- max(y)
+p1 + annotation_custom(grob = p2_grob, xmin = xmin, xmax = xmax, ymin = ymin - 1.5, ymax = ymin + 1.5)
+
+# Insert p3_grob inside the scatter plot
+p1 + annotation_custom(grob = p3_grob, xmin = xmin - 1.5, xmax = xmin + 1.5, ymin = ymin, ymax = ymax)
+
+library(GGally)
+library(ggcorrplot)
+mydata <- mtcars[, c(1,3,4,5,6,7)]
+ggcorr(mydata, palette = "Set3", label = TRUE)
+
+# Matrix of scatter plot
+ggpairs(mydata)
+
+mydata <- mtcars[, c(1,3,4,5,6,7)]
+corr <- round(cor(mydata),1)
+head(corr[,1:6],3)
+
+p.mat <- cor_pmat(mydata)
+head(p.mat[,1:4],3)
+
+ggcorrplot(corr)
+
+# reordering the correlation matrix
+# use hierarchical clustering
+ggcorrplot(corr, hc.order = T, outline.col = "white")
+
+# Types of correlogram layout and customization
+# Add correlation coefficients
+ggcorrplot(corr, hc.order = T, 
+           type = 'lower',
+           outline.color = 'white',
+           ggtheme = ggplot2::theme_bw,
+           colors = c('#6D9EC1', 'white', '#E46726'),
+           lab = T)
+
+# Add correlation significance level
+# Argument p.mat
+# Barring the no significant coefficient
+ggcorrplot(corr, hc.order = T, type = 'lower', p.mat = p.mat)
+
+library(survival)
+data(lung, package = 'survival')
+# - time: Survival time in days.
+# - status: censoring status 1 = censored, 2 = dead
+# - sex: Male = 1; Female = 2
+fit = survfit(Surv(time, status) ~ sex, data = lung)
+
+library(survminer)
+
+# ggsurvplot: drawing survival curves
+ggsurvplot(fit)
+
+# customize survival curves
+ggsurvplot(fit, size = 1, # change line size 
+           palette = c("#E7B800", "#2E9FDF"), # custom color palette 
+           conf.int = TRUE, # Add confidence interval 
+           pval = TRUE, # Add p-value 
+           risk.table = TRUE, # Add risk table 
+           risk.table.col = "strata", # Risk table color by groups 
+           ggtheme = theme_bw() # Change ggplot2 theme 
+)
