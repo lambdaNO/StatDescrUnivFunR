@@ -1246,4 +1246,27 @@ ggsurvplot(fit, size = 1, # change line size
            risk.table = TRUE, # Add risk table 
            risk.table.col = "strata", # Risk table color by groups 
            ggtheme = theme_bw() # Change ggplot2 theme 
+           
 )
+
+data()
+
+help("ToothGrowth")
+help("economics")
+help("diamonds")
+help(world2)
+help(world)
+help(lung)
+
+help(mtcar)
+??mtcars
+
+help(mpg)
+
+table(mpg$manufacturer)
+table(mpg$model)
+
+help(iris)
+??iris
+
+help("faithfuld")

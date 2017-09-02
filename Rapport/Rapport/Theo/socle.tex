@@ -1,0 +1,253 @@
+\vspace*{\stretch{1}}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.8]{ilu/benderMaths.png}\end{center}\end{figure}
+\vspace*{\stretch{1}}
+\dominitoc
+\chapter{Socle théorique de la Statistique - Christophe Chesneau}
+\textbf{Auteur : } \underline{\href{http://www.math.unicaen.fr/~chesneau/}{Christophe Chesneau}}\newline
+\\
+\textbf{Note : }\newline
+L'objectif de ce document est de présenter quelques bases mathématiques sur lesquelles reposent la Statistique paramétrique. Notamment, les principales lois de probabilités utilisées en Statistique seront étudiées (lois normale, de Student, du Chi-deux et de Fisher\dots).\newline
+\textit{Contact :} \href{christophe.chesneau@gmail.com}{christophe.chesneau@gmail.com}\newline
+Bonne lecture !
+\section{Variables aléatoires réelles à densité : l'essentiel}
+\textbf{Point de départ :} On suppose construit un espace probabilisé $(\Omega;\mathcal{A}; \mathbb{P})$. Lorsqu'une quantité est introduite (dérivée, intégrale, espérance, moments, variance \dots), il est supposé que celle-ci existe.
+\subsection*{Variable aléatoire réelle (\textit{var}) :}
+On appelle var toute application $X : \Omega \rightarrow \mathbb{R}$.
+\subsection*{Support :} Le support d'une \textit{var} $X$, noté $X(\Omega)$, est l'ensemble des valeurs atteintes par $X$. C'est la première chose à préciser lorsqu'on considère une \textit{var}.
+\subsection*{Densité :}
+On appelle densité toute fonction $f : \mathbb{R} \rightarrow \mathbb{R}$ vérifiant :
+\begin{itemize}
+	\item Pour tout $x\in \mathbb{R}$
+	$$f(x)\geq 0$$
+	\item 
+	$$\int_{-\infty}^{+\infty} f(x)\textrm{dx}=1$$
+\end{itemize}
+\subsection*{Var à densité :}
+On dit qu'une \textit{var} $X$ est à densité s'il existe une densité $f$ telle que, pour tous $a\leq b$, on a :
+$$ \mathbb{P}(a\leq X\leq b) = \int_{a}^{b}f(x)\textrm{dx}$$
+On dit alors que $X$ est de densité $f$ ou $X$ possède la densité $f$ ou $f$ est une densité de $X$.\newline
+La loi de $X$ est caractérisée par $f$.
+\subsection*{Calculs usuels :}
+\begin{enumerate}
+	\item $$\color{red}{\mathbb{P}(X = a) = 0}$$
+	\item $$\mathbb{P}(X\leq b) = \int_{-\infty}^{b}f(x)\textrm{dx}$$
+	\item $$\mathbb{P}(X\geq a) = \int_{a}^{+\infty}f(x)\textrm{dx}$$
+	\item $$\mathbb{P}(a\leq X\leq b) = \int_{a}^{b}f(x)\textrm{dx } = \int_{-\infty}^{b}f(x)\textrm{dx } - \int_{-\infty}^{a}f(x)\textrm{dx}$$
+\end{enumerate}
+On peut donc remplacer les inégalités larges par des inégalités strictes :
+$$\mathbb{P}(a\leq X\leq b) = \mathbb{P}(a < X\leq b) = \mathbb{P}(a\leq X < b) = \mathbb{P}(a < X < b) = \dots $$
+\subsection*{Fonction de répartition :}
+$$ F(X) = \mathbb{P}(X \leq	x) = \int_{-\infty}^{x} f(t)\textrm{dt , }\forall x \in \mathbb{R}$$
+\subsection*{Retour sur le support :}
+Soit $F$ la fonction de répartition d'une \textit{var} $X$ de densité $f$. Alors $X(\Omega)$ est l'adhérence de $\{x \in \mathbb{R}\textrm{; }F(x) \in ]0; 1[\}$.
+\subsection*{Caractérisation d'une fonction de répartition :}
+\begin{itemize}
+	\item $F$ est continue sur $\mathbb{R}$
+	\item $F$ est croissante
+	\item 
+	$$\lim\limits_{x \rightarrow -\infty} F(x) = 0 \textrm{ et } \lim\limits_{x \rightarrow +\infty} F(x) = 1$$
+\end{itemize}
+\subsection*{Densité et fonction de répartition :}
+Soit $X$ une \textit{var} à densité de fonction de répartition $F$. Alors une densité $f$ de $X$ est donnée par : 
+$$f(x) = F'(X)$$
+pour tout $x \in X(\Omega)$ sauf les points où $F$ n'est pas dérivable, et par ce qu'on veut ailleurs (du moment que $f$ reste une densité).
+\subsection*{Égalité en loi :}
+$X$ et $Y$ suivent la même loi , $F_{X}(x) = F_{Y} (x)$ pour tout $x \in \mathbb{R}$ $\Leftrightarrow$ $f_{X}(x) = f_{Y}(x)$ pour tout $x 2 \in \mathbb{R}$ sauf, éventuellement, en un nombre fini de points.
+$$F_{X}(x) = F_{Y} (x)\textrm{, }\forall x \in \mathbb{R} \Leftrightarrow f_{X}(x) = f_{Y}(x)$$
+\subsection*{Var symétrique :}
+\begin{itemize}
+	\item $X$ est symétrique $Leftrightarrow$ $X$ et $-X$ suivent la même loi.
+	\item $X$ possède une densité $f$ paire $\Rightarrow$ $X$ est symétrique.
+\end{itemize}
+\subsection*{Propriétés d'une var symétrique :}
+\begin{itemize}
+	\item pour tout $x \in \mathbb{R}$, 
+	$$\mathbb{P}(X \leq -x) = 1 - P(X\leq x)$$
+	\item pour tout $x \geq 0$, 
+	$$\mathbb{P}P(|X| \leq x) = 2\mathbb{P}(X \leq x) - 1$$.	
+\end{itemize}
+\subsection*{Espérance :}
+$$\mathbb{E}(X) = \int_{-\infty}^{+\infty} xf(x)\textrm{dx}$$
+L'espérance de $X$ est la valeur moyenne de $X$.
+\subsection*{Formule du transfert :}
+$$\mathbb{E}(g(X)) = \int_{-\infty}^{+\infty} g(x)f(x)\textrm{dx}$$
+\subsection*{Propriétés élémentaires :}
+\begin{itemize}
+	\item 
+	$$\mathbb{E}(a) = a $$
+	\item 
+	$$ X(\Omega) \subseteq [0;+\infty[ \Rightarrow \mathbb{E}(X) \geq 0$$
+	\item 
+	$$\mathbb{E}(aX+b) = a\mathbb{E}(X) + b$$
+	\item 
+	$$\mathbb{E}(aX^{2}+bX + c) = a\mathbb{E}(X^{2}) + b\mathbb{E}(X) + c$$
+\end{itemize}
+
+\subsection*{Moment d'ordre r :}
+$$\mathbb{E}(X^{r}) = \int_{-\infty}^{+\infty} x^{r}f(x)\textrm{dx}$$
+\subsection*{Espérance et var symétrique :}
+$X$ est symétrique $\Rightarrow$ pour toute fonction $g : \mathbb{R} \rightarrow \mathbb{R}$ impaire (si existence) $\mathbb{E}(g(X)) = 0$.
+\subsection*{Variance :}
+$$\mathbb{V}(X)= \mathbb{E}((X-\mathbb{E}(X))^{2})$$
+La variance de $X$ mesure la dispersion des valeurs de $X$ autour de son espérance.
+\subsection*{Propriétés élémentaires :}
+\begin{itemize}
+	\item
+	$$\mathbb{V}(a) = 0$$
+	\item
+	$$\mathbb{V}(X) \geq 0$$
+	\item
+	$$\mathbb{V}(X) = 0\textrm{ } \Leftrightarrow \textrm{ } X \textrm{ est une var constante}$$
+	\item 
+	$$\mathbb{V}(aX+b) = a^{2}\mathbb{V}(X)$$
+\end{itemize}
+\subsection*{Formule de König-Huyghens :}
+$$\mathbb{V}(X) = \mathbb{E}(X^{2}) - (\mathbb{E}(X))^{2}$$
+\subsection*{Écart-type :}
+$$\sigma(X)=\sqrt{\mathbb{X}}$$
+Tout comme la variance, l'écart-type de X mesure la dispersion des valeurs de X autour de son espérance. Il a l'avantage d'être de la même unité que X contrairement à la variance qui élève l'unité au carré.
+\subsection*{Transformée de Laplace :}
+$$\mathcal{L}(t) = \mathbb{E}(e^{tX})$$
+pour tout $t$ telle que $\mathbb{E}(e^{tX})$ existe.
+\subsection*{Moments et transformée de Laplace :}
+$$\mathbb{E}(X^{n}) = \mathcal{L}^{(n)}(0)$$
+C'est pourquoi on appelle aussi $\mathcal{L}$ fonction génératrice des moments de $X$.
+\subsection*{Égalité en loi et transformée de Laplace :}
+$X$ et $Y$ suivent la même loi $\Leftrightarrow$ $L_{X}(t) = L_{Y}(t)$ pour tout
+$t \in \mathbb{R}$.
+\subsection*{Vecteur de \textit{var} :}
+Soient $X_{1};\dots ;X_{n}$, $n$ \textit{var}. On appelle vecteur de \textit{var} l'application $(X_{1};\dots ;X_{n}) : \Omega \rightarrow \mathbb{R}^{n}$
+vérifiant 
+$$(X_{1};\dots ;X_{n})(\omega) = (X_{1}(\omega);\dots ;X_{n}(\omega)); \textrm{, }\omega \in \Omega$$
+\subsection*{Support :}
+Le support d'un vecteur de \textit{var} $(X_{1};\dots ;X_{n})$, noté $(X_{1}(\omega);\dots ;X_{n}(\omega))$, est l'ensemble de ses valeurs possibles.
+\subsection*{Densité (n-dimensionnelle) :}
+On appelle densité (n-dimensionnelle) toute fonction $f : \mathbb{R}^{n} \rightarrow \mathbb{R}$ vérifiant :
+\begin{itemize}
+	\item Pour tout $(x_{1}; \dots ; x_{n}) \in \mathbb{R}^{n}$, $f(x_{1}; \dots ; x_{n}) \geq 0$
+	\item $$\int_{-\infty}^{+\infty}\dots\int_{-\infty}^{+\infty}f(x_{1},\dots,x_{n})\textrm{d}x_{1}\dots\textrm{d}x_{n} = 1$$
+\end{itemize}
+\subsection*{Vecteur de var à densité :}
+On dit qu'un vecteur de \textit{var}  $(X_{1};\dots ;X_{n})$ est à densité s'il existe une densité $f$, telle que, pour tout $D \subseteq  \mathbb{R}^{n}$, on a : 
+$$\mathbb{P}((X_{1};\dots ;X_{n})\in\mathcal{D})\int\dots\int_{\mathcal{D}}f(x_{1},\dots,x_{n})\textrm{d}x_{1}\dots\textrm{d}x_{n} = 1$$
+On dit alors que $(X_{1};\dots ;X_{n})$ est de densité $f$ ou $(X_{1};\dots ;X_{n})$ possède la densité $f$ ou $f$ est une densité
+de $(X_{1};\dots ;X_{n})$. La loi de $(X_{1};\dots ;X_{n})$ est caractérisée par $f$.
+\subsection*{Fonction de répartition :}
+$$F(x_{1},\dots,x_{n}) = \mathbb{P}\left(\bigcap_{i=1}^{n}\{X_{i}\leq x_{i}\}  \right)\textrm{, } (x_{1},\dots,x_{n})\in\mathbb{R}^{n}$$
+
+\subsection*{Retour sur le support :}
+Soit $F$ la fonction de répartition d'un vecteur de \textit{var} $(X_{1};\dots ;X_{n})$ à densité.\newline
+On définit $(X_{1};\dots ;X_{n})(\Omega)$ par l'adhérence de 
+$$\{(x_{1},\dots,x_{n}) \in \mathbb{R}^{n}\textrm{ ; } F(x_{1},\dots,x_{n}) \in ]0; 1[\}$$.
+\subsection*{Densités marginales :}
+Une densité de $X_{1}$ est donnée par : 
+$$f_{X_{1}}(x_{1})=\int_{-\infty}^{+\infty}\dots\int_{-\infty}^{+\infty}f(x_{1},\dots,x_{n})\textrm{d}x_{2}\dots\textrm{d}x_{n}\textrm{, } x_{1}\in\mathbb{R}$$
+On définit de la même manière des densités pour d'autres \textit{var} $X_{2}$, \dots ,$X_{n}$.
+\subsection*{Densités de vecteurs de var composantes de $(X_{1};\dots ;X_{n})$ :}
+Une densité de $(X_{1};X_{2})$ est donnée par :
+$$f_{(X_{1},X_{2})}(x_{1},x_{2})=\int_{-\infty}^{+\infty}\dots\int_{-\infty}^{+\infty}f(x_{1},\dots,x_{n})\textrm{d}x_{3}\dots\textrm{d}x_{n}\textrm{, } (x_{1},x_{2})\in\mathbb{R}^{2}$$
+On définit de la même manière des densités d'autres vecteurs de \textit{var}.
+\subsection*{Indépendance mutuelle de $n$ \textit{var} à densité :}
+$X_{1};\dots ;X_{n}$ sont (mutuellement) indépendantes $\leftrightarrow$ $(X_{1};\dots ;X_{n})$ possède la densité produit : $\prod_{i=1}^{n}f_{X_{i}}(x_{i})$ \textit{i.e}
+$$f(x_{1},\dots,x_{n})=\prod_{i=1}^{n}f_{X_{i}}(x_{i})$$
+pour tout $(x_{1}; \dots ; x_{n})\in \mathbb{R}^{n}$ sauf, éventuellement, sur un ensemble de volume nul (donc $(X_{1};\dots ;X_{n})(\Omega) = X_{1}(\Omega)\times \dots  X_{n}(\Omega))$ $\Leftrightarrow$ pour tout $(x_{1}; \dots ; x_{n})\in\mathbb{R}^{n}$, on a :
+$$F(x_{1},\dots,x_{n})=\prod_{i=1}^{n}F_{X_{i}}(x_{i})$$
+$\Leftrightarrow$ pour tous $a_{i} \leq b_{i}$, $i \in \{1; \dots ; n\}$,
+$$\mathbb{P}\left( \bigcap_{i=1}^{n} \{a_{i}\leq X_{i}\leq b_{i}\}\right) = \prod_{i=1}^{n}\mathbb{P}(a_{i}\leq X_{i}\leq b_{i})$$
+\subsection*{Sur l'indépendance :}
+\begin{itemize}
+	\item Si $(X_{1};\dots ;X_{n})(\Omega)$ n'est pas un ensemble produit, alors $X_{1};\dots ;X_{n}$ ne sont pas (mutuellement) indépendantes.
+	\item $X_{1};\dots ;X_{n}$ sont indépendantes $\Rightarrow$ $g_{1}(X_{1}); \dots; g_{n}(X_{n})$ sont indépendantes.
+	\item $X_{1};\dots ;X_{n}$ sont indépendantes ) $\Rightarrow$ $g(X_{1};\dots;X_{q})$ et $h(X_{q+1};\dots;X_{n})$ sont indépendantes
+\end{itemize}
+\subsection*{Formule du transfert :}
+$$\mathbb{E}(g(X_{1},\dots,X_{n})) = \int_{-\infty}^{+\infty}\dots\int_{-\infty}^{+\infty} g(x_{1},\dots,x_{n})f(x_{1},\dots,x_{n})\textrm{d}x_{1}\dots\textrm{d}x_{n}$$
+\subsection*{Espérance et indépendance :}
+$X_{1},\dots ,X_{n}$ sont indépendantes $\Rightarrow$ 
+$$\mathbb{E}\left(\prod_{i=1}^{n}g_{i}(X_{i})\right) = \prod_{i=1}^{n}\mathbb{E}(g_{i}(X_{i}))$$
+\subsection*{Covariance :}
+$$\mathbb{C}(X,Y) = \mathbb{E}\left((X-\mathbb{E}(X))(Y-\mathbb{E}(Y))\right) = \mathbb{E}(XY) - \mathbb{E}(X)\mathbb{E}(Y)$$
+\subsection*{Propriétés de la covariance :}
+\begin{itemize}
+	\item 
+	$$\mathbb{C}(X,Y) = \mathbb{C}(Y,X)$$
+	\item 
+	$$\mathbb{C}(X,a) = 0$$
+	\item 
+	$$\mathbb{C}(aX+b,cY+d) = ac\mathbb{C}(Y,X)$$
+	\item
+	$$|\mathbb{C}(X,Y)| \leq \sigma(X)\sigma(Y)$$
+	\item
+	$$\mathbb{C}(aX+bY,cU+dV) = ac\mathbb{C}(X,U) + ad\mathbb{C}(X,V) + bc\mathbb{C}(Y,U) + bd\mathbb{C}(Y,V)$$
+\end{itemize}
+\subsection*{Matrice de covariance :}
+$$\Sigma = 
+\begin{pmatrix}
+\mathbb{C}(X_{1},X_{1}) & \mathbb{C}(X_{1},X_{2}) & \dots & \mathbb{C}(X_{1},X_{n}) \\
+\mathbb{C}(X_{2},X_{1}) & \mathbb{C}(X_{2},X_{2}) & \dots & \mathbb{C}(X_{2},X_{n}) \\
+\vdots & \ddots &  &  \vdots\\
+\vdots &  & \ddots &  \mathbb{C}(X_{n-1},X_{n})\\
+\mathbb{C}(X_{n},X_{1}) & \dots & \dots &  \mathbb{C}(X_{n-1},X_{n})\\
+\end{pmatrix}$$
+
+\subsection*{Espérance et variance d'une somme de $n$ \textit{var} :}
+$$\mathbb{E}\left(\sum_{i=1}^{n}X_{i}\right)= \sum_{i=1}^{n}\mathbb{E}(X_{i})$$
+$$\mathbb{V}\left(\sum_{i=1}^{n}X_{i}\right)= \sum_{i=1}^{n}\mathbb{V}(X_{i}) + 2 \sum_{i=2}^{n}\sum_{j=1}^{i-1}\mathbb{C}(X_{i},X_{j})$$
+$X_{1},\dots,X_{n}$ sont indépendantes  $\mathbb{C}(X_{i};X_{j}) = 0$ pour tout $i \neq j$ avec $(i;j) \in \{1; \dots ; n\}^{2}$ $\Rightarrow$
+$$\mathbb{V}\left(\sum_{i=1}^{n}X_{i}\right)= \sum_{i=1}^{n}\mathbb{V}(X_{i})$$
+\subsection*{Bilinéarité de la covariance :}
+$$\mathbb{C}\left(\sum_{i=1}^{n}a_{i}X_{i}\sum_{j=1}^{q}b_{j}Y_{j}\right)= \sum_{i=1}^{n}\sum_{j=1}^{q}a_{i}b_{j}\mathbb{C}(X_{i},Y_{j}) $$
+
+\subsection*{Théorème du changement de variable (pour un couple de \textit{var}, \textit{i.e.} $n = 2$)}
+Soient  $(X,Y)$ un couple de \textit{var}de densité $f_{(X,Y)}$, et $\phi:(X,Y)(\Omega) \rightarrow \mathbb{R}$ et $\psi:(X,Y)(\Omega)\rightarrow\mathbb{R}$, deux fonctions.\newline
+On considère le couple de \textit{var} :
+$$(U,V) = (\phi(X,Y),\psi(X,Y))$$
+On suppose que $g(x,y)=(\phi(x,y),\psi(x; y))$ est injective et qu'il existe deux fonctions $h : \mathbb{R}^{2} \rightarrow X(\Omega)$ et $k : \mathbb{R}^{2} \rightarrow Y(\Omega)$ différentiables telles que : 
+$$\left\{
+  \begin{array}{rcl}
+    u & = & \phi(x,y)\\
+    v & = & \psi(x,y)\\
+  \end{array}
+\right.
+\textrm{ }
+\Leftrightarrow
+\textrm{ }
+\left\{
+  \begin{array}{rcl}
+    x & = & h(u,v)\\
+    y & = & k(u,v)\\
+  \end{array}
+\right.
+$$
+Soit $J(u,v)$ le jacobien associé à $(x,y) = (h(u,v),k(u,v))$ défini par le déterminant :
+$$\begin{vmatrix} 
+\frac{\partial h}{\partial u}(u,v) & \frac{\partial h}{\partial v}(u,v) \\
+\\
+\frac{\partial k}{\partial u}(u,v) & \frac{\partial k}{\partial v}(u,v) 
+\end{vmatrix} = \frac{\partial h}{\partial u}(u,v)\frac{\partial k}{\partial v}(u,v) - \frac{\partial k}{\partial u}(u,v)\frac{\partial h}{\partial v}(u,v) $$
+Alors une densité de $(U,V)$ est donnée par : 
+$$f_{(U,V)}(u,v) = f_{(X,Y)}(h(u,v),k(u,v))|J(u,v)|\textrm{, } (u,v)\in\mathbb{R}^{2}$$
+\section{Loi normale}
+
+
+
+\section{Loi du Chi-deux}
+
+
+
+\section{Loi de Student}
+
+
+
+\section{Loi de Fisher}
+
+
+\section{Loi du Chi-deux non centrée}
+
+
+
+\section{Forme quadratique aléatoire}
+
+
+
+\section{Complément : loi normale multidimensionelle}

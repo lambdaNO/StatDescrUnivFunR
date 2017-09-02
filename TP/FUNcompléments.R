@@ -1396,5 +1396,136 @@ B
 solve(B)
 solve(B) %*% c(1, 2, 2, 3, 2)
 
+setwd("~/Desktop/DIVERS_TEMPLATES/StatDesR/TP")
 
+
+nb = c(18, 16, 8, 10, 6, 4, 4, 9, 11, 10, 12, 12)
+bar = barplot(nb / 120, col = "white")
+points(bar, rep(1 / 12, 12), type = "h",col="red")
+
+
+nb = c(60, 105, 65, 47, 15, 4, 3, 1, 0)
+bar = barplot(nb / 300, col = "white")
+lambda = sum((0:8) * nb) / 300;lambda
+prob = c(dpois(0:7, lambda), 1 - ppois(7, lambda));prob
+points(bar, prob, type = "h",col="red")
+
+x = c(43, 48, 65, 55, 51, 51, 44, 51, 59, 62, 45, 53, 55, 55, 49, 34, 52,
+      69, 45, 54, 59, 36, 36, 29, 52, 59, 41, 58, 54, 55, 72, 53, 52, 49, 57, 42,
+      70, 58, 42, 53, 57, 68, 40, 65, 54, 49, 32, 56, 50, 59)
+hist(x, freq = FALSE, main = "Méthode de l’histogramme", ylab = "")
+curve(dnorm(x, 51.94, 9.704638), add = TRUE,col="red")
+
+plot(ecdf(x), main = "Méthode de la fonction de répartition")
+curve(pnorm(x, 51.94, 9.704638), add = TRUE, col="red")
+
+plot(density(x), main = "Méthode de l’approximation de la densité",
+     ylab = "")
+curve(dnorm(x, 51.94, 9.704638), lwd = 1.5, col = "red", add = TRUE)
+
+qqnorm(x, main = "Méthode du QQ plot avec droite de Henry")
+a = mean(x) ; b = sd(x);a;b
+curve(a + b * x, -6, 6, col = "red", add = TRUE)
+
+plot(qnorm(ppoints(x)), sort(x))
+
+qqnorm(scale(x), main = "Méthode du QQ plot")
+abline(0, 1, col = "red")
+
+boxplot(x, main = "Méthode de la boîte à moustaches")
+
+x = c(0.96, 1.45, 0.42, 3.69, 2.58, 1.95, 1.74, 0.01, 1.02, 1.12, 0.17,
+      3.19, 0.85, 1.27, 0.68, 3.60, 1.23, 0.34, 0.31, 0.16, 0.07, 0.79, 0.02,
+      1.20, 0.05, 2.09, 0.24, 5.46, 2.57, 0.89, 0.74, 1.67, 0.88, 2.27, 0.22,
+      3.39, 0.12, 0.06, 0.78, 0.32, 5.79, 2.09, 0.39, 1.82, 2.96, 0.20, 0.08,
+      0.37, 2.58, 0.30)
+1 / mean(x)
+
+hist(x, freq = FALSE, main = "Méthode de l’histogramme", ylab = "")
+curve(dexp(x, 0.7446016), add = TRUE,col="red")
+
+plot(ecdf(x), main = "Méthode de la fonction de répartition")
+curve(pexp(x, 0.7446016), add = TRUE,col="red",lwd=1.5)
+
+plot(density(x), main = "Méthode de l’approximation de la densité",
+     xlim = c(0, 7), ylim = c(0, 0.5), ylab = "")
+curve(dexp(x, 0.7446016), lwd = 1.5, col = "red", add = TRUE)
+
+plot(qexp(ppoints(x), 0.7446016), sort(x), main = "Méthode du QQ plot",
+     xlab = "")
+abline(0,x, col = "red")
+
+nb = c(84, 79, 75, 49, 36, 47)
+proba = c(0.3, 0.2, 0.2, 0.1, 0.1, 0.1)
+chisq.test(nb, p = proba)$p.value
+
+nb = c(18, 16, 8, 10, 6, 4, 4, 9, 11, 10, 12, 12)
+proba = rep(1 / 12, 12)
+chisq.test(nb, p = proba)$p.value
+
+nb = c(60, 105, 65, 47, 15, 4, 3, 1)
+lambda = sum((0:7) * nb) / 300
+lambda
+
+proba = c(dpois(0:6, lambda), 1 - ppois(6, lambda))
+proba
+
+chisq.test(nb, p = proba)$p.value
+
+proba
+300 * proba
+
+nb2 = c(60, 105, 65, 47, 15, 8)
+proba2 = c(dpois(0:4, lambda), 1 - ppois(4, lambda))
+proba2
+300 * proba2
+
+x2obs = chisq.test(nb2, p = proba2)$statistic
+deg = 4
+1 - pchisq(x2obs, deg)
+
+mean(673,389,1832,570,522,2694,3683,644,1531,2916,1069,3145,2268,3574,791,1418,649,3344,1153,3922)
+
+x = c(673, 389, 1832, 570, 522, 2694, 3683, 644, 1531, 2916, 1069, 3145,
+      2268, 3574, 791, 1418, 649, 3344, 1153, 3922)
+ks.test(x, "pexp", 1 / 1850)$p.value
+
+x = c(43, 48, 65, 55, 51, 51, 44, 51, 59, 62, 45, 53, 55, 55, 49, 34, 52,
+      69, 45, 54, 59, 36, 36, 29, 52, 59, 41, 58, 54, 55, 72, 53, 52, 49, 57, 42,
+      70, 58, 42, 53, 57, 68, 40, 65, 54, 49, 32, 56, 50, 59)
+shapiro.test(x)$p.value
+
+nb = c(18, 23, 19, 12, 11, 15)
+bar = barplot(nb / 100, col = "white")
+points(bar, rep(1 / 6, 6), type = "h",col="red")
+
+nb
+proba = rep(1 / 6, 6)
+chisq.test(nb, p = proba)$p.value
+
+nb = c(60, 62, 67, 68, 64, 56, 62, 44, 58, 67)
+proba = rep(1 / 10, 10)
+chisq.test(nb, p = proba)$p.value
+
+x = rnorm(100)
+a = numeric()
+for (i in 1:6) {
+  a[i] = ks.test(x, "pnorm", 0, 1 + (i - 1) / 10)$p.value
+}
+a
+
+nb = c(773, 231, 238, 59)
+bar = barplot(nb / 1301, col = "white")
+points(bar, c(9 / 16, 3 / 16, 3 / 16, 1 / 16), type = "h",col="red")
+
+nb
+proba = c(9 / 16, 3 / 16, 3 / 16, 1 / 16)
+chisq.test(nb, p = proba)$p.value
+
+
+n = 1000
+a = rpois(n, 5)
+b = rpois(n, 3)
+c = rpois(n, 8)
+qqplot(a + b, c,col)
 
