@@ -1,0 +1,1363 @@
+\chapter{Sur l'adéquation à une loi de probabilité avec R - Christophe Chesneau}
+\textbf{Auteur : }\underline{\href{http://www.math.unicaen.fr/~7Echesneau/}{Christophe Chesneau}}\newline
+\\
+\textbf{Note : } L'objectif de ce document est de présenter les principaux outils statistiques et commandes \textbf{R} utilisés pour juger de l'adéquation de la distribution des valeurs d'un caractère à une loi de probabilité.
+\section{Point de départ}
+On observe la valeur d'un caractère $X$ pour chacun des $n$ individus d'un échantillon. Ces observations constituent les données : $x_{1}; \dots ; x_{n}$. On modélise alors $X$ comme une \textit{var}\footnote{Variable Aléatoire} (en gardant la notation $X$ par convention). Soit $\mathcal{L}$ une loi de probabilité étant possiblement en adéquation avec la loi inconnue de $X$. La problématique est la suivante :\newline
+\\
+\textcolor{red}{Est-ce que ces données nous permettent d'affirmer que $X$ ne suit pas la loi $\mathcal{L}$ (avec un faible risque de se tromper) ?}\newline
+\\
+Pour répondre à cette question, on distingue deux approches complémentaires :
+\begin{itemize}
+  \item Analyses graphiques.
+  \item Tests statistiques adaptées reposant sur les hypothèses :
+
+  $$H_{0} : \textrm{" }X\textrm{ suit la loi }\mathcal{L}\textrm{ " \textbf{\textcolor{red}{contre}} }H_{1}\textrm{ : " }X\textrm{ ne suit pas la loi }\mathcal{L}\textrm{ ".}$$
+
+\end{itemize}
+Dans ce document, nous mettons en oeuvre ces tests en utilisant la $p$-valeur.\newline
+La $p$-valeur est le plus petit réel $\alpha \in ]0; 1[$ calculé à partir des données tel que l'on puisse se permettre de rejeter $H_{0}$ au risque $100\alpha\%$. Autrement écrit, la $p$-valeur est une estimation ponctuelle de la probabilité critique de se tromper en rejetant H0 alors que $H_{0}$ est vraie.\newline
+\\
+\textcolor{red}{Les logiciels actuels travaillent principalement avec cette $p$-valeur.}
+\section{Analyses graphiques}
+\subsection*{Cas de caractères qualitatifs ou quantitatifs "discrets"}
+Soit $X$ un caractère non chiffré (qualitatif) ou chiffré (quantitatif) prenant un ensemble dénombrable de valeurs (possiblement infini). L'analyse graphique la plus pertinente pour juger de l'adéquation de la loi de $X$ avec $\mathcal{L}$ repose sur le schéma suivant :
+\begin{itemize}
+  \item On trace le barplot des fréquences correspondantes aux données.
+  \item On superpose les valeurs de la "densité" associée à la loi $\mathcal{L}$ en estimant éventuellement les paramètres inconnus de celle-ci.
+\end{itemize}
+\subsection*{Exemple}
+\begin{enumerate}
+  \item On souhaite savoir si les entrées à l'hôpital pour une certaine maladie sont réparties au hasard dans l'année ou bien si certains mois sont plus propices à la maladie. On examine le mois d'entrée d'un échantillon de 120 porteurs de la maladie étudiée. Les résultats sont :
+
+\begin{center}
+\begin{tabular}{|l|l|l|l|l|l|l|l|l|l|l|l|l|}
+\hline
+\textbf{Mois d'entrée}    & 1  & 2  & 3 & 4  & 5 & 6 & 7 & 8 & 9  & 10 & 11 & 12 \\ \hline
+\textbf{Nombre d'entrées} & 18 & 16 & 8 & 10 & 6 & 4 & 4 & 9 & 11 & 10 & 12 & 12 \\ \hline
+\end{tabular}
+\end{center}
+
+Peut-on affirmer que \textit{"les entrées ne se font pas au hasard dans l'année"} (donc que \textit{"certains mois sont plus propices à la maladie"}) ?\newline
+\\
+\textbf{Solution : } Soit $X$ la \textit{var} égale au mois d'entrée à l'hôpital d'un porteur de la maladie. Par l'énoncé, on observe la valeur de $X$ sur chacun des $n$ individus (porteurs de la maladie) d'un échantillon avec $n = 120$ : $(x_{1}; \dots ; x_{n})$ (avec $x_{i} \in \{1; \dots ; 12\}$). On forme alors un vecteur des effectifs : 
+$$(n_{1},n_{2},\dots, n_{12}) = (18,16,\dots,12)$$
+Dire que les entrées se font au hasard dans l'année signifie que $X$ suit la loi uniforme $\mathit{U}(\{1; \dots ; 12\})$ :
+$$\mathbb{P}(X=i) = \frac{1}{12}\textrm{ avec } i \in \{1,\dots,12\}$$
+La problématique est la suivante : \textit{est-ce que ces données nous permettent d'affirmer que $X$ ne suit pas la loi $\mathcal{L}=\mathcal{U}(\{1; \dots ; 12\})$ ?}\newline
+Pour tout $i \in \{1,\dots,12\}$, une estimation (ponctuelle) de $\mathbb{P}(X=i)$ est la fréquence $n_{i}/n$.\newline
+Ainsi, pour une analyse graphique, on peut : 
+\begin{itemize}
+  \item tracer le barplot des fréquences correspondantes aux données
+  \item superposer les valeurs de la "densité" associée à la loi uniforme $\mathcal{U}(\{1; \dots ; 12\})$.
+\end{itemize}
+On propose les commandes :
+\begin{lstlisting}[language=html]
+> nb = c(18, 16, 8, 10, 6, 4, 4, 9, 11, 10, 12, 12)
+> bar = barplot(nb / 120, col = "white")
+> points(bar, rep(1 / 12, 12), type = "h",col="red")
+\end{lstlisting}
+Cela renvoie :
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.45]{ilu/adeq1.png}\end{center}\end{figure}
+
+Les différences observées laissent penser que $X$ ne suit pas une loi uniforme.
+
+\item Dans un verger, on étudie le comportement des insectes quand ceux-ci attaquent les fruits.\newline
+Soit $X$ le caractère qui dénombre le nombre d'attaques d'insectes sur un fruit pris au hasard. Une étude statistique antérieure montre que, si les attaques se font de façon indépendante les unes des autres, on peut modéliser $X$ comme une \textit{var} suivant une loi de Poisson $\mathcal{P}(\lambda)$ avec $\lambda$ inconnu.\newline
+On considère un échantillon de $300$ fruits et on compte le nombre d'attaques sur le fruit. Les résultats sont :
+
+\begin{center}
+\begin{tabular}{|l|l|l|l|l|l|l|l|l|}
+\hline
+\textbf{Nombre d'attaques}          & 0  & 1   & 2  & 3  & 4  & 5 & 6 & 7 \\ \hline
+\textbf{Nombre de fruits attaqués} & 60 & 105 & 65 & 47 & 15 & 4 & 3 & 1 \\ \hline
+\end{tabular}
+\end{center}
+
+\textit{Peut-on dire que le comportement des insectes est grégaire ?} (on dit que le comportement des insectes est grégaire quand chacun d'entre eux a tendance à se comporter comme le voisin et à attaquer le même fruit ; dans ce cas, $X$ ne suit pas une loi de Poisson).\newline
+\\
+\textbf{Solution :} Par l'énoncé, on observe la valeur de $X$ sur chacun des $n$ individus (fruits) d'un échantillon avec $n = 300$ : $(x_{1}; \dots ; x_{n})$ (avec $x_{i} \in \mathbb{N}$). On forme alors un vecteur des effectifs : 
+$$(n_{1}; n_{2}; \dots ; n_{8}) = (60; 105; \dots ; 1)$$
+Dire que $X$ suit la loi de Poisson $\mathcal{P}(\lambda)$, avec $\lambda$ inconnu: 
+$$\mathbb{P}(X = i) = e^{-\lambda}\frac{\lambda^{k}}{i!},\textrm{ } i \in \mathbb{N}$$
+Pour évaluer la loi de Poisson la plus adaptée à notre contexte, il faut estimer $\lambda$ à l'aide des données.\newline
+Comme $\mathbb{E}(X) = \lambda$, la méthode des moments nous assure qu'une estimation de $\lambda$ est : 
+$$\bar{x} = \frac{1}{n}\sum_{i=1}^{n}x_{i} = \frac{0 \times 60 + 1 \times 105 + 2 \times 65 + 3 \times 47 + 4 \times 15 + 5 \times 4 + 6 \times 3 + 7 \times 1}{300} = 1.603333$$
+Ainsi, la problématique est la suivante : \textit{est-ce que ces données nous permettent d'affirmer que X ne suit pas la loi $\mathcal{L} = \mathcal{P}(1.603333)$} ? \newline
+Pour tout $i \in \{0,\dots,7\}$, une estimation de $\mathbb{P}(X=i)$ est la fréquence $n_{i+1}/n$ et une estimation de $\mathbb{P}(X\geq 8) = 1 - \mathbb{P}(x \leq 7 )$  est :
+$$1 - \sum_{i=1}^{8}\frac{n_{i}}{n}$$
+Ainsi, pour une analyse graphique, on peut : 
+\begin{itemize}
+  \item tracer le barplot des fréquences correspondantes aux données
+  \item superposer les valeurs de la "densité" associée à la loi de poisson $\mathcal{P}(1.603333)$.
+\end{itemize}
+On propose les commandes :
+\begin{lstlisting}[language=html]
+> nb = c(60, 105, 65, 47, 15, 4, 3, 1, 0)
+> bar = barplot(nb / 300, col = "white")
+> lambda = sum((0:8) * nb) / 300;lambda
+[1] 1.603333
+> prob = c(dpois(0:7, lambda), 1 - ppois(7, lambda));prob
+[1] 0.2012246500 0.3226301888 0.2586418681 0.1382297095 0.0554070752
+[6] 0.0177672021 0.0047477912 0.0010874703 0.0002640448
+> points(bar, prob, type = "h",col="red")
+\end{lstlisting}
+Cela renvoie :
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.45]{ilu/adeq2.png}\end{center}\end{figure}
+Les différences observées laissent penser que $X$ suit une loi de Poisson, remettant ainsi en cause le comportement grégaire des insectes.
+\end{enumerate}
+\subsection*{Cas de caractères quantitatifs "continus"}
+Soit $X$ un caractère chiffré (quantitatif) prenant un ensemble indénombrable de valeurs. Les analyses graphiques possibles pour juger de l'adéquation de la loi de $X$ avec $\mathcal{L}$ sont nombreuses. Les méthodes usuelles sont :
+\begin{itemize}
+  \item \textbf{Méthode de l'histogramme :} On trace l'histogramme des fréquences correspondantes aux données.\newline
+  Puis on superpose les valeurs de la "densité" associée à la loi $\mathcal{L}$ en estimant éventuellement les paramètres inconnus de celle-ci.
+  \item \textbf{Méthode de la fonction de répartition :} On trace le graphe de la fonction de répartition empirique définie par :
+  $$F_{n}(x) = \frac{1}{n}\sum_{i=1}^{n}\mathbf{1}_{\{x_{i}\leq x\}},x\in\mathbb{R}$$
+  Puis on superpose le graphe de la fonction de répartition associée à la loi $\mathcal{L}$ en estimant éventuellement les paramètres inconnus de celle-ci.
+  \item \textbf{Méthode de l'approximation de la densité :} On utilise une estimation de la densité inconnue. Puis on superpose les valeurs de la "densité" associée à la loi $\mathcal{L}$ en estimant éventuellement les paramètres inconnus de celle-ci.
+  \item \textbf{Méthode du QQ plot (quantile-quantile plot) :} Cette méthode consiste en la comparaison des quantiles empiriques et des quantiles théoriques.\newline
+  Soit $F(x) = P(X \leq x)$, la fonction de répartition de $X$ et $x_{p}$ le quantile d'ordre $p$ définie par : 
+  $$x_{p} = \inf\{x\in\mathbb{R};F(x)\geq p\}$$
+  Soient $x_{(1)}; x_{(2)}; \dots ; x_{(n)}$ les données rangées par ordre croissant : $x_{(1)}< x_{(2)}< \dots < x_{(n)}$. Alors on peut écrire la fonction de répartition comme : 
+  $$F_{n}(x) = \frac{1}{n}\sum_{i=1}^{n}\mathbf{1}_{\{x_{i}\leq x\}} = \left\{
+  \begin{array}{rcl}
+    0 & \textrm{ si } & x < x_{(1)}\\
+\\
+\frac{k}{n}&\textrm{ si } & x_{(k)}\leq x < x_{(k+1)},k\in\{1,\dots,n-1\}\\
+\\
+    1 &\textrm{ si }& x\geq x_{(n)}\\
+  \end{array}
+\right.$$
+Soit $(p_{1}; p_{2}; \dots ; p_{n})$ une suite strictement croissante de $n$ réels vérifiant $p_{k} \in ](k - 1)/n; k/n[$, $k \in \{1; \dots ; n\}$, de sorte que $\inf\{x\in\mathbb{R};F_{n}(x)\geq p_{k}\} = x_{(n)}$ pour tout $k \in \{1; \dots ; n\}$.
+On appelle QQ plot le nuage de points $\mathcal{N}$ dans le repère orthonormé $(O; I; J)$ défini par :
+$$\mathcal{N} = \{(x_{p_{1}},x_{(1)}),(x_{p_{2}},x_{(2)}),\dots,(x_{p_{n}},x_{(n)})\}$$
+Si $X$ suit la loi $\mathcal{L}$, les données font que $F_{n}$ est une bonne estimation de $F$ et, a fortiori, $x_{(k)}$ doit bien estimer $x_{p_{k}} : x_{(k)}  \simeq  x_{p_{k}}$ pour tout $k \in \{1;\dots; n\}$ ; les points du nuage $\mathcal{N}$ doivent être proche de la "droite diagonale" d'équation : $y = x$.
+\item \textbf{Cas d'une loi normale : méthode du QQ plot (QQ norm) avec droite de Henry :} Soit $z_{p}$ le quantile d'ordre $p$ d'une var $Z$ suivant la loi normale centrée réduite $\mathcal{N}(0; 1)$.\newline
+Alors, si $X$ suit la loi normale $\mathcal{N}(\mu,\sigma^{2})$, le quantile d'ordre $p$ de $X$ vérifie : 
+$$x_{p} = \mu + \sigma z_{p}$$
+Par conséquent, au lieu du QQ plot standard, on peut se contenter de construire le nuage de points
+$\mathcal{N}_{*}$ dans le repère orthonormé $(O; I; J)$ défini par : 
+$$\mathcal{N}_{*} = \{(z_{p_{1}},x_{(1)}),(z_{p_{2}},x_{(2)}),\dots,(z_{p_{n}},x_{(n)})\}$$
+Si $X$ suit la loi $\mathcal{N}(\mu,\sigma^{2})$, alors les points du nuage $\mathcal{N}_{*}$ doivent être proche de la droite d'équation :
+$$y = \bar{x} + sx$$
+avec : 
+$$\bar{x} = \frac{1}{n}\sum_{i=1}^{n}x_{i}\textrm{ et } s = \sqrt{\frac{1}{n-1}\sum_{i=1}^{n}(x_{i}-\bar{x})^{2}}$$
+Cette droite est appelée droite de Henry.
+\item \textbf{Cas d'une loi normale : méthode de la boîte à moustaches :} On fait la boîte à moustache associée aux données. Si $X$ suit une loi normale, il n'y a approximativement que $0,7\%$ des points qui se trouvent en dehors des "moustaches". D'autre part, la boîte doit être à peu près symétrique par rapport à la médiane, idem pour les moustaches.
+\end{itemize}
+\textbf{Exemples : }
+\begin{enumerate}
+  \item On fait passer à 50 adolescents le test psychologique de Rorschach. Les temps de passation en minutes du test sont :
+
+\begin{center}
+\begin{tabular}{|l|l|l|l|l|l|l|l|l|l|}
+\hline
+43 & 48 & 65 & 55 & 51 & 51 & 44 & 51 & 59 & 62 \\ \hline
+45 & 53 & 55 & 55 & 49 & 34 & 52 & 69 & 45 & 54 \\ \hline
+59 & 36 & 36 & 29 & 52 & 59 & 41 & 58 & 54 & 55 \\ \hline
+72 & 53 & 52 & 49 & 57 & 42 & 70 & 58 & 42 & 53 \\ \hline
+57 & 68 & 40 & 65 & 54 & 49 & 32 & 56 & 50 & 59 \\ \hline
+\end{tabular}
+\end{center}
+
+On s'interroge pour savoir si la \textit{var} $X$ qui à un adolescent associe son temps de passation au test suit ou non une loi normale.\newline
+\\
+\textbf{Solution} : 
+Par l'énoncé, on observe la valeur de $X$ sur chacun des $n$ individus (adolescents) d'un échantillon avec $n = 50$ : $(x_{1}; \dots ; x_{n})$ (avec $x_{i} \in \mathbb{R}$).\newline
+Dire que $X$ suit une loi normale $\mathcal{N}(\mu,\sigma^{2})$, avec $\mu$ et $\sigma$ inconnus, signifie qu'elle possède la densité :
+$$f(x) = \frac{1}{\sqrt{2\pi\sigma^{2}}}e^{-\frac{(x-\mu)^{2}}{2\sigma^{2}}},\textrm{ } x\in\mathbb{R}$$
+Pour préciser la loi normale $\mathcal{N}(\mu,\sigma^{2})$ la plus adaptée à notre contexte, il faut estimer $\mu$ et $\sigma$ à l'aide des données. On estime alors $\mu$ par
+$$\bar{x} = \frac{1}{n}\sum_{i=1}^{n}x_{i} = 51.94$$
+et $\sigma$ par 
+$$s = \sqrt{\frac{1}{n-1}\sum_{i=1}^{n}(x_{i}-\bar{x})^{2}} = 9.704638$$
+Ainsi, la problématique est la suivante : \textit{est-ce que ces données nous permettent d'affirmer que $X$ ne suit pas la loi $\mathcal{L} = \mathcal{N}(51,94; 9,704638^{2})$ ?}\newline
+Nous allons faire une analyse graphique en utilisant les méthodes présentées précédemment.
+\begin{itemize}
+  \item \textbf{Méthode de l'histogramme :} On propose les commandes :
+\begin{lstlisting}[language=html]
+  > x = c(43, 48, 65, 55, 51, 51, 44, 51, 59, 62, 45, 53, 55, 55, 49, 34, 52,
++       69, 45, 54, 59, 36, 36, 29, 52, 59, 41, 58, 54, 55, 72, 53, 52, 49, 57, 42,
++       70, 58, 42, 53, 57, 68, 40, 65, 54, 49, 32, 56, 50, 59)
+> hist(x, freq = FALSE, main = "Méthode de l'histogramme", ylab = "")
+> curve(dnorm(x, 51.94, 9.704638), add = TRUE,col="red")
+\end{lstlisting}
+Cela renvoie :
+
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.45]{ilu/adeq3.png}\end{center}\end{figure}
+Vu les différences observées, il est difficile de conclure.
+
+\item \textbf{Méthode de la fonction de répartition :} On propose les commandes :
+\begin{lstlisting}[language=html]
+> plot(ecdf(x), main = "Méthode de la fonction de répartition")
+> curve(pnorm(x, 51.94, 9.704638), add = TRUE, col="red")
+\end{lstlisting}
+Cela renvoie :
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.45]{ilu/adeq4.png}\end{center}\end{figure}
+Ici, les différences observées laissent penser que $X$ suit bien une loi normale.
+
+\item \textbf{Méthode de l'approximation de la densité :} On propose les commandes :
+\begin{lstlisting}[language=html]
+> plot(density(x), main = "Méthode de l'approximation de la densité",
++      ylab = "")
+> curve(dnorm(x, 51.94, 9.704638), lwd = 1.5, col = "red", add = TRUE)
+\end{lstlisting}
+Cela renvoie :
+
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.45]{ilu/adeq5.png}\end{center}\end{figure}
+
+Les informations \textit{"N = 50 Bandwitdth = 3.686"} précisent des quantités utilisées dans l'estimateur de la densité : c'est un estimateur dit "à noyau", lequel utilise une fenêtre (Bandwidth) qui s'ajuste en fonction des données.\newline
+De nouveau, les différences observées laissent penser que $X$ suit bien une loi normale.
+\item \textbf{Méthode du QQ plot (cas d'une loi normale) :} On propose les commandes :
+\begin{lstlisting}[language=html]
+> qqnorm(x, main = "Méthode du QQ plot avec droite de Henry")
+> a = mean(x) ; b = sd(x);a;b
+[1] 51.94
+[1] 9.704638
+> curve(a + b * x, -6, 6, col = "red", add = TRUE)
+\end{lstlisting}
+
+Cela renvoie :
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.45]{ilu/adeq6.png}\end{center}\end{figure}
+
+La droite de henry ajuste bien le nuage de points ; on peut envisager que $X$ suit une loi normale.\newline
+À la place de la commande qqnorm, on aurait pu faire le QQ plot à la main :
+\begin{lstlisting}[language=html]
+> plot(qnorm(ppoints(x)), sort(x))
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.45]{ilu/adeq7.png}\end{center}\end{figure}
+
+
+Une autre solution est de "centrer" et "réduire" les données : 
+$$x_{i}^{*} = \frac{x_{i}-\bar{x}}{s}, i\in \{1,\dots,n\}$$
+
+considérer la loi normale centrée réduite $\mathcal{N}(0; 1)$, tracer le QQ plot associé et évaluer son ajustement par la droite $y = x$ :
+\begin{lstlisting}[language=html]
+> qqnorm(scale(x), main = "Méthode du QQ plot")
+> abline(0, 1, col = "red")
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.45]{ilu/adeq8.png}\end{center}\end{figure}
+
+\item \textbf{Cas d'une loi normale : méthode de la boîte à moustaches :} On fait :
+\begin{lstlisting}[language=html]
+> boxplot(x, main = "Méthode de la boîte à moustaches")
+\end{lstlisting}
+Cela renvoie :
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.45]{ilu/adeq9.png}\end{center}\end{figure}
+
+On constate qu'aucun point ne se trouve en dehors des "moustaches". D'autre part, la boîte est à peu près symétrique par rapport à la médiane, idem pour les moustaches. On peut envisager que $X$ suit une loi normale.
+\end{itemize}
+\textbf{Conclusion :} Toutes les analyses graphiques laissent penser que $X$ suit une loi normale.
+
+\item Dans une station service, un jour donné, les durée du passage en caisse de 49 clients on été mesurés. Les résultats en secondes sont :
+
+\begin{center}
+\begin{tabular}{|l|l|l|l|l|l|l|l|l|l|}
+\hline
+0.96 & 1.45 & 0.42 & 3.69 & 2.58 & 1.95 & 1.74 & 0.01 & 1.02 & 1.12 \\ \hline
+0.17 & 3.19 & 0.85 & 1.27 & 0.68 & 3.60 & 1.23 & 0.34 & 0.31 & 0.16 \\ \hline
+0.07 & 0.79 & 0.02 & 1.20 & 0.05 & 2.09 & 0.24 & 5.46 & 2.57 & 0.89 \\ \hline
+0.74 & 1.67 & 0.88 & 2.27 & 0.22 & 3.39 & 0.12 & 0.06 & 0.78 & 0.32 \\ \hline
+5.79 & 2.09 & 0.39 & 1.82 & 2.96 & 0.20 & 0.08 & 0.37 & 2.58 & 0.30 \\ \hline
+\end{tabular}
+\end{center}
+
+Soit $X$ la var égale à la durée de passage d'un client. On s'interroge sur le fait que X suit ou non une loi exponentielle.\newline
+\\
+\textbf{Solution 1.} Par l'énoncé, on observe la valeur de $X$ sur chacun des $n$ individus (clients) d'un échantillon avec $n = 50$ : $(x_{1}; \dots ; x_{n})$ (avec $x_{i} \in \mathbb{R}$).\newline
+Dire que $X$ suit une loi exponentielle $\varepsilon(\lambda)$, avec $\lambda > 0$ inconnu, signifie qu'elle possède la densité :
+$$f(x) =  \left\{
+  \begin{array}{rcl}
+    \lambda e^{-\lambda x} & \textrm{ si } & x \geq 0\\
+\\
+0 &\textrm{ sinon } & \\
+  \end{array}
+\right.$$
+
+Pour préciser la loi exponentielle $\varepsilon(\lambda)$ la plus adaptée à notre contexte, il faut estimer $\lambda$ à l'aide des données. Comme $\mathbb{E}(X) = 1/\lambda \Leftrightarrow \lambda = 1/\mathbb{E}(X)$, la méthode des moments nous assure qu'une estimation de $\lambda$ est $1/\bar{x}$. On peut la calculer en faisant :
+\begin{lstlisting}[language=html]
+> x = c(0.96, 1.45, 0.42, 3.69, 2.58, 1.95, 1.74, 0.01, 1.02, 1.12, 0.17,
++       3.19, 0.85, 1.27, 0.68, 3.60, 1.23, 0.34, 0.31, 0.16, 0.07, 0.79, 0.02,
++       1.20, 0.05, 2.09, 0.24, 5.46, 2.57, 0.89, 0.74, 1.67, 0.88, 2.27, 0.22,
++       3.39, 0.12, 0.06, 0.78, 0.32, 5.79, 2.09, 0.39, 1.82, 2.96, 0.20, 0.08,
++       0.37, 2.58, 0.30)
+> 1 / mean(x)
+[1] 0.7446016
+\end{lstlisting}
+Ainsi, la problématique est la suivante : \textit{est-ce que ces données nous permettent d'affirmer que $X$ ne suit pas la loi $\mathcal{L} = \varepsilon(0:7446016)$ ?}\newline
+Nous allons faire une analyse graphique en utilisant les méthodes présentées précédemment.
+
+\begin{itemize}
+  \item \textbf{Méthode de l'histogramme :} On propose les commandes :
+\begin{lstlisting}[language=html]
+> hist(x, freq = FALSE, main = "Méthode de l'histogramme", ylab = "")
+> curve(dexp(x, 0.7446016), add = TRUE,col="red")
+\end{lstlisting}
+Cela renvoie :
+
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.45]{ilu/adeq10.png}\end{center}\end{figure}
+
+Vu les différences observées, il est vraisemblable que $X$ suit une loi exponentielle.
+
+
+  \item \textbf{Méthode de la fonction de répartition :} On propose les commandes :
+\begin{lstlisting}[language=html]
+> plot(ecdf(x), main = "Méthode de la fonction de répartition")
+> curve(pexp(x, 0.7446016), add = TRUE,col="red",lwd=1.5)
+\end{lstlisting}
+Cela renvoie :
+
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.45]{ilu/adeq11.png}\end{center}\end{figure}
+Les différences observées laissent penser que $X$ suit bien une loi exponentielle.
+  \item \textbf{Méthode de l'approximation de la densité :} On propose les commandes :
+\begin{lstlisting}[language=html]
+> plot(density(x), main = "Méthode de l'approximation de la densité",
++      xlim = c(0, 7), ylim = c(0, 0.5), ylab = "")
+> curve(dexp(x, 0.7446016), lwd = 1.5, col = "red", add = TRUE)
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.45]{ilu/adeq12.png}\end{center}\end{figure}
+
+De nouveau, les différences observées laissent penser que $X$ suit bien la loi exponentielle.
+
+
+  \item \textbf{Méthode du QQ plot :} On propose les commandes :
+\begin{lstlisting}[language=html]
+> plot(qexp(ppoints(x), 0.7446016), sort(x), main = "Méthode du QQ plot",
++      xlab = "")
+> abline(0,x, col = "red")
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.45]{ilu/adeq13.png}\end{center}\end{figure}
+
+La droite diagonale $y = x$ ajuste bien le nuage de points ; on peut envisager que $X$ suit une loi exponentielle.
+\end{itemize}
+
+\textbf{Conclusion :} Toutes les analyses graphiques laissent penser que X suit une loi exponentielle.
+\end{enumerate}
+\section{Tests statistiques d'adéquation à une loi}
+\subsection*{Test du Chi-deux}
+\subsubsection*{Données}
+On observe la valeur d'une \textit{var} $X$ sur chacun des $n$ individus d'un échantillon avec $n \geq 50$. Ces valeurs constituent les données : $x_{1}; \dots ; x_{n}$. Elles sont généralement présentées sous la forme d'un tableau classes-effectifs :
+
+\begin{center}
+\begin{tabular}{|c|c|}
+\hline
+\textbf{Classes} & \textbf{Effectifs} \\ \hline
+$C_{1}$          & $n_{1}$            \\ \hline
+$\vdots$         & $\vdots$           \\ \hline
+$C_{k}$          & $n_{k}$            \\ \hline
+\end{tabular}
+\end{center}
+Dans ce tableau, pour tout $i \in \{1; : : : ; k\}$, $C_{i}$ peut être une des valeurs $x_{1}; \dots ; x_{n}$, ou un intervalle de valeurs et $n_{i}$ est le nombre d'individus dont l'observation de $X$ appartient la classe $C_{i}$.
+\subsubsection*{Mise en oeuvre}
+Soit $\mathcal{L}$ une loi de probabilité coïncidant possiblement / étant possiblement en adéquation avec la loi inconnue de $X$. On considère les hypothèses :
+$$H_{0} : \textrm{" }X\textrm{ suit la loi }\mathcal{L}\textrm{ " \textbf{contre} }H_{1}\textrm{ : " }X\textrm{ ne suit pas la loi }\mathcal{L}\textrm{ ".}$$
+Pour pouvoir décider du rejet de $H_{0}$ :
+\begin{itemize}
+  \item Si besoin est, on estime ponctuellement les $\mathit{l}$ paramètres inconnus de la loi $\mathcal{L}$ à l'aide des données, et on considère une \textit{var} $R$ suivant cette loi définie avec les paramètres estimés.
+  \item Si besoin est, on ajuste la première et la dernière classes : $C_{1}$ et $C_{k}$, de sorte que : 
+  $$\bigcup_{i=1}^{k} C_{i} = R(\Omega)$$
+  \item  Pour tout $i \in \{1; \dots ; k\}$, on calcule la probabilité :
+  $$p_{i} = \mathbb{P}(R\in C_{i})$$
+\end{itemize}
+On vérifie que, pour tout $i \in \{1; \dots ; k\}$, $np_{i} \geq 5$. Si tel n'est pas le cas, on créé une ou plusieurs nouvelles classes par fusion des anciennes, redéfinissant ainsi le $n_{i}$ (et le $k$), jusqu'à obtenir de nouvelles probabilités $p_{i}$ vérifiant cette hypothèse.
+
+\begin{itemize}
+  \item On calcule : 
+  $$\chi_{obs}^{2} = \sum_{i=1}^{k}\frac{(n_{i}-np_{i})^{2}}{np_{i}} = \sum_{i=1}^{k} \frac{n_{i}^{2}}{np_{i}}- n$$
+  \item Soit $ K \sim \chi^{2}(\upsilon)$, $\upsilon = k - 1 - \mathit{l}$, Alors la $p$-valeur associée au test du Chi-deux d'adéquation à une loi est : 
+  $$p\textrm{-valeur} = \mathbb{P}(K \geq\chi^{2}_{obs})$$
+\end{itemize}
+
+\subsubsection*{Commandes}
+En pratique, le test du chi-deux d'adéquation à une loi est surtout utilisé pour une \textit{var} $X$ discrète ; il existe d'autres tests statistiques statistiques "plus puissants" dans le cas où \textit{var} $X$ est à densité.\newline
+Lorsqu'aucun paramètre de la loi n'est à estimer, on propose les commandes :
+\begin{lstlisting}[language=html]
+chisq.test(nb, p = proba)$p.value
+\end{lstlisting}
+Lorsqu'un ou plusieurs paramètres d'une loi discrète sont à estimer, en introduisant le degré de liberté\footnote{En statistiques le degré de liberté (ddl) désigne le nombre de variables aléatoires qui ne peuvent être déterminées ou fixées par une équation (notamment les équations des tests statistiques).\newline
+Par exemple si l'on cherche deux chiffres dont la somme est 12, aucun des deux chiffres ne peut être directement déterminé par la simple équation $ X+Y=12$.\newline
+$X$ peut être choisi arbitrairement, mais alors pour $Y$ il n'y a plus le choix. Ainsi, si vous choisissez $11$ comme valeur pour $X$, $Y$ vaut obligatoirement $1$. Il y a donc deux variables aléatoires $( X , Y )$, mais un seul degré de liberté.\newline
+Une autre définition est fournie par \textit{Walker, H. M}. dans son article \textit{« Degrees of freedom »} publié en 1940 dans Journal of Educational Psychology, (Vol 31(4), Apr 1940, 253-269. doi: 10.1037/h0054588). : \textit{« the number of observations minus the number of necessary relations among these observations »}\newline
+Le nombre de degré de liberté est égal au nombre d'observations moins le nombre de relations entre ces observations. On pourrait remplacer l'expression « nombre de relations » par « nombre de paramètres à estimer ».\newline
+Un problème est identifié (il présente une solution unique) si le nombre de degrés de liberté est égal à 0.\newline
+Si l'on considère une droite ( $y = a x + b$ ), pour définir cette droite nous cherchons à estimer deux paramètres (la pente $a$ et l'origine $b$). Pour que le problème présente une solution unique il faut remplir la condition \textit{ddl=0}, il nous faut donc 2 observations.
+\begin{itemize}
+  \item La première observation est le Point $1$ : $y_{1} = a x_{1}  + b $. Par un point passent une infinité de droites (\textit{ddl=1 observation - 2 paramètres à estimer <0}). Le problème n'a pour le moment pas de solution unique.
+  \item La seconde observation est le Point $2$ : $y_{2} = a x_{2}  + b $, qui vient identifier le problème. Par deux points distincts passe une seule et unique droite (\textit{2 observations - 2 paramètres à estimer = 0 degré de liberté}).
+\end{itemize}
+} ajusté \textit{deg}, les commandes donnent la bonne $p$-valeur :
+\begin{lstlisting}[language=html]
+x2obs = chisq.test(nb, p = proba)$statistic
+deg = nbdeclasses - 1 - nbdeparametresestimes
+1 - pchisq(x2obs, deg)
+\end{lstlisting}
+Si un \textcolor{red}{"Warning message"} du type "Chi-squared approximation may be incorrect" apparaît, il faut vérifier que $npi \geq 5$ pour tout $i \in \{1; : : : ; k\}$ à la main et modifier les classes en fonction.\newline
+En disposant les données brutes dans un vecteur x , on peut essayer :
+\begin{lstlisting}[language=html]
+library(vcd)
+gf = goodfit(x, type = "poisson", method = "MinChisq")
+summary(gf)
+plot(gf)
+\end{lstlisting}
+\subsubsection*{Exemples}
+
+\begin{enumerate}
+  \item La marque Smies produit des bonbons au chocolat de six couleurs. Le responsable de la communication affirme que la proportion de chaque couleur est très précisément de $30\%$ pour le brun (B), $20\%$ pour le jaune (J), $20\%$ pour le rouge (R), $10\%$ pour l'orange (O), $10\%$ pour le vert (V) et $10\%$ pour le doré (D) dans tout échantillon de grande taille. Une expérience réalisée sur un échantillon de $370$ bonbons donne les comptages suivants :
+
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|c|c|}
+\hline
+\textbf{Couleur}           & B  & J  & R  & O  & V  & D  \\ \hline
+\textbf{Nombre de bonbons} & 84 & 79 & 75 & 49 & 36 & 47 \\ \hline
+\end{tabular}
+\end{center}
+
+\textit{Peut-on affirmer, au risque 5\%, que le responsable de la communication à tort ?}\newline
+\\
+\textbf{Solution : } Soit $X$ la \textit{var} égale à la couleur d'un bonbon choisi au hasard. Par l'énoncé, on observe la valeur de $X$ sur chacun des $n$ individus (bonbons) d'un échantillon avec $n = 370$ : $(x_{1}; \dots ; x_{n})$. Ces
+valeurs sont regroupées en $k = 6$ classes : $C_{1} = \{B\}$, $C_{2} = \{J\}$, $C_{3} = \{R\}$, $C_{4} = \{O\}$, $C_{5} = \{V\}$ et
+$C_{6} = \{D\}$, avec pour effectifs respectifs : $n_{1} = 84$, $n_{2} = 79$, $n_{3} = 75$, $n_{4} = 49$, $n_{5} = 36$ et $n_{6} = 47$. On considère les hypothèses :
+
+\begin{itemize}
+\item $H_{0}$ : "X suit la loi de probabilité décrite par le responsable de la communication" 
+\item $H_{1}$ : "X ne suit pas la loi de probabilité décrite par le responsable de la communication".
+\end{itemize}
+Soit $R$ une var suivant la loi de probabilité décrite par le responsable de la communication. On a $p_{1}=\mathbb{P}(R\in C_{1})=0.3$,$p_{2}=\mathbb{P}(R\in C_{2})=0.2$,$p_{3}=\mathbb{P}(R\in C_{3})=0.2$,$p_{4}=\mathbb{P}(R\in C_{4})=0.1$,$p_{5}=\mathbb{P}(R\in C_{5})=0.1$,$p_{6}=\mathbb{P}(R\in C_{6})=0.1$.\newline
+\\
+On considère les commandes :
+\begin{lstlisting}[language=html]
+> nb = c(84, 79, 75, 49, 36, 47)
+> proba = c(0.3, 0.2, 0.2, 0.1, 0.1, 0.1)
+> chisq.test(nb, p = proba)$p.value
+[1] 0.01880704
+\end{lstlisting}
+Notons qu'aucun "Warning message" n'apparaît ; les conditions d'application du test sont vérifiées.\newline
+Comme $p$-valeur $\in]0,01; 0,05]$, le rejet de $H_{0}$ est significatif\newline
+Par conséquent, au risque $5\%$, on peut affirmer que $X$ ne suit pas la loi décrite par le responsable de la communication.
+\item On souhaite savoir si les entrées à l'hôpital pour une
+certaine maladie sont réparties au hasard dans l'année ou bien si certains mois sont plus propices à la maladie. On examine le mois d'entrée d'un échantillon de $120$ porteurs de la maladie étudiée. Les résultats sont :
+
+\begin{center}
+\begin{tabular}{|l|l|l|l|l|l|l|l|l|l|l|l|l|}
+\hline
+\textbf{Mois d'entrée}    & 1  & 2  & 3 & 4  & 5 & 6 & 7 & 8 & 9  & 10 & 11 & 12 \\ \hline
+\textbf{Nombre d'entrées} & 18 & 16 & 8 & 10 & 6 & 4 & 4 & 9 & 11 & 10 & 12 & 12 \\ \hline
+\end{tabular}
+\end{center}
+
+\textit{Peut-on affirmer, au risque $1\%$, que "les entrées ne se font pas au hasard dans l'année" (donc que "certains mois sont plus propices à la maladie") ?}\newline
+\\
+\textbf{Solution : } Soit $X$ la \textit{var} égale au le mois d'entrée à l'hôpital. Par l'énoncé, on observe la valeur de X sur chacun des n individus (porteurs de la maladie) d'un échantillon avec $n = 120$ : $(x_{1}; \dots ; x_{n})$. Ces
+valeurs sont regroupées en $k = 12$ classes : $C_{1} = \{1\}$, $C_{1} = \{2\}$,\dots , $C_{12} = \{12\}$, avec pour effectifs respectifs : $n_{1} = 18$, $n_{2} = 16$, \dots , $n_{12} = 12$.\newline
+Dire que les entrées se font au hasard dans l'année signifie que $X$ suit la loi uniforme $\mathit{U}(\{1; : : : ; 12\})$ :
+$$\mathbb{P}(X=i)=\frac{1}{12}, \textrm{ } i \in \{1,\dots,12\}$$
+La problématique est la suivante : \textit{est-ce que ces données nous permettent d'affirmer, au risque $1\%$, que $X$ ne suit pas la loi $\mathcal{L} = \mathit{U}(\{1,\dots,12\})$} ?\newline
+\\
+On considère alors les hypothèses :
+\begin{itemize}
+  \item $H_{0}$ : "X suit la loi uniforme $\mathit{U}(\{1,\dots,12\})$" 
+  \item $H_{1}$ : "X ne suit pas la loi uniforme $\mathit{U}(\{1,\dots,12\})$" 
+\end{itemize}
+Soit $R$ une \textit{var} suivant la loi uniforme $\mathit{U}(\{1,\dots,12\})$. On a 
+$$p_{i} = \mathbb{P}(R \in C_{i}) = \frac{1}{12},\textrm{ }\forall i \in\{1,\dots,12\}$$
+On considère les commandes :
+\begin{lstlisting}[language=html]
+> nb = c(18, 16, 8, 10, 6, 4, 4, 9, 11, 10, 12, 12)
+> proba = rep(1 / 12, 12)
+> chisq.test(nb, p = proba)$p.value
+[1] 0.04267211
+\end{lstlisting}
+
+Notons qu'aucun "Warning message" n'apparaît ; les conditions d'application du test sont vérifiées.\newline
+Comme $p$-valeur $\in ]0.01; 0.05]$, le rejet de H0 est significatif.\newline
+Toutefois, comme $p$-valeur $> 0.01$, au risque $1\%$, les données ne nous permettent pas d'affirmer que $X$ ne suit pas la loi uniforme $\mathit{U}(\{1,\dots,12\})$ ; on ne peut donc rien conclure sur le fait que les entrées ne se font pas au hasard dans l'année.
+
+\item Dans un verger, on étudie le comportement des insectes quand ceux-ci attaquent les fruits. Soit $X$ le caractère qui dénombre le nombre d'attaques
+d'insectes sur un fruit pris au hasard. Une étude statistique antérieure montre que, si les attaques se font de façon indépendantes les unes des autres, on peut modéliser $X$ comme une \textit{var} suivant une loi de Poisson $\mathcal{P}(\lambda)$ avec $\lambda$ inconnu.\newline
+On considère un échantillon de $300$ fruits et on compte le nombre d'attaques sur le fruit. Les résultats sont :
+
+\begin{center}
+\begin{tabular}{|l|l|l|l|l|l|l|l|l|}
+\hline
+\textbf{Nombre d'attaques}          & 0  & 1   & 2  & 3  & 4  & 5 & 6 & 7 \\ \hline
+\textbf{Nombre de fruits attaqués} & 60 & 105 & 65 & 47 & 15 & 4 & 3 & 1 \\ \hline
+\end{tabular}
+\end{center}
+
+\textit{Peut-on dire que le comportement des insectes est significativement grégaire ?} (on dit que le comportement des insectes est grégaire quand chacun d'entre eux a tendance à se comporter comme le voisin et à attaquer le même fruit ; dans ce cas, $X$ ne suit pas une loi de Poisson).\newline
+\\
+\textbf{Solution} Par l'énoncé, on observe la valeur de $X$ sur chacun des $n$ individus (fruits) d'un échantillon avec $n = 300$ : $(x_{1}; \dots ; x_{n})$ (avec $x_{i} \in \mathbb{N}$). Ces valeurs sont regroupées en $k = 8$ classes :
+$C_{1} = \{0\}$, $C_{2} = \{1\}$,\dots , $C_{8} = \{7\}$ avec pour effectifs respectifs : $n_{1} = 60$, $n_{2} = 105$,\dots , $n_{8} = 1$.\newline
+La problématique est la suivante : \textit{est-ce que ces données nous permettent d'affirmer, a moins au risque 5\%, que $X$ ne suit pas une loi de Poisson ?}
+
+On considère les hypothèses :
+\begin{itemize}
+  \item $H_{0}$ : "X suit une loi de Poisson" 
+  \item $H_{1}$ : "X ne suit pas une loi de Poisson".
+\end{itemize}
+Soit $R$ une var suivant la loi de Poisson $\mathcal{P}(\lambda)$ avec $\lambda > 0$ inconnu. On a $R(\Omega) = \mathbb{N}$.\newline
+Comme $\bigcup_{i=1}^{8} C_{i}= \{0; \dots ; 7\} \neq \mathbb{N}$, on ajuste la dernière classe comme : $C_{8} = \{7; 8; \dots ;\infty\}$ (de sorte à ce que
+$\bigcup_{i=1}^{8} = R(\Omega)$. Le paramètre $\lambda$ étant inconnu, il faut l'estimer à l'aide des données.\newline
+Comme $\mathbb{E}(X) = \lambda$, la méthode des moments nous assure qu'une estimation de $\lambda$ est la moyenne $x$ que l'on peut calculer en faisant :
+\begin{lstlisting}[language=html]
+> nb = c(60, 105, 65, 47, 15, 4, 3, 1)
+> lambda = sum((0:7) * nb) / 300
+> lambda
+[1] 1.603333
+\end{lstlisting}
+Cette estimation sera prise en compte dans la suite. Pour tout $i \in \{1; \dots ; 7\}$, on a
+
+$$p_{i} = \mathbb{P}(R\in C_{i}) = \mathbb{P}(R = i - 1) = e^{-1.603333}\frac{1.603333^{i-1}}{(i-1)!}$$
+et
+$$p_{8} = \mathbb{P}(R\in C_{8}) = \mathbb{P}(R \geq 7) = \sum_{i=1}^{\infty}e^{-1.603333}\frac{1.603333^{i}}{i!}$$
+On peut obtenir ces probabilités avec les commandes :
+\begin{lstlisting}[language=html]
+> proba = c(dpois(0:6, lambda), 1 - ppois(6, lambda))
+> proba
+[1] 0.201224650 0.322630189 0.258641868 0.138229709 0.055407075 0.017767202
+[7] 0.004747791 0.001351515
+\end{lstlisting}
+Dans un premier temps, on propose de mettre en oeuvre le test du Chi-deux en faisant :
+
+\begin{lstlisting}[language=html]
+> chisq.test(nb, p = proba)$p.value
+[1] 0.4732928
+Warning message:
+In chisq.test(nb, p = proba) :
+  l'approximation du Chi-2 est peut-être incorrecte
+\end{lstlisting}
+
+On dénombre alors deux problèmes :
+
+\begin{itemize}
+  \item le logiciel n'a pas pris en compte le fait que $\lambda$ a été estimé (il ne peut pas le savoir)
+  \item il y a un "Warning message" nous avertissant que l'hypothèse : $np_{i} \geq 5$ pour tout $i \in \{1; \dots ; 8\}$ n'est peut-être pas vérifiée.
+\end{itemize}
+
+Étudions ce dernier point :
+
+\begin{lstlisting}[language=html]
+> proba
+[1] 0.201224650 0.322630189 0.258641868 0.138229709 0.055407075 0.017767202
+[7] 0.004747791 0.001351515
+> 300 * proba
+[1] 60.3673950 96.7890567 77.5925604 41.4689128 16.6221226  5.3301606
+[7]  1.4243374  0.4054545
+\end{lstlisting}
+Comme $np_{7} < 5$ et $np_{8} < 5$, nous allons fusionner les classes $C_{6}$, $C_{7}$ et $C_{8}$, formant ainsi une nouvelle dernière classe : $C_{6} = \{5; 6; \dots \}$ avec pour effectif : $n_{6} = 4+3+1 = 8$. Il y a désormais $k = 6$ classes. On vérifie alors que l'hypothèse est vérifiée avec cette nouvelle configuration :
+\begin{lstlisting}[language=html]
+> nb2 = c(60, 105, 65, 47, 15, 8)
+> proba2 = c(dpois(0:4, lambda), 1 - ppois(4, lambda))
+> proba2
+[1] 0.20122465 0.32263019 0.25864187 0.13822971 0.05540708 0.02386651
+> 300 * proba2
+[1] 60.367395 96.789057 77.592560 41.468913 16.622123  7.159953
+\end{lstlisting}
+Aucune valeur ne dépasse $5$. Pour avoir la $p$-valeur associée au test du Chi-deux en prenant en compte le fait que l'on a estimé un paramètre, on considère le degré de liberté :
+$$\mu = k - 1 - \mathit{l} = 6 - 1 - 1 = 4$$
+On fait :
+
+\begin{lstlisting}[language=html]
+> x2obs = chisq.test(nb2, p = proba2)$statistic
+> deg = 4
+> 1 - pchisq(x2obs, deg)
+X-squared 
+0.4427608 
+\end{lstlisting}
+On obtient alors la vraie $p$-valeur associée au test du Chi-deux (il ne faut pas faire attention au "X-squared" et notons aussi qu'aucun "Warning message" n'apparaît). Comme $p$-valeur $ > 0.05$, les données ne nous permettent pas de rejeter $H_{0}$. Ainsi, on ne peut pas rejeter l'hypothèse selon laquelle les insectes n'ont pas un comportement grégaire.
+\end{enumerate}
+\subsection*{Test de Kolmogorov-Smirnov}
+\subsubsection*{Contexte}
+On observe la valeur d'une \textit{var} $X$ sur chacun des $n$ individus d'un échantillon. Ces valeurs constituent les données : $x_{1}; \dots ; x_{n}$. On considère les hypothèses :
+  $$H_{0} : \textrm{" }X\textrm{ suit la loi }\mathcal{L}\textrm{ " \textbf{contre} }H_{1}\textrm{ : " }X\textrm{ ne suit pas la loi }\mathcal{L}\textrm{ ".}$$
+
+Soient $F_{n}(x)$ la fonction de répartition empirique associée aux données et $F(x)$ la fonction de répartition associé à la loi $\mathcal{L}$. L'idée du test de Kolmogorov-Smirnov est que \textcolor{blue}{plus $F_{n}(x)$ diffère de $F(x)$, plus le rejet de $H_{0}$ est significatif} (idée similaire à l'analyse graphique de la méthode de la fonction de répartition). La $p$-valeur du test de Kolmogorov-Smirnov utilise la statistique de test observée :
+$$d_{obs} = \sup_{x\in\mathbb{R}}|F_{n}(x)-F(x)|$$
+et une loi de probabilité non-usuelle que l'on arrive à évaluer.\newline
+\\
+En pratique, le test de Kolmogorov-Smirnov est surtout utilisé pour une \textit{var} $X$ à densité. Il est plus \textbf{puissant que le test du Chi-deux} quand $n$ est petit.\newline
+Les commandes associées sont :
+\begin{lstlisting}[language=html]
+ks.test(x, "pnorm")$p.value
+\end{lstlisting}
+Lorsqu'un ou plusieurs paramètres de la loi sont à préciser, on fait, par exemple :
+\begin{lstlisting}[language=html]
+ks.test(x, "pexp", lambda)$p.value
+\end{lstlisting}
+\subsubsection*{Exemple}
+On mesure les durées de vie de $20$ ampoules d'un même type. Les résultats, en heures, sont :
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|}
+\hline
+673  & 389  & 1832 & 570  & 522 & 2694 & 3683 & 644  & 1531 & 2916 \\ \hline
+1069 & 3145 & 2268 & 3574 & 791 & 1418 & 649  & 3344 & 1153 & 3922 \\ \hline
+\end{tabular}
+\end{center}
+Soit $X$ la \textit{var} égale à la durée de vie en heures d'une ampoule de ce type.\newline
+\textit{Est-ce que l'on peut affirmer, au risque $5\%$, que $X$ ne suit pas la loi exponentielle $\varepsilon(1/1850)$ ?}\newline
+\\
+\textbf{Solution} Par l'énoncé, on observe la valeur de $X$ sur chacun des $n$ individus (ampoules) d'un échantillon avec $n = 20$ : $(x_{1}; \dots ; x_{n})$ (avec $x_{i} \in \mathbb{R}$).\newline
+On considère les hypothèses :
+\begin{itemize}
+  \item $H_{0}$ : "X suit la loi exponentielle $\varepsilon(1=1850)$" 
+  \item $H_{1}$ : "X ne suit pas la loi exponentielle $\varepsilon(1=1850)$"
+\end{itemize}
+On peut utiliser le test de Kolmogorov-Smirnov. On fait :
+\begin{lstlisting}[language=html]
+> x = c(673, 389, 1832, 570, 522, 2694, 3683, 644, 1531, 2916, 1069, 3145,
++       2268, 3574, 791, 1418, 649, 3344, 1153, 3922)
+> ks.test(x, "pexp", 1 / 1850)$p.value
+[1] 0.3774748
+\end{lstlisting}
+Comme $p$-valeur $> 0.05$, les données ne nous permettent pas de rejeter $H_{0}$. Ainsi, on ne peut pas rejeter l'hypothèse selon laquelle $X$ suit la loi exponentielle $\varepsilon(1/1850)$.
+\subsection*{Test de Shapiro-Wilk}
+\subsubsection*{Contexte}
+On observe la valeur d'une \textit{var} $X$ sur chacun des $n$ individus d'un échantillon. Ces valeurs constituent les données : $x_{1}; \dots ; x_{n}$. On cherche à montrer que $X$ ne suit pas une loi normale, ce qui mettrait en défaut une hypothèse cruciale pour de nombreux outils statistiques comme des intervalles
+de confiance (T-IntConf,\dots) et des tests statistiques (T-Test, test du coefficient de corrélation, ANOVA \dots).\newline
+On considère donc les hypothèses :
+\begin{itemize}
+  \item $H_{0}$ : "X suit une loi normale $\mathcal{N}$" 
+  \item $H_{1}$ : "X ne suit pas une loi normale $\mathcal{N}$".  
+\end{itemize}
+On peut alors utiliser le test du Chi-deux ou le test de Kolmogorov-Smirnov avec $\mathcal{L}$ = loi normale $\mathcal{N}$. Toutefois, dans ce cas particulier, il est fortement conseillé d'utiliser le test de Shapiro-Wilk plus puissant.\newline
+Celui-ci utilise la statistique de test observée :
+$$w_{obs} = \frac{\left(\sum_{i=1}^{n}a_{i}x_{(i)}\right)^{2}}{(n-1)s^{2}}$$
+où les valeurs $a_{1}; \dots ; a_{n}$ sont calculés à partir du vecteur des moyennes et de la matrice de covariance des statistiques d'ordre de $n$ \textit{var} \textit{iid} suivant une loi normale et une loi de probabilité non-usuelle que l'on arrive à évaluer.\newline
+Les commandes associées sont :
+\begin{lstlisting}[language=html]
+shapiro.test(x)$p.value
+\end{lstlisting}
+\paragraph{Remarque :} Le test de Shapiro-Wilk appartient à la grande famille des "tests de normalité". Il en existe un grands nombres, parmi lesquels : le test de Lilliefors, le test de Anderson-Darling, le test de D'Agostino et le test de Jarque-Bera. Toutefois, s'il fallait en retenir qu'un, ca serait le test de Shapiro-Wilk.
+\subsubsection*{Exemple}
+On fait passer à $50$ adolescents le test psychologique de Rorschach. Les temps de passation en minutes du test sont :
+\begin{center}
+\begin{tabular}{|l|l|l|l|l|l|l|l|l|l|}
+\hline
+43 & 48 & 65 & 55 & 51 & 51 & 44 & 51 & 59 & 62 \\ \hline
+45 & 53 & 55 & 55 & 49 & 34 & 52 & 69 & 45 & 54 \\ \hline
+59 & 36 & 36 & 29 & 52 & 59 & 41 & 58 & 54 & 55 \\ \hline
+72 & 53 & 52 & 49 & 57 & 42 & 70 & 58 & 42 & 53 \\ \hline
+57 & 68 & 40 & 65 & 54 & 49 & 32 & 56 & 50 & 59 \\ \hline
+\end{tabular}
+\end{center}
+Soit $X$ la var qui à un adolescent associe son temps de passation au test. \textit{Peut-on affirmer, au risque $5\%$, que X ne suit pas une loi normale ?}\newline
+\\
+\textbf{Solution } Par l'énoncé, on observe la valeur de $X$ sur chacun des $n$ individus (adolescents) d'un échantillon avec $n = 50$ : $(x_{1}; \dots ; x_{n})$ (avec $x_{i} \in \mathbb{R}$). On considère les hypothèses :
+\begin{itemize}
+  \item $H_{0}$ : "X suit une loi normale" 
+  \item $H_{1}$ : "X ne suit pas une loi normale".
+\end{itemize}
+On peut utiliser le test de Shapiro-Wilk. On fait :
+\begin{lstlisting}[language=html]
+> x = c(43, 48, 65, 55, 51, 51, 44, 51, 59, 62, 45, 53, 55, 55, 49, 34, 52,
++       69, 45, 54, 59, 36, 36, 29, 52, 59, 41, 58, 54, 55, 72, 53, 52, 49, 57, 42,
++       70, 58, 42, 53, 57, 68, 40, 65, 54, 49, 32, 56, 50, 59)
+> shapiro.test(x)$p.value
+[1] 0.4801461
+\end{lstlisting}
+Comme $p$-valeur $> 0,05$, on ne rejette pas $H_{0}$ ; l'hypothèse selon laquelle $X$ suit une loi normale n'est pas rejetée.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Exercices}
+\subsection{Enoncés}
+\subsubsection*{Exercice 1}
+On lance 100 fois un dé à 6 faces numérotées de 1 à 6. On obtient les résultats suivants :
+
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|c|c|}
+\hline
+\textbf{Numéro}        & 1  & 2  & 3  & 4  & 5  & 6  \\ \hline
+\textbf{Nombre de fois} & 18 & 23 & 19 & 12 & 11 & 15 \\ \hline
+\end{tabular}
+\end{center}
+
+\textit{Peut-on affirmer que le dé est truqué ? (on fera une analyse graphique convenable, puis un test statistique adapté au risque $5\%$)}.
+\subsubsection*{Exercice 2}
+On indique dans le tableau suivant le nombre de fois qu'un chiffre apparaît dans les $608$ premières décimales de $\pi$ : 
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|}
+\hline
+\textbf{Chiffre}        & 0  & 1  & 2  & 3  & 4  & 5  & 6  & 7  & 8  & 9  \\ \hline
+\textbf{Nombre de fois} & 60 & 62 & 67 & 68 & 64 & 56 & 62 & 44 & 58 & 67 \\ \hline
+\end{tabular}
+\end{center}
+\textit{Peut-on affirmer, au risque $5\%$, que les décimales ne sont pas équiréparties ?}
+\subsubsection*{Exercice 3}
+Lindström, spécialiste de la génétique et de l'hybridation du maïs, a croisé deux types récessifs de maïs : le type vert-zébré et le type doré. Si les lois de la génétique sont respectées obtient :
+\begin{itemize}
+  \item  "vert" avec la probabilité $9/16$
+  \item  "doré" avec la probabilité $3/16$
+  \item  "vert-zébré" avec la probabilité $3/16$
+  \item  "doré-vert-zébré" avec la probabilité $1/16$
+\end{itemize}
+On effectue $1301$ croisements. On obtient les résultats suivants :
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+\textbf{Type}          & "vert" & "doré" & "vert-zébré" & "doré-vert-zébré" \\ \hline
+\textbf{Nombre defois} & 773    & 231     & 238            & 59                   \\ \hline
+\end{tabular}
+\end{center}
+\textit{Peut-on dire que les lois de la génétique ne sont pas respectées ?} (on fera une analyse graphique convenable, puis un test statistique adapté au risque $5\%$).
+
+\subsubsection*{Exercice 4}
+L'agence immobilière Centurion a étudié le nombre de biens vendus par agent le mois de Juin 2016. Les résultats obtenus sont :
+
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+Nombre de biens vendus & 0  & 1  & 2  & $\geq$3 \\ \hline
+Nombre d'agents        & 15 & 18 & 11 & 8       \\ \hline
+\end{tabular}
+\end{center}
+Soit $X$ la \textit{var} égale au nombre de biens vendu par un agent en Juin 2016.\textit{Peut-on affirmer que X ne suit pas la loi de Poisson $\mathcal{P}(2)$ ?} (on fera une analyse graphique convenable, puis un test statistique adapté au risque $5\%$).
+
+\subsubsection*{Exercice 5}
+Dans le garage AutoLover, sur une période de 320 jours, on a relevé le nombre journalier d'accidents du travail. Les résultats obtenus sont :
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|}
+\hline
+\textbf{Nombre d'accidents journalier} & 0  & 1   & 2  & 3  & 4  & 5 & 6 & 7 \\ \hline
+\textbf{Nombre de jours}               & 65 & 110 & 70 & 48 & 16 & 5 & 4 & 2 \\ \hline
+\end{tabular}
+\end{center}
+On peut modéliser le nombre journalier d'accidents du travail dans ce garage par une var $X$. \textit{Peut on affirmer, au risque $5\%$, que $X$ ne suit pas une loi de Poisson ? }(on fera une analyse graphique convenable, puis un test statistique adapté au risque $5\%$).
+\subsubsection*{Exercice 6}
+On mesure les durées de vie en heures de $7$ appareils. Les résultats obtenus sont :
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|c|c|c|}
+\hline
+\textbf{Appareil}      & 1   & 2   & 3   & 4  & 5   & 6  & 7  \\ \hline
+\textbf{Durée de vie} & 145 & 110 & 170 & 48 & 116 & 95 & 74 \\ \hline
+\end{tabular}
+\end{center}
+On peut modéliser la durée de vie en heures d'un appareil par une var $X$. Peut-on affirmer que $X$, au risque $5\%$, que ne suit pas une loi exponentielle $\varepsilon(0.01)$ ?
+
+\subsubsection*{Exercice 7}
+Dans un magasin, un jour donnée, on mesure les temps d'attente en minutes entre 2
+clients à une caisse. Les résultats obtenus sont :
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|c|}
+\hline
+25.12 & 12.36 & 24.35 & 12.19 & 5.27 & 18.35 & 19.11 & 27.08 & 21.09 & 17.19 & 8.45 & 13.27 & 15.17 \\ \hline
+\end{tabular}
+\end{center}
+On peut modéliser le temps d'attente entre 2 clients par une var $X$. Peut-on affirmer que X, au risque $5\%$, que ne suit pas une loi exponentielle $\varepsilon(1/\bar{x})$, $\bar{x}$ où désigne la moyenne des valeurs obtenues ?
+
+\subsubsection*{Exercice 8}
+On étudie l'accroissement de poids en kilogrammes chez des pourceaux pendant une
+période de 15 jours. On prélève au hasard 50 pourceaux. Les résultats, sous la forme d'un tableau classes-effectifs, sont :
+\begin{center}
+\begin{tabular}{|c|c|}
+\hline
+\textbf{Classes} & \textbf{Effectifs} \\ \hline
+{]}0,4{]}        & 2                  \\ \hline
+{]}4,8{]}        & 5                  \\ \hline
+{]}8,12{]}       & 12                 \\ \hline
+{]}12,16{]}      & 14                 \\ \hline
+{]}16,20{]}      & 11                 \\ \hline
+{]}20,24{]}      & 5                  \\ \hline
+{]}24,28{]}      & 1                  \\ \hline
+\end{tabular}
+\end{center}
+
+Soit X la var égale à l'accroissement de poids en kilogrammes d'un pourceau pendant 15 jours. À l'aide d'une analyse graphique, montrer qu'il est vraisemblable que X suit une loi normale.
+\subsubsection*{Exercice 9}
+On pèse 20 plaquettes de beurre pris au hasard dans une production normande. Les
+résultats, en grammes, sont :
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|}
+\hline
+247.0 & 247.8 & 250.2 & 251.3 & 251.9 & 249.4 & 248.8 & 247.1 & 255.0 & 247.0 \\ \hline
+254.8 & 244.8 & 250.7 & 250.7 & 252.6 & 251.1 & 254.1 & 249.2 & 252.0 & 254.0 \\ \hline
+\end{tabular}
+On suppose que le poids en grammes d'une plaquette de beurre de cette production peut être modélisé par une var $X$. \textit{Peut-on affirmer que X suit une loi normale ?} (on fera une analyse graphique convenable, puis un test statistique adapté au risque $5\%$).
+\end{center}
+
+\subsubsection*{Exercice 10}
+Une ferme de Bay of Plenty en Nouvelle-Zélande produit des kiwis. On pèse 16 kiwis
+choisis au hasard dans cette ferme. Les résultats, en grammes, sont :
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|}
+\hline
+247.0 & 247.8 & 250.2 & 251.3 & 251.9 & 249.4 & 248.8 & 247.1 & 255.0 & 247.0 \\ \hline
+254.8 & 244.8 & 250.7 & 250.7 & 252.6 & 251.1 & 254.1 & 249.2 & 252.0 & 254.0 \\ \hline
+\end{tabular}
+\end{center}
+Soit X la var égale au poids en grammes d'un kiwi. \textit{Peut-on affirmer que X suit une loi normale ?} (on fera une analyse graphique convenable, puis un test statistique adapté au risque $5\%$).
+\subsubsection*{Exercice 11}
+La pression artérielle systolique est la pression maximale du sang dans les artères au moment de la contraction du coeur. Celle-ci a été mesurée pour 29 individus de différents âges. Ainsi, pour chacun d'entre eux, on dispose :
+\begin{itemize}
+  \item de leur pression systolique en mmHg,
+  \item de leur âge en années
+\end{itemize}
+On modélise ces deux variables comme des var $Y$ et $X_{1}$. Le jeu de données "pression" est disponible ici : \href{http://www.math.unicaen.fr/~chesneau/pression.txt}{\underline{lien}}.
+\begin{enumerate}
+  \item Mettre le jeu de données sous la forme d'une data frame $w$, puis attacher les noms des colonnes.
+  \item Peut-on affirmer, au risque 5\%, que Y ne suit pas une loi normale ?
+  \item Peut-on affirmer, au risque 5\%, que X1 ne suit pas une loi normale ?
+  \item Reproduire et comprendre l'enjeu des commandes suivantes :
+
+  \begin{lstlisting}[language=html]
+  par(mfrow = c(1, 2))
+  qqnorm(scale(X1))
+  abline(0, 1, col = "red")
+  qqnorm(scale(Y))
+  abline(0, 1, col = "blue")
+  \end{lstlisting}
+
+\end{enumerate}
+\subsubsection*{Exercice 12}
+Soient $X$ et $Y$ deux \textit{var} indépendantes telles que $X$ suit la loi de Poisson $\mathcal{P}(5)$ et $Y$ suit la loi de Poisson $\mathcal{P}(3)$. Alors on sait que $Z = X + Y$ suit la loi de Poisson $\mathcal{P}(5 + 3)$.\newline
+Illustrer ce résultat en simulant des var et en utilisant la commande qqplot.
+\subsubsection*{Exercice 13}
+Soient $X_{1}$ et $X_{2}$ deux var indépendantes. Illustrer les résultats ci-dessous avec la commande qqplot :
+\begin{center}
+\begin{tabular}{|l|l|l|l|l|}
+\hline
+$X_{i} \sim$ & $\varepsilon(\lambda)$  & $\Gamma(m_{i},\lambda)$  & $\mathcal{N}(\mu_{i},\sigma^{2}_{i})$ & $\chi^{2}(\nu_{i})$ \\ \hline
+$X_{1} + X_{2} \sim$ & $\Gamma(2,\lambda)$  & $\Gamma(m_{1} + m_{2},\lambda)$ & $\mathcal{N}(\mu_{1}+\mu_{2},\sigma^{2}_{1}+\sigma_{2}^{2})$ & $\chi^{2}(\nu_{1}+\nu_{2})$ \\ \hline
+Numérique & $\lambda = 3.8$ & $m_{1}=m_{2}=4.2,\lambda=2.1$ & $\mu_{1}=\mu_{2}=1.6,\sigma_{1}=\sigma_{2}=1.5$ & $\nu_{1}=\nu_{2}=3.2$ \\ \hline
+\end{tabular}
+\end{center}
+\subsubsection*{Exercice 14}
+Soient $X$ et $Y$ deux var indépendantes. Illustrer les résultats ci-dessous avec la commande qqplot :
+
+\begin{itemize}
+  \item Caractérisation de la loi du chi-deux $\chi^{2}(2)$ :\newline
+  Si $X$ $\sim$ $\mathcal{N}(0,1)$ et $Y$ $\sim$ $\mathcal{N}(0,1)$ alors 
+$$X^{2} + Y^{2} \sim \chi^{2}(2)$$
+\item Caractérisation de la loi de Student $\mathcal{T}(\nu)$ : \newline
+Si $X$ $\sim$ $\mathcal{N}(0,1)$ et $Y$ $\sim$ $\chi^{2}(\mu)$ alors 
+$$\frac{X}{\sqrt{\frac{Y}{\nu}}} \sim \mathcal{T}(\nu)$$
+Prendre $\nu = 3.9$.
+\item Caractérisation de la loi de Fisher $\mathcal{F}(\nu_{1},\nu_{2})$\newline
+$$\frac{\frac{X}{\nu_{1}}}{\frac{Y}{\nu_{2}}} = \frac{\nu_{2}X}{\nu_{1}Y} \sim \mathcal{F}(\nu_{1},\nu_{2})$$
+Prendre $(\nu_{1},\nu_{2}) = (2,1; 8,3)$.
+\end{itemize}
+\subsubsection*{Exercice 15}
+On considère les commandes :
+\begin{lstlisting}[language=html]
+> x = rnorm(100)
+> a = numeric()
+> for (i in 1:6) {
++   a[i] = ks.test(x, "pnorm", 0, 1 + (i - 1) / 10)$p.value
++ }
+> a
+[1] 0.86547276 0.52803787 0.25056642 0.10861385 0.04521945 0.01858058
+\end{lstlisting}
+Commenter ces résultats numériques.
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage
+\textcolor{red}{\textbf{La grande philosophie des tests statistiques, c'est de les utiliser pour espérer écarter les hypothèses qui contrediraient la normalité (ou autre) d'une loi}}
+\subsection{Solutions}
+\subsubsection*{Exercice 1}
+Soit $X$ la \textit{var} égale au numéro affiché par le dé après un lancer. Par l'énoncé, on observe la valeur de $X$ sur chacun des $n$ individus (dés) d'un échantillon avec $n = 100$ : $(x_{1}; \dots ; x_{n})$ (avec $x_{i} \in \{1; \dots ; 6\})$. On forme alors un vecteur des effectifs $(n_{1}; n_{2}; \dots ; n_{6}) = (18; 23; \dots ; 15)$.\newline
+Dire que le dé n'est pas truqué signifie que $X$ suit la loi uniforme $\mathit{U}(\{1; \dots ; 6\})$ :
+$$\mathbb{P}(X=i) = \frac{1}{6}, \textrm{ } i \in \{1,\dots, 6\}$$
+La problématique est la suivante : \textit{est-ce que les données nous permettent d'affirmer que X ne suit pas la loi $\mathit{U}(\{1; \dots ; 6\})$} ?\newline
+\\
+Ainsi, pour une analyse graphique, on propose les commandes :
+\begin{lstlisting}[language=html]
+> nb = c(18, 23, 19, 12, 11, 15)
+> bar = barplot(nb / 100, col = "white")
+> points(bar, rep(1 / 6, 6), type = "h",col="red")
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.45]{ilu/adeq14.png}\end{center}\end{figure}
+Il est difficile de conclure au vu des différences observées.\newline
+On peut utiliser le test du Chi-deux d'adéquation à une loi pour y voir plus clair. On considère alors les hypothèses :
+\begin{itemize}
+  \item $H_{0}$ : "X suit la loi uniforme $\mathit{U}(\{1; \dots ; 6\})$"
+  \item $H_{1}$ : "X ne suit pas la loi uniforme $\mathit{U}(\{1; \dots ; 6\})$".
+\end{itemize}
+Les valeurs sont regroupées en $k = 6$ classes : $C_{1} = \{1\}$, $C_{2} = \{2\}$,\dots, $C_{6} = \{6\}$.\newline
+On considère les commandes :
+\begin{lstlisting}[language=html]
+> nb
+[1] 18 23 19 12 11 15
+> proba = rep(1 / 6, 6)
+> chisq.test(nb, p = proba)$p.value
+[1] 0.2757299
+\end{lstlisting}
+Notons qu'aucun "Warning message" n'apparaît ; les conditions d'application du test sont vérifiées.\newline
+Comme $p$-valeur $> 0,05$, les données ne nous permettent pas de rejeter $H_{0}$. Ainsi, on ne peut pas affirmer que le dé est truqué.
+\subsubsection*{Exercice 2}
+Soit $X$ la var égale au chiffre affiché par une décimale (que l'on suppose donc aléatoire).\newline
+Par l'énoncé, on observe la valeur de $X$ sur chacun des n individus (décimales) d'un échantillon avec $n = 608$ : $(x_{1}; \dots ; x_{n})$ (avec $x_{i} \in \{0; \dots ; 9 \})$. On forme alors un vecteur des effectifs $(n_{1}; n_{2}; \dots ; n_{10}) = (60; 62; : : : ; 67)$. Dire que les décimales sont équiréparties signifie que $X$ suit la loi uniforme $\mathit{U}(\{0; \dots ; 9\})$ :
+$$\mathbb{P}(X=i) = \frac{1}{10}, \textrm{ } i \in \{1,\dots, 9\}$$
+
+La problématique est la suivante : \textit{est-ce que les données nous permettent d'affirmer que X ne suit pas la loi $\mathit{U}(\{0; \dots ; 9\})$} ?\newline
+\\
+\begin{itemize}
+  \item $H_{0}$ : "X suit la loi uniforme $\mathit{U}(\{1; \dots ; 9\})$"
+  \item $H_{1}$ : "X ne suit pas la loi uniforme $\mathit{U}(\{1; \dots ; 9\})$".
+\end{itemize}
+On peut utiliser le test du Chi-deux d'adéquation à une loi. Les valeurs sont regroupées en k = 10
+classes : $C_{1} = \{0\}$, $C_{2} = \{1\}$,\dots, $C_{10} = \{9\}$.\newline
+On considère les commandes :
+\begin{lstlisting}[language=html]
+> nb = c(60, 62, 67, 68, 64, 56, 62, 44, 58, 67)
+> proba = rep(1 / 10, 10)
+> chisq.test(nb, p = proba)$p.value
+[1] 0.585888
+\end{lstlisting}
+Notons qu'aucun "Warning message" n'apparaît ; les conditions d'application du test sont vérifiées.\newline
+Comme $p$-valeur $> 0,05$, les données ne nous permettent pas de rejeter $H_{0}$. Ainsi, au risque $5\%$, on ne peut pas affirmer que le décimales de $\pi$ soient équiréparties.
+\subsubsection*{Exercice 3}
+
+Soit X la var égale au type de maïs obtenu avec un croisement. On utilise le codage :
+
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+\textbf{Type}          & "vert" & "doré" & "vert-zébré" & "doré-vert-zébré" \\ \hline
+\textbf{Nombre defois} & 0    & 1     & 2            & 3                   \\ \hline
+\end{tabular}
+\end{center}
+Par l'énoncé, on observe la valeur de $X$ sur chacun des n individus (croisements) d'un échantillon avec $n = 1301$ : $(x_{1}; \dots ; x_{n})$ (avec $x_{i} \in \{0 ;1; 2; 3\})$. On forme alors un vecteur des effectifs $(n_{1}; n_{2}; n_{3}; n_{4}) = (773; 231; 238; 59)$.
+Dire que les lois de la génétique sont respectées signifie que $X$ suit la loi décrite dans l'énoncé :
+
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+\textbf{Type}          & "vert" & "doré" & "vert-zébré" & "doré-vert-zébré" \\ \hline
+\textbf{Nombre de fois} & 9/16    & 3/16     & 3/16            & 1/16                   \\ \hline
+\end{tabular}
+\end{center}
+La problématique est la suivante : \textit{est-ce que les données nous permettent d'affirmer que X ne suit pas la loi décrite dans l'énoncé ?}\newline
+Ainsi, pour une analyse graphique, on propose les commandes :
+\begin{lstlisting}[language=html]
+> nb = c(773, 231, 238, 59)
+> bar = barplot(nb / 1301, col = "white")
+> points(bar, c(9 / 16, 3 / 16, 3 / 16, 1 / 16), type = "h",col="red")
+\end{lstlisting}
+
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.45]{ilu/adeq15.png}\end{center}\end{figure}
+
+Il est difficile de conclure au vu des différences observées.\newline
+On peut utiliser le test du Chi-deux d'adéquation à une loi pour y voir plus clair. \newline
+On considère alors les hypothèses :
+\begin{itemize}
+  \item $H_{0}$ : "X suit la loi décrite dans l'énoncé" 
+  \item $H_{1}$ : "X ne suit pas la loi décrite dans l'énoncé".
+\end{itemize}
+Les valeurs sont regroupées en $k = 4$ classes : $C_{1} = \{1\}$, $C_{2} = \{2\}$, $C_{3} = \{3\}$ et $C_{4} = \{4\}$. On considère les commandes :
+\begin{lstlisting}[language=html]
+> nb
+[1] 773 231 238  59
+> proba = c(9 / 16, 3 / 16, 3 / 16, 1 / 16)
+> chisq.test(nb, p = proba)$p.value
+[1] 0.02589168
+\end{lstlisting}
+Notons qu'aucun "Warning message" n'apparaît ; les conditions d'application du test sont vérifiées.\newline
+Comme $p$-valeur $\in]0,01; 0,05]$, le rejet de $H_{0}$ est significatif. Par conséquent, on peut affirmer, au risque 5\%, que $X$ ne suit pas la loi décrite dans l'énoncé ; les lois de la génétique ne sont pas respectées.
+\subsubsection*{Exercice 4}
+Par l'énoncé, on observe la valeur de $X$ sur chacun des $n$ individus (agents) d'un échantillon avec $n = 52$ : $(x_{1}; \dots ; x_{n})$ (avec $x_{i} \in \mathbb{N}$). On forme alors un vecteur des effectifs $(n_{1}; n_{2}; n_{3}; n_{4}) =
+(15; 18; 11; 8)$. Dire que X suit la loi de Poisson $\mathcal{P}(2)$ signifie que$$\mathbb{P}(X=i) = e^{-2}\frac{2^{i}}{i!}\textrm{, } i \in \mathbb{N}$$
+La problématique est la suivante : \textit{est-ce que ces données nous permettent d'affirmer que $X$ ne suit pas la loi $\mathcal{P}(2)$ ?} Pour une analyse graphique, on propose les commandes :
+\begin{lstlisting}[language=html]
+> nb = c(15, 18, 11, 8)
+> bar = barplot(nb / 52, col = "white")
+> lambda = sum((0:4) * nb) / 52;lambda
+[1] 2.384615
+> prob = c(dpois(0:2, lambda), 1 - ppois(2, lambda))
+> points(bar, prob, type = "h",col="red")
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.45]{ilu/adeq17.png}\end{center}\end{figure}
+Les différences observées laissent penser que $X$ ne suit pas la loi de Poisson $\mathcal{P}(2)$. Confirmons cela avec le test du Chi-deux d'adéquation à une loi. On considère alors les hypothèses :
+\begin{itemize}
+  \item $H_{0}$ : "X suit la loi de Poisson $\mathcal{P}(2)$"
+  \item $H_{1}$ : "X ne suit pas la loi de Poisson  $\mathcal{P}(2)$".
+\end{itemize}
+Les données sont sont regroupées en $k = 4$ classes :  $C_{1} = \{0\}$, $C_{2} = \{1\}$,$C_{3} = \{2\}$, $C_{4} = \{3,4,\dots,\infty\}$.\newline
+Soit $R$ une var suivant la loi de Poisson $\mathcal{P}(2)$. On a $R(\Omega)
+) = \mathbb{N}$ et $\bigcup_{i=1}^{4} C_{i} = \mathbb{N} = R(\Omega)$ (il n'y a pas d'ajustement à faire). On met en oeuvre le test du Chi-deux en faisant :
+\begin{lstlisting}[language=html]
+> nb
+[1] 15 18 11  8
+> prob
+[1] 0.09212441 0.21968127 0.26192767 0.42626665
+> chisq.test(nb, p = prob)$p.value
+[1] 1.159166e-07
+\end{lstlisting}
+Comme $p$-valeur $\in]0.001; 0.01]$, le rejet de $H_{0}$ est très significatif.
+Par conséquent, au risque 5\%, on peut affirmer que X ne suit pas la loi de Poisson $\mathcal{P}(2)$.
+\subsubsection*{Exercice 5}
+Par l'énoncé, on observe la valeur de $X$ sur chacun des $n$ individus (jours) d'un échantillon avec $n = 320$ : $(x_{1}; \dots ; x_{n})$ (avec $x_{i} \in \mathbb{N})$. Ces valeurs sont regroupées en $k = 8$ classes : $C_{1} = \{0\}$, $C_{2} = \{1\}$,\dots, $C_{8} = \{7\}$ avec pour effectifs respectifs : $n_{1} = 65$, $n_{2} = 110$,\dots , $n_{8} = 2$.\newline
+On considère les hypothèses :
+\begin{itemize}
+  \item $H_{0}$ : "X suit une loi de Poisson" 
+  \item $H_{1}$ : "X ne suit pas une loi de Poisson"
+\end{itemize}
+On peut alors utiliser le test du Chi-deux d'adéquation à une loi. Soit $R$ une var suivant la loi de Poisson $\mathcal{P}(\lambda)$ avec $\lambda > 0$ inconnu. On a $R(\Omega) = \mathbb{N}$. Comme $\bigcup_{i=1}^{8} C_{i} = \{0,\dots,7\}\neq\mathbb{N}$, on ajuste la
+dernière classe comme : $C_{8} = \{7; 8; \dots ;\infty \}$ (de sorte à ce que $\bigcup_{i=1}^{8} C_{i} = R(\Omega)$). Le paramètre $\lambda$ étant inconnu, il faut l'estimer à l'aide des données. Comme $\mathbb{E}(X) = \lambda$, la méthode des moments nous assure qu'une estimation de $\lambda$ est la moyenne $x$. On peut la calculer en faisant :
+\begin{lstlisting}[language=html]
+> nb = c(65, 110, 70, 48, 16, 5, 4, 2)
+> lambda = sum((0:7) * nb) / 320
+> lambda
+[1] 1.628125
+\end{lstlisting}
+Cette estimation sera prise en compte dans la suite. Pour tout $i \in \{1; \dots ; 7\}$, on a :
+$$p_{i} = \mathbb{P}(R\in C_{i}) = \mathbb{P}(R = i-1) = e^{-1.628125}\frac{1.628125^{i-1}}{(i-1)!}$$
+De plus, on a : 
+$$p_{8} = \mathbb{P}(R\in C_{8}) = \mathbb{P}(R \geq 7) = \sum_{i=7}^{\infty}e^{-1.628125}\frac{1.628125^{i}}{(i)!}$$
+On peut obtenir ces probabilités avec les commandes :
+\begin{lstlisting}[language=html]
+> proba = c(dpois(0:6, lambda), 1 - ppois(6, lambda))
+> proba
+[1] 0.196297287 0.319596520 0.260171542 0.141197264 0.057471699 0.018714222
+[7] 0.005078182 0.001473285
+\end{lstlisting}
+Dans un premier temps, on propose de mettre en oeuvre le test du Chi-deux en faisant :
+\begin{lstlisting}[language=html]
+> nb
+[1]  65 110  70  48  16   5   4   2
+> proba
+[1] 0.196297287 0.319596520 0.260171542 0.141197264 0.057471699 0.018714222
+[7] 0.005078182 0.001473285
+> chisq.test(nb, p = proba)$p.value
+[1] 0.1057037
+Warning message:
+In chisq.test(nb, p = proba) :
+  l'approximation du Chi-2 est peut-être incorrecte
+\end{lstlisting}
+
+On dénombre alors deux problèmes :
+\begin{itemize}
+  \item le logiciel n'a pas pris en compte le fait que $\lambda$ a été estimé,
+  \item il y a un "Warning message" nous avertissant que l'hypothèse : $np_{i} \geq 5$ pour tout $i \in \{1; \dots ; 8\}$
+n'est peut-être pas vérifiée.
+\end{itemize}
+
+Étudions ce dernier point :
+\begin{lstlisting}[language=html]
+> proba
+[1] 0.196297287 0.319596520 0.260171542 0.141197264 0.057471699 0.018714222
+[7] 0.005078182 0.001473285
+> sum(nb)
+[1] 320
+> 320*prob
+[1]  29.47981  70.29801  83.81686 136.40533
+\end{lstlisting}
+Comme $np_{7} < 5$ et $np_{8} < 5$, nous allons fusionner les classes $C_{6}$, $C_{7}$ et $C_{8}$, formant ainsi une
+nouvelle dernière classe : $C_{6} = \{5; 6; \dots\}$ avec pour effectif : $n_{6} = 5 + 4 + 2 = 11$. Il y a désormais $k = 6$ classes.\newline
+On vérifie alors que l'hypothèse est vérifiée avec cette nouvelle configuration :
+\begin{lstlisting}[language=html]
+> nb2 = c(65, 110, 70, 48, 16, 11)
+> proba2 = c(dpois(0:4, lambda), 1 - ppois(4, lambda))
+> 320 * proba2
+[1]  62.81513 102.27089  83.25489  45.18312  18.39094   8.08502
+\end{lstlisting}
+Aucune valeur ne dépasse $5$. Pour avoir la $p$-valeur associée au test du Chi-deux en prenant en compte le fait que l'on a estimé un paramètre, on considère le degré de liberté :
+$$\nu = k - 1 - \mathit{l} = 6 - 1 - 1 = 4$$
+On fait :
+\begin{lstlisting}[language=html]
+> x2obs = chisq.test(nb2, p = proba2)$statistic
+> deg = 4
+> 1 - pchisq(x2obs, deg)
+X-squared 
+0.3659448 
+\end{lstlisting}
+On obtient alors la vraie $p$-valeur associée au test du Chi-deux (notons aussi qu'aucun "Warning message" n'apparaît).\newline
+Comme $p$-valeur $> 0.05$, les données ne nous permettent pas de rejeter $H_{0}$. Ainsi, on ne peut pas rejeter l'hypothèse selon laquelle X ne suit pas une loi de Poisson.
+\subsubsection*{Exercice 6}
+Par l'énoncé, on observe la valeur de $X$ sur chacun des $n$ individus (appareils) d'un échantillon avec $n = 7$ : $(x_{1}; : : : ; x_{n})$ (avec $x_{i} \in \mathbb{R}$).\newline
+On considère les hypothèses :
+\begin{itemize}
+  \item $H_{0}$ : "X suit la loi exponentielle $\varepsilon(0.01)$" 
+  \item $H_{1}$ : "X ne suit pas la loi exponentielle $\varepsilon(0.01)$".
+\end{itemize}
+On peut utiliser le test de Kolmogorov-Smirnov. On fait :
+\begin{lstlisting}[language=html]
+> x = c(145, 110, 170, 48, 116, 95, 74 )
+> ks.test(x, "pexp", 0.01)$p.value
+[1] 0.2005605
+\end{lstlisting}
+Comme $p$-valeur $> 0.05$, les données ne nous permettent pas de rejeter $H_{0}$. Ainsi, on ne peut pas rejeter l'hypothèse selon laquelle $X$ suit la loi exponentielle $\varepsilon(0.01)$.
+\subsubsection*{Exercice 7}
+Par l'énoncé, on observe la valeur de $X$ sur chacun des $n$ individus (attentes) d'un échantillon avec $n = 7$ : $(x_{1}; \dots ; x_{n})$ (avec $x_{i} \in \mathbb{R})$. On détermine $1/\bar{x}$ en faisant :
+
+\begin{lstlisting}[language=html]
+> x = c(25.12, 12.36, 24.35, 12.19, 5.27, 18.35, 19.11, 27.08, 21.09, 17.19,
++       8.45, 13.27, 15.17)
+> 1 / mean(x)
+[1] 0.05936073
+\end{lstlisting}
+On considère les hypothèses :
+\begin{itemize}
+  \item $H_{0}$ : "X suit la loi exponentielle $\varepsilon(0.05936073)$"
+  \item $H_{1}$ : "X ne suit pas la loi exponentielle $\varepsilon(0.05936073)$"
+\end{itemize}
+On peut utiliser le test de Kolmogorov-Smirnov. On fait :
+
+\begin{lstlisting}[language=html]
+> ks.test(x, "pexp", 0.05936073)$p.value
+[1] 0.05028391
+\end{lstlisting}
+
+Comme $p$-valeur $> 0.05$ (de justesse), les données ne nous permettent pas de rejeter $H_{0}$. Ainsi, on ne peut pas rejeter l'hypothèse selon laquelle $X$ suit la loi exponentielle $\varepsilon(0.05936073)$.
+
+\subsubsection*{Exercice 8}
+Par l'énoncé, on observe la valeur de $X$ sur chacun des $n$ individus (pourceaux) d'un échantillon avec $n = 50$ : $(x_{1}; \dots ; x_{n})$ (avec $x_{i} \in \mathbb{R})$. Celles-ci sont présentées sous la forme d'un tableau classes-effectifs. On propose d'extrapoler les données en utilisant les centres des classes et les effectifs respectifs :
+\begin{lstlisting}[language=html]
+> xinf = c(0, 4, 8, 12, 16, 20, 24)
+> xsup = c(4, 8, 12, 16, 20, 24, 28)
+> centre = (xinf + xsup) / 2
+> centre
+[1]  2  6 10 14 18 22 26
+> n = c(2, 5, 12, 14, 11, 5, 1)
+> x = rep(centre, n)
+> x
+ [1]  2  2  6  6  6  6  6 10 10 10 10 10 10 10 10 10 10 10 10 14 14 14 14 14
+[25] 14 14 14 14 14 14 14 14 14 18 18 18 18 18 18 18 18 18 18 18 22 22 22 22
+[49] 22 26
+\end{lstlisting}
+Pour une analyse graphique, on peut utiliser la méthode de l'histogramme. On propose les commandes
+:
+\begin{lstlisting}[language=html]
+> hist(x, freq = FALSE, breaks = c(0, 4, 8, 12, 16, 20, 24, 28),
++      main = "Méthode de l'histogramme", ylim = c(0, 0.082), ylab = "")
+> a = mean(x) ; b = sd(x)
+> curve(dnorm(x, a, b), add = TRUE, col="red")
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.45]{ilu/adeq18.png}\end{center}\end{figure}
+Les différences observées laissent penser que $X$ suit une loi normale.
+
+\subsubsection*{Exercice 9}
+Par l'énoncé, on observe la valeur de $X$ sur chacun des $n$ individus (plaquettes de beurre) d'un échantillon avec $n = 20$ : $(x_{1}; \dots ; x_{n})$ (avec $x_{i} \in \mathbb{R}$).\newline
+Pour une analyse graphique, on peut utiliser la méthode du QQ plot avec la droite de Henry.\newline
+On propose les commandes :
+
+\begin{lstlisting}[language=html]
+x = c(247.0, 247.8, 250.2, 251.3, 251.9, 249.4, 248.8, 247.1, 255.0, 247.0,
+254.8, 244.8, 250.7, 250.7, 252.6, 251.1, 254.1, 249.2, 252.0, 254.0)
+qqnorm(x, main = "Méthode du QQ plot avec droite de Henry")
+a = mean(x) ; b = sd(x)
+curve(a + b * x, -6, 6, col = "red", add = TRUE)
+\end{lstlisting}
+
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.45]{ilu/adeq19.png}\end{center}\end{figure}
+
+On constate que la droite de henry ajuste bien le nuage de points, ce qui traduit le fait que $X$ suit une
+loi normale. Confirmons cela avec un test statistique. On considère les hypothèses :
+\begin{itemize}
+  \item $H_{0}$ : "X suit une loi normale" 
+  \item $H_{1}$ : "X ne suit pas une loi normale".
+\end{itemize}
+On peut utiliser le test de Shapiro-Wilk. On fait :
+\begin{lstlisting}[language=html]
+ [1] 247.0 247.8 250.2 251.3 251.9 249.4 248.8 247.1 255.0 247.0 254.8 244.8
+[13] 250.7 250.7 252.6 251.1 254.1 249.2 252.0 254.0
+> shapiro.test(x)$p.value
+[1] 0.751598
+\end{lstlisting}
+Comme $p$-valeur $> 0.05$, on ne rejette pas $H_{0}$ ; l'hypothèse selon laquelle $X$ suit une loi normale n'est pas rejetée.
+\subsubsection*{Exercice 10}
+Par l'énoncé, on observe la valeur de $X$ sur chacun des $n$ individus (kiwis) d'un échantillon
+avec $n = 16$ : $(x_{1}; \dots ; x_{n})$ (avec $x_{i} \in \mathbb{R}$).\newline
+Pour une analyse graphique, on peut utiliser la méthode du QQ plot avec la droite de Henry. On
+propose les commandes :
+\begin{lstlisting}[language=html]
+> x = c(65.06, 71.44, 67.93, 69.02, 67.28, 62.34, 66.23, 64.16, 68.56, 70.45,
++       64.91, 69.90, 65.52, 66.75, 68.54, 67.90)
+> qqnorm(x, main = "Méthode du QQ plot avec droite de Henry")
+> a = mean(x) ; b = sd(x)
+> a;b
+[1] 67.24938
+[1] 2.455317
+> curve(a + b * x, -6, 6, col = "red", add = TRUE)
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.45]{ilu/adeq20.png}\end{center}\end{figure}
+On constate que la droite de henry ajuste bien le nuage de points, ce qui traduit le fait que $X$ suit une
+loi normale. Confirmons cela avec un test statistique. On considère les hypothèses :
+\begin{itemize}
+  \item $H_{0}$ : "X suit une loi normale" 
+  \item $H_{1}$ : "X ne suit pas une loi normale".
+\end{itemize}
+On peut utiliser le test de Shapiro-Wilk. On fait :
+\begin{lstlisting}[language=html]
+> x
+ [1] 65.06 71.44 67.93 69.02 67.28 62.34 66.23 64.16 68.56 70.45 64.91 69.90
+[13] 65.52 66.75 68.54 67.90
+> shapiro.test(x)$p.value
+[1] 0.9971045
+\end{lstlisting}
+Comme $p$-valeur $> 0.05$, on ne rejette pas $H_{0}$ ; l'hypothèse selon laquelle $X$ suit une loi normale
+n'est pas rejetée.
+\subsubsection*{Exercice 11}
+\begin{enumerate}
+  \item On propose :
+\begin{lstlisting}[language=html]
+> w = read.table("pression.txt", header = T)
+> str(w)
+'data.frame': 29 obs. of  2 variables:
+ $ X1: int  39 45 47 65 46 67 42 67 56 64 ...
+ $ Y : int  144 138 145 162 142 170 124 158 154 162 ...
+> attach(w)
+\end{lstlisting}
+\item On considère les hypothèses :
+\begin{itemize}
+  \item $H_{0}$ : "Y suit une loi normale" 
+  \item $H_{1}$ : "Y ne suit pas une loi normale"
+\end{itemize}
+On fait le test de Shapiro-Wilk :
+\begin{lstlisting}[language=html]
+> shapiro.test(Y)$p.value
+[1] 0.6421197
+\end{lstlisting}
+Comme $p$-valeur $> 0.05$, l'hypothèse que $Y$ suit une loi normale n'est pas rejetée.
+\item On considère les hypothèses :
+\begin{itemize}
+  \item $H_{0}$ : "$X_{1}$ suit une loi normale" 
+  \item $H_{1}$ : "$X_{1}$ ne suit pas une loi normale".
+\end{itemize}
+On fait le test de Shapiro-Wilk :
+\begin{lstlisting}[language=html]
+> shapiro.test(X1)$p.value
+[1] 0.2083349
+\end{lstlisting}
+Comme $p$-valeur $> 0.05$, l'hypothèse que $X_{1}$ suit une loi normale n'est pas rejetée.
+\item On fait :
+\begin{lstlisting}[language=html]
+> par(mfrow = c(1, 2))
+> qqnorm(scale(X1))
+> abline(0, 1, col = "red")
+> qqnorm(scale(Y))
+> abline(0, 1, col = "blue")
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.45]{ilu/adeq21.png}\end{center}\end{figure}
+On analyse les QQ plot associés aux var $X_{1}$ et $Y$ . On constate que les points sont presque alignés
+sur la droite diagonale d'équation $y = x$. On peut alors admettre que $X_{1}$ et $Y$ suivent des lois
+normale.
+\end{enumerate}
+
+\subsubsection*{Exercice 12}
+On fait :
+\begin{lstlisting}[language=html]
+> n = 1000
+> a = rpois(n, 5)
+> b = rpois(n, 3)
+> c = rpois(n, 8)
+> qqplot(a + b, c)
+\end{lstlisting}
+Cela renvoie :
+
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.45]{ilu/adeq16.png}\end{center}\end{figure}
+On constate que le nuage de points peut être ajusté par la droite $y = x$, ce qui illustre le résultat.
+
+\subsubsection*{Exercice 13}
+\begin{itemize}
+  \item $X_{1} \sim \varepsilon(\lambda)$,$X_{2}\sim \varepsilon(\lambda)$, $X_{1}$ et $X_{2}$ indépendantes entraînent $X_{1} + X_{2} \sim \Gamma(\lambda,2)$ avec $\lambda = 3.8$
+\begin{lstlisting}[language=html]
+  > a = rexp(1000, 3.8)
+  > b = rexp(1000, 3.8)
+  > c = rgamma(1000, 2, 3.8)
+  > qqplot(a + b, c)
+\end{lstlisting}
+  \begin{figure}[H]\begin{center}\includegraphics[scale=0.45]{ilu/adeq22.png}\end{center}\end{figure}
+
+  On constate que le nuage de points peut être ajusté par la droite d'équation $y = x$, ce qui illustre
+le résultat.
+
+  \item $X_{1} \sim \Gamma(m_{1},\lambda)$, $X_{2} \sim \Gamma(m_{2},\lambda)$, $X_{1}$ et $X_{2}$ indépendantes entraînent $X_{1} + X_{2} \sim \Gamma(m_{1}+m_{2},\lambda)$ avec $ m_{1}=m_{2}=4.2$ et $\lambda = 2.1$
+\begin{lstlisting}[language=html]
+  > a = rgamma(1000, 4.2, 2.1)
+  > b = rgamma(1000, 4.2, 2.1)
+  > c = rgamma(1000, 8.4, 2.1)
+  > qqplot(a + b, c)
+\end{lstlisting}
+  \begin{figure}[H]\begin{center}\includegraphics[scale=0.45]{ilu/adeq23.png}\end{center}\end{figure}
+
+  De nouveau, on constate que le nuage de points peut être ajusté par la droite d'équation $y = x$,
+ce qui illustre le résultat.
+
+  \item $X_{1} \sim \mathcal(N)(\mu_{1},\sigma_{1}^{2})$,$X_{2} \sim \mathcal(N)(\mu_{2},\sigma_{2}^{2})$ $X_{1}$ et $X_{2}$ indépendantes entraînent $X_{1} + X_{2} \sim \mathcal(N)(\mu_{1}+\mu_{2},\sigma_{1}^{2}+\sigma_{2}^{2})$, avec $\mu_{1}=\mu_{2}=1.6$ et $\sigma_{1}=\sigma_{2}=1.5$
+\begin{lstlisting}[language=html]
+> a = rnorm(1000, 1.6, 1.5)
+> b = rnorm(1000, 1.6, 1.5)
+> c = rnorm(1000, 3.2, sqrt(1.5^2 + 1.5^2))
+> qqplot(a + b, c)
+\end{lstlisting}
+  \begin{figure}[H]\begin{center}\includegraphics[scale=0.45]{ilu/adeq24.png}\end{center}\end{figure}
+
+  De nouveau, on constate que le nuage de points peut être ajusté par la droite d'équation $y = x$,
+ce qui illustre le résultat.
+
+  \item $X_{1}\sim\chi^{2}(\nu_{1})$,$X_{2}\sim\chi^{2}(\nu_{2})$, $X_{1}$ et $X_{2}$ indépendantes entraînent $X_{1} + X_{2} \sim \chi^{2}(\nu_{1}+\nu_{2})$ avec $\nu_{1}=\nu_{2}=3.2$
+\begin{lstlisting}[language=html]
+> a = rchisq(1000, 3.2)
+> b = rchisq(1000, 3.2)
+> c = rchisq(1000, 6.4)
+> qqplot(a + b, c)
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.45]{ilu/adeq25.png}\end{center}\end{figure}
+
+De nouveau, on constate que le nuage de points peut être ajusté par la droite d'équation y = x,
+ce qui illustre le résultat.
+
+\end{itemize}
+\subsubsection*{Exercice 14}
+\begin{itemize}
+  \item Caractérisation de la loi du chi-deux : $\chi^{2}(2)$ :\newline
+  Si $X$ $\sim$ $\mathcal{N}(0,1)$ et $Y$ $\sim$ $\mathcal{N}(0,1)$ alors 
+$$X^{2} + Y^{2} \sim \chi^{2}(2)$$
+\begin{lstlisting}[language=html]
+> a = rnorm(1000)
+> b = rnorm(1000)
+> c = rchisq(1000, 2)
+> qqplot(a^2 + b^2, c)
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.45]{ilu/adeq26.png}\end{center}\end{figure}
+On constate que le nuage de points peut être ajusté par la droite d'équation$y = x$, ce qui illustre
+le résultat.
+
+\item Caractérisation de la loi de Student $\mathcal{T}(\nu)$ : \newline
+Si $X$ $\sim$ $\mathcal{N}(0,1)$ et $Y$ $\sim$ $\chi^{2}(\mu)$ alors 
+$$\frac{X}{\sqrt{\frac{Y}{\nu}}} \sim \mathcal{T}(\nu)$$
+
+avec $\nu = 3.9$
+\begin{lstlisting}[language=html]
+> a = rnorm(1000)
+> b = rchisq(1000, 3.9)
+> c = rt(1000, 3.9)
+> qqplot(a / sqrt(b / 3.9), c)
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.45]{ilu/adeq27.png}\end{center}\end{figure}
+De nouveau, on constate que le nuage de points peut être ajusté par la droite d'équation $y = x$,
+ce qui illustre le résultat.
+
+\item Caractérisation de la loi de Fisher $\mathcal{F}(\nu_{1},\nu_{2})$\newline
+$$\frac{\frac{X}{\nu_{1}}}{\frac{Y}{\nu_{2}}} = \frac{\nu_{2}X}{\nu_{1}Y} \sim \mathcal{F}(\nu_{1},\nu_{2})$$
+avec $(\nu_{1},\nu_{2}) = (2,1; 8,3)$.
+\begin{lstlisting}[language=html]
+> a = rchisq(1000, 2.1)
+> b = rchisq(1000, 8.3)
+> c = rf(1000, 2.1, 8.3)
+> qqplot((a / 2.1) / (b / 8.3), c)
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.45]{ilu/adeq28.png}\end{center}\end{figure}
+De nouveau, on constate que le nuage de points peut être ajusté par la droite d'équation $y = x$,
+ce qui illustre le résultat.
+\end{itemize}
+
+\subsubsection*{Exercice 15}
+Dans les commandes, on génère $100$ observations d'une var $X$ suivant la loi normale centrée réduite $\mathcal{N}(0; 1)$. On les place dans un vecteur $x$. \newline
+Ensuite, on créé un vecteur numérique $a$. Dans la boucle for, pour tout $i \in \{1; \dots ; 6\}$, on considère les hypothèses suivantes :
+\begin{itemize}
+  \item $H_{0}(i)$ : "X suit la loi normale $\mathcal{N}(0,(1+\frac{i-1}{10})^{2})$"
+  \item $H_{1}(i)$"X ne suit pas la loi normale $\mathcal{N}(0,(1+\frac{i-1}{10})^{2})$"
+\end{itemize}
+on utilise le test de Kolmogorov-Smirnov, on calcule la $p$-valeur associée à $H_{0}(i)$ et on met cette valeur au $i$-ème élément de $a$.\newline
+Ensuite, on affiche a.\newline
+On remarque alors que, logiquement, plus $i$ est grand, plus $1 + (i - 1)/10$ s'éloigne de 1, plus la $p$-valeur est petite, moins on a de certitude en affirmant que la loi de X est en adéquation avec la loi normale $\mathcal{N}(0,(1+\frac{i-1}{10})^{2})$

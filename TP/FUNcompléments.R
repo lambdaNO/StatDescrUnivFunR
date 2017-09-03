@@ -1529,3 +1529,28 @@ b = rpois(n, 3)
 c = rpois(n, 8)
 qqplot(a + b, c,col)
 
+nb = c(15, 18, 11, 8)
+bar = barplot(nb / 52, col = "white")
+lambda = sum((0:4) * nb) / 52;lambda
+prob = c(dpois(0:2, lambda), 1 - ppois(2, lambda))
+points(bar, prob, type = "h",col="red")
+
+nb
+prob
+chisq.test(nb, p = prob)$p.value
+
+nb = c(65, 110, 70, 48, 16, 5, 4, 2)
+lambda = sum((0:7) * nb) / 320
+lambda
+
+proba = c(dpois(0:6, lambda), 1 - ppois(6, lambda))
+proba
+
+nb
+proba
+chisq.test(nb, p = proba)$p.value
+
+
+proba
+sum(nb)
+320*prob

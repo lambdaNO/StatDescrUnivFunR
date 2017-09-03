@@ -103,6 +103,7 @@ On effectue $1301$ croisements. On obtient les résultats suivants :
 \end{center}
 \textit{Peut-on dire que les lois de la génétique ne sont pas respectées ?} (on fera une analyse graphique convenable, puis un test statistique adapté au risque $5\%$).
 
+\varepsilon
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -115,3 +116,46 @@ On effectue $1301$ croisements. On obtient les résultats suivants :
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+
+\begin{itemize}
+  \item Caractérisation de la loi du chi-deux : $\chi^{2}(2)$ :\newline
+  Si $X$ $\sim$ $\mathcal{N}(0,1)$ et $Y$ $\sim$ $\mathcal{N}(0,1)$ alors 
+$$X^{2} + Y^{2} \sim \chi^{2}(2)$$
+\begin{lstlisting}[language=html]
+> a = rnorm(1000)
+> b = rnorm(1000)
+> c = rchisq(1000, 2)
+> qqplot(a^2 + b^2, c)
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=1]{ilu/adeq25.png}\end{center}\end{figure}
+On constate que le nuage de points peut être ajusté par la droite d’équation$y = x$, ce qui illustre
+le résultat.
+
+\item Caractérisation de la loi de Student $\mathcal{T}(\nu)$ : \newline
+Si $X$ $\sim$ $\mathcal{N}(0,1)$ et $Y$ $\sim$ $\chi^{2}(\mu)$ alors 
+$$\frac{X}{\sqrt{\frac{Y}{\nu}}} \sim \mathcal{T}(\nu)$$
+
+avec $\nu = 3.9$
+\begin{lstlisting}[language=html]
+> a = rnorm(1000)
+> b = rchisq(1000, 3.9)
+> c = rt(1000, 3.9)
+> qqplot(a / sqrt(b / 3.9), c)
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=1]{ilu/adeq26.png}\end{center}\end{figure}
+De nouveau, on constate que le nuage de points peut être ajusté par la droite d’équation $y = x$,
+ce qui illustre le résultat.
+
+\item Caractérisation de la loi de Fisher $\mathcal{F}(\nu_{1},\nu_{2})$\newline
+$$\frac{\frac{X}{\nu_{1}}}{\frac{Y}{\nu_{2}}} = \frac{\nu_{2}X}{\nu_{1}Y} \sim \mathcal{F}(\nu_{1},\nu_{2})$$
+avec $(\nu_{1},\nu_{2}) = (2,1; 8,3)$.
+\begin{lstlisting}[language=html]
+> a = rchisq(1000, 2.1)
+> b = rchisq(1000, 8.3)
+> c = rf(1000, 2.1, 8.3)
+> qqplot((a / 2.1) / (b / 8.3), c)
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=1]{ilu/adeq27.png}\end{center}\end{figure}
+De nouveau, on constate que le nuage de points peut être ajusté par la droite d’équation $y = x$,
+ce qui illustre le résultat.
+\end{itemize}
