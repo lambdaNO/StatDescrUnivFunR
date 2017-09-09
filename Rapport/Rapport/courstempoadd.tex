@@ -1,14 +1,66 @@
+\begin{figure}[H]\begin{center}\includegraphics[scale=1]{ilu/probab .png}\end{center}\end{figure}
 
 
+\begin{lstlisting}[language=html]
+  
+\end{lstlisting}
+
+
+%% La dernière image est probab28
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\subsubsection*{Exercice }
+\subsubsection*{Exercice }
+\subsubsection*{Exercice }
+\subsubsection*{Exercice }
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{figure}[H]\begin{center}\includegraphics[scale=1]{ilu/adeq .png}\end{center}\end{figure}
 
 
 
-Soit $X$ la \textit{var} égale au numéro affiché par le dé après un lancer. Par l’énoncé, on observe la valeur de $X$ sur chacun des $n$ individus (dés) d’un échantillon avec $n = 100$ : $(x_{1}; \dots ; x_{n})$ (avec $x_{i} \in \{1; \dots ; 6\})$. On forme alors un vecteur des effectifs $(n_{1}; n_{2}; \dots ; n_{6}) = (18; 23; \dots ; 15)$.\newline
-Dire que le dé n’est pas truqué signifie que $X$ suit la loi uniforme $\mathit{U}(\{1; \dots ; 6\})$ :
+Soit $X$ la \textit{var} égale au numéro affiché par le dé après un lancer. Par l'énoncé, on observe la valeur de $X$ sur chacun des $n$ individus (dés) d'un échantillon avec $n = 100$ : $(x_{1}; \dots ; x_{n})$ (avec $x_{i} \in \{1; \dots ; 6\})$. On forme alors un vecteur des effectifs $(n_{1}; n_{2}; \dots ; n_{6}) = (18; 23; \dots ; 15)$.\newline
+Dire que le dé n'est pas truqué signifie que $X$ suit la loi uniforme $\mathit{U}(\{1; \dots ; 6\})$ :
 $$\mathbb{P}(X=i) = \frac{1}{6}, \textrm{ } i \in \{1,\dots, 6\}$$
-La problématique est la suivante : \textit{est-ce que les données nous permettent d’affirmer que X ne suit pas la loi $\mathit{U}(\{1; \dots ; 6\})$} ?\newline
+La problématique est la suivante : \textit{est-ce que les données nous permettent d'affirmer que X ne suit pas la loi $\mathit{U}(\{1; \dots ; 6\})$} ?\newline
 \\
 Ainsi, pour une analyse graphique, on propose les commandes :
 \begin{lstlisting}[language=html]
@@ -18,7 +70,7 @@ Ainsi, pour une analyse graphique, on propose les commandes :
 \end{lstlisting}
 \begin{figure}[H]\begin{center}\includegraphics[scale=1]{ilu/adeq14.png}\end{center}\end{figure}
 Il est difficile de conclure au vu des différences observées.\newline
-On peut utiliser le test du Chi-deux d’adéquation à une loi pour y voir plus clair. On considère alors les hypothèses :
+On peut utiliser le test du Chi-deux d'adéquation à une loi pour y voir plus clair. On considère alors les hypothèses :
 \begin{itemize}
   \item $H_{0}$ : "X suit la loi uniforme $\mathit{U}(\{1; \dots ; 6\})$"
   \item $H_{1}$ : "X ne suit pas la loi uniforme $\mathit{U}(\{1; \dots ; 6\})$".
@@ -32,14 +84,14 @@ On considère les commandes :
 > chisq.test(nb, p = proba)$p.value
 [1] 0.2757299
 \end{lstlisting}
-Notons qu’aucun "Warning message" n’apparaît ; les conditions d’application du test sont vérifiées.\newline
+Notons qu'aucun "Warning message" n'apparaît ; les conditions d'application du test sont vérifiées.\newline
 Comme $p$-valeur $> 0,05$, les données ne nous permettent pas de rejeter $H_{0}$. Ainsi, on ne peut pas affirmer que le dé est truqué.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-On indique dans le tableau suivant le nombre de fois qu’un chiffre apparaît dans les $608$ premières décimales de $\pi$ : 
+On indique dans le tableau suivant le nombre de fois qu'un chiffre apparaît dans les $608$ premières décimales de $\pi$ : 
 \begin{center}
 \begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|}
 \hline
@@ -53,17 +105,17 @@ On indique dans le tableau suivant le nombre de fois qu’un chiffre apparaît d
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-Soit $X$ la var égale au chiffre affiché par une décimale (que l’on suppose donc aléatoire).\newline
-Par l’énoncé, on observe la valeur de $X$ sur chacun des n individus (décimales) d’un échantillon avec $n = 608$ : $(x_{1}; \dots ; x_{n})$ (avec $x_{i} \in \{0; \dots ; 9 \})$. On forme alors un vecteur des effectifs $(n_{1}; n_{2}; \dots ; n_{10}) = (60; 62; : : : ; 67)$. Dire que les décimales sont équiréparties signifie que $X$ suit la loi uniforme $\mathit{U}(\{0; \dots ; 9\})$ :
+Soit $X$ la var égale au chiffre affiché par une décimale (que l'on suppose donc aléatoire).\newline
+Par l'énoncé, on observe la valeur de $X$ sur chacun des n individus (décimales) d'un échantillon avec $n = 608$ : $(x_{1}; \dots ; x_{n})$ (avec $x_{i} \in \{0; \dots ; 9 \})$. On forme alors un vecteur des effectifs $(n_{1}; n_{2}; \dots ; n_{10}) = (60; 62; : : : ; 67)$. Dire que les décimales sont équiréparties signifie que $X$ suit la loi uniforme $\mathit{U}(\{0; \dots ; 9\})$ :
 $$\mathbb{P}(X=i) = \frac{1}{10}, \textrm{ } i \in \{1,\dots, 9\}$$
 
-La problématique est la suivante : \textit{est-ce que les données nous permettent d’affirmer que X ne suit pas la loi $\mathit{U}(\{0; \dots ; 9\})$} ?\newline
+La problématique est la suivante : \textit{est-ce que les données nous permettent d'affirmer que X ne suit pas la loi $\mathit{U}(\{0; \dots ; 9\})$} ?\newline
 \\
 \begin{itemize}
   \item $H_{0}$ : "X suit la loi uniforme $\mathit{U}(\{1; \dots ; 9\})$"
   \item $H_{1}$ : "X ne suit pas la loi uniforme $\mathit{U}(\{1; \dots ; 9\})$".
 \end{itemize}
-On peut utiliser le test du Chi-deux d’adéquation à une loi. Les valeurs sont regroupées en k = 10
+On peut utiliser le test du Chi-deux d'adéquation à une loi. Les valeurs sont regroupées en k = 10
 classes : $C_{1} = \{0\}$, $C_{2} = \{1\}$,\dots, $C_{10} = \{9\}$.\newline
 On considère les commandes :
 \begin{lstlisting}[language=html]
@@ -72,7 +124,7 @@ On considère les commandes :
 > chisq.test(nb, p = proba)$p.value
 [1] 0.585888
 \end{lstlisting}
-Notons qu’aucun "Warning message" n’apparaît ; les conditions d’application du test sont vérifiées.\newline
+Notons qu'aucun "Warning message" n'apparaît ; les conditions d'application du test sont vérifiées.\newline
 Comme $p$-valeur $> 0,05$, les données ne nous permettent pas de rejeter $H_{0}$. Ainsi, au risque $5\%$, on ne peut pas affirmer que le décimales de $\pi$ soient équiréparties.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -86,7 +138,7 @@ Comme $p$-valeur $> 0,05$, les données ne nous permettent pas de rejeter $H_{0}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-Lindström, spécialiste de la génétique et de l’hybridation du maïs, a croisé deux types récessifs de maïs : le type vert-zébré et le type doré. Si les lois de la génétique sont respectées obtient :
+Lindström, spécialiste de la génétique et de l'hybridation du maïs, a croisé deux types récessifs de maïs : le type vert-zébré et le type doré. Si les lois de la génétique sont respectées obtient :
 \begin{itemize}
   \item  "vert" avec la probabilité $9/16$
   \item  "doré" avec la probabilité $3/16$
@@ -117,45 +169,15 @@ On effectue $1301$ croisements. On obtient les résultats suivants :
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
-\begin{itemize}
-  \item Caractérisation de la loi du chi-deux : $\chi^{2}(2)$ :\newline
-  Si $X$ $\sim$ $\mathcal{N}(0,1)$ et $Y$ $\sim$ $\mathcal{N}(0,1)$ alors 
-$$X^{2} + Y^{2} \sim \chi^{2}(2)$$
-\begin{lstlisting}[language=html]
-> a = rnorm(1000)
-> b = rnorm(1000)
-> c = rchisq(1000, 2)
-> qqplot(a^2 + b^2, c)
-\end{lstlisting}
-\begin{figure}[H]\begin{center}\includegraphics[scale=1]{ilu/adeq25.png}\end{center}\end{figure}
-On constate que le nuage de points peut être ajusté par la droite d’équation$y = x$, ce qui illustre
-le résultat.
 
-\item Caractérisation de la loi de Student $\mathcal{T}(\nu)$ : \newline
-Si $X$ $\sim$ $\mathcal{N}(0,1)$ et $Y$ $\sim$ $\chi^{2}(\mu)$ alors 
-$$\frac{X}{\sqrt{\frac{Y}{\nu}}} \sim \mathcal{T}(\nu)$$
 
-avec $\nu = 3.9$
-\begin{lstlisting}[language=html]
-> a = rnorm(1000)
-> b = rchisq(1000, 3.9)
-> c = rt(1000, 3.9)
-> qqplot(a / sqrt(b / 3.9), c)
-\end{lstlisting}
-\begin{figure}[H]\begin{center}\includegraphics[scale=1]{ilu/adeq26.png}\end{center}\end{figure}
-De nouveau, on constate que le nuage de points peut être ajusté par la droite d’équation $y = x$,
-ce qui illustre le résultat.
 
-\item Caractérisation de la loi de Fisher $\mathcal{F}(\nu_{1},\nu_{2})$\newline
-$$\frac{\frac{X}{\nu_{1}}}{\frac{Y}{\nu_{2}}} = \frac{\nu_{2}X}{\nu_{1}Y} \sim \mathcal{F}(\nu_{1},\nu_{2})$$
-avec $(\nu_{1},\nu_{2}) = (2,1; 8,3)$.
-\begin{lstlisting}[language=html]
-> a = rchisq(1000, 2.1)
-> b = rchisq(1000, 8.3)
-> c = rf(1000, 2.1, 8.3)
-> qqplot((a / 2.1) / (b / 8.3), c)
-\end{lstlisting}
-\begin{figure}[H]\begin{center}\includegraphics[scale=1]{ilu/adeq27.png}\end{center}\end{figure}
-De nouveau, on constate que le nuage de points peut être ajusté par la droite d’équation $y = x$,
-ce qui illustre le résultat.
-\end{itemize}
+
+
+
+
+
+
+
+
+\begin{figure}[H]\begin{center}\includegraphics[scale=1]{ilu/norm .png}\end{center}\end{figure}

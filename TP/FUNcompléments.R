@@ -1554,3 +1554,219 @@ chisq.test(nb, p = proba)$p.value
 proba
 sum(nb)
 320*prob
+
+nb2 = c(65, 110, 70, 48, 16, 11)
+proba2 = c(dpois(0:4, lambda), 1 - ppois(4, lambda))
+320 * proba2
+
+x2obs = chisq.test(nb2, p = proba2)$statistic
+deg = 4
+1 - pchisq(x2obs, deg)
+
+x = c(145, 110, 170, 48, 116, 95, 74 )
+ks.test(x, "pexp", 0.01)$p.value
+
+x = c(25.12, 12.36, 24.35, 12.19, 5.27, 18.35, 19.11, 27.08, 21.09, 17.19,
+      8.45, 13.27, 15.17)
+1 / mean(x)
+
+ks.test(x, "pexp", 0.05936073)$p.value
+
+xinf = c(0, 4, 8, 12, 16, 20, 24)
+xsup = c(4, 8, 12, 16, 20, 24, 28)
+centre = (xinf + xsup) / 2
+centre
+n = c(2, 5, 12, 14, 11, 5, 1)
+x = rep(centre, n)
+x
+
+hist(x, freq = FALSE, breaks = c(0, 4, 8, 12, 16, 20, 24, 28),
+     main = "Méthode de l’histogramme", ylim = c(0, 0.082), ylab = "")
+a = mean(x) ; b = sd(x)
+curve(dnorm(x, a, b), add = TRUE, col="red")
+
+x = c(247.0, 247.8, 250.2, 251.3, 251.9, 249.4, 248.8, 247.1, 255.0, 247.0,
+      254.8, 244.8, 250.7, 250.7, 252.6, 251.1, 254.1, 249.2, 252.0, 254.0)
+qqnorm(x, main = "Méthode du QQ plot avec droite de Henry")
+a = mean(x) ; b = sd(x)
+curve(a + b * x, -6, 6, col = "red", add = TRUE)
+
+x
+shapiro.test(x)$p.value
+
+x = c(65.06, 71.44, 67.93, 69.02, 67.28, 62.34, 66.23, 64.16, 68.56, 70.45,
+      64.91, 69.90, 65.52, 66.75, 68.54, 67.90)
+qqnorm(x, main = "Méthode du QQ plot avec droite de Henry")
+a = mean(x) ; b = sd(x)
+a;b
+curve(a + b * x, -6, 6, col = "red", add = TRUE)
+x
+shapiro.test(x)$p.value
+
+getwd()
+w = read.table("pression.txt", header = T)
+str(w)
+attach(w)
+
+shapiro.test(Y)$p.value
+shapiro.test(X1)$p.value
+
+par(mfrow = c(1, 2))
+qqnorm(scale(X1))
+abline(0, 1, col = "red")
+qqnorm(scale(Y))
+abline(0, 1, col = "blue")
+par(mfrow = c(1, 1))
+
+a = rexp(1000, 3.8)
+b = rexp(1000, 3.8)
+c = rgamma(1000, 2, 3.8)
+qqplot(a + b, c)
+
+a = rgamma(1000, 4.2, 2.1)
+b = rgamma(1000, 4.2, 2.1)
+c = rgamma(1000, 8.4, 2.1)
+qqplot(a + b, c)
+
+a = rnorm(1000, 1.6, 1.5)
+b = rnorm(1000, 1.6, 1.5)
+c = rnorm(1000, 3.2, sqrt(1.5^2 + 1.5^2))
+qqplot(a + b, c)
+
+a = rchisq(1000, 3.2)
+b = rchisq(1000, 3.2)
+c = rchisq(1000, 6.4)
+qqplot(a + b, c)
+
+a = rnorm(1000)
+b = rnorm(1000)
+c = rchisq(1000, 2)
+qqplot(a^2 + b^2, c)
+
+a = rnorm(1000)
+b = rchisq(1000, 3.9)
+c = rt(1000, 3.9)
+qqplot(a / sqrt(b / 3.9), c)
+
+a = rchisq(1000, 2.1)
+b = rchisq(1000, 8.3)
+c = rf(1000, 2.1, 8.3)
+qqplot((a / 2.1) / (b / 8.3), c)
+
+
+moy <- 10
+std <- 3
+plot(function(x) dnorm(x,moy,std),  moy-4*std, moy+4*std,xlab="x",ylab="",main = "",col="blue")
+
+
+x <- rnorm(1000,0,0.5)
+y <- rnorm(1000,3,1)
+z <- c(x,y)
+r <- c(-10,10)
+hist(z,freq=FALSE,col="grey",ylim=c(0,0.5),20)
+plot(function(x) 0.5*dnorm(x,0,0.5),xlim=r,col=2,add=TRUE,lwd=2)
+plot(function(x) 0.5*dnorm(x,3,1),xlim=r,col=3,add=TRUE,lwd="2")
+
+simu <- rnorm(1000)
+{hist(simu, prob=T, breaks="FD", 
+      main="Histogramme de 1000 tirages N(0,1)",col=rainbow(12), lwd=2)}
+curve(dnorm(x), add=T)
+
+###################################################################
+###################################################################
+###################################################################
+###################################################################
+
+setwd("~/Desktop/DIVERS_TEMPLATES/StatDesR/TP")
+dbinom(4, 8, 0.3)
+choose(8, 4) * 0.3^4 *(1- 0.3)^(8 - 4)
+dnorm(1.7, 2, 0.12)
+(1 / sqrt(2 * pi * 0.12^2)) * exp(- (1.7 - 2)^2 / (2 * 0.12^2))
+dbinom(c(4, 6), 8, 0.3)
+dexp(2, c(1, 2, 3))
+vec = dexp(2, c(1, 2, 3))
+vec
+plot(0:5, dbinom(0:5, 5, 0.2), type = "h", ylab = "P(X = x)")
+curve(dnorm(x, 5, 1.5), 0.5, 9.5, ylab = "fX(x)")
+pbinom(4, 8, 0.3)
+sum(dbinom(0:4, 8, 0.3))
+pnorm(12, 9, 2)
+pexp(2, 3, lower.tail = FALSE)
+exp(-6)
+plot(stepfun(0:15, c(0, pbinom(0:15, 15, 0.6))), ylab = "FX(x)", main = "")
+curve(pnorm(x, 5, 1.5), 0.5, 9.5, ylab = "FX(x)")
+qbinom(0.25, 5, 0.6)
+dbinom(c(1,2,3,4,5),5,0.6)
+pbinom(0:5, 5, 0.6)
+qnorm(0.975, 0, 1)
+pnorm(1.96, 0, 1)
+rpois(10, 2)
+sum(rbinom(80, 1, 0.02))
+x = rnorm(15, 22, 2)
+x
+x = 1:7
+sample(x)
+y = sample(c("rouge", "vert", "bleu", "blanc", "noir"))
+y
+sample(1:3, size = 2, replace = TRUE, prob = c(25 / 100, 20 / 100,55 / 100))
+sample(1:10, size = 3)
+sample(1:5, size = 9, replace = TRUE)
+y = c("rouge", "vert", "bleu", "blanc", "noir")
+sample(y, 2, prob = c(10 / 100, 30 / 100, 10 / 100, 30 / 100, 20 / 100))
+###
+
+plot(0:8, dpois(0:8, 1), type = "h", xlab = "x", ylab = "P(X = x)")
+curve(dchisq(x, 3), 0, 10, xlab = "x")
+## On split la fenêtre en deux
+par(mfrow = c(2,1))
+# On veut les densité donc : dloi
+## Var Bino -> B(50,0.08) 
+plot(0:50, dbinom(0:50, 50, 0.08), type = "h", xlab = "x", ylab = "P(X = x)",
+     ylim=c(0, 0.25), main = "Densité associée à la loi B(50, 0.08)",col="red")
+## Var Poiss -> P(0,4)
+plot(0:50, dpois(0:50, 4), type = "h", xlab = "x", ylab = "P(X = x)",
+     ylim = c(0, 0.25), main = "Densité associée à la loi P(0.08)",col="blue")
+## On oubli pas de mettre les options graphique par défaut
+par(mfrow = c(1,1))
+
+par(mfrow = c(3, 1))
+curve(dnorm(x, 4, 1), 1, 8, ylab = "",
+      main = "Densités associées aux lois N(4,1) et N(5,1)")
+curve(dnorm(x, 5, 1), 1, 8, col = "red", ylab = "", add = TRUE)
+curve(dnorm(x, 4, 1), -2, 10, ylab = "",
+      main = "Densités associées aux lois N(4,1) et N(4,4)")
+curve(dnorm(x, 4, 2), -2, 10, col = "blue", ylab = "", add = TRUE)
+curve(dnorm(x, 4, 1), -1, 11, ylab = "",
+      main = "Densités associées aux lois N(4,1) et N(5,4)")
+curve(dnorm(x, 5, 2),-1, 11, col = "green", ylab = "", add = TRUE)
+par(mfrow = c(1,1))
+
+plot(0:50, dbinom(0:50, 50, 0.4), type = "h", xlab = "x", ylab = "",
+     main = "Densités associées aux lois B(50,0.4) et N(20,12)")
+curve(dnorm(x, 20, sqrt(12)), 0, 50, col = "red", ylab = "", add = TRUE)
+
+plot(0:20, dbinom(0:20, 100, 0.01), type = "h", xlab = "x", ylab = "",
+     ylim = c(0, 0.4), main = "Densités associées aux lois B(100,0.01) et N(1,0.99)")
+curve(dnorm(x, 1, sqrt(0.99)), 0, 20, col = 3, ylab = "", add = TRUE)
+pnorm(-0.5, 0, 1)
+1 - pnorm(1.5, 0, 1)
+1 - pnorm(-1, 0, 1)
+pnorm(1.96, 0, 1) - pnorm(-1.96, 0, 1)
+pnorm(2.58, 0, 1) - pnorm(-2.58, 0, 1)
+1 - (pnorm(3, 0, 1) - pnorm(-3, 0, 1))
+pnorm(1.5, 0, 1, lower.tail = FALSE)
+pnorm(20, 15, 3) - pnorm(16, 15, 3)
+1 - pnorm(18, 15, 3)
+pnorm(6, 15, 3)
+1 - (pnorm(15 + 5.88, 15, 3) - pnorm(15 - 5.88, 15, 3))
+
+plot(stepfun(0:50, c(0, pbinom(0:50, 50, 0.4))),
+     main = "Fonctions de répartitions associées aux lois B(50, 0.4) et N(20, 12)",col="blue",lwd=1.5)
+curve(pnorm(x, 20, sqrt(12)), 0, 50, col = "red", add = TRUE)
+
+## On définit les valeurs des quantiles 
+p = c(0.00135, 0.025, 0.95, 0.999, 0.995, 0.99865)
+## On cherche les quantiles pour les valeurs que l'on a définit
+x = qnorm(p)
+## On améliore l'affichage
+cbind(p, x)

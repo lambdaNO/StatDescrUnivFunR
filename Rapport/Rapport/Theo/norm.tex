@@ -1,0 +1,260 @@
+
+\chapter{La loi normale}
+\section{Le modèle de la loi normale}
+\subsection*{Un exemple : Test de mémoire}
+Etude de la capacité de mémoire d'adultes atteints d'une maladie neurologique.
+Chaque individu lit $30$ mots et doit ensuite en réciter le plus possible.
+\begin{itemize}
+  \item Population $\mathcal{P}$ = $\{$ patients atteints de la maladie $\}$
+  \item Variable quantitative $X$ = \textit{"nombre de mots retenus"}
+  \item 2 paramètres $\mu$; $\sigma$.
+\end{itemize}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.75]{ilu/norm1.png}\end{center}\end{figure}
+En sciences humaines on observe souvent des distributions :
+\begin{itemize}
+  \item plutôt symétriques autour de $\mu$
+  \item avec une forme de cloche
+\end{itemize}
+Pour pouvoir faire des calculs, on va parfois supposer que X suit une distribution "modèle", appelée \textbf{Loi normale}.
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.75]{ilu/norm2.png}\end{center}\end{figure}
+\subsection*{Propriétés de la loi normale}
+Si $X$ suit cette distribution "modèle", on lui associe une courbe :
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.75]{ilu/norm3.png}\end{center}\end{figure}
+\begin{itemize}
+  \item courbe symétrique par rapport à $\mu$
+  \item forme de cloche
+\end{itemize}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.75]{ilu/norm4.png}\end{center}\end{figure}
+l'aire grisée représente la proportion cumulée.\newline
+\paragraph{Paramètres de la loi normale}
+Pour chaque $\mu$; $\sigma$, il existe une \textbf{loi normale de moyenne $\mu$ et d'écart-type $\sigma$}.\newline
+\textbf{\textcolor{red}{Cas particulier}} : $\mu = 0$ et $\sigma = 1$ : \textit{loi normale centrée/réduite}.\newline
+\\
+Lorsque l'on suppose qu'une variable $X$ suit le modèle de la loi normale $\mathcal{N}(\mu; \sigma)$, on écrit : 
+$$X \sim \mathcal{N}(\mu,\sigma)$$
+\textbf{Exemples} de lois normales avec moyennes différentes, même écart-type :
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.75]{ilu/norm5.png}\end{center}\end{figure}
+\textbf{Exemples} de lois normales avec même moyenne, écart-types différents :
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.75]{ilu/norm6.png}\end{center}\end{figure}
+Pour la tracer : 
+$$y = \frac{1}{\sigma\sqrt{2\pi}}\exp\left(-\frac{(x-\mu)^{2}}{2\sigma^{2}}\right)$$
+\textbf{Etude} sur le QI de $515$ enfants du même âge, $\mu = 100,1$ , $\sigma = 5,7$.
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.75]{ilu/norm7.png}\end{center}\end{figure}
+En rose, courbe de la loi normale $\mathcal{N}(\mu = 100,1; \mu = 5,7)$.\newline
+\\
+\textcolor{red}{\textbf{A retenir}} sur : 
+$$\mathcal{N}(\mu,\sigma)$$
+\begin{itemize}
+  \item distribution "modèle" pour des variables \textbf{quantitatives continues}
+  \item moyenne $\mu$, écart-type $\sigma$
+  \item allure de la courbe :
+  \begin{figure}[H]\begin{center}\includegraphics[scale=0.75]{ilu/norm3.png}\end{center}\end{figure}
+  \item aires = proportions cumulées
+\end{itemize}
+\section{Calculs pratiques}
+\subsection*{Loi Normale centrée Réduite $\mathcal{N}(0,1)$}
+\subsubsection*{Exemple}
+\begin{enumerate}
+  \item On suppose qu'une certaine variable $X \sim \mathcal{N}(0. 1)$. Pour quelle proportion d'individus est-ce que $X \leq 1.56$ ?\newline
+\textit{On cherche $\mathbb{P}(X \leq 1; 56)$ (rappel : on écrit aussi $F(1.56))$.}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.75]{ilu/norm8.png}\end{center}\end{figure}
+On cherche \textcolor{blue}{$1,5$}\textcolor{red}{$6$} dans la table (CF fin du rapport) :
+\begin{center}
+\begin{tabular}{c|ccc}
+      & \multicolumn{1}{c}{\dots} & \multicolumn{1}{c}{\textcolor{red}{$0,06$}} & \multicolumn{1}{c}{\dots} \\ \hline
+\vdots      &                       &                    \vdots         &                       \\
+\textcolor{blue}{$1,5$} &    \dots                   &         $0,9406$                    &                       \\
+\vdots      &                       &                             &                       \\ 
+\end{tabular}
+\end{center}
+Donc $\mathbb{P}(X \leq 1. 56) = 0. 9406$.\newline
+Pour $94.06\%$ des individus, la variable $X$ est inférieure à $1,56$.
+\item On suppose qu'une certaine variable $X \sim \mathcal{N}(0. 1)$. Pour quelle proportion d'individus est-ce que $X \geq 1.56$ ?\newline
+\textit{On cherche $\mathbb{P}(X \geq 1; 56)$. On écrit d'abord}
+$$\mathbb{P}(X \geq 1.49) = 1 - \mathbb{P}(X \leq 1.49) =1- F(1.49)$$
+On cherche \textcolor{blue}{$1,4$}\textcolor{red}{$9$} dans la table (CF fin du rapport) :
+\begin{center}
+\begin{tabular}{c|ccc}
+      & \multicolumn{1}{c}{\dots} & \multicolumn{1}{c}{\textcolor{red}{$0,09$}} & \multicolumn{1}{c}{\dots} \\ \hline
+\vdots      &                       &                    \vdots         &                       \\
+\textcolor{blue}{$1,4$} &    \dots                   &         $0,9319$                    &                       \\
+\vdots      &                       &                             &                       \\ 
+\end{tabular}
+\end{center}
+Donc 
+$$\mathbb{P}(X \geq 1.49) = 1 - \mathbb{P}(X \leq 1.49) =1- 0,9319$$
+Soit 
+$$\mathbb{P}(X \geq 1.49) = 0,0681$$
+Pour $6.81\%$ des individus, la variable $X$ est supérieure à $1,49$.
+
+\item On suppose qu'une certaine variable $X \sim \mathcal{N}(0, 1)$. Pour quelle proportion d'individus est-ce que $X \leq -1.1$ ?\newline
+\textit{On cherche $\mathbb{P}(X \leq 1,1)$, c'est à dire $F(-1,1)$}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.75]{ilu/norm9.png}\end{center}\end{figure}
+Mais, on rappelle que la loi normale est symétrique par rapport à $\mu$.
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.75]{ilu/norm10.png}\end{center}\end{figure}
+On peut donc ainsi calculer : 
+$$\mathbb{P}(X \geq 1.1) = 1 - \mathbb{P}(X \leq 1.1) = 1- F(1.1) =  1 - 0,8643$$
+Et ainsi : 
+$$\mathbb{P}(X \leq 1,1) = 0,1357$$
+\textcolor{red}{\textbf{A retenir : }}
+$$F(-a) = 1 - F(a)$$
+\textit{Par exemple : } $F(-1,1) = 1 - F(1,1)$
+\end{enumerate}
+\paragraph{Pour tous type de $a$ : }\textcolor{white}{.}\newline
+Pour n'importe quel $a > 0$,
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.75]{ilu/norm11.png}\end{center}\end{figure}
+
+\subsubsection*{Loi normale quelconque $\mathcal{N}(\mu,\sigma)$}
+Pour faire des calculs avec une  $\mathcal{N}(\mu,\sigma)$, on se ramène à la loi
+ $\mathcal{N}(0,1)$.\newline
+Par le théorème suivant : 
+$$\textrm{Si } X \sim \mathcal{N}(\mu,\sigma)\textrm{, alors } \frac{X - \mu}{\sigma} \sim \mathcal{N}(0,1)$$
+On dit alors que l'on \textbf{centre et réduit $X$}. On utilise la lettre Z pour désigner une loi normale centrée/réduite.\newline
+\paragraph*{Exemple} 
+\begin{enumerate}
+  \item On suppose qu'une certaine variable $X \sim \mathcal{N}(11, 2)$. Pour quelle proportion d'individus est-ce que $X \leq 14$ ?\newline
+\textit{On cherche $\mathbb{P}(X \leq 14)$}.
+\begin{enumerate}
+  \item On \textbf{centre et on réduit} $X$
+  $$\frac{X-11}{2}\sim\mathcal{N}(0,1)$$
+  \item On calcule : 
+  $$
+\begin{aligned}
+\mathbb{P}(X \geq 14) & = & \mathbb{P}\left(\frac{X-11}{2}\leq\frac{14-11}{2}\right)\\
+                      & = & \mathbb{P}(Z\leq 1,5)
+\end{aligned}
+$$
+  \item On cherche $1,5$ dans la table.
+\end{enumerate}
+On trouve finalement : 
+$$\mathbb{P}(X \leq 14) =  0,9332\textrm{ pour } X \sim \mathcal{N}(11,2)$$
+
+  \item On cherche le quantile à $97,5\%$ pour la $\mathcal{N}(0,1)$.\newline
+  \textit{Cela revient à trouver $a$ tel que }
+  $$P(Z\leq a) = 0,975$$
+  On lit alors la table à l'envers.
+  \begin{center}
+\begin{tabular}{c|ccc}
+      & \multicolumn{1}{c}{\dots} & \multicolumn{1}{c}{\textcolor{red}{$0,06$}} & \multicolumn{1}{c}{\dots} \\ \hline
+\vdots      &                       &                    \vdots         &                       \\
+\textcolor{blue}{$1,9$} &    \dots                   &         \textcolor{orange}{$0,9750$}                    &                       \\
+\vdots      &                       &                             &                       \\ 
+\end{tabular}
+\end{center}
+Donc  
+$$\mathbb{P}(X\leq 1,96) = 0,9750$$
+Le quantile recherché est donc 
+$$ a = 1,96$$
+\textcolor{red}{\textbf{Notation : }} Le quantile d'ordre $\alpha$ pour la loi normale centrée/réduite est noté $z\alpha$.\newline
+Par exemple, $z_{0,975} = 1,96$ pour $X\sim\mathcal{N}(0,1)$.
+
+\item On cherche le quantile à $14\%$ pour la $\mathcal{N}(0, 1)$.\newline
+\textit{Cela revient à trouver $a$ tel que $\mathcal{P}(Z \leq a) = 0.14$}.\newline
+\textbf{\textcolor{red}{Mais,} Il n'y a pas de nombre inférieur à $0,5$ dans la table de la loi Normale}.
+\begin{figure}[H]\begin{center}
+\includegraphics[scale=0.75]{ilu/norm12.png}
+\includegraphics[scale=0.75]{ilu/norm13.png}
+\includegraphics[scale=0.75]{ilu/norm14.png}
+\end{center}\end{figure}
+Par symétrie de la loi Normale par rapport à $\mu$, on peut en déduire : 
+$$z_{0,14} = -1,08$$
+\textcolor{red}{\textbf{A retenir :}} 
+$$z_{\alpha} = - z_{1-\alpha}$$
+\textit{Par exemple :} $z_{0,14} = - z_{0,86}$
+\end{enumerate}
+
+\subsubsection*{Quantile d'une loi normale quelconque}
+Notons $Q_{\alpha}$ le quantile d'ordre $\alpha$ d'une loi normale quelconque
+$N(\mu; \alpha)$, On a : 
+$$Q_{\alpha} = \mu + \sigma \times z_{\alpha}$$
+On "déréduit" et on "décentré" le quantile de la loi normale centrée/réduite.
+\section{Compléments mathématiques}
+\subsection*{La loi normale centrée réduite}
+La loi normale centrée réduite $\mathcal{N}(0, 1)$ est la loi de probabilité dont la densité est la fonction f définie par :
+$$\color{red}{\forall t \in \mathbb{R}, f(t) = \frac{1}{\sqrt{2\pi}}e^{-\frac{t^{2}}{2}}}$$
+\begin{figure}[H]\begin{center}\includegraphics[scale=1]{ilu/norm15.png}\end{center}\end{figure}
+\textbf{Remarque : } Au cours des études post-bac, on sait démontrer que l'intégrale de Gauss\footnote{
+  On appelle intégrales de Gauss les intégrales de la forme :
+$$\int_{-\infty}^{+\infty} e^{-at^{2}}\textrm{ d}t$$
+où $a$ est un nombre réel strictement positif. 
+La valeur de l'intégrale de Gauss est lié au nombre $\pi$ par la relation :
+$$\int_{-\infty}^{+\infty} e^{-at^{2}}\textrm{ d}t = \sqrt{\frac{\pi}{a}}$$
+\textbf{Cas où a = 1}
+$$\int_{-\infty}^{+\infty} e^{-t^{2}}\textrm{ d}t = \sqrt{\pi}$$
+La particularité de l'intégrale de Gauss c'est que la fonction à intégrer n'admet aucune primitive s'exprimant à l'aide des fonctions usuelles.
+} : 
+$$\int_{-\infty}^{+\infty} e^{-\frac{t^{2}}{2}}\textrm{ d}t = \sqrt{2\pi}$$
+En divisant par $\sqrt{2\pi}$, on normalise : 
+$$\frac{1}{\sqrt{2\pi}}\int_{-\infty}^{+\infty} e^{-\frac{t^{2}}{2}}\textrm{ d}t = 1$$
+La fonction de répartition de la loi normale centrée réduite est la fonction F définie par :
+$$\forall x \in \mathbb{R},F(x) = \mathbb{P}(X\leq x) = \int_{-\infty}^{x} \frac{1}{\sqrt{2\pi}}e^{-\frac{t^{2}}{2}}\textrm{ d}t$$
+\begin{figure}[H]\begin{center}\includegraphics[scale=1]{ilu/norm16.png}\end{center}\end{figure}
+Ainsi $\{\forall (a,b) \in \mathbb{R}^{2}|a<b\}$
+$$ \color{red}{\mathbb{P}(a\leq X\leq b) = \int_{a}^{b} \frac{1}{\sqrt{2\pi}}e^{-\frac{t^{2}}{2}}\textrm{ d}t = F(b)-F(a)}$$
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.75]{ilu/norm17.png}\end{center}\end{figure}
+On ne sait pas exprimer les intégrales précédentes à l'aide des fonctions usuelles à disposition en terminale. Pour obtenir des valeurs de la fonction de répartition de la loi normale centrée réduite, on dispose soit de la calculatrice, soit de tables numériques fournies à la fin de certains livres.\newline
+L'espérance de la loi normale centrée réduite est $0$ (la loi est centrée) et l'écart-type de la loi normale centrée réduite est $1$ (la loi est réduite) ($\mathcal{N}(0,1)$)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection*{Théorème de Moivre-Laplace}
+La loi normale approche la loi binomiale. Plus précisément :\newline
+\textbf{Théorème : } Pour tout entier naturel non nul $n$, on considère une variable aléatoire $X_{n}$ qui suit une loi binomiale $\mathcal{B}(n, p)$ puis on considère Zn tel que : 
+$$Z_{n} = \frac{X_{n}-np}{\sqrt{np(1-p)}}$$
+la variable centrée réduite associée.\newline
+Alors, pour tous réels $a$ et $b$ tels que $a < b$
+$$
+\color{red}{
+\lim\limits_{n \rightarrow +\infty} \mathbb{P}\left(np+a\sqrt{np(1-p)}\leq X_{n}\leq np+b\sqrt{np(1-p)}\right)= \lim\limits_{n \rightarrow +\infty} \mathbb{P}(a \leq Z_{n} \leq b)= \int_{a}^{b} \frac{1}{\sqrt{2\pi}}e^{-\frac{t^{2}}{2}}
+}
+$$
+\subsection*{Loi normale : cas général}
+Une variable aléatoire X suit la loi $\mathcal{N} (\mu , \sigma^{2})$ si et seulement si la variable aléatoire
+$$\frac{X-\mu}{\sigma}$$
+suit la loi normale centrée réduite $\mathcal{N}(0, 1)$.\newline
+$\mu$ est l'espérance de $\mathcal{N} (\mu , \sigma^{2})$, $\sigma^{2}$ est sa variance et $\sigma$ est son écart-type.
+\begin{figure}[H]\begin{center}\includegraphics[scale=1]{ilu/norm18.png}\end{center}\end{figure}
+\subsection*{Intervalle associé à une probabilité}
+\textbf{Théorème : } Soit $X$ une variable aléatoire régie par la loi normale centrée réduite $\mathcal{N}(0,1)$.\newline
+Pour tout réel $\alpha \in]0, 1[$, il existe un réel strictement positif $u_{\alpha}$ et un seul tel que $$\color{red}{\mathbb{P}(-u_{\alpha} \leq X \leq u_{\alpha}) = 1 - \alpha}$$.
+\begin{figure}[H]\begin{center}\includegraphics[scale=1]{ilu/norm19.png}\end{center}\end{figure}
+On doit connaître en particulier $u_{0,05} = 1,96$ (intervalle à $95\%$) et $u_{0,01} = 2,58$ (intervalle à $99\%$).\newline
+Inversement, pour une loi normale en général, on doit connaître les probabilités associées à des intervalles centrés autour de $\mu$ de rayon $\sigma$, $2\sigma$ ou $3\sigma$ :\newline
+\\
+\textbf{Théorème : } Soit $X$ une variable aléatoire régie par une loi normale $\mathcal{N}(\mu, \sigma^{2})$ de paramètres $\mu \in \mathbb{R}$ et $\sigma > 0$.
+\begin{figure}[H]\begin{center}\includegraphics[scale=1]{ilu/norm20.png}\end{center}\end{figure}
+\textbf{Conséquence : } Si $X_{n}$ est une variable aléatoire régie par une loi binomiale $\mathcal{B}(n, p)$ et si
+$$Z_{n} = \frac{X_{n}-np}{\sqrt{np(1-p)}}$$
+Alors : 
+$$
+\color{red}{
+ \lim\limits_{n \rightarrow +\infty} \mathbb{P}\left(np-u_{\alpha}\sqrt{np(1-p)}\leq X_{n}\leq np+u_{\alpha}\sqrt{np(1-p)}\right) =\lim\limits_{n \rightarrow +\infty} \mathbb{P}(-u_{\alpha} \leq Z_{n} \leq u_{\alpha}) =1-\alpha
+ }
+$$
+
+\subsection*{Graphes}
+\begin{lstlisting}[language=html]
+> moy <- 10
+> std <- 3
+> plot(function(x) dnorm(x,moy,std),  moy-4*std, moy+4*std,xlab="x",ylab="",main = "",col="blue")
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.45]{ilu/normA.png}\end{center}\end{figure}
+\begin{lstlisting}[language=html]
+> x <- rnorm(1000,0,0.5)
+> y <- rnorm(1000,3,1)
+> z <- c(x,y)
+> r <- c(-10,10)
+> hist(z,freq=FALSE,col="grey",ylim=c(0,0.5),20)
+> plot(function(x) 0.5*dnorm(x,0,0.5),xlim=r,col=2,add=TRUE,lwd=2)
+> plot(function(x) 0.5*dnorm(x,3,1),xlim=r,col=3,add=TRUE,lwd="2")
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.45]{ilu/normB.png}\end{center}\end{figure}
+\begin{lstlisting}[language=html]
+> {hist(simu, prob=T, breaks="FD", 
++       main="Histogramme de 1000 tirages N(0,1)",col=rainbow(12), lwd=2)}
+> curve(dnorm(x), add=T)
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.45]{ilu/normC.png}\end{center}\end{figure}
+

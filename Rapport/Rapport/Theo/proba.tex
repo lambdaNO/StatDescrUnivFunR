@@ -1,0 +1,1079 @@
+\chapter{Introduction aux lois de probabilité avec R - Christophe Chesneau}
+\textbf{Auteur : }\underline{\href{http://www.math.unicaen.fr/~7Echesneau/}{Christophe Chesneau}}\newline
+\\
+\textbf{Note : } L'objectif de ce document est de présenter les principales commandes \textbf{R} associées aux lois de probabilités et simulations de variables aléatoires réelles (\textit{var}). Quelques éléments théoriques sont consultables \underline{\href{http://www.math.unicaen.fr/~chesneau/form-prob-MATHS.pdf}{ici}}\newline
+Bonne lecture !
+
+\section{Syntaxe générale}
+Pour une \textit{var} $X$ suivant une loi notée loi dans \textbf{R}, la syntaxe générale est la suivante :
+\begin{description}
+	\item[Densité] :
+	pour obtenir "la densité" de $X$, la commande est : \textcolor{red}{d}loi ; on ajoute la lettre \textcolor{red}{d} devant loi
+	\item[Fonction de répartition] : 
+	pour obtenir la fonction de répartition de $X$, la commande est : \textcolor{red}{p}loi ; on ajoute la lettre \textcolor{red}{p} devant loi
+	\item[Quantile] :
+	pour obtenir le quantile de $X$, la commande est : \textcolor{red}{q}loi ; on ajoute la lettre \textcolor{red}{q} devant loi,
+	\item[Simulation] :
+	pour simuler des réalisations de \textit{var} suivant la même loi que $X$, la commande est : \textcolor{red}{r}loi ; on ajoute la lettre \textcolor{red}{r} devant loi.
+\end{description}
+Ci-dessous, un tableau grossier récapitulatif :
+\begin{center}
+\begin{tabular}{|c||c|c|c|c|}
+\hline\hline
+\textbf{Loi}       & \textit{Densité} & \textit{Fonction de répartition} & \textit{Quantile} & \textit{Simulation} \\ \hline
+\textbf{Notations} &   $f(x);\mathbb{P}(X=x)$            &         $F(x)$                        &       Valeur liée à $F(x)$            &      $x_{1},\dots,x_{n}$              \\ \hline
+\textbf{Commandes} &     \textcolor{red}{d}loi             &         \textcolor{red}{p}loi                         &        \textcolor{red}{q}loi           &      \textcolor{red}{r}loi        \\ \hline
+\end{tabular}
+\end{center}
+Les noms loi les plus célèbres sont : \textit{norm} (pour la loi normale), \textit{binom} (pour la loi binomiale) (la loi de \textit{Bernoulli} est une loi binomiale répétée une fois), \textit{unif} (pour la loi uniforme), \textit{geom} (pour la loi géométrique), \textit{pois} (pour la loi de Poisson), \textit{t} (pour la loi de Student), \textit{chisq} (pour la loi du Chi-deux), \textit{exp} (pour la loi exponentielle), \textit{f} (pour la loi de Fisher)\dots
+\section{Densité}
+\subsection*{Définition}
+\begin{itemize}
+	\item Pour une var $X$ discrète, on appelle "la densité" de $X$ en $x$ la probabilité $\mathbb{P}(X = x)$.
+	\item Pour une var $X$ à densité (continue) de densité $f_{X}$, on appelle "la densité" de $X$ en $x$ la fonction $f_{X}(x)$.
+\end{itemize}
+Dans les deux cas, la densité ainsi définie caractérise la loi de $X$.
+\subsection*{Commandes}
+Si la loi de $X$ dépend d'un ou de plusieurs paramètres, disons \textit{par$_{1}$} et \textit{par$_{2}$}, alors la densité de $X$ en $x$ est donnée par les commandes :
+\begin{center}
+\textbf{d}loi($x$,par$_{1}$,par$_{2}$)
+\end{center}
+Quelques exemples sont décrits ci-dessous :
+\begin{center}
+\begin{tabular}{|l||c|c|c|}
+\hline
+\textbf{Loi}                 & \textit{Binomiale} & \textit{Géométrique} & \textit{Poisson} \\ \hline
+\textbf{Paramètres}          &  $n\in\mathbb{N}*,p\in]0,1[$         &      $p\in]0,1[$     &  $\lambda > 0$         \\ \hline
+\textbf{$X\sim$}             &  $\mathcal{B}(n,p)$         &    $\mathcal{G}(p)$       &  $\mathcal{P}(\lambda)$         \\ \hline
+\textbf{$X(\Omega)$}         &   $\{0,\dots;n\}$        &    $\mathbb{N}$       &    $\mathbb{N}$       \\ \hline
+\textbf{$\mathbb{P}(X=x)$} &     $\binom{x}{n}p^{x}(1-p)^{n-x}$      &    $p(1-p)^{x}$       & $e^{-\lambda}\frac{\lambda^{x}}{x!}$          \\ \hline
+\textbf{Commandes}           &     dbinom($x$,$n$,$p$)      &     dgeom($x$,$p$)      & dpois($x$,lambda)          \\ \hline
+\end{tabular}
+\end{center}\begin{center}
+\begin{tabular}{|l||c|c||c||}
+\hline
+\textbf{Loi}                 & \textit{Uniforme} & \textit{Exponentielle} & \textcolor{red}{\textit{Normale}} \\ \hline
+\textbf{Paramètres}          &    $(a,b)\in\mathbb{R}^{2}$                &    $\lambda>0$                &      $\mu\in\mathbb{R},\sigma>0$              \\ \hline
+\textbf{$X\sim$}             &      $\mathcal{U}([a,b])$              &       $\varepsilon(\lambda)$             &        $\mathcal{N}(\mu,\sigma^{2})$            \\ \hline
+\textbf{$X(\Omega)$}         &  $[a,b] $                 &    $[0,\infty[$                &   $\mathbb{R}$                 \\ \hline
+\textbf{$\mathbb{P}(X=x)$} &         $\frac{1}{b-a}$           &        $\lambda e^{-\lambda x}$            &         $\frac{1}{\sqrt{2\pi\sigma^{2}}}e^{-\frac{(x-\mu)^{2}}{2\sigma^{2}}} $          \\ \hline
+\textbf{Commandes}           &       dunif($x$,$a$,$b$)             &        dexp($x$,$lambda$)            &            dnorm($x$,mu, sigma)        \\ \hline
+\end{tabular}
+\end{center}
+Pour compléter, voir : \textit{help("dgamma"), help("dt"), help("dchisq")} et\textit{help("df")}.
+\subsection*{Calculs}
+On fait :
+\begin{lstlisting}[language=html]
+> dbinom(4, 8, 0.3)
+[1] 0.1361367
+\end{lstlisting}
+Ainsi, on a calculé la densité d'une var $X \sim \mathcal{B}(8; 0.3)$ en $x = 4$ :
+$$\mathbb{P}(X=4)\binom{8}{4}(0.3)^{8}(1-0.3)^{8-4}$$
+On peut vérifier cela en faisant :
+\begin{lstlisting}[language=html]
+> choose(8, 4) * 0.3^4 *(1- 0.3)^(8 - 4)
+[1] 0.1361367
+\end{lstlisting}
+On fait :
+\begin{lstlisting}[language=html]
+> dnorm(1.7, 2, 0.12)
+[1] 0.1460692
+\end{lstlisting}
+Ainsi, on a calculé la densité d'une var $X \sim \mathcal{N}(2, 0.122)$ en $x = 1,7$ :
+$$f_{X}(1.7) = \frac{1}{\sqrt{2\pi(1.12)^{2}}}e^{-\frac{(1.7-2)^{2}}{2\times 0.12^{2}}}$$
+On peut vérifier cela en faisant :
+\begin{lstlisting}[language=html]
+> (1 / sqrt(2 * pi * 0.12^2)) * exp(- (1.7 - 2)^2 / (2 * 0.12^2))
+[1] 0.1460692
+\end{lstlisting}
+\textcolor{red}{Pour calculer la densité en plusieurs valeurs, on prend pour $x$ le vecteur ayant pour éléments ces valeurs. On peut faire de même avec un ensemble de paramètres et les arguments correspondants.}\newline
+\\
+On fait :
+\begin{lstlisting}[language=html]
+> dbinom(c(4, 6), 8, 0.3)
+[1] 0.13613670 0.01000188
+\end{lstlisting}
+On a ainsi calculé la densité d'une var $X \sim \mathcal{B}(8, 0.3)$ pour $x \in \{4, 6\}$.\newline
+\\
+On fait :
+\begin{lstlisting}[language=html]
+> dexp(2, c(1, 2, 3))
+[1] 0.135335283 0.036631278 0.007436257
+\end{lstlisting}
+Ainsi, on a calculé la densité d'une var $X \sim \varepsilon(\lambda)$ en $x = 2$, avec $\lambda = 1$, $\lambda = 2$ et $\lambda = 3$.\newline
+\\
+On peut aussi mettre ces résultats dans un vecteur pour le réutiliser ultérieurement.\newline
+On fait :
+\begin{lstlisting}[language=html]
+> vec = dexp(2, c(1, 2, 3))
+> vec
+[1] 0.135335283 0.036631278 0.007436257
+\end{lstlisting}
+\subsection*{Représentation graphique}
+On peut représenter le graphe de la densité d'une var $X$ discrète avec la commande plot et l'option \textit{type = h}.\newline
+\\
+\begin{lstlisting}[language=html]
+> plot(0:5, dbinom(0:5, 5, 0.2), type = "h", ylab = "P(X = x)")
+\end{lstlisting}
+Cela renvoie :
+\begin{figure}[H]\begin{center}\includegraphics[scale=1]{ilu/probab1.png}\end{center}\end{figure}
+
+On a ainsi représenté le graphe de la densité d'une var $X \sim \mathcal{B}(5, 0.2)$.\newline
+\\
+On peut représenter le graphe de la densité d'une var $X$ à densité avec la commande \textit{curve}.\newline
+On fait :
+\begin{lstlisting}[language=html]
+> curve(dnorm(x, 5, 1.5), 0.5, 9.5, ylab = "fX(x)")
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=1]{ilu/probab2.png}\end{center}\end{figure}
+
+On a ainsi représenté le graphe de la densité d'une var $X \sim \mathcal{N}(5, 1.5^{2})$.
+\section{Fonction de répartition}
+\subsection*{Définition}
+On appelle fonction de répartition d'une var $X$ en $x$ la fonction $F_{X}(x) = P(X \leq x)$.
+\begin{itemize}
+	\item Si $X$ est discrète, on a :
+	$$F_{X}(x) = \sum_{k\in X(\Omega)\bigcap ]-\infty,x]} \mathbb{P}(X=k)$$
+	\item Si $X$ est à densité, on a :
+	$$F_{X}(x) = \int_{-\infty}^{x}f_{X}(t)\textrm{d}t$$
+\end{itemize}
+\subsection*{Commandes}
+Si la loi de $X$ dépend d'un ou de plusieurs paramètres, disons \textit{par$_{1}$} et \textit{par$_{2}$}, alors la fonction de répartition de $X$ en $x$ est donnée par les commandes :
+\begin{center}
+\textbf{p}loi($x$,par$_{1}$,par$_{2}$)
+\end{center}
+On peut calculer :
+$$\mathbb{P}(X>x) = 1 - F_{X}(x)$$
+En faisant : 
+\begin{center}
+\textbf{p}loi($x$,par$_{1}$,par$_{2}$,\textcolor{blue}{lower.tail = FALSE})
+\end{center}
+\subsection*{Calculs}
+On fait :
+\begin{lstlisting}[language=html]
+> pbinom(4, 8, 0.3)
+[1] 0.9420324
+\end{lstlisting}
+Ainsi, on a calculé la fonction de répartition d'une var $X \sim \mathcal{B}(8, 0.3)$ en $x = 4$ :
+$$F_{X}(4)=\mathbb{P}(X\leq 4) = \sum_{k=0}^{4}\mathbb{P}(X=4)$$
+
+On peut vérifier le calcul précédent en faisant :
+\begin{lstlisting}[language=html]
+> sum(dbinom(0:4, 8, 0.3))
+[1] 0.9420323
+\end{lstlisting}
+On fait :
+\begin{lstlisting}[language=html]
+> pnorm(12, 9, 2)
+[1] 0.9331928
+\end{lstlisting}
+Ainsi, on a calculé la fonction de répartition d'une var $X \sim \mathcal{N}(9, 2^{2})$ en $x = 12$ :
+$$F_{X}(12) = \mathbb{P}(X\leq 12) = \int_{-\infty}^{12}\frac{1}{\sqrt{2\pi\times 2^{2}}}e^{-\frac{(t-9)^{2}}{2\times 2^{2}}}$$
+On fait :
+\begin{lstlisting}[language=html]
+> pexp(2, 3, lower.tail = FALSE)
+[1] 0.002478752
+\end{lstlisting}
+Ainsi, on a calculé : $\mathbb{P}(X>2)$,$X\sim \varepsilon(3)$
+$$\mathbb{P}(X>2) = \int_{2}^{+\infty}f_{X}(x)\textrm{d}x = \int_{2}^{+\infty}3e^{-3x}\textrm{d}x = [-e^{-3x}]_{2}^{\infty} = e^{-6}$$
+
+On peut vérifier le calcul précédent en faisant :
+\begin{lstlisting}[language=html]
+> exp(-6)
+[1] 0.002478752
+\end{lstlisting}
+\subsection*{Représentation graphique}
+On peut représenter le graphe de la fonction de répartition d'une var $X$ discrète avec la commande \textit{stepfun}.\newline
+On fait :
+\begin{lstlisting}[language=html]
+> plot(stepfun(0:15, c(0, pbinom(0:15, 15, 0.6))), ylab = "FX(x)", main = "")
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=1]{ilu/probab3.png}\end{center}\end{figure}
+On a ainsi représenté le graphe de la fonction de répartition d'une var $X \sim \mathbb{B}(15, 0.6)$.\newline
+\\
+On peut représenter le graphe de la fonction de répartition d'une var $X$ à densité avec la commande
+\textit{curve}.\newline
+On fait :
+\begin{lstlisting}[language=html]
+> curve(pnorm(x, 5, 1.5), 0.5, 9.5, ylab = "FX(x)")
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=1]{ilu/probab4.png}\end{center}\end{figure}
+\section{Quantiles}
+\subsection*{Définition}
+Soit $p \in ]0; 1[$ et $X$ une var.\newline
+\begin{itemize}
+	\item Si $X$ est discrète, on appelle $p$-ème quantile de $X$ l'entier $x_{p}$ défini par
+	$$x_{p} = \inf\{k\in \mathbb{Z}; F_{X}(k)\geq p\}$$
+	\item Si $X$ est à densité, on appelle $p$-ème quantile de $X$ le réel $x_{p}$ tel que : 
+	$$F_{X}(x_{p}) = p$$
+\end{itemize}
+\subsection*{Commandes}
+Si la loi de $X$ dépend d'un ou de plusieurs paramètres, disons \textit{par$_{1}$} et \textit{par$_{2}$}, alors le $p$-ème quantile de $X$ est donné par les commandes :
+\begin{center}
+\textbf{q}loi($x$,par$_{1}$,par$_{2}$)
+\end{center}
+\subsection*{Calculs}
+On fait :
+\begin{lstlisting}[language=html]
+> qbinom(0.25, 5, 0.6)
+[1] 2
+\end{lstlisting}
+Ainsi, on a calcule le $p$-ème quantile avec $p = 0,25$ d?une var $X \sim \mathcal{B}(5, 0.6) :$
+$$x_{0.25} = \inf\{k \in \mathbb{Z}; F_{X}(k) \geq 0.25\}$$.
+
+On peut vérifier ce résultat en cherchant toutes les valeurs de FX(x) pour $x \in \{0, 1, 2, 3, 4, 5\}$ :
+\begin{lstlisting}[language=html]
+> pbinom(0:5, 5, 0.6)
+[1] 0.01024 0.08704 0.31744 0.66304 0.92224 1.00000
+\end{lstlisting}
+On constate alors que $F_{X}(1) = 0.08704 < 0.25 < 0.31744 = F_{X}(2)$, donc $x_{0.25} = 2$.\newline
+\\
+On fait :
+\begin{lstlisting}[language=html]
+> qnorm(0.975, 0, 1)
+[1] 1.959964
+\end{lstlisting}
+Ainsi, on a calcule le $p$-ème quantile avec $p = 0.975$ d?une var $X \sim \mathcal{N}(0, 1)$ : le réel $x_{0.975}$ tel que $F_{X}(x_{0.975}) = 0.975$.\newline
+On peut vérifier cela en faisant :
+\begin{lstlisting}[language=html]
+> pnorm(1.96, 0, 1)
+[1] 0.9750021
+\end{lstlisting}
+On aurait aussi pu considérer les commandes : \textit{pnorm(1.96)}, sans spécifier $\mu = 0$ et $\sigma = 1$ ; la commande prend par défaut les paramètres de la loi centrée et réduite.
+\section{Simulation}
+\subsection{La commande sample}
+\subsubsection*{Utilisation de base}
+L'utilisation de base est : \textit{sample($x$)}, où $x$ est un vecteur numérique, logique ou chaîne de caractères.\newline
+Cela renvoie un vecteur dont les éléments correspondent au tirage d'un élément de $x$ \textbf{sans remise}.\newline
+Cela revient à permuter aléatoirement les éléments de $x$.\newline
+On fait :
+\begin{lstlisting}[language=html]
+> x = 1:7
+> sample(x)
+[1] 7 2 4 6 1 3 5
+\end{lstlisting}
+On refait la même commande :
+\begin{lstlisting}[language=html]
+> sample(x)
+[1] 3 4 1 5 6 2 7
+> sample(x)
+[1] 4 3 5 6 2 1 7
+\end{lstlisting}
+On obtient des résultats différents ; l'ordre de la permutation est due au hasard à chaque fois.\newline
+On peut conserver le résultat d'une permutation aléatoire dans un vecteur pour le réutiliser ultérieurement :
+\begin{lstlisting}[language=html]
+> y = sample(c("rouge", "vert", "bleu", "blanc", "noir"))
+> y
+[1] "noir"  "bleu"  "vert"  "blanc" "rouge"
+> y = sample(c("rouge", "vert", "bleu", "blanc", "noir"))
+> y
+[1] "bleu"  "noir"  "blanc" "vert"  "rouge"
+\end{lstlisting}
+\subsubsection*{Options}
+Il existe des options dans \textit{sample} permettant de modifier le type de tirage. On les active en rajoutant une ou plusieurs commandes dans \textit{sample}.\newline
+Par exemple, on fait :
+\begin{lstlisting}[language=html]
+> sample(1:3, size = 2, replace = TRUE, prob = c(25 / 100, 20 / 100,55 / 100))
+[1] 1 1
+> sample(1:3, size = 2, replace = TRUE, prob = c(25 / 100, 20 / 100,55 / 100))
+[1] 3 3
+> sample(1:3, size = 2, replace = TRUE, prob = c(25 / 100, 20 / 100,55 / 100))
+[1] 3 2
+\end{lstlisting}
+Quelques options sont présentées ci-dessous.
+
+
+\begin{itemize}
+	\item \textit{size} : Les commandes : \textit{size = "$n$"}, où $n$ est un entier, précise le nombre de fois $n$ que l'on effectuera le tirage. Par défaut, le nombre de tirage est égal à la longueur de $x$.\newline
+  On fait :
+  \begin{lstlisting}[language=html]
+  > sample(1:10, size = 3)
+  [1] 9 5 7
+  > sample(1:10, size = 3)
+  [1] 3 2 9
+  \end{lstlisting}
+  Dans la syntaxe de sample, l'argument \textit{size} est en deuxième position. On peut donc se contenter de : \textit{sample(1:10, 3)}.
+	\item \textit{replace} : Les commandes : \textit{replace = L}, où L est TRUE ou FALSE, dont que les tirages sont avec remise si L = TRUE et sans remise sinon.\newline
+  On fait :
+  \begin{lstlisting}[language=html]
+  > sample(1:5, size = 9, replace = TRUE)
+  [1] 3 2 2 3 3 3 2 4 4
+  > sample(1:5, size = 9, replace = TRUE)
+  [1] 4 2 5 2 1 2 5 4 3
+  \end{lstlisting}
+	\item \textit{prob}
+  La commande \textit{prob} permet la simulation de var dont le support est l'ensemble des éléments de $x$, que l'on suppose au nombre de $k$. Ainsi, la loi commune de ces var est :
+  $$\mathbb{P}(X = j\textrm{-ème élément de }x) = p_{j} \textrm{ avec } j \in \{1,\dots,k\},p_{j}\in[0,1]\textrm{ et } \sum_{j=1}^{k}p_{j}=1$$
+  On ajoute donc \textit{prob = vec}, où \textit{vec} est le vecteur des probabilités $(p_{1}; \dots ; p_{k})$.\newline
+  Si \textit{prob} n'est pas indiqué, par défaut $p_{j} = 1/k$ (tirage équiprobable).\newline
+  On fait :
+  \begin{lstlisting}[language=html]
+  > y = c("rouge", "vert", "bleu", "blanc", "noir")
+  > sample(y, 2, prob = c(10 / 100, 30 / 100, 10 / 100, 30 / 100, 20 / 100))
+  [1] "bleu" "noir"
+  > sample(y, 2, prob = c(10 / 100, 30 / 100, 10 / 100, 30 / 100, 20 / 100))
+  [1] "blanc" "rouge"
+  > sample(y, 2, prob = c(10 / 100, 30 / 100, 10 / 100, 30 / 100, 20 / 100))
+  [1] "blanc" "noir" 
+  \end{lstlisting} 
+\end{itemize}
+\subsection{Simulation par des lois préprogrammées}
+\subsubsection*{Commandes}
+Si la loi de $X$ dépend d'un ou de plusieurs paramètres, disons \textit{par$_{1}$} et \textit{par$_{2}$}, alors la simulation de $n$ variables aléatoires indépendantes suivant la même loi que $X$ est donnée par les commandes :
+\begin{center}
+\textbf{r}loi($x$,par$_{1}$,par$_{2}$)
+\end{center}
+\subsubsection*{Calculs}
+On fait :
+\begin{lstlisting}[language=html]
+> rpois(10, 2)
+ [1] 2 1 1 1 2 0 1 0 3 1
+\end{lstlisting}
+Ainsi, on a simulé des réalisations de 10 var indépendantes suivant chacune la loi de Poisson $\mathcal{P}(2)$.\newline
+\textit{Encore une pour le fun ?} 
+\begin{lstlisting}[language=html]
+> rpois(10, 2)
+ [1] 3 4 2 3 3 2 2 2 2 1
+\end{lstlisting}
+\textit{Allez, une troisième pour le plaisir}
+\begin{lstlisting}[language=html]
+> rpois(10, 2)
+ [1] 2 1 1 0 2 5 3 2 1 0
+\end{lstlisting}
+On fait :
+\begin{lstlisting}[language=html]
+> sum(rbinom(80, 1, 0.02))
+[1] 3
+\end{lstlisting}
+On a alors simulé une réalisation de la var $\sum_{i=1}^{80}X_{i}$ où $X_{1}$,$X_{2}$,\dots,$X_{80}$ sont des var indépendantes suivant chacune la loi binomiale $\mathcal{B}(1, 0.02)$, (ainsi, la loi commune est la loi de Bernoulli $\mathcal{B}(0.02)$ :
+$$\mathbb{P}(X_{1} = 0) = 1 - 0.02 = 0.98\textrm{ et } P(X_{1} = 1) = 0.02.$$ 
+Comme $\sum_{i=1}^{80}X_{i} \sim \mathcal{B}(80,0.02)$ cela revient à simulé
+une réalisation d'une var $Y \sim \mathcal{B}(80, 0.02)$ : \textit{rbinom(1, 80, 0.02)}.\newline
+On fait : 
+\begin{lstlisting}[language=html]
+> x = rnorm(15, 22, 2)
+> x
+ [1] 21.86975 21.27651 21.44174 20.73213 23.46708 23.15454 22.51041 22.90081
+ [9] 24.32300 23.98299 23.78338 23.12981 22.93772 21.08650 20.61778
+\end{lstlisting}
+Ainsi, on a construit un vecteur dont les éléments sont des réalisations de $15$ var indépendantes suivant chacune la loi normale $\mathcal{N}(22, 2^{2})$.
+\section{Exercices}
+\subsection{Enoncés}
+\subsubsection*{Exercice 1}
+Représenter le graphe de la densité d'une var $X \sim \mathcal{P}(1)$ pour $x \in \{0; \dots ; 8\}$.
+\subsubsection*{Exercice 2}
+Représenter le graphe de la densité d'une var $X \sim \chi^{2}(3)$ pour $x \in [0; 10]$.
+\subsubsection*{Exercice 3}
+Diviser la fenêtre de l'écran en deux fenêtres lignes.
+\begin{itemize}
+  \item Représenter, dans la première fenêtre, le graphe de la densité d'une var $X\sim \mathcal{B}(50, 0.08)$ en prenant \textit{ylim = c(0, 0.25)}.
+  \item Représenter dans la deuxième fenêtre, au-dessous de la première, le graphe de la densité d'une var $Y \sim \mathcal{P}(4)$ pour $x \in \{0; \dots ; 50\}$ avec la même option : \textit{ylim = c(0, 0.25)}.
+\end{itemize}
+\textit{(Ceci illustrera le fait que lorsque $n \geq 31$ et $np \leq 10$ on peut approcher la loi binomiale $\mathcal{B}(n, p)$ par la loi de Poisson $\mathcal{P}(np)$)}.
+\subsubsection*{Exercice 4}
+Séparer l'écran graphique en 3 (1 ligne, 3 colonnes).
+\begin{itemize}
+  \item Dans la première fenêtre, représenter le graphe de la densité d'une var $X \sim \mathcal{N}(4, 1)$, puis ajouter dans la même fenêtre, avec une autre couleur, celui de la densité d'une var $Y \sim \mathcal{N}(5, 1)$.
+  \item  Dans la deuxième fenêtre, représenter le graphe de la densité d'une var $X \sim \mathcal{N}(4, 1)$ puis ajouter dans la même fenêtre, avec une autre couleur, celui de la densité d'une var $Y \sim \mathcal{N}(4, 4)$.
+  \item Dans la troisième fenêtre, représenter le graphe de la densité d'une var $X \sim \mathcal{N}(4, 1)$ puis ajouter dans la même fenêtre, avec une autre couleur, celui de la densité d'une var $Y \sim \mathcal{N}(5, 4)$.
+\end{itemize}
+\subsubsection*{Exercice 5}
+Représenter le graphe de la densité d'une var $X \sim \mathcal{B}(50, 0.4)$, puis ajouter par dessus ce graphe celui de la densité d'une var $Y \sim \mathcal{N}(20; 12)$ (\textit{cela illustrera le fait que, lorsque $n \geq 31$, $np \geq 5$ et $n(1 - p) \geq 5$, on peut approcher la loi binomiale B(n; p) par la loi normale $\mathcal{N}(np; np(1 - p))$}).
+\subsubsection*{Exercice 6}
+Représenter le graphe de la densité d'une var $X \sim \mathcal{B}(n, p)$ pour $x \in \{0; \dots ; 10\}$ avec $n = 100$ et $p = 0.01$, puis ajouter dans la même fenêtre le graphe de la densité d'une var $Y \sim \mathcal{N}(np, np(1 - p))$. Que constatez-vous ?
+\subsubsection*{Exercice 7}
+Soit $X \sim \mathcal{N}(0, 1)$. Calculer les probabilités : 
+\begin{itemize}
+  \item $\mathbb{P}(X < -0,5)$
+  \item $\mathbb{P}(X > 1,5)$
+  \item $\mathbb{P}(X > -1)$
+  \item $\mathbb{P}(|X| \leq 1,96)$
+  \item $\mathbb{P}(|X| \leq 2,58)$
+  \item $\mathbb{P}(|X| \geq 3)$
+\end{itemize}
+\subsubsection*{Exercice 8}
+Soit $X \sim \mathcal{N}(15; 9)$.
+\begin{itemize}
+  \item Calculer les probabilités : $\mathbb{P}(16 \leq X \leq 20)$, $\mathbb{P}(X > 18)$, $\mathbb{P}(X < 6)$ et $\mathbb{P}(|X - 15| > 5,88)$.
+  \item Représenter le graphe de la fonction de répartition de $X$ pour $x \in [6; 24]$.
+\end{itemize}
+\subsubsection*{Exercice 9}
+Représenter, sur une même figure, la fonction de répartition d'une var $X \sim B(50, 0.4)$ et celle d'une var $Y \sim \mathcal{N}(20, 12)$.
+\subsubsection*{Exercice 10}
+\begin{itemize}
+  \item Soit $X \sim \mathcal{N}(0, 1)$. Calculer les quantiles : $x_{0.00135}$, $x_{0.025}$, $x_{0.95}$, $x_{0.999}$, $x_{0.995}$ et $x_{0.99865}$.
+  \item Soit $Y \sim \mathcal{N}(19, 3)$. Calculer les quantiles : $y_{0.975}$ et $y_{0.025}$. Vérifier que $y_{0.975} = 19 + \sqrt{3}x_{0.975}$.
+\end{itemize}
+\subsubsection*{Exercice 11}
+Construire un vecteur \textit{simul1} composé de $1000$ éléments dont les valeurs sont des réalisations d'une var $X \sim \mathcal{N}(15, 3)$. Faire l'histogramme des fréquences de \textit{simul1} et superposer la densité de $X$. Faire le boxplot de \textit{simul1}.
+\subsubsection*{Exercice 12}
+\begin{enumerate}
+  \item Construire un vecteur \textit{simul2} qui est composé de $1000$ éléments dont les valeurs sont des réalisations d'une var $X \sim \mathcal{P}(1)$
+  \item Construire un vecteur dont le premier élément sera le nombre de réalisations qui vaudront 0, le deuxième élément sera le nombre de réalisations qui vaudront 1\dots O\textit{On pourra utiliser la fonction compter décrite ci-dessous}.
+  \begin{lstlisting}[language=html]
+  compter = function(a, b) {
+    d = numeric()
+    for(i in 1:(length(a))) {
+      d[i] = sum(b == a[i])
+    }
+    names(d) = as.character(a)
+    d
+  }
+  \end{lstlisting}
+  \item Faire un barplot et superposer la densité de $X$.
+\end{enumerate}
+\subsubsection*{Exercice 13}
+Construire dans R une fonction péage qui a 4 arguments : \textit{mu1, mu2, sigma} et \textit{n}. À l'intérieur de cette fonction :
+\begin{itemize}
+  \item on définit un vecteur numérique attente de longueur n
+  \item on construit un objet cabines constitué des cabines $C1$ et $C2$
+  \item on ouvre une boucle qui va de $1$ à $n$. Pour chaque $i$ avec $i \in \{1; \dots ; n\}$, à l'intérieur de cette boucle, on tire au hasard une cabine dans l'objet cabines.
+  \begin{itemize}
+    \item Si la cabine $C1$ a été choisie, on simule le tirage d'une var d'espérance \textit{mu1} et d'écart-type \textit{sigma} et on affecte le résultat à la $i$-ème composante de attente
+    \item Si la cabine $C2$ a été choisie, on simule le tirage d'une var de moyenne \textit{mu2} et d'écart-type \textit{sigma} et on affecte le résultat à la $i$-ème composante de attente
+  \end{itemize}
+  \item après avoir constitué le vecteur \textit{attente}, on construit l'histogramme des fréquences du vecteur \textit{attente}
+  \item on calcule \textit{moy} qui est la moyenne du vecteur attente
+  \item on calcule ecart qui est l'écart-type corrigé des valeurs des éléments du vecteur \textit{attente} en utilisant la fonction \textbf{sd}
+  \item on ajoute à l'histogramme la courbe de la densité associée à la loi normale de moyenne moy et d'écart-type \textit{ecart}
+  \item on ajoute à la figure un texte comportant l'indication de la valeur de moy et l'indication de la valeur de \textit{ecart} (garder deux décimales seulement)
+  \item on ajoute à l'histogramme le graphe de la fonction suivante :
+  $$f(x) = 0.5(f_{1}(x)+f_{2})$$
+  où $f_{1}(x)$ est la densité associée à la loi $\mathcal{N}(\mu_{1}; \sigma^{2})$ et $f_{2}(x)$ celle associée à la loi $\mathcal{N}(\mu_{2}; \sigma^{2})$.
+\end{itemize}
+On exécute ensuite cette fonction sur deux fenêtres :
+\begin{itemize}
+  \item pour la première prendre $mu1 = 50$, $mu2 = 51$, $sigma = 2$ et $n = 1000$
+  \item pour la seconde prendre $mu1 = 50$, $mu2 = 60$, $sigma = 2$ et $n = 1000$
+\end{itemize}
+L'objectif est de montrer qu'un mélange de lois normales n'est pas obligatoirement une loi normale.
+\subsubsection*{Exercice 14}
+Diviser l'écran en 4 fenêtres.
+\begin{itemize}
+  \item Dans la première fenêtre, représenter le graphe de la densité d'une var $X \sim \mathcal{N}(0, 1)$ pour $x \in [-3; 3]$, puis ajouter celui de la densité d'une var $Y \sim \mathcal{T} (2)$.
+  \item Dans la première fenêtre, représenter le graphe de la densité d'une var $X \sim \mathcal{N}(0, 1)$ pour $x \in [-3; 3]$, puis ajouter celui de la densité d'une var $Y \sim \mathcal{T} (3)$.
+  \item Dans la première fenêtre, représenter le graphe de la densité d'une var $X \sim \mathcal{N}(0, 1)$ pour $x \in [-3; 3]$, puis ajouter celui de la densité d'une var $Y \sim \mathcal{T} (10)$.
+  \item Dans la première fenêtre, représenter le graphe de la densité d'une var $X \sim \mathcal{N}(0, 1)$ pour $x \in [-3; 3]$, puis ajouter celui de la densité d'une var $Y \sim \mathcal{T} (30)$.
+\end{itemize}
+\subsubsection*{Exercice 15}
+Construire dans R une fonction \textit{stu1} qui a 4 arguments : $n$, $nb$, $mu$ et $sigma$.\newline
+À l'intérieur de cette fonction, on définit un vecteur \textit{vec} de longueur $nb$.\newline
+On construit les composantes du vecteur par une boucle allant de $1$ à $nb$.\newline
+La $i$-ème composante de vec est calculée ainsi :
+\begin{itemize}
+\item On simule un vecteur \textit{simul} qui est composé de $n$ réalisations d'une var $X \sim \mathcal{N}(mu; sigma^{2})$.
+ \item On calcule la moyenne $\bar{x}$ et l'écart-type corrigé $s$ des valeurs des éléments de \textit{simul}.\newline
+   La $i$-ème composante de \textit{vec} est égale à :
+     $$\textrm{vec}[i] = \sqrt{n}\left(\frac{\bar{x}-mu}{s}\right)$$
+ 
+ \item Diviser l'écran en 2 fenêtres superposées.
+ \begin{itemize}
+  \item Dans la première fenêtre, construire l'histogramme des fréquences de vec. Superposer le graphe de la densité associée à loi $\mathcal{N}(0, 1)$ et, avec une autre couleur, le graphe de la densité associée à la loi $\mathcal{T} (n - 1)$.
+  \item Dans la deuxième fenêtre, représenter la fonction de répartition empirique de vec avec les commandes : \textit{plot(ecdf(vec))}. Ajouter en rouge le graphe de la fonction de répartition associée à la loi $\mathcal{T} (n - 1)$). Ajouter en jaune le graphe de la fonction de répartition associée à la loi $\mathcal{N}(0, 1)$.
+   \end{itemize}
+\end{itemize}
+Essayer cette fonction avec $n=3$, $nb = 1000$, $mu = 10$ et $sigma = 2$, puis avec $n=30$, $nb = 1000$, $mu = 10$ et $sigma = 2$.\newline
+\\
+\textit{Rappel : La fonction de répartition empirique associée à un $n$-échantillon $(X_{1}; \dots ;X_{n})$ d'une var X de fonction de répartition $F_{X}$ est $$\hat{F}(x) = \frac{1}{n}\sum_{i=1}^{n}\mathbf{1}_{\{X_{i} \leq x\}}$$
+Le théorème de Glivenko-Cantelli nous assure que :
+$$\max_{-\infty < x +\infty} |\hat{F}(x)-F_{X}(x)| \rightarrow 0 \textrm{ converge presque sûrement quand } n \rightarrow +\infty$$}
+\subsubsection*{Exercice 16}
+Diviser l'écran en 6 fenêtres.
+\begin{itemize}
+  \item Dans la fenêtre 1, représenter le graphe de la densité d'une var $X \sim \chi^{2}(1)$ pour $x \in [0.01; 10]$.
+  \item Dans la fenêtre 2, représenter le graphe de la densité d'une var $X \sim \chi^{2}(2)$ pour $x \in [0.01; 10]$.
+  \item Dans la fenêtre 3, représenter le graphe de la densité d'une var $X \sim \chi^{2}(3)$ pour $x \in [0.01; 10]$.
+  \item Dans la fenêtre 4, représenter le graphe de la densité d'une var $X \sim \chi^{2}(5)$ pour $x \in [0.01; 10]$.
+  \item Dans la fenêtre 5, représenter le graphe de la densité d'une var $X \sim \chi^{2}(10)$ pour $x \in [0.01; 20]$.
+  \item Dans la fenêtre 6, représenter le graphe de la densité d'une var $X \sim \chi^{2}(20)$ pour $x \in [0.01; 60]$.
+\end{itemize}
+\subsubsection*{Exercice 17}
+Construire dans R une fonction \textit{khi2} qui a 4 arguments : $n$, $nb$, $mu$ et $sigma$.\newline
+À l'intérieur de cette fonction, on définit un vecteur \textit{vec} de longueur $nb$.\newline
+On construit les composantes de ce vecteur par une boucle allant de $1$ à $nb$.
+La $i$-ème composante de vec est calculée ainsi :
+\begin{itemize}
+  \item On simule un vecteur \textit{simul} qui est composé de $n$ réalisations d'une var $X \sim \mathcal{N}(mu, sigma^{2})$.
+  \item On calcule la variance corrigée $s^{2}$ de la série des $n$ composantes de \textit{simul}.
+\end{itemize}
+La $i$-ème composante de \textit{vec} est égale à
+$$\textrm{vec}[i] = \frac{(n-1)s^{2}}{sigma^{2}}$$
+Une fois ce vecteur construit, on ne garde que les composantes comprises entre $0.01$ et $10$ et on construit l'histogramme des fréquences.\newline
+On superpose le graphe de la densité associée à la loi $\chi^{2}(n - 1)$.\newline
+Essayer cette fonction avec $n = 4$, $nb = 10000$, $mu = 10$ et $sigma = 2$.
+\subsubsection*{Exercice 18}
+Diviser l'écran en 4 fenêtres.
+\begin{itemize}
+  \item Dans la fenêtre 1, représenter le graphe de la densité d'une var $X \sim \varepsilon (1)$ pour $x \in [0, 3]$.
+  \item Dans la fenêtre 2, représenter le graphe de la densité d'une var $X \sim \varepsilon (2)$ pour $x \in [0, 3]$.
+  \item Dans la fenêtre 3, représenter le graphe de la densité d'une var $X \sim \varepsilon (0.5)$ pour $x \in [0, 20]$.
+  \item Dans la fenêtre 4, représenter le graphe de la densité d'une var $X \sim \varepsilon (0.1)$ pour $x \in [0, 60]$.
+\end{itemize}
+\subsubsection*{Exercice 19}
+Proposer des commandes R permettant d'obtenir le graphique suivant :
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.7]{ilu/probab11.png}\end{center}\end{figure}
+\subsubsection*{Exercice 20}
+Proposer des commandes R permettant d'obtenir le graphique suivant :
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.7]{ilu/probab12.png}\end{center}\end{figure}
+\subsubsection*{Exercice 21}
+On s'interesse à la durée de vie d'un certain type de voiture. Soit $X$ la var égale à la durée de vie en années d'une de ces voitures. On suppose que $X$ suit la loi exponentielle $\varepsilon(1/10)$, \textit{i.e.} de densité
+$$f(x) = \left \{
+\begin{array}{c c}
+    \frac{1}{10}e^{-\frac{x}{10}} & \textrm{ si } x \geq 0 \\
+\\
+    0 & \textrm{ sinon} \\
+\end{array}
+\right.$$
+
+\begin{enumerate}
+  \item Écrire une nouvelle fonction R équivalente à dexp (on pourra utiliser une structure de contrôle \textit{if . . . else} pour que celle-ci valle $0$ quand $x < 0$).
+  \item Vérifier numériquement que$\int_{0}^{10} f(x)\textrm{d}x \approx 1$ avec la commande \textit{integrate}.
+  \item Séparer l'écran graphique en 2 : dans la fenêtre 1, représenter le graphe de la densité $f$ et, dans la fenêtre 2, celui de la fonction de répartition de $X$.
+  \item Calculer la probabilité que la durée de vie d'une voiture dépasse $10.2$ ans.
+\end{enumerate}
+
+\subsubsection*{Exercice 22}
+Soit X une var suivant la loi gamma $\Gamma(5,1)$, \textit{i.e.} de densité : 
+$$f(x) = \left \{
+\begin{array}{c c}
+    \frac{1}{24}x^{4}e^{-x} & \textrm{ si } x \geq 0 \\
+\\
+    0 & \textrm{ sinon} \\
+\end{array}
+\right.$$
+\begin{enumerate}
+  \item Écrire une nouvelle fonction R équivalente à dgamma.
+  \item Vérifier numériquement que$\int_{0}^{10} f(x)\textrm{d}x \approx 1$
+  \item Évaluer la fonction de répartition de $X$ pour $x \in \{2; \dots ; 10\}$
+  \item Déterminer le réel $x$ vérifiant $\mathbb{P}(X \leq x) = 0.92$.
+\end{enumerate}
+\subsubsection*{Exercice 23}
+Soit $X$ une var suivant la loi normale $\mathcal{N}(0, 1)$, \textit{i.e.} de densité : 
+$$f(x) = \frac{1}{\sqrt{2\pi}}e^{-\frac{x^{2}}{2}}, x\in\mathbb{R}$$
+\begin{enumerate}
+  \item Écrire une nouvelle fonction R équivalente à la fonction dnorm
+  \item Vérifier numériquement que$\int_{0}^{10} f(x)\textrm{d}x \approx 1$
+  \item Séparer l'écran graphique en 2 : dans la fenêtre 1, représenter le graphe de la densité $f$ et, dans la fenêtre 2, celui de la fonction de répartition de $X$.
+  \item Calculer $\mathbb{P}(X \leq 2.2)$, $\mathbb{P}(X \geq 1.7)$, $\mathbb{P}(0.2 \leq X < 1.4)$ et $\mathbb{P}(|X| \leq 1.96)$.
+  \item Déterminer le réel $x$ vérifiant $\mathbb{P}(X \leq x) = 0.98$. 
+\end{enumerate}
+\subsubsection*{Exercice 24}
+On suppose que le poids d'un foie gras peut être modélisé par une var $X$ suivant la loi normale $\mathcal{N}(550, 100^{2})$, l'unité étant le gramme. Quelle est la probabilité qu'un foie gras pèse :
+\begin{itemize}
+  \item moins de 650 grammes ?
+  \item plus de 746 grammes ?
+  \item entre 550 grammes et 600 grammes ?
+\end{itemize}
+\subsubsection*{Exercice 25}
+Soit X une var suivant la loi normale $\mathcal{N}(0, 1)$. La fonction de répartition de $X$, \textit{i.e.} $F_{X}(x) = \mathbb{P}(X \leq x)$, avec $x \geq 0$, peut s'écrire comme 
+$$F_{X}(x) = \frac{1}{2} + \frac{1}{\sqrt{2\pi}}e^{-\frac{x^{2}}{2}}\sum_{n=0}^{\infty}\frac{x^{2n+1}}{\prod_{m=0}^{n}(2m+1)}$$
+Utiliser cette expression pour écrire une nouvelle fonction R équivalente à la fonction pnorm (\textit{on tronquera la somme infinie à la valeur 50}).
+\subsubsection*{Exercice 26}
+Soit $X$ une var dont la loi est donnée par
+$$\mathbb{P}(X=0)= 0.2\textrm{, }\mathbb{P}(X=2)= 0.5\textrm{, }\mathbb{P}(X=5)= 0.3$$
+Simuler 1000 réalisations de $X$ et préciser les effectifs associés aux valeurs de $X$.
+\subsubsection*{Exercice 27}
+Une urne contient $p + q$ boules, dont $p$ rouges et $q$ noires. Construire dans R une fonction Urne qui a 3 arguments : $k$, $p$ et $q$. L'enjeu de celle-ci est de modéliser le résultat de $k$ tirages sans remise d'une boule de l'urne. Par exemple : 
+\begin{lstlisting}[language=html]
+> Urne(6, 8, 5)
+[1] "Rouge" "Noire" "Noire" "Rouge" "Noire" "Rouge"
+\end{lstlisting}
+\subsubsection*{Exercice 28}
+Lorsqu'on effectue $n$ tirages indépendants d'une même expérience aléatoire, on appelle fréquence du résultat $k$ le rapport entre le nombre de fois où $k$ est tiré, et $n$.\newline
+Par exemple, si on jette $7$ fois un dé cubique équilibré, avec pour résultats : $1 ; 1 ; 5 ; 2 ; 6 ; 5 ; 3$, alors la fréquence de $5$ est $2/7$, celle de $4$ est $0$.\newline
+Construire dans R une fonction Freq qui a un argument : $n$. L'enjeu de celle-ci est de renvoyer la fréquence de $5$ lors de $n$ tirages indépendants d'un dé cubique équilibré. Comparer les fréquences pour $n \in \{10, 100, 1000\}$, avec la probabilité (théorique) d'obtenir un $5$ lorsqu'on lance un dé.
+\subsubsection*{Exercice 29}
+Une urne contient 15 boules, dont 5 blanches et 10 noires. On considère les deux expériences suivantes :
+\begin{itemize}
+  \item \textit{E1} : On tire successivement 10 boules dans l'urne, avec remise
+  \item \textit{E2} : On tire successivement 10 boules dans l'urne, sans remise
+\end{itemize}
+\begin{enumerate}
+  \item Simuler une réalisation de chacune des deux expériences avec la fonction sample. On représentera une boule blanche par le chiffre 1 et une boule noire par le chiffre 0.
+  \item On s'intéresse à la var $X$ égale au nombre de boules blanches tirées lors l'expérience \textit{E1}, et à la var $Y$ , l'analogue mais avec l'expérience \textit{E2}.
+  \begin{enumerate}
+    \item Simuler 500 réalisations de chacune de ces var en utilisant la fonction sample.
+    \item Comparer, suivant le type d'épreuve, le diagramme en barre des fréquences observées avec la distribution des lois binomiales et hypergéométriques correspondantes.
+  \end{enumerate}
+\end{enumerate}
+
+\subsubsection*{Exercice 30}
+On considère la marche aléatoire suivante : un mobile est positionné à l'origine d'un axe. À chaque étape, il se déplace d'une distance de longueur 1 vers la droite ou la gauche avec la probabilité $0.5$ pour chaque direction. Il effectue $n$ étapes au total. Soit $X_{i}$ la position du mobile à l'étape $i$ (on pose $X_{0} = 0$). Simuler une réalisation du vecteur de var $(X_{0};X_{1}; \dots ;X_{n})$ (on pourra utiliser la fonction \textit{cumsum} qui donne la somme cumulée d'un vecteur. Par exemple :
+\begin{lstlisting}[language=html]
+> cumsum(c(2, 2, 2, 3))
+[1] 2 4 6 9.
+\end{lstlisting}
+
+\subsubsection*{Exercice 31}
+On lance 5 dés cubiques équilibrés, puis on relance ceux qui n'ont pas fait 6, et ainsi de suite jusqu'à ce que les 5 dés affichent 6.\newline
+Simuler une réalisation de cette expérience aléatoire en affichant les chiffres obtenus après chaque lancers et le nombre de lancers total (\textit{on pourra utiliser une boucle \textbf{while} et la commande \textbf{sum(x != 6)} qui calcule le nombre de composantes d'un vecteur x différentes de 6}).
+\subsection{Solutions}
+\subsubsection*{Exercice 1}
+\begin{lstlisting}[language=html]
+> plot(0:8, dpois(0:8, 1), type = "h", xlab = "x", ylab = "P(X = x)")
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=1]{ilu/probab5.png}\end{center}\end{figure}
+
+\subsubsection*{Exercice 2}
+\begin{lstlisting}[language=html]
+> curve(dchisq(x, 3), 0, 10, xlab = "x")
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=1]{ilu/probab6.png}\end{center}\end{figure}
+
+\subsubsection*{Exercice 3}
+\begin{lstlisting}[language=html]
+## On split la fenêtre en deux
+> par(mfrow = c(2,1))
+# On veut les densité donc : dloi
+## Var Bino -> B(50,0.08) 
+> plot(0:50, dbinom(0:50, 50, 0.08), type = "h", xlab = "x", ylab = "P(X = x)",
++     ylim=c(0, 0.25), main = "Densité associée à la loi B(50, 0.08)",col="red")
+## Var Poiss -> P(0,4)
+> plot(0:50, dpois(0:50, 4), type = "h", xlab = "x", ylab = "P(X = x)",
++     ylim = c(0, 0.25), main = "Densité associée à la loi P(0.08)",col="blue")
+## On oubli pas de mettre les options graphique par défaut
+> par(mfrow = c(1,1))
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=1]{ilu/probab7.png}\end{center}\end{figure}
+
+
+\subsubsection*{Exercice 4}
+\begin{lstlisting}[language=html]
+> par(mfrow = c(3, 1))
+## ATTENTION : à bien mettre add = TRUE pour pouvoir superposer les graphiques
+> curve(dnorm(x, 4, 1), 1, 8, ylab = "",
++       main = "Densités associées aux lois N(4,1) et N(5,1)")
+> curve(dnorm(x, 5, 1), 1, 8, col = "red", ylab = "", add = TRUE)
+> curve(dnorm(x, 4, 1), -2, 10, ylab = "",
++       main = "Densités associées aux lois N(4,1) et N(4,4)")
+> curve(dnorm(x, 4, 2), -2, 10, col = "blue", ylab = "", add = TRUE)
+> curve(dnorm(x, 4, 1), -1, 11, ylab = "",
++       main = "Densités associées aux lois N(4,1) et N(5,4)")
+> curve(dnorm(x, 5, 2),-1, 11, col = "green", ylab = "", add = TRUE)
+## On oubli pas de mettre les options graphique par défaut
+> par(mfrow = c(1,1))
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=1]{ilu/probab8.png}\end{center}\end{figure}
+
+
+\subsubsection*{Exercice 5}
+\begin{lstlisting}[language=html]
+> plot(0:50, dbinom(0:50, 50, 0.4), type = "h", xlab = "x", ylab = "",
++      main = "Densités associées aux lois B(50,0.4) et N(20,12)")
+## Ne pas oublier le add = TRUE
+> curve(dnorm(x, 20, sqrt(12)), 0, 50, col = "red", ylab = "", add = TRUE)
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=1]{ilu/probab9.png}\end{center}\end{figure}
+
+
+\subsubsection*{Exercice 6}
+\begin{lstlisting}[language=html]
+> plot(0:20, dbinom(0:20, 100, 0.01), type = "h", xlab = "x", ylab = "",
++      ylim = c(0, 0.4), main = "Densités associées aux lois B(100,0.01) et N(1,0.99)")
+> curve(dnorm(x, 1, sqrt(0.99)), 0, 20, col = 3, ylab = "", add = TRUE)
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=1]{ilu/probab10.png}\end{center}\end{figure}
+On peut établir une approximation de la loi Binomiale($\mathcal{B}(n, p)$) par la loi Normale ($mathcal{N}(np, np(1 - p))$) pour les valeurs de $n$ et $p$ données comme conditions.
+\subsubsection*{Exercice 7}
+$X \sim \mathcal{N}(0, 1)$. Cette fois ci, nous voulons calculer les probabilité, nous allons donc utiliser la syntaxe \textbf{p}loi
+\begin{itemize}
+  \item $\mathbb{P}(X < -0,5)$
+\begin{lstlisting}[language=html]
+> pnorm(-0.5, 0, 1)
+[1] 0.3085375
+\end{lstlisting}
+  \item $\mathbb{P}(X > 1,5)$ - On passe par le contraire\footnote{Si tu veux connaître le nombre d'abrutis sur cette terre, commence par compter les malins, tu gagneras du temps - Didier DINET}
+  $$\mathbb{P}(X > 1,5) = 1 \mathbb{P}(X < 1,5)$$
+\begin{lstlisting}[language=html]
+> 1 - pnorm(1.5, 0, 1)
+[1] 0.0668072
+\end{lstlisting}
+  \item $\mathbb{P}(X > -1)$ - Même logique
+  $$\mathbb{P}(X > -1) = 1 - \mathbb{P}(X < -1)$$
+\begin{lstlisting}[language=html]
+> 1 - pnorm(-1, 0, 1)
+[1] 0.8413447
+\end{lstlisting}
+  \item $\mathbb{P}(|X| \leq 1,96)$ - Attention, ici il y a des valeurs absolues\footnote{Une bonne valeur absolue est une valeur absolue qui n'existe pas - Didier DINET}. Cela signifie que l'on cherche à connaître la quantité comprise entre $-1.96 \leq X \leq 1.96$. On fait donc : 
+  $$\mathbb{P}(|X| \leq 1,96) = \mathbb{P}(X \leq 1,96) - \mathbb{P}(X \leq - 1,96)$$
+\begin{lstlisting}[language=html]
+> pnorm(1.96, 0, 1) - pnorm(-1.96, 0, 1)
+[1] 0.9500042
+\end{lstlisting}
+  \item $\mathbb{P}(|X| \leq 2,58)$ - Même logique
+  $$\mathbb{P}(|X| \leq 2.58) = \mathbb{P}(X \leq 2.58) - \mathbb{P}(X \leq - 2.58)$$
+\begin{lstlisting}[language=html]
+> pnorm(2.58, 0, 1) - pnorm(-2.58, 0, 1)
+[1] 0.99012
+\end{lstlisting}
+  \item $\mathbb{P}(|X| \geq 3)$ - Là c'est le méga combo (contraire et valeurs absolues)
+  $$ \mathbb{P}(|X| \geq 3) = 1 - \mathbb{P}(|X| \leq 3) = 1 - \mathbb{P}(X \leq 3) - \mathbb{P}(X \leq - 3)$$
+\begin{lstlisting}[language=html]
+> 1 - (pnorm(3, 0, 1) - pnorm(-3, 0, 1))
+[1] 0.002699796
+\end{lstlisting}
+\end{itemize}
+On aurait pu utiliser d'autres commandes. Par exemple, pour $\mathbb{P}(X > 1.5)$ :
+\begin{lstlisting}[language=html]
+> pnorm(1.5, 0, 1, lower.tail = FALSE)
+[1] 0.0668072
+\end{lstlisting}
+ \subsubsection*{Exercice 8}
+ \begin{enumerate}
+   \item Pour $X \sim \mathcal{N}(15, 9)$, on a :
+ \begin{itemize}
+   \item $\mathbb{P}(16 < X < 20)$ 
+   \begin{lstlisting}[language=html]
+   > pnorm(20, 15, 3) - pnorm(16, 15, 3)
+  [1] 0.321651
+   \end{lstlisting}
+      \item $\mathbb{P}(X > 18)$ 
+   \begin{lstlisting}[language=html]
+   > 1 - pnorm(18, 15, 3)
+  [1] 0.1586553
+   \end{lstlisting}
+
+      \item $\mathbb{P}(X < 6)$ 
+   \begin{lstlisting}[language=html]
+   > pnorm(6, 15, 3)
+  [1] 0.001349898
+   \end{lstlisting}
+    \item $\mathbb{P}(|X - 15|>  5.88)$ 
+   \begin{lstlisting}[language=html]
+   > 1 - (pnorm(15 + 5.88, 15, 3) - pnorm(15 - 5.88, 15, 3))
+  [1] 0.04999579
+   \end{lstlisting}
+ \end{itemize}
+ \item On fait :
+\begin{lstlisting}[language=html]
+ > curve(pnorm(x, 15, 3), 6, 24)
+\end{lstlisting}
+\end{enumerate}
+\subsubsection*{Exercice 9}
+\begin{lstlisting}[language=html]
+> plot(stepfun(0:50, c(0, pbinom(0:50, 50, 0.4))),
++      main = "Fonctions de répartitions associées aux lois B(50, 0.4) et N(20, 12)",col="blue",lwd=1.5)
+> curve(pnorm(x, 20, sqrt(12)), 0, 50, col = "red", add = TRUE)
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=1]{ilu/probab14.png}\end{center}\end{figure}
+\subsubsection*{Exercice 10}
+\begin{enumerate}
+  \item On fait :
+  \begin{lstlisting}[language=html]
+  > p = c(0.00135, 0.025, 0.95, 0.999, 0.995, 0.99865)
+  ## On définit les valeurs des quantiles
+  > x = qnorm(p) 
+  ## On cherche les quantiles pour les valeurs que l'on a définit
+  > cbind(p, x) 
+  ## On améliore l'affichage
+             p         x
+  [1,] 0.00135 -2.999977
+  [2,] 0.02500 -1.959964
+  [3,] 0.95000  1.644854
+  [4,] 0.99900  3.090232
+  [5,] 0.99500  2.575829
+  [6,] 0.99865  2.999977
+\end{lstlisting}
+\item On fait :
+  \begin{lstlisting}[language=html]
+> p = c(0.975, 0.025)
+> y = qnorm(p, 19, sqrt(3))
+> cbind(p, y)
+         p        y
+[1,] 0.975 22.39476
+[2,] 0.025 15.60524
+\end{lstlisting}
+On a
+  \begin{lstlisting}[language=html]
+> y[1]
+[1] 22.39476
+> qnorm(0.975)
+[1] 1.959964
+> y[1] - 19 - sqrt(3) * qnorm(0.975)
+[1] 8.881784e-16
+\end{lstlisting}
+On arrondit cela à 0.
+\end{enumerate}
+\subsubsection*{Exercice 11}
+\begin{lstlisting}[language=html]
+> simul1 = rnorm(1000, 15, sqrt(3))
+> head(simul1,5);tail(simul1,5)
+[1] 10.40035 13.61364 16.44047 14.85643 14.22192
+[1] 12.78735 14.92611 14.51578 15.20232 18.89797
+> hist(simul1, col = 3, prob = TRUE, ylim = c(0, 0.25),
++      main = "Histogramme de rnorm(1000,15, sqrt(3)) et
++      \n densité associée à la loi N(15, 3)")
+> curve(dnorm(x, 15, sqrt(3)), col = "black", add = TRUE)
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=1]{ilu/probab15.png}\end{center}\end{figure}
+\begin{lstlisting}[language=html]
+> boxplot(simul1, main = "Boxplot de rnorm(1000, 15, sqrt(3))")
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=1]{ilu/probab16.png}\end{center}\end{figure}
+\subsubsection*{Exercice 12}
+\begin{enumerate}
+  \item On fait :
+\begin{lstlisting}[language=html]
+> simul2 = rpois(1000, 1)
+> head(simul2,10);tail(simul2,10)
+ [1] 0 2 0 1 1 1 0 3 1 1
+ [1] 0 0 1 3 1 0 1 0 0 1
+> table(simul2)
+simul2
+  0   1   2   3   4   5   7 
+386 350 186  57  15   5   1 
+\end{lstlisting}
+ \item En utilisant la fonction compter, on fait :
+\begin{lstlisting}[language=html]
+> maxi = max(simul2);maxi
+[1] 7
+> nbsimul2 = compter(0:maxi, simul2)
+  0   1   2   3   4   5   6   7 
+386 350 186  57  15   5   0   1 
+\end{lstlisting}
+\item 
+\begin{lstlisting}[language=html]
+> bppois = barplot(nbsimul2)
+> points(bppois, dpois(0:maxi,1) * 1000, type = "h",
++        col = "blue", lwd = 2)
+> axis(4, at = seq(0, 1000, by = 100), labels = seq(0, 1, by = 0.1))
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=1]{ilu/probab17.png}\end{center}\end{figure}
+\end{enumerate}
+\subsubsection*{Exercice 13}
+\begin{lstlisting}[language=html]
+> peage = function(mu1, mu2, sigma, n) {
++   attente = numeric(n)
++   cabines = c("C1", "C2")
++   for(i in 1 : n) {
++     tirage = sample(cabines, 1)
++     if(tirage == "C1") {
++       attente[i] = rnorm(1, mu1, sigma)
++     } else {
++       attente[i] = rnorm(1, mu2, sigma)
++     }
++   }
++   a = 0.9 * max(hist(attente, prob = TRUE, ylim = c(0, 0.22), xlab = "attente",
++                      main = "Histogramme de attente")$density)
++   moy = mean(attente)
++   ecart = sd(attente)
++   curve(dnorm(x, moy, ecart), add = TRUE)
++   text(moy, a, paste("moy =", round(moy, 2), "écart =", round(ecart, 2)))
++   curve(0.5 * (dnorm(x, mu1, sigma) + dnorm(x, mu2, sigma)), col = "red", add = TRUE)
++ }
+
+> par(mfrow = c(2, 1))
+> peage(50, 51, 2, 1000)
+> peage(50, 60, 2, 1000)
+> par(mfrow = c(1, 1))
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=1]{ilu/probab18.png}\end{center}\end{figure}
+\subsubsection*{Exercice 14}
+\begin{lstlisting}[language=html]
+> par(mfrow = c(2, 2))
+> curve(dnorm(x), -3, 3)
+> curve(dt(x, 2), -3, 3, col = "red", add = TRUE)
+> legend("topleft", legend = c("N(0,1)", "T(2)"), col = c("black", "red"), lwd=1)
+> curve(dnorm(x), -3, 3)
+> curve(dt(x,3), -3, 3, col = "red", add = TRUE)
+> legend("topleft", legend = c("N(0,1)", "T(3)"), col = c("black", "red"), lwd = 1)
+> curve(dnorm(x), -3, 3)
+> curve(dt(x, 10), -3, 3, col = "red", add = TRUE)
+> legend("topleft", legend = c("N(0,1)", "T(10)"), col = c("black", "red"), lwd = 1)
+> curve(dnorm(x), -3, 3)
+> curve(dt(x, 30), -3, 3, col = "red", add = TRUE)
+> legend("topleft", legend = c("N(0,1)", "T(30)"), col = c("black", "red"), lwd = 1)
+> par(mfrow = c(1, 1))
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=1]{ilu/probab19.png}\end{center}\end{figure}
+\subsubsection*{Exercice 15}
+\begin{lstlisting}[language=html]
+> stu = function(n,nb,mu,sigma) {
++   vec = numeric(nb)
++   for (i in 1:nb) {
++     simul = rnorm(n,mu,sigma)
++     xbar = mean(simul)
++     sech = sd(simul)
++     vec[i] = sqrt(n) * (xbar - mu) / sech
++   }
++   par(mfrow = c(2, 1))
++   hist(vec, prob = TRUE,
++        breaks = seq(-1000.25, 1000.25, by = 0.5), xlim = c(-5, 5), ylim = c(0, 0.5),
++        main = "Histogramme de vec")
++   curve(dnorm(x), -5, 5, add = TRUE)
++   curve(dt(x, n - 1), -5, 5, col = "red", add = TRUE)
++   legend("topleft",
++          legend = c("N(0,1)", paste("T(", n - 1, ")", sep = "")), col = c("black", "red"),
++          lwd = 1)
++   plot(ecdf(vec), xlim = c(-5, 5))
++   curve(pnorm(x), -5, 5, col = "green", lwd = 2, add = TRUE)
++   curve(pt(x, n-1), -5, 5, col = "red", lwd = 2, add = TRUE)
++   legend("topleft", legend = c("F_N(0,1)", paste("F_T(", n - 1, ")", sep = "")),
++          col = c("green", "red"), lwd = 1)
++   par(mfrow = c(1,1))
++ }
+> stu(3, 1000, 10, 2)
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=1]{ilu/probab20.png}\end{center}\end{figure}
+
+\begin{lstlisting}[language=html]
+> stu(30, 1000, 10, 2)
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=1]{ilu/probab21.png}\end{center}\end{figure}
+\subsubsection*{Exercice 16}
+\begin{lstlisting}[language=html]
+> curve(dchisq(x, 1), 0.01, 10, main = "Chisq(1)")
+> curve(dchisq(x, 2), 0.01, 10, main = "Chisq(2)")
+> curve(dchisq(x, 3), 0.01, 10, main = "Chisq(3)")
+> curve(dchisq(x, 5), 0.01, 10, main = "Chisq(5)")
+> curve(dchisq(x, 10), 0.01, 20, main = "Chisq(10)")
+> curve(dchisq(x, 20), 0.01, 60, main = "Chisq(20)")
+> par(mfrow = c(1, 1))
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=1]{ilu/probab22.png}\end{center}\end{figure}
+\subsubsection*{Exercice 17}
+\begin{lstlisting}[language=html]
+> khi2 = function(n, nb, mu, sigma) {
++   vec = numeric(nb)
++   for (i in 1:nb) {
++     simul = rnorm(n, mu, sigma)
++     sech2 = var(simul)
++     vec[i] = (n-1) * sech2 / sigma^2
++   }
++   vecnew = vec[vec >= 0.01 & vec <= 10]
++   hist(vecnew, prob = TRUE, main = "Histogramme de vecnew")
++   curve(dchisq(x, n-1), 0.01, 10, add = TRUE)
++   legend("topright", legend = paste("Chisq(",n-1,")", sep = ""), col = "black",
++          lwd = 1)
++ }
+> par(mfrow = c(1, 1))
+> khi2(4, 10000, 10, 2)
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=1]{ilu/probab23.png}\end{center}\end{figure}
+\subsubsection*{Exercice 18}
+\begin{lstlisting}[language=html]
+> par(mfrow = c(2, 2))
+> curve(dexp(x, 1), 0, 3, main = "exp(1)")
+> curve(dexp(x, 2), 0, 3, main = "exp(2)")
+> curve(dexp(x, 0.5), 0,20, main = "exp(0.5)")
+> curve(dexp(x, 0.1), 0,60, main = "exp(0.1)")
+> par(mfrow=c(1, 1))
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=1]{ilu/probab24.png}\end{center}\end{figure}
+\subsubsection*{Exercice 19}
+\begin{lstlisting}[language=html]
+curve(dnorm(x, 0, 1), xlim = c(-10, 10), ylim = c(0, 0.58), col = "red", lwd = 3,
+ylab = "", main = "Exemples de densités associées à la loi normale")
+curve(dnorm(x, 2, 3), col = "green", lwd = 3, add = TRUE)
+curve(dnorm(x, 0, 5), col = "blue", lwd = 3, add = TRUE)
+curve(dnorm(x, -2, 0.7), col = "yellow", lwd = 3, add = TRUE)
+legend("topright", legend = c("N(0,1)", "N(2,9)", "N(0,25)", "N(-2,0.49)"),
+lty = 1, lwd = 3, col = c("red", "green", "blue", "yellow"))
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=1]{ilu/probab25.png}\end{center}\end{figure}
+\subsubsection*{Exercice 20}
+\begin{lstlisting}[language=html]
+> curve(dexp(x, 0.5), xlim = c(0, 3), ylim = c(0, 1), col = "red", lwd = 3,
++       ylab = "", main = "Exemples de densités associées à la loi exponentielle")
+> curve(dexp(x, 1), col = "green", lwd = 3, add = TRUE)
+> curve(dexp(x, 1.5), col = "blue", lwd = 3, add = TRUE)
+> curve(dexp(x, 2), col = "yellow", lwd = 3, add = TRUE)
+> legend("topright", legend = c("E(0.5)", "E(1)", "E(1.5)", "E(2)"),
++        lty = 1, lwd = 3, col = c("red", "green", "blue", "yellow"))
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=1]{ilu/probab26.png}\end{center}\end{figure}
+\subsubsection*{Exercice 21}
+\begin{enumerate}
+  \item On fait :
+\begin{lstlisting}[language=html]
+  > densexp = function(x, lambda) {
++   ifelse (x >= 0, lambda * exp(-lambda * x), 0)
++ }
+\end{lstlisting}
+\item On fait :
+\begin{lstlisting}[language=html]
+> integrate(function(x) dexp(x, 1 / 10), 0, 100)
+0.9999546 with absolute error < 2.8e-14
+\end{lstlisting}
+
+\item On fait :
+\begin{lstlisting}[language=html]
+> par(mfrow = c(1, 2))
+> curve(dexp(x, 1 / 10), 0, 15, main = "Densité")
+> curve(pexp(x, 1 / 10), 0, 15, main = "Fonction de répartition")
+\end{lstlisting}
+\begin{figure}[H]\begin{center}\includegraphics[scale=1]{ilu/probab27.png}\end{center}\end{figure}
+
+\item La probabilité que la durée de vie d?une voiture dépasse $10.2$ ans est donnée par :
+\begin{lstlisting}[language=html]
+  > 1 - pexp(10.2, 1 / 10)
+[1] 0.3605949
+\end{lstlisting}
+\end{enumerate}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsubsection*{Exercice 30}
+\begin{lstlisting}[language=html]
+> n = 10000
+> u = sample(c(-1,1), n, replace = T)
+> x = cumsum(u)
+> x = c(0, x)
+> head(x,50)
+ [1]  0  1  2  1  0 -1  0  1  0 -1 -2 -3 -2 -1 -2 -3 -4 -5 -4 -3 -2 -1  0  1
+[25]  0 -1  0  1  2  3  2  1  0 -1 -2 -3 -2 -1  0 -1 -2 -3 -2 -1 -2 -1  0  1
+[49]  0 -1
+\end{lstlisting}
+Nouvelle simulation de $u$
+\begin{lstlisting}[language=html]
+> head(x,50)
+ [1]  0 -1 -2 -3 -4 -5 -4 -3 -2 -3 -2 -3 -2 -1 -2 -1 -2 -1  0  1  2  1  2  3
+[25]  4  5  4  3  4  3  2  3  2  3  2  1  2  3  2  3  4  3  2  3  4  3  4  5
+[49]  4  5
+
+> head(x,50)
+ [1]  0 -1 -2 -3 -4 -5 -4 -5 -4 -5 -6 -7 -6 -5 -4 -5 -4 -3 -4 -3 -4 -5 -6 -7
+[25] -6 -7 -8 -7 -8 -7 -6 -7 -8 -9 -8 -9 -8 -7 -6 -7 -6 -7 -6 -5 -4 -5 -4 -3
+[49] -2 -3
+
+> plot(x,col=rainbow(10),main="Simulation de la trajectoire du mobile")
+\end{lstlisting}
+
+\begin{figure}[H]\begin{center}\includegraphics[scale=1]{ilu/probab28.png}\end{center}\end{figure}
+
+\subsubsection*{Exercice 31}
+\begin{lstlisting}[language=html]
+> n = 0
+> x = rep(0, 5)
+> while(sum(x != 6) != 0) {
++   x[x != 6] = sample(1:6, sum(x != 6), rep = T)
++   print(x)
++   n = n + 1
++ }
+[1] 4 4 5 6 1
+[1] 6 3 3 6 5
+[1] 6 1 1 6 6
+[1] 6 4 3 6 6
+[1] 6 6 2 6 6
+[1] 6 6 6 6 6
+> print(n)
+[1] 6
+\end{lstlisting}
+
