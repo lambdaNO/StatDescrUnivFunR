@@ -1764,9 +1764,295 @@ plot(stepfun(0:50, c(0, pbinom(0:50, 50, 0.4))),
      main = "Fonctions de répartitions associées aux lois B(50, 0.4) et N(20, 12)",col="blue",lwd=1.5)
 curve(pnorm(x, 20, sqrt(12)), 0, 50, col = "red", add = TRUE)
 
-## On définit les valeurs des quantiles 
-p = c(0.00135, 0.025, 0.95, 0.999, 0.995, 0.99865)
-## On cherche les quantiles pour les valeurs que l'on a définit
-x = qnorm(p)
-## On améliore l'affichage
-cbind(p, x)
+
+p = c(0.00135, 0.025, 0.95, 0.999, 0.995, 0.99865)## On définit les valeurs des quantiles 
+x = qnorm(p) ## On cherche les quantiles pour les valeurs que l'on a définit
+cbind(p, x) ## On améliore l'affichage
+
+p = c(0.975, 0.025)
+y = qnorm(p, 19, sqrt(3))
+cbind(p, y)
+
+y[1]
+qnorm(0.975)
+y[1] - 19 - sqrt(3) * qnorm(0.975)
+
+
+simul1 = rnorm(1000, 15, sqrt(3))
+head(simul1,5);tail(simul1,5)
+hist(simul1, col = 3, prob = TRUE, ylim = c(0, 0.25),
+     main = "Histogramme de rnorm(1000,15, sqrt(3)) et
+     \n densité associée à la loi N(15, 3)")
+curve(dnorm(x, 15, sqrt(3)), col = "black", add = TRUE)
+boxplot(simul1, main = "Boxplot de rnorm(1000, 15, sqrt(3))")
+
+simul2 = rpois(1000, 1)
+head(simul2,10);tail(simul2,10)
+table(simul2)
+
+compter = function(a, b) {
+  d = numeric()
+  for(i in 1:(length(a))) {
+    d[i] = sum(b == a[i])
+  }
+  names(d) = as.character(a)
+  print(d)
+}
+
+maxi = max(simul2);maxi
+nbsimul2 = compter(0:maxi, simul2)
+
+bppois = barplot(nbsimul2)
+points(bppois, dpois(0:maxi,1) * 1000, type = "h",
+       col = "blue", lwd = 2)
+axis(4, at = seq(0, 1000, by = 100), labels = seq(0, 1, by = 0.1))
+
+peage = function(mu1, mu2, sigma, n) {
+  attente = numeric(n)
+  cabines = c("C1", "C2")
+  for(i in 1 : n) {
+    tirage = sample(cabines, 1)
+    if(tirage == "C1") {
+      attente[i] = rnorm(1, mu1, sigma)
+    } else {
+      attente[i] = rnorm(1, mu2, sigma)
+    }
+  }
+  a = 0.9 * max(hist(attente, prob = TRUE, ylim = c(0, 0.22), xlab = "attente",
+                     main = "Histogramme de attente")$density)
+  moy = mean(attente)
+  ecart = sd(attente)
+  curve(dnorm(x, moy, ecart), add = TRUE)
+  text(moy, a, paste("moy =", round(moy, 2), "écart =", round(ecart, 2)))
+  curve(0.5 * (dnorm(x, mu1, sigma) + dnorm(x, mu2, sigma)), col = "red", add = TRUE)
+}
+par(mfrow = c(2, 1))
+peage(50, 51, 2, 1000)
+peage(50, 60, 2, 1000)
+par(mfrow = c(1, 1))
+
+stu = function(n,nb,mu,sigma) {
+  vec = numeric(nb)
+  for (i in 1:nb) {
+    simul = rnorm(n,mu,sigma)
+    xbar = mean(simul)
+    sech = sd(simul)
+    vec[i] = sqrt(n) * (xbar - mu) / sech
+  }
+  par(mfrow = c(2, 1))
+  hist(vec, prob = TRUE,
+       breaks = seq(-1000.25, 1000.25, by = 0.5), xlim = c(-5, 5), ylim = c(0, 0.5),
+       main = "Histogramme de vec")
+  curve(dnorm(x), -5, 5, add = TRUE)
+  curve(dt(x, n - 1), -5, 5, col = "red", add = TRUE)
+  legend("topleft",
+         legend = c("N(0,1)", paste("T(", n - 1, ")", sep = "")), col = c("black", "red"),
+         lwd = 1)
+  plot(ecdf(vec), xlim = c(-5, 5))
+  curve(pnorm(x), -5, 5, col = "green", lwd = 2, add = TRUE)
+  curve(pt(x, n-1), -5, 5, col = "red", lwd = 2, add = TRUE)
+  legend("topleft", legend = c("F_N(0,1)", paste("F_T(", n - 1, ")", sep = "")),
+         col = c("green", "red"), lwd = 1)
+  par(mfrow = c(1,1))
+}
+stu(3, 1000, 10, 2)
+
+par(mfrow = c(2, 2))
+curve(dnorm(x), -3, 3)
+curve(dt(x, 2), -3, 3, col = "red", add = TRUE)
+legend("topleft", legend = c("N(0,1)", "T(2)"), col = c("black", "red"), lwd=1)
+curve(dnorm(x), -3, 3)
+curve(dt(x,3), -3, 3, col = "red", add = TRUE)
+legend("topleft", legend = c("N(0,1)", "T(3)"), col = c("black", "red"), lwd = 1)
+curve(dnorm(x), -3, 3)
+curve(dt(x, 10), -3, 3, col = "red", add = TRUE)
+legend("topleft", legend = c("N(0,1)", "T(10)"), col = c("black", "red"), lwd = 1)
+curve(dnorm(x), -3, 3)
+curve(dt(x, 30), -3, 3, col = "red", add = TRUE)
+legend("topleft", legend = c("N(0,1)", "T(30)"), col = c("black", "red"), lwd = 1)
+par(mfrow = c(1, 1))
+#########
+
+stu = function(n,nb,mu,sigma) {
+  vec = numeric(nb)
+  for (i in 1:nb) {
+    simul = rnorm(n,mu,sigma)
+    xbar = mean(simul)
+    sech = sd(simul)
+    vec[i] = sqrt(n) * (xbar - mu) / sech
+  }
+  par(mfrow = c(2, 1))
+  hist(vec, prob = TRUE,
+       breaks = seq(-1000.25, 1000.25, by = 0.5), xlim = c(-5, 5), ylim = c(0, 0.5),
+       main = "Histogramme de vec")
+  curve(dnorm(x), -5, 5, add = TRUE)
+  curve(dt(x, n - 1), -5, 5, col = "red", add = TRUE)
+  legend("topleft",
+         legend = c("N(0,1)", paste("T(", n - 1, ")", sep = "")), col = c("black", "red"),
+         lwd = 1)
+  plot(ecdf(vec), xlim = c(-5, 5))
+  curve(pnorm(x), -5, 5, col = "green", lwd = 2, add = TRUE)
+  curve(pt(x, n-1), -5, 5, col = "red", lwd = 2, add = TRUE)
+  legend("topleft", legend = c("F_N(0,1)", paste("F_T(", n - 1, ")", sep = "")),
+         col = c("green", "red"), lwd = 1)
+  par(mfrow = c(1,1))
+}
+stu(3, 1000, 10, 2)
+stu(30, 1000, 10, 2)
+
+par(mfrow = c(2, 3))
+curve(dchisq(x, 1), 0.01, 10, main = "Chisq(1)")
+curve(dchisq(x, 2), 0.01, 10, main = "Chisq(2)")
+curve(dchisq(x, 3), 0.01, 10, main = "Chisq(3)")
+curve(dchisq(x, 5), 0.01, 10, main = "Chisq(5)")
+curve(dchisq(x, 10), 0.01, 20, main = "Chisq(10)")
+curve(dchisq(x, 20), 0.01, 60, main = "Chisq(20)")
+par(mfrow = c(1, 1))
+
+khi2 = function(n, nb, mu, sigma) {
+  vec = numeric(nb)
+  for (i in 1:nb) {
+    simul = rnorm(n, mu, sigma)
+    sech2 = var(simul)
+    vec[i] = (n-1) * sech2 / sigma^2
+  }
+  vecnew = vec[vec >= 0.01 & vec <= 10]
+  hist(vecnew, prob = TRUE, main = "Histogramme de vecnew")
+  curve(dchisq(x, n-1), 0.01, 10, add = TRUE)
+  legend("topright", legend = paste("Chisq(",n-1,")", sep = ""), col = "black",
+         lwd = 1)
+}
+par(mfrow = c(1, 1))
+khi2(4, 10000, 10, 2)
+
+par(mfrow = c(2, 2))
+curve(dexp(x, 1), 0, 3, main = "exp(1)")
+curve(dexp(x, 2), 0, 3, main = "exp(2)")
+curve(dexp(x, 0.5), 0,20, main = "exp(0.5)")
+curve(dexp(x, 0.1), 0,60, main = "exp(0.1)")
+par(mfrow=c(1, 1))
+
+curve(dnorm(x, 0, 1), xlim = c(-10, 10), ylim = c(0, 0.58), col = "red", lwd = 3,
+      ylab = "", main = "Exemples de densités associées à la loi normale")
+curve(dnorm(x, 2, 3), col = "green", lwd = 3, add = TRUE)
+curve(dnorm(x, 0, 5), col = "blue", lwd = 3, add = TRUE)
+curve(dnorm(x, -2, 0.7), col = "yellow", lwd = 3, add = TRUE)
+legend("topright", legend = c("N(0,1)", "N(2,9)", "N(0,25)", "N(-2,0.49)"),
+       lty = 1, lwd = 3, col = c("red", "green", "blue", "yellow"))
+
+curve(dexp(x, 0.5), xlim = c(0, 3), ylim = c(0, 1), col = "red", lwd = 3,
+      ylab = "", main = "Exemples de densités associées à la loi exponentielle")
+curve(dexp(x, 1), col = "green", lwd = 3, add = TRUE)
+curve(dexp(x, 1.5), col = "blue", lwd = 3, add = TRUE)
+curve(dexp(x, 2), col = "yellow", lwd = 3, add = TRUE)
+legend("topright", legend = c("E(0.5)", "E(1)", "E(1.5)", "E(2)"),
+       lty = 1, lwd = 3, col = c("red", "green", "blue", "yellow"))
+
+
+densexp = function(x, lambda) {
+  ifelse (x >= 0, lambda * exp(-lambda * x), 0)
+}
+
+integrate(function(x) dexp(x, 1 / 10), 0, 100)
+
+par(mfrow = c(1, 2))
+curve(dexp(x, 1 / 10), 0, 15, main = "Densité")
+curve(pexp(x, 1 / 10), 0, 15, main = "Fonction de répartition")
+
+1 - pexp(10.2, 1 / 10)
+
+n = 0
+x = rep(0, 5)
+while(sum(x != 6) != 0) {
+  x[x != 6] = sample(1:6, sum(x != 6), rep = T)
+  print(x)
+  n = n + 1
+}
+print(n)
+
+n = 100
+u = sample(c(-1,1), n, replace = T)
+x = cumsum(u)
+x = c(0, x)
+head(x,50)
+par(mfrow = c(1, 1))
+plot(x)
+
+densgamma = function(x, m, lambda) {
+  ifelse (x >= 0, (1/factorial(m - 1)) * lambda^m * x^(m - 1) *
+            exp(-lambda * x), 0)
+}
+integrate(function(x) dgamma(x, 5, 1), 0, 100)
+x = 2:10
+pgamma(x, 5, 1)
+qgamma(0.92, 5, 1)
+
+densnorm = function(x) {
+  (1 / sqrt(2 * pi)) * exp(-x^2 / 2)
+}
+integrate(function(x) dnorm(x), -100, 100)
+par(mfrow = c(1, 2))
+curve(dnorm(x), -5, 5, ylab = "Densité",main= "Densité",col="red")
+curve(pnorm(x), -5, 5, ylab = "Fonction de répartition",main ="Fonction de répartition",col="blue")
+
+pnorm(2.2)
+1 - pnorm(1.7)
+pnorm(1.7, lower.tail = FALSE)
+pnorm(1.4) - pnorm(0.2)
+2 * pnorm(1.96) - 1
+qnorm(0.98)
+
+pnorm(650, 550, 100)
+1 - pnorm(746, 550, 100)
+pnorm(746, 550, 100, lower.tail = FALSE)
+pnorm(600, 550, 100) - pnorm(550, 550, 100)
+
+foncrep = function(x) {
+  n = 1 + 2 * 0:50
+  0.5 + (1 / sqrt(2 * pi)) * exp(-x^2 / 2) * sum(x^n / cumprod(n))
+}
+foncrep(1.2)
+pnorm(1.2)
+
+x = sample(c(0, 2, 5), 1000, replace = T, prob = c(0.2, 0.5, 0.3))
+table(x)
+
+Urne = function(k, p, q) {
+  contenu = rep(c("Rouge", "Noire"), c(p, q))
+  sample(contenu, k)
+}
+Urne(6,8,5)
+
+Freq = function(n) {
+  tirage = sample(1:6, n, replace = T)
+  sum(tirage == 5) / n
+}
+Freq(10)
+Freq(100)
+Freq(1000)
+Freq(10000)
+
+sample(c(0, 1), 10, replace = T, prob = c(2 / 3, 1 / 3))
+sample(c(rep(0, 10), rep(1, 5)), 10)
+
+x = numeric()
+for(i in 1:500){
+  x[i] = sum(sample(c(0, 1), 10, replace = T, prob = c(2 / 3, 1 / 3)))
+}
+table(x)
+
+y = numeric()
+for(i in 1:500){
+  y[i] = sum(sample(c(rep(0, 10), rep(1, 5)), 10))
+}
+table(y)
+
+titre1 = "Fréquences obtenues pour 500 tirages avec remise"
+titre2 = "B(10, 1/3)"
+titre3 = "Fréquences obtenues pour 500 tirages sans remise"
+titre4 = "H(10, 5, 10)"
+par(mfrow = c(2, 2))
+barplot(table(x) / 500, main = titre1)
+barplot(dbinom(0:10, 10, 1/3), names.arg = 0:10, main = titre2)
+barplot(table(y) / 500, main = titre3)
+barplot(dhyper(0:5, 5, 10, 10), names.arg = 0:5, main = titre4)

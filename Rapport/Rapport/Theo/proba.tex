@@ -116,7 +116,7 @@ On peut représenter le graphe de la densité d'une var $X$ discrète avec la comma
 > plot(0:5, dbinom(0:5, 5, 0.2), type = "h", ylab = "P(X = x)")
 \end{lstlisting}
 Cela renvoie :
-\begin{figure}[H]\begin{center}\includegraphics[scale=1]{ilu/probab1.png}\end{center}\end{figure}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.4]{ilu/probab1.png}\end{center}\end{figure}
 
 On a ainsi représenté le graphe de la densité d'une var $X \sim \mathcal{B}(5, 0.2)$.\newline
 \\
@@ -125,7 +125,7 @@ On fait :
 \begin{lstlisting}[language=html]
 > curve(dnorm(x, 5, 1.5), 0.5, 9.5, ylab = "fX(x)")
 \end{lstlisting}
-\begin{figure}[H]\begin{center}\includegraphics[scale=1]{ilu/probab2.png}\end{center}\end{figure}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.4]{ilu/probab2.png}\end{center}\end{figure}
 
 On a ainsi représenté le graphe de la densité d'une var $X \sim \mathcal{N}(5, 1.5^{2})$.
 \section{Fonction de répartition}
@@ -188,7 +188,7 @@ On fait :
 \begin{lstlisting}[language=html]
 > plot(stepfun(0:15, c(0, pbinom(0:15, 15, 0.6))), ylab = "FX(x)", main = "")
 \end{lstlisting}
-\begin{figure}[H]\begin{center}\includegraphics[scale=1]{ilu/probab3.png}\end{center}\end{figure}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.4]{ilu/probab3.png}\end{center}\end{figure}
 On a ainsi représenté le graphe de la fonction de répartition d'une var $X \sim \mathbb{B}(15, 0.6)$.\newline
 \\
 On peut représenter le graphe de la fonction de répartition d'une var $X$ à densité avec la commande
@@ -197,7 +197,7 @@ On fait :
 \begin{lstlisting}[language=html]
 > curve(pnorm(x, 5, 1.5), 0.5, 9.5, ylab = "FX(x)")
 \end{lstlisting}
-\begin{figure}[H]\begin{center}\includegraphics[scale=1]{ilu/probab4.png}\end{center}\end{figure}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.4]{ilu/probab4.png}\end{center}\end{figure}
 \section{Quantiles}
 \subsection*{Définition}
 Soit $p \in ]0; 1[$ et $X$ une var.\newline
@@ -612,13 +612,13 @@ Simuler une réalisation de cette expérience aléatoire en affichant les chiffres 
 \begin{lstlisting}[language=html]
 > plot(0:8, dpois(0:8, 1), type = "h", xlab = "x", ylab = "P(X = x)")
 \end{lstlisting}
-\begin{figure}[H]\begin{center}\includegraphics[scale=1]{ilu/probab5.png}\end{center}\end{figure}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.4]{ilu/probab5.png}\end{center}\end{figure}
 
 \subsubsection*{Exercice 2}
 \begin{lstlisting}[language=html]
 > curve(dchisq(x, 3), 0, 10, xlab = "x")
 \end{lstlisting}
-\begin{figure}[H]\begin{center}\includegraphics[scale=1]{ilu/probab6.png}\end{center}\end{figure}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.4]{ilu/probab6.png}\end{center}\end{figure}
 
 \subsubsection*{Exercice 3}
 \begin{lstlisting}[language=html]
@@ -634,7 +634,7 @@ Simuler une réalisation de cette expérience aléatoire en affichant les chiffres 
 ## On oubli pas de mettre les options graphique par défaut
 > par(mfrow = c(1,1))
 \end{lstlisting}
-\begin{figure}[H]\begin{center}\includegraphics[scale=1]{ilu/probab7.png}\end{center}\end{figure}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.4]{ilu/probab7.png}\end{center}\end{figure}
 
 
 \subsubsection*{Exercice 4}
@@ -653,7 +653,7 @@ Simuler une réalisation de cette expérience aléatoire en affichant les chiffres 
 ## On oubli pas de mettre les options graphique par défaut
 > par(mfrow = c(1,1))
 \end{lstlisting}
-\begin{figure}[H]\begin{center}\includegraphics[scale=1]{ilu/probab8.png}\end{center}\end{figure}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.4]{ilu/probab8.png}\end{center}\end{figure}
 
 
 \subsubsection*{Exercice 5}
@@ -663,7 +663,7 @@ Simuler une réalisation de cette expérience aléatoire en affichant les chiffres 
 ## Ne pas oublier le add = TRUE
 > curve(dnorm(x, 20, sqrt(12)), 0, 50, col = "red", ylab = "", add = TRUE)
 \end{lstlisting}
-\begin{figure}[H]\begin{center}\includegraphics[scale=1]{ilu/probab9.png}\end{center}\end{figure}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.4]{ilu/probab9.png}\end{center}\end{figure}
 
 
 \subsubsection*{Exercice 6}
@@ -672,7 +672,7 @@ Simuler une réalisation de cette expérience aléatoire en affichant les chiffres 
 +      ylim = c(0, 0.4), main = "Densités associées aux lois B(100,0.01) et N(1,0.99)")
 > curve(dnorm(x, 1, sqrt(0.99)), 0, 20, col = 3, ylab = "", add = TRUE)
 \end{lstlisting}
-\begin{figure}[H]\begin{center}\includegraphics[scale=1]{ilu/probab10.png}\end{center}\end{figure}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.4]{ilu/probab10.png}\end{center}\end{figure}
 On peut établir une approximation de la loi Binomiale($\mathcal{B}(n, p)$) par la loi Normale ($mathcal{N}(np, np(1 - p))$) pour les valeurs de $n$ et $p$ données comme conditions.
 \subsubsection*{Exercice 7}
 $X \sim \mathcal{N}(0, 1)$. Cette fois ci, nous voulons calculer les probabilité, nous allons donc utiliser la syntaxe \textbf{p}loi
@@ -755,7 +755,7 @@ On aurait pu utiliser d'autres commandes. Par exemple, pour $\mathbb{P}(X > 1.5)
 +      main = "Fonctions de répartitions associées aux lois B(50, 0.4) et N(20, 12)",col="blue",lwd=1.5)
 > curve(pnorm(x, 20, sqrt(12)), 0, 50, col = "red", add = TRUE)
 \end{lstlisting}
-\begin{figure}[H]\begin{center}\includegraphics[scale=1]{ilu/probab14.png}\end{center}\end{figure}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.4]{ilu/probab14.png}\end{center}\end{figure}
 \subsubsection*{Exercice 10}
 \begin{enumerate}
   \item On fait :
@@ -805,11 +805,11 @@ On arrondit cela à 0.
 +      \n densité associée à la loi N(15, 3)")
 > curve(dnorm(x, 15, sqrt(3)), col = "black", add = TRUE)
 \end{lstlisting}
-\begin{figure}[H]\begin{center}\includegraphics[scale=1]{ilu/probab15.png}\end{center}\end{figure}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.4]{ilu/probab15.png}\end{center}\end{figure}
 \begin{lstlisting}[language=html]
 > boxplot(simul1, main = "Boxplot de rnorm(1000, 15, sqrt(3))")
 \end{lstlisting}
-\begin{figure}[H]\begin{center}\includegraphics[scale=1]{ilu/probab16.png}\end{center}\end{figure}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.4]{ilu/probab16.png}\end{center}\end{figure}
 \subsubsection*{Exercice 12}
 \begin{enumerate}
   \item On fait :
@@ -838,7 +838,7 @@ simul2
 +        col = "blue", lwd = 2)
 > axis(4, at = seq(0, 1000, by = 100), labels = seq(0, 1, by = 0.1))
 \end{lstlisting}
-\begin{figure}[H]\begin{center}\includegraphics[scale=1]{ilu/probab17.png}\end{center}\end{figure}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.4]{ilu/probab17.png}\end{center}\end{figure}
 \end{enumerate}
 \subsubsection*{Exercice 13}
 \begin{lstlisting}[language=html]
@@ -867,7 +867,7 @@ simul2
 > peage(50, 60, 2, 1000)
 > par(mfrow = c(1, 1))
 \end{lstlisting}
-\begin{figure}[H]\begin{center}\includegraphics[scale=1]{ilu/probab18.png}\end{center}\end{figure}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.4]{ilu/probab18.png}\end{center}\end{figure}
 \subsubsection*{Exercice 14}
 \begin{lstlisting}[language=html]
 > par(mfrow = c(2, 2))
@@ -885,7 +885,7 @@ simul2
 > legend("topleft", legend = c("N(0,1)", "T(30)"), col = c("black", "red"), lwd = 1)
 > par(mfrow = c(1, 1))
 \end{lstlisting}
-\begin{figure}[H]\begin{center}\includegraphics[scale=1]{ilu/probab19.png}\end{center}\end{figure}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.4]{ilu/probab19.png}\end{center}\end{figure}
 \subsubsection*{Exercice 15}
 \begin{lstlisting}[language=html]
 > stu = function(n,nb,mu,sigma) {
@@ -914,12 +914,12 @@ simul2
 + }
 > stu(3, 1000, 10, 2)
 \end{lstlisting}
-\begin{figure}[H]\begin{center}\includegraphics[scale=1]{ilu/probab20.png}\end{center}\end{figure}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.4]{ilu/probab20.png}\end{center}\end{figure}
 
 \begin{lstlisting}[language=html]
 > stu(30, 1000, 10, 2)
 \end{lstlisting}
-\begin{figure}[H]\begin{center}\includegraphics[scale=1]{ilu/probab21.png}\end{center}\end{figure}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.4]{ilu/probab21.png}\end{center}\end{figure}
 \subsubsection*{Exercice 16}
 \begin{lstlisting}[language=html]
 > curve(dchisq(x, 1), 0.01, 10, main = "Chisq(1)")
@@ -930,7 +930,7 @@ simul2
 > curve(dchisq(x, 20), 0.01, 60, main = "Chisq(20)")
 > par(mfrow = c(1, 1))
 \end{lstlisting}
-\begin{figure}[H]\begin{center}\includegraphics[scale=1]{ilu/probab22.png}\end{center}\end{figure}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.4]{ilu/probab22.png}\end{center}\end{figure}
 \subsubsection*{Exercice 17}
 \begin{lstlisting}[language=html]
 > khi2 = function(n, nb, mu, sigma) {
@@ -949,7 +949,7 @@ simul2
 > par(mfrow = c(1, 1))
 > khi2(4, 10000, 10, 2)
 \end{lstlisting}
-\begin{figure}[H]\begin{center}\includegraphics[scale=1]{ilu/probab23.png}\end{center}\end{figure}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.4]{ilu/probab23.png}\end{center}\end{figure}
 \subsubsection*{Exercice 18}
 \begin{lstlisting}[language=html]
 > par(mfrow = c(2, 2))
@@ -959,7 +959,7 @@ simul2
 > curve(dexp(x, 0.1), 0,60, main = "exp(0.1)")
 > par(mfrow=c(1, 1))
 \end{lstlisting}
-\begin{figure}[H]\begin{center}\includegraphics[scale=1]{ilu/probab24.png}\end{center}\end{figure}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.4]{ilu/probab24.png}\end{center}\end{figure}
 \subsubsection*{Exercice 19}
 \begin{lstlisting}[language=html]
 curve(dnorm(x, 0, 1), xlim = c(-10, 10), ylim = c(0, 0.58), col = "red", lwd = 3,
@@ -970,7 +970,7 @@ curve(dnorm(x, -2, 0.7), col = "yellow", lwd = 3, add = TRUE)
 legend("topright", legend = c("N(0,1)", "N(2,9)", "N(0,25)", "N(-2,0.49)"),
 lty = 1, lwd = 3, col = c("red", "green", "blue", "yellow"))
 \end{lstlisting}
-\begin{figure}[H]\begin{center}\includegraphics[scale=1]{ilu/probab25.png}\end{center}\end{figure}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.4]{ilu/probab25.png}\end{center}\end{figure}
 \subsubsection*{Exercice 20}
 \begin{lstlisting}[language=html]
 > curve(dexp(x, 0.5), xlim = c(0, 3), ylim = c(0, 1), col = "red", lwd = 3,
@@ -981,7 +981,7 @@ lty = 1, lwd = 3, col = c("red", "green", "blue", "yellow"))
 > legend("topright", legend = c("E(0.5)", "E(1)", "E(1.5)", "E(2)"),
 +        lty = 1, lwd = 3, col = c("red", "green", "blue", "yellow"))
 \end{lstlisting}
-\begin{figure}[H]\begin{center}\includegraphics[scale=1]{ilu/probab26.png}\end{center}\end{figure}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.4]{ilu/probab26.png}\end{center}\end{figure}
 \subsubsection*{Exercice 21}
 \begin{enumerate}
   \item On fait :
@@ -1002,14 +1002,252 @@ lty = 1, lwd = 3, col = c("red", "green", "blue", "yellow"))
 > curve(dexp(x, 1 / 10), 0, 15, main = "Densité")
 > curve(pexp(x, 1 / 10), 0, 15, main = "Fonction de répartition")
 \end{lstlisting}
-\begin{figure}[H]\begin{center}\includegraphics[scale=1]{ilu/probab27.png}\end{center}\end{figure}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.4]{ilu/probab27.png}\end{center}\end{figure}
 
-\item La probabilité que la durée de vie d?une voiture dépasse $10.2$ ans est donnée par :
+\item La probabilité que la durée de vie d'une voiture dépasse $10.2$ ans est donnée par :
 \begin{lstlisting}[language=html]
   > 1 - pexp(10.2, 1 / 10)
 [1] 0.3605949
 \end{lstlisting}
 \end{enumerate}
+\subsubsection*{Exercice 22}
+\begin{enumerate}
+  \item On fait :
+  \begin{lstlisting}[language=html]
+  > densgamma = function(x, m, lambda) {
+  +   ifelse (x >= 0, (1/factorial(m - 1)) * lambda^m * x^(m - 1) *
+  +             exp(-lambda * x), 0)
+  + }
+  \end{lstlisting}
+  \item On fait :
+  \begin{lstlisting}[language=html]
+  > integrate(function(x) dgamma(x, 5, 1), 0, 100)
+  1 with absolute error < 2.7e-07
+  \end{lstlisting}
+  \item On fait :
+  \begin{lstlisting}[language=html]
+  > x = 2:10
+  > pgamma(x, 5, 1)
+  [1] 0.05265302 0.18473676 0.37116306 0.55950671 0.71494350 0.82700839
+  [7] 0.90036760 0.94503636 0.97074731
+  \end{lstlisting}
+  Ces valeurs correspondent à $F_{X}(2), \dots , F_{X}(10)$ respectivement.
+  \item On fait :
+  \begin{lstlisting}[language=html]
+  > qgamma(0.92, 5, 1)
+  [1] 8.376739
+  \end{lstlisting}
+\end{enumerate}
+\subsubsection*{Exercice 23}
+\begin{enumerate}
+  \item On fait :
+  \begin{lstlisting}[language=html]
+  densnorm = function(x) {
+    (1 / sqrt(2 * pi)) * exp(-x^2 / 2)
+  }
+  \end{lstlisting}
+  \item On fait :
+  \begin{lstlisting}[language=html]
+  > integrate(function(x) dnorm(x), -100, 100)
+  1 with absolute error < 3.2e-07
+  \end{lstlisting}
+  \item On considère les commandes :
+  \begin{lstlisting}[language=html]
+  > par(mfrow = c(1, 2))
+  > curve(dnorm(x), -5, 5, ylab = "Densité",main= "Densité",col="red")
+  > curve(pnorm(x), -5, 5, ylab = "Fonction de répartition",main ="Fonction de répartition",col="blue")
+  \end{lstlisting}
+  \begin{figure}[H]\begin{center}\includegraphics[scale=0.4]{ilu/probab29.png}\end{center}\end{figure}
+  \item Les calculs de probabilités : 
+    \begin{enumerate}
+    \item $\mathbb{P}(X\leq 2.2)$
+    \begin{lstlisting}[language=html]
+    > pnorm(2.2)
+    [1] 0.9860966
+    \end{lstlisting}
+    \item $\mathbb{P}(X\geq 1.7) = 1 - \mathbb{P}(X\leq 1.7)$
+    \begin{lstlisting}[language=html]
+    > 1 - pnorm(1.7)
+    [1] 0.04456546
+    \end{lstlisting}
+    Ou 
+    \begin{lstlisting}[language=html]
+    > pnorm(1.7, lower.tail = FALSE)
+    [1] 0.04456546
+    \end{lstlisting}
+
+    \item $\mathbb{P}(0.2\leq X\leq 1.4) = \mathbb{P}(X\geq 1.4) - \mathbb{P}(X\leq 0.2)$
+    \begin{lstlisting}[language=html]
+    > pnorm(1.4) - pnorm(0.2)
+    [1] 0.3399836
+    \end{lstlisting}
+
+    \item $\mathbb{P}(|X|\leq 1.96) = 2\mathbb{P}(X\leq 1.96)-1$
+    \begin{lstlisting}[language=html]
+    > 2 * pnorm(1.96) - 1
+    [1] 0.9500042
+    \end{lstlisting}
+    \textit{Alors l'explication sur ce dernier point :} Nous étudions une variable aléatoire $X\sim \mathcal{N}(0,1)$, on peut donc jouer avec la  symétrie de la loi normale : 
+   \begin{figure}[H]\begin{center}\includegraphics[scale=0.3]{ilu/probab30.png}\end{center}\end{figure} 
+   On fera de manière générale (et en suivant cette logique) : 
+   \begin{center}
+   \textcolor{green}{Aire verte} = 1 - \textcolor{red}{Aire rouge} 
+   \end{center}
+   $$
+   \begin{aligned}
+   \mathbb{P}(|X|\leq t)  = & \mathbb{P}(-1 \leq X\leq 1) \\
+   \mathbb{P}(|X|\leq t)  = & 1 - [\mathbb{P}(X \leq -t) + \mathbb{P}(X \geq t)]\\
+   \mathbb{P}(|X|\leq t)  = & 1 - \mathbb{P}(X \leq -t) - \mathbb{P}(X \geq t)\\
+   \mathbb{P}(|X|\leq t)  = & 1 - \mathbb{P}(X \geq t) - \mathbb{P}(X \geq t)\\
+    \mathbb{P}(|X|\leq t) = & 1 - 2\mathbb{P}(X \geq t)\\
+    \mathbb{P}(|X|\leq t) = & 2\mathbb{P}(X \leq t) - 1
+   \end{aligned}
+   $$
+
+  \end{enumerate}
+   \item On fait : 
+   \begin{lstlisting}[language=html]
+   > qnorm(0.98)
+    [1] 2.053749
+    \end{lstlisting}
+ \end{enumerate}
+ 
+\subsubsection*{Exercice 24}
+La probabilité qu'un foie gras pèse
+\begin{itemize}
+  \item moins de 650 grammes est donnée par 
+  $$\mathbb{P}(X \leq 650)$$
+  \begin{lstlisting}[language=html]
+  > pnorm(650, 550, 100)
+  [1] 0.8413447
+  \end{lstlisting}
+  \item plus de 746 grammes est donnée par :
+  $$\mathbb{P}(X \geq 746) = 1 - \mathbb{P}(X \leq 746)$$
+  \begin{lstlisting}[language=html]
+  > 1 - pnorm(746, 550, 100)
+  [1] 0.0249979
+  \end{lstlisting}
+  Ou 
+  \begin{lstlisting}[language=html]
+  > pnorm(746, 550, 100, lower.tail = FALSE)
+  [1] 0.0249979
+  \end{lstlisting}
+  \item entre 550 grammes et 600 grammes est donnée par :
+  $$\mathbb{P}(550\leq X \leq 600) = \mathbb{P}(X \leq 600) - \mathbb{P}(X \leq 550)$$
+  \begin{lstlisting}[language=html]
+  > pnorm(600, 550, 100) - pnorm(550, 550, 100)
+  [1] 0.1914625
+  \end{lstlisting}
+\end{itemize}
+
+\subsubsection*{Exercice 25}
+On fait : 
+\begin{lstlisting}[language=html]
+> foncrep = function(x) {
++   n = 1 + 2 * 0:50
++   0.5 + (1 / sqrt(2 * pi)) * exp(-x^2 / 2) * sum(x^n / cumprod(n))
++ }
+> foncrep(1.2)
+[1] 0.8849303
+\end{lstlisting}
+On retrouve bien  
+\begin{lstlisting}[language=html]
+> pnorm(1.2)
+[1] 0.8849303
+\end{lstlisting}
+
+\subsubsection*{Exercice 26}
+\begin{lstlisting}[language=html]
+> x = sample(c(0, 2, 5), 1000, replace = T, prob = c(0.2, 0.5, 0.3))
+> table(x)
+x
+  0   2   5 
+209 486 305 
+\end{lstlisting}
+
+\subsubsection*{Exercice 27}
+\begin{lstlisting}[language=html]
+> Urne = function(k, p, q) {
++   contenu = rep(c("Rouge", "Noire"), c(p, q))
++   sample(contenu, k)
++ }
+> Urne(6,8,5)
+[1] "Rouge" "Noire" "Rouge" "Noire" "Rouge" "Noire"
+\end{lstlisting}
+\subsubsection*{Exercice 28}
+\begin{lstlisting}[language=html]
+> Freq = function(n) {
++   tirage = sample(1:6, n, replace = T)
++   sum(tirage == 5) / n
++ }
+> Freq(10)
+[1] 0.2
+> Freq(100)
+[1] 0.15
+> Freq(1000)
+[1] 0.167
+> Freq(10000)
+[1] 0.1683
+\end{lstlisting}
+On constate que cette dernière probabilité est proche de $1/6$, la probabilité théorique d'obtenir un $5$ lorsqu'on lance un dé.
+\subsubsection*{Exercice 29}
+\begin{itemize}
+  \item On fait
+  \begin{itemize}
+    \item Pour $E1$
+    \begin{lstlisting}[language=html]
+    > sample(c(0, 1), 10, replace = T, prob = c(2 / 3, 1 / 3))
+    [1] 0 1 1 0 0 0 0 0 1 0
+    \end{lstlisting}
+    \item Pour $E2$
+    \begin{lstlisting}[language=html]
+    > sample(c(rep(0, 10), rep(1, 5)), 10)
+    [1] 0 1 1 1 0 1 0 0 1 0
+    \end{lstlisting}
+  \end{itemize}
+  \item 
+  \begin{enumerate}
+    \item On fait : 
+    \begin{itemize}
+      \item Pour $X$
+      \begin{lstlisting}[language=html]
+      > x = numeric()
+      > for(i in 1:500){
+      +   x[i] = sum(sample(c(0, 1), 10, replace = T, prob = c(2 / 3, 1 / 3)))
+      + }
+      > table(x)
+      x
+        0   1   2   3   4   5   6   7   8 
+        9  34 107 114 127  71  28   8   2 
+      \end{lstlisting}
+      \item Pour $Y$
+      \begin{lstlisting}[language=html]
+      > y = numeric()
+      > for(i in 1:500){
+      +   y[i] = sum(sample(c(rep(0, 10), rep(1, 5)), 10))
+      + }
+      > table(y)
+      y
+        1   2   3   4   5 
+        8  71 209 170  42
+      \end{lstlisting}
+    \end{itemize}
+    \item On propose les commandes :
+    \begin{lstlisting}[language=html]
+    > titre1 = "Fréquences obtenues pour 500 tirages avec remise"
+    > titre2 = "B(10, 1/3)"
+    > titre3 = "Fréquences obtenues pour 500 tirages sans remise"
+    > titre4 = "H(10, 5, 10)"
+    > par(mfrow = c(2, 2))
+    > barplot(table(x) / 500, main = titre1)
+    > barplot(dbinom(0:10, 10, 1/3), names.arg = 0:10, main = titre2)
+    > barplot(table(y) / 500, main = titre3)
+    > barplot(dhyper(0:5, 5, 10, 10), names.arg = 0:5, main = titre4)
+    \end{lstlisting}
+    \begin{figure}[H]\begin{center}\includegraphics[scale=0.4]{ilu/probab31.png}\end{center}\end{figure}
+  \end{enumerate}
+\end{itemize}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1056,7 +1294,7 @@ Nouvelle simulation de $u$
 > plot(x,col=rainbow(10),main="Simulation de la trajectoire du mobile")
 \end{lstlisting}
 
-\begin{figure}[H]\begin{center}\includegraphics[scale=1]{ilu/probab28.png}\end{center}\end{figure}
+\begin{figure}[H]\begin{center}\includegraphics[scale=0.4]{ilu/probab28.png}\end{center}\end{figure}
 
 \subsubsection*{Exercice 31}
 \begin{lstlisting}[language=html]
