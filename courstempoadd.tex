@@ -1,3 +1,93 @@
+%\newtheorem{The}{Théorème}
+%\newtheorem{Pro}[The]{Proposition}
+%\newtheorem{Pre}[The]{Preuve}
+%\newtheorem{Def}[The]{Définition}
+%\newtheorem{Exemp}[The]{Exemple}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\begin{Exemp}[....]\end{Exemp}
+%\begin{The}[Pythogore] 
+%La somme des carrés des longueurs côtés adjacents à l'angle droit d'un triangle rectangle est égale au carré de la longueur de l'hypothénuse de ce triangle. \end{The} 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% web.univ-ubs.fr/lmam/gouno/BAYES/COURS/Cours1.pdf
+% web.univ-ubs.fr/lmam/gouno/BAYES/COURS/Cours2.pdf
+% web.univ-ubs.fr/lmam/gouno/BAYES/COURS/Cours3.pdf
+% web.univ-ubs.fr/lmam/gouno/BAYES/COURS/Cours4.pdf
+% web.univ-ubs.fr/lmam/gouno/BAYES/COURS/Cours5.pdf
+% web.univ-ubs.fr/lmam/gouno/BAYES/COURS/Cours6.pdf
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\section{Estimateur de Bayes}
+Comme nous l’avons déjà fait remarquer, la prise d’une décision, ici le choix d’un estimateur, va engendrer un coût que l’on va quantifier à l’aide de la fonction de perte. En pratique, on cherche une décision qui minimise en moyenne la fonction de coût.
+\begin{Def}
+On appelle estimateur de Bayes associé à un coût $L$ et à une distribution a priori $\pi$, toute décision $\delta^{\pi}}$ qui minimise le risque de Bayes $r(\pi, \delta)$.\newline
+On a :
+$$\delta^{\pi}(x)=\underset{\delta \in \mathcal{D}}{\arg\min}\textrm{ } r(\pi,\delta)$$
+\end{Def}
+Remarquons que d’après la proposition précédente (Risque de Bayes $r(\pi,\delta)$), une estimateur peut également être défini comme étant une décision qui minimise la moyenne suivant la prédictive f(x) du coût a posteriori.
+\subsection*{Fonctions de coût usuelles}
+\subsubsection*{Coût quadratique}
+\begin{Def}
+La fonction de coût quadratique est la fonction définie par :
+$$L(\theta,\delta(x))=(\theta-\delta(x))^{2}$$
+Une variante de cette fonction de coût est une fonction de coût quadratique pondérée de la forme :
+$$L(\theta,\delta(x))=w(\theta)(\theta-\delta(x))^{2}$$
+\end{Def}
+\begin{Pro}
+Sous l’hypothèse d’un coût quadratique, l’estimateur de Bayes $\delta^{\pi}}(x)$ de $\theta$ associé à la loi a priori $\pi$ est la moyenne a posteriori de $\theta$ :
+$$\delta^{\pi}(x)=\mathbb{E}^{(.|\pi)}(\theta)=\int_{\theta\in\Theta}L(\theta,\delta(x))\pi(\theta|x)\textrm{d}\theta$$
+\end{Pro}
+\begin{Pre}
+Par définition, l’estimateur de Bayes minimise le coût a posteriori \textit{i.e.}
+$$\rho(\pi,\delta)=\mathbb{E}^{\pi(.|x)}[L(\theta,\delta(x))]$$
+Sous l’hypothèse d’un coût quadratique, on a :
+$$\rho(\pi,\delta)=\mathbb{E}^{\pi(.|x)}[L(\theta,\delta(x))] = \mathbb{E}^{\pi(.|x)}(\theta^{2})-2\delta(x)\mathbb{E}^{\pi(.|x)}(\theta)+\delta^{2}(x)$$
+Il s’agit d’un polynôme du second degré en $\delta(x)$. Il sera minimum en $\mathbb{E}^{\pi(.|x)}(\theta)$.
+\end{Pre}
+\begin{Exemp}
+\begin{enumerate}
+  \item 
+\end{enumerate}
+
+\end{Exemp}
+
+
+
+
+
+
+
+    
+
+  \item[] \textit{}.
+  \item[] \textit{}.
+  \item[] \textit{}.
+
+
+  
+ 
+    
+    
+
+% web.univ-ubs.fr/lmam/gouno/BAYES/COURS/Cours1.pdf
+% web.univ-ubs.fr/lmam/gouno/BAYES/COURS/Cours2.pdf
+% web.univ-ubs.fr/lmam/gouno/BAYES/COURS/Cours3.pdf
+% web.univ-ubs.fr/lmam/gouno/BAYES/COURS/Cours4.pdf
+% web.univ-ubs.fr/lmam/gouno/BAYES/COURS/Cours5.pdf
+% web.univ-ubs.fr/lmam/gouno/BAYES/COURS/Cours6.pdf
+
+
+
 \begin{figure}[H]\begin{center}\includegraphics[scale=1]{ilu/probab .png}\end{center}\end{figure}
 
 
@@ -11,7 +101,7 @@
 
 
 
-
+%
 
 
 

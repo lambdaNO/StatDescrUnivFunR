@@ -1,0 +1,39 @@
+---
+title: "Exemple d'analyse"
+author: "LATIF Mehdi"
+date: "31/12/2017"
+output:
+  html_document: default
+  pdf_document: default
+---
+#### Importation du data frame : 
+Ici, on a placé dans le chunk l'option *echo=FALSE* ce qui permet d'évaluer le bout de code sans l'afficher.
+```{r echo=FALSE}
+setwd("~/Desktop/DIVERS_TEMPLATES/StatDesR/TP")
+smp <- read.csv2("DONNEES/smp2.csv")
+```
+Même si les commandes ne sont pas affichées, les commandes sont cependant évaluées. **La preuve**, on accède à la variable *smp*
+
+#### Affichage du nom des variables présentes dans le DF :
+On utilise l'option *eval = c(1,3)* pour signifier au logiciel que l'on souhaite évaluer seulement les lignes 1 et 3
+```{r, eval = c(1,3)}
+names(smp)
+summary(smp)
+str(smp)
+```
+#### Création d'une variable catégoricielle : n.enfant.cat :
+```{r}
+n.enfant.cat <- factor(smp$n.enfant)
+levels(n.enfant.cat) [6:13]<- "5+" 
+table(n.enfant.cat)
+```
+#### Calcul de la table des fréquences (en %) : 
+```{r, eval = c(2)}
+prop.table(table(n.enfant.cat))
+prop.table(table(n.enfant.cat))*100
+```
+#### Affichage d'un diagramme en barre : 
+```{r echo = FALSE}
+barplot(prop.table(table(n.enfant.cat))*100,ylim = c(0,30),las=1,col = rainbow(12), main = "fréquences (en %)")
+```
+

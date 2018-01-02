@@ -1,0 +1,295 @@
+\chapter*{Introduction aux statistiques Bayésiennes}
+\begin{flushright}
+\textit{Pour Alison.\\ Que cette partie puisse l'aider dans son projet de thèse. \\ \begin{tiny}(et pour la mienne plus tard)\end{tiny}}
+\end{flushright}
+\section*{Préambule}
+\textit{Tout simplement du \underline{\href{https://fr.wikipedia.org/wiki/Statistique_bayésienne}{wikipédia}}}\newline
+\\
+La statistique bayésienne est une approche statistique fondée sur l'inférence bayésienne. On utilise le terme de bayésienne pour la différencier de la statistique fréquentiste (ou statistique classique) qui ne sait traiter que les grands échantillons (où elle donne les mêmes résultats que la bayésienne par des procédés moins coûteux en calcul). La statistique bayésienne est surtout utilisée lorsque l'on n'a que de petits échantillons, typiquement quand chaque observation est elle-même très coûteuse (par exemple campagne de prospection pétrolière par voie sismique). Contrairement à la statistique classique, elle n'exige pas au départ qu'on se fixe une hypothèse précise à confirmer ou infirmer, ce qui la rend utile en exploration de données.\newline
+\\
+En statistique bayésienne :
+\begin{itemize}
+  \item on interprète les probabilités comme un degré de croyance plutôt que comme la fréquence limite d'un phénomène ;
+  \item on modélise les paramètres du modèle par des lois de probabilité ;
+  \item on infère des paramètres devenant d'autant plus plausibles à mesure qu'on affine cette distribution de probabilité au fur et à mesure que sont connus de nouveaux résultats d'observation
+\end{itemize}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{Introduction aux statistiques Bayésiennes - UBS}
+\textbf{Auteur :} \underline{\href{http://web.univ-ubs.fr/lmba/gouno/ }{Evans Gouno}}.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Introduction}
+Dans de nombreuses situations d'expériences aléatoires, il semble raisonnable d'imaginer que le praticien a une certaine idée du phénomène aléatoire qu'il est en train d'observer. Or, la dé marche statistique classique repose essentiellement sur un principe de vraisemblance qui consiste à considérer que ce qui a été observé rend compte de manière exhaustive du phénomène. Mais l'observation ne fournit qu'une image et celle-ci peut être mauvaise. Certes cet inconvénient est en général gommé par les considérations asymptotiques et un certain nombre de théorèmes permettent d'évaluer la bonne qualité des estimateurs si le nombre d'observations est suffisant.\newline
+L'analyse bayésienne des problèmes statistiques propose d'introduire dans la démarche d'inférence, l'information dont dispose a priori le praticien. Dans le cadre de la statistique paramétrique, ceci se traduira par le choix d'un loi sur le paramètre d'intérêt.\newline
+Dans l'approche classique, le modèle statistique est le triplet $(\mathcal{X},\mathcal{A},P_{\theta},\theta\in\Theta)$. Ayant un \textit{a priori} sur le paramètre, modélisé par une densité de probabilité que nous noterons $\pi(\theta)$, on
+"ré-actualise" cet a priori au vu de l'observation en calculant la densité a posteriori $\pi(\theta|x)$, et c'est à partir de cette loi que l'on mène l'inférence.\newline
+On peut alors, par exemple, de manière intuitive pour le moment, retenir l'espérance mathématique ou encore le modee de cette densité a posteriori comme estimateur de $\theta$.\newline
+Le paramètre $\theta$ devient donc en quelque sorte une variable aléatoire, à laquelle on associe une loi de probabilité dite \textbf{loi a priori}.\newline
+On sent bien d'emblée que les estimateurs bayésiens sont très dépendants du choix de l'a priori. Différentes méthodes existent pour déterminer ces lois a priori. On peut se référer à des techniques bayésiennes empiriques, où l'on construit la loi a priori sur la base d'une expérience passée, usant de méthodes fréquentistes, pour obtenir forme et valeurs de paramètres pour cette loi. Nous verrons que l'on peut aussi modéliser l'absence d'information sur le paramètre au moyen des lois dites \textit{lois non informatives}.\newline
+L'approche bayésienne se différencie donc de l'approche classique dans le sens où le paramètre $\theta$ n'est plus considéré comme étant totalement inconnu ; il est devenu une v.a. dont le comportement est supposé connu. On fait intervenir dans l'analyse statistique une distribution associée à ce paramètre.\newline
+On donne la définition :
+\begin{Def}
+On appelle \textbf{modèle statistique bayésien}, la donnée d'un modèle statistique paramétré $(\mathcal{X},\mathcal{A},P_{\theta},\theta\in\Theta)$ avec $f(x|\theta)$ densité de $P_{\theta}$ \textbf{et} d'une loi $\pi(\theta)$ sur le paramètre.
+\end{Def} 
+La démarche de l'analyse bayésienne conduit au calcul d'une \textbf{loi a posteriori} $\pi(\theta|x)$; actualisation de la loi a priori $\pi(\theta)$ au vu de l'observation.\newline
+Ce calcul repose sur la version continue du théorème de Bayes\footnote{
+  La version discrète de la formule de Bayes : 
+  $$\mathbb{P}(A|B) = \frac{\mathbb{P}(A)\mathbb{P}(B|A)}{\mathbb{P}(B)}$$
+  Si on pose A comme un système complet d'évènement $(A_{i})_{i\in\mathbb{N}}$, on obtient : 
+  $$\mathbb{P}(A_{i}|B) = \frac{\mathbb{P}(A_{i})\mathbb{P}(B|A_{i})}{\sum_{i=1}^{n}\mathbb{P}(A_{i})\mathbb{P}(B|A_{i})}$$
+} :
+$$\pi(\theta|x) = \frac{f(x|\theta)\pi(\theta)}{f(x)}$$
+$f(x|\theta)$ désignant la loi de l'observation ou \textbf{vraisemblance} et $f(x)$ la loi marginale ou prédictive :
+$$f(x) = \int_{\Theta}f(x|\theta)\pi(\theta)\textrm{d}\theta$$
+
+\begin{Exemp}
+Considérons un $n$-échantillon \textit{i.i.d}\footnote{\textit{i.i.d.} signifie que les v.a. X i sont indépendantes et identiquement distribuées}. $X = (X_{1} , \dots , X_{n})$ de loi exponentielle de
+paramètre $\theta > 0$\footnote{
+Une loi exponentielle modélise la durée de vie d'un phénomène sans mémoire, ou sans vieillissement, ou sans usure : la probabilité que le phénomène dure au moins $s + t$ heures sachant qu'il a déjà duré $t$ heures sera la même que la probabilité de durer $s$ heures à partir de sa mise en fonction initiale. En d'autres termes, le fait que le phénomène ait duré pendant $t$ heures ne change rien à son espérance de vie à partir du temps $t$.
+}\footnote{Normalement, chez les gens sérieux, on utilise le paramètre $\lambda$}.\newline
+La vraisemblance a pour expression :
+$$f(x|\theta) = \left(\frac{1}{\theta}\right)^{n}\exp(-\sum_{i=1}^{n}\frac{x_{i}}{\theta})$$
+On prend une loi a priori de type gamma-inverse\footnote{Dans la Théorie des probabilités et en statistiques, la distribution inverse-gamma est une famille de lois de probabilité continues à deux paramètres sur la demi-droite des réels positifs. Il s'agit de l'inverse d'une variable aléatoire distribuée selon une distribution Gamma $ X \sim \Gamma (k,\theta)$ avec $k>0$ et $\theta>0$.\newline
+Les distributions Gamma sont utilisées pour modéliser une grande variété de phénomènes, et tout particulièrement les phénomènes se déroulant au cours du temps où par essence, le temps écoulé est une grandeur réelle positive ; c'est le cas par exemple dans l'analyse de survie.
+} sur $\theta$. La densité de cette loi a priori est donnée par :
+$$\pi(\theta) = \frac{\beta^{\alpha}}{\Gamma(\alpha)}\left(\frac{1}{u}\right)^{\alpha +1} \exp\left(-\frac{\beta}{u}\right)\textrm{ avec }u\in\mathbb{R}^{+},\alpha,\beta>0$$
+La loi jointe est donc :
+$$f(x,\theta) = f(x|\theta)\pi(\theta) = \frac{\beta^{\alpha}}{\Gamma(\alpha)} \left(\frac{1}{\theta}\right)^{n+\alpha +1}
+\exp\left(-\frac{\beta + \sum_{i=1}^{n}x_{i}}{\theta}\right)
+$$
+et la prédictive s'écrit :
+$$
+\begin{aligned}
+f(x) & = & \frac{\beta^{\alpha}}{\Gamma(\alpha)} \int_{0}^{+\infty} \left(\frac{1}{\theta}\right)^{n+\alpha +1}
+\exp\left(-\frac{\beta + \sum_{i=1}^{n}x_{i}}{\theta}\right)\\
+& = & \frac{\beta^{\alpha}}{\Gamma(\alpha)} \frac{\Gamma(n+\alpha)}{(\sum_{i=1}^{n}x_{i} + \beta)^{n+\alpha}}
+\end{aligned}
+$$
+Ainsi, la loi a posteriori a pour expression : 
+$$\pi(\theta|x) = \frac{\left(\sum_{i=1}^{n}x_{i}+\beta\right)^{n+\alpha}}{\Gamma(n+\alpha)} \left(\frac{1}{\theta}\right)^{n+\alpha+1}\exp\left(\frac{-(\beta+\sum_{i=1}^{n}x_{i})}{\theta}\right)$$
+Il s'agit d'une loi gamma inverse de paramètres :
+$$X \sim \Gamma^{-1}(n+\alpha,\beta+\sum_{i=1}^{n}x_{i})$$
+\end{Exemp}
+\section{Estimation Ponctuelle}
+\subsection*{Coût et Décision}
+Le problème très général auquel on s'intéresse ici est celui d'un individu plongé dans un environnement donné (\textbf{nature}) et qui, sur la base d'observations, est conduit à mener des \textbf{actions} et à prendre des \textbf{décisions} qui auront un coût.\newline
+Les espaces intervenant dans l'écriture d'un \textbf{modèle de décision} sont :
+\begin{itemize}
+  \item $\mathcal{X}$ : l'espace des observations
+  \item $\Theta$ : l'espace des états de la nature (l'espace des paramètres dans le cas d'un problème statistique)
+  \item $\mathcal{A}$ : l'espace des actions ou décisions, dont les éléments sont des images de l'observation par une application $\delta$ appelée règle de décisions (une statistique (\textit{i.e.} fonction de observations) dans le cas d'un problème statistique)
+  \item $\mathcal{D}$ : l'ensemble des règles  de décisions applications de $X$ dans $A$ (les estimateurs possibles)
+\end{itemize}
+On note $a$ une action\footnote{On dirait vraiment de la Théorie des Jeux ... }. On a : 
+$$a = \delta(x)$$
+L'inférence consiste à choisir une règle de décision $\delta \in \mathcal{D}$ concernant $\theta \in \Theta$ sur la base d'une observation $x \in \mathcal{X}$, $x$ et $\theta$ étant liés par la loi $f(x|\theta)$.\newline
+En statistique, la règle de décision est un estimateur, l'action est une estimation (valeur de l'estimateur au point d'observation $x$).
+Pour choisir une décision, on construit une relation de préférence en considérant une mesure du coût ou perte encourue lorsqu'on prend la décision $\delta(x)$ et que \textit{l'état de la nature} est $\theta$.\newline
+Pour ce faire on introduit la fonction $L$, appelée \textbf{fonction de coût} (ou de perte) définie de la
+manière suivante :
+\begin{Def}
+\textit{On appelle fonction de coût, toute fonction $L$ de $\Theta \times \mathcal{A}$ dans $\mathbb{R}$}.\newline
+\\
+$L(\theta, a)$ évalue le coût d'une décision $a$ quand le paramètre vaut $\theta$. Elle permet donc, en quelque
+sorte, de quantifier la perte encourue par une mauvaise décision, une mauvaise évaluation de $\theta$.\newline
+Il s'agit d'une fonction de $\theta$. Un coût négatif correspond à un gain.
+\end{Def}
+\begin{Exemp}
+
+\begin{enumerate}
+  \item (Berger) Pour décider de la commercialisation d'un nouveau médicament antalgique, une entreprise de l'industrie pharmaceutique s'intéresse en particulier à deux facteurs susceptible d'affecter sa décision :
+  \begin{itemize}
+    \item $\theta_{1}$ : la proportion d'individus sur laquelle l'antalgique sera efficace
+    \item $\theta_{2}$ : la part de marché que le médicament est susceptible de prendre (demande)
+  \end{itemize}
+  Ces deux paramètres sont inconnues. On pourra faire des expériences pour essayer d'obtenir des informations à leur sujet. On a ici un problème classique de théorie de la décision où le but ultime est de décider de mettre ou non le produit sur le marché, dans quelle proportion, à quel prix, etc.\newline
+  Intéressons-nous à $\theta_{2}$. $\theta_{2}$ est une proportion.\newline
+
+On a donc $\Theta = \{\theta_{2} : 0\leq \theta_{2}\leq 1\}$ et une décision sera donc ici un nombre compris entre $0$ et $1$ ; une estimation que les experts veulent faire de la part de marché. L'espace des actions $\mathcal{A}$ est l'intervalle $[0, 1]$. 
+L'information dont on dispose est la suivante. Les experts pensent que le coût d'une \textit{sur-estimation} de la demande est 2 fois plus élevé qu'une \textit{sous-estimation} de celle-ci. Ce qui peut se traduire par une fonction de coût de la forme suivante :
+$$L(\theta_{2},a) = \left\{
+\begin{array}{c c c l}
+\theta_{2} -a & \textrm{ si }& \theta_{2} - a \geq 0 & \textrm{ (sous-estimation)}\\
+2(\theta_{2} -a) & \textrm{ si }& \theta_{2} - a \leq 0 & \textrm{ (sur-estimation)}\\
+\end{array}
+\right.$$
+\item Une fonction de coût classiquement utilisée est la fonction de \textbf{coût quadratique} : $L(\theta, d) =
+(\theta ? d)^{2}$. C'est le critère des moindres carrés en régression.
+\item On retrouve cette notion de coût en théorie des jeux. Dans ce cadre, un jeu est décrit par un triplet $(\Theta,\mathcal{A},L)$, $\Theta$ étant les états possibles de la nature.\newline
+Considérons le jeu suivant à deux joueurs : chaque joueur montre un doigt ou deux. Lorsque la somme est paire, le joueur $A$ gagne. Si la somme est impaire, c'est le joueur $B$ qui gagne. Dans tous les cas, le gagnant reçoit du perdant la somme, en euros, des nombres de doigts apparus. Plaçons nous du point de vue du joueur $B$. Celui-ci représente le décideur (l'agent économique, le statisticien). Le joueur $B$ représente lui nature. Le joueur $A$ ne sait pas ce que va jouer $B$, c'est-à-dire il ne connaît pas l'état de la nature. Cet état de la nature est un point $\theta$ de $\Theta = \{1, 2\}$ et le joueur $A$ sans être informé de l'état de la nature (ce que va jouer $B$), va devoir choisir une action $a$ dans $\mathcal{A} = \{1, 2\}$.\newline
+On peut alors décrire une fonction de coût, pour le joueur B de la manière suivante : \textit{Si le couple $(1,1)$ apparaît, la somme est paire. Le joueur $A$ l'emporte et gagne $2$ euros donc le coût pour $B$ est $-2$ euros. Si on a $(1,2)$, c'est le joueur $B$ qui gagne et on a un coût de $3$ euros pour le joueurs $B$ (gain).} En poursuivant ce raisonnement, on complète le tableau ci-dessous.
+\begin{center}
+\begin{tabular}{cccc}
+\multicolumn{2}{c}{\multirow{2}{*}{}}                                                                                         & \multicolumn{2}{c}{B (décideur)}                                  \\ \cline{3-4} 
+\multicolumn{2}{c}{}                                                                                                          & \multicolumn{1}{c|}{\textbf{1}} & \multicolumn{1}{c|}{\textbf{2}} \\ \cline{2-4} 
+\multicolumn{1}{c|}{\multirow{2}{*}{\begin{tabular}[c]{@{}c@{}}A \\ (nature)\end{tabular}}} & \multicolumn{1}{c|}{\textbf{1}} & \multicolumn{1}{c|}{-2}         & \multicolumn{1}{c|}{3}          \\ \cline{2-4} 
+\multicolumn{1}{c|}{}                                                                       & \multicolumn{1}{c|}{\textbf{2}} & \multicolumn{1}{c|}{2}          & \multicolumn{1}{c|}{-4}         \\ \cline{2-4} 
+\end{tabular}
+\end{center}
+
+\item Le paradoxe de Saint-Petersbourg\footnote{Décidemment on dirait vraiment de la théorie des jeux} ? Un mendiant possède un billet de loterie qui peut lui permettre de gagner 20 000 ducats. Il croise un marchand qui lui propose de lui acheter son billet 9 000 ducats. Le mendiant est donc confronté à un problème de décision qui consiste à choisir entre 2 loteries en quelques sortes. L'une lui offre la possibilté de gagner 20 000 ducats avec une certaine probabilité $p$ ou ne rien gagner du tout avec une probabilité $1?p$.\newline
+L'autre est une loterie certaine, il gagne avec certitude 9 000. On peut définir le coût de la décision comme étant l'espérance de gain des loteries. Ainsi, si $p > 0. 5$, le mendiant a tout intérêt à jouer puisque l'espérance de gain de la loterie est de $p \times 20000 = 10000 > 9000$ ducats !
+\end{enumerate}
+\end{Exemp}
+\subsection*{Risque Fréquentiste}
+On dira qu'une décision est une bonne \textit{décision} si elle conduit à un coût nul.\newline
+Autrement dit, une bonne décision est solution de l'équation :
+$$L(\theta,\delta(x))=0$$
+$\theta$ étant inconnu, on ne peut évidemment pas résoudre cette équation. Classer les décisions par la seule considération du coût est donc impossible. Celui-ci ne prend pas en compte l'information apportée par le modèle $f(x|\theta)$. Ces remarques conduisent à considérer la moyenne de la perte, c'est le \textit{risque fréquentiste}.
+\begin{Def}
+On appelle risque fréquentiste le coût moyen (l'espérance mathématique) du coût d'une règle de décision :
+$$R(\theta,\delta)=\mathbb{E}\left[L(\theta,\delta(x))\right]=\int_{\mathcal{X}}L[\theta,\delta(x)]\textrm{ d}P_{\theta}(x)$$
+\end{Def}
+On peut alors donner la définition suivante :
+\begin{Def}
+On dira que $\delta_{1}$ est préférable à $\delta_{2}$ et on note $\delta_{1} \prec \delta_{2}$ si :
+$$R(\theta,\delta_{1})\leq R(\theta,\delta_{2}),\forall\theta\in\Theta$$
+\end{Def}
+Cette définition permet d'établir un préordre\footnote{
+En mathématiques, un préordre est une relation binaire réflexive et transitive.\newline  C'est-à-dire que si $E$ est un ensemble, une relation binaire $\mathcal{R}$ sur $E$ est un préordre lorsque :
+  \begin{itemize}
+    \item $\forall x \in E,\textrm{ } x \mathcal{R} x \textrm{ (réflexivité)}$
+    \item $\forall(x,y)\in E^{2}\textrm{, }(x\mathcal{R}y\textrm{ }\land\textrm{ }y\mathcal{R}z) \Rightarrow x \mathcal{R} y \textrm{ (transitivité)}$
+  \end{itemize}
+
+} sur l'ensemble $\mathcal{D}$ des décisions.\newline
+Cependant, ce préordre est partiel puisqu'il ne permet pas de comparer deux règles de décision telles que :
+$$R(\theta_{1},\delta_{1})<R(\theta_{1},\delta_{2}) \textrm{ et } R(\theta_{2},\delta_{1})>R(\theta_{2},\delta_{2})$$
+\subsection*{Risque de Bayes}
+Puisque l'approche Bayésienne met à la disposition du statisticien une loi a priori $\pi(\theta)$, on
+peut considérer la moyenne du risque fréquentiste \textit{i.e.} la moyenne du coût moyen suivant la loi a priori : $\mathbb{E}^{\pi}\left[R(\theta,\delta(X))\right]$. Il s'agit du \textbf{risque bayésien} ou \textbf{risque de Bayes} que l'on note $r(\pi, \delta)$.\newline
+On a :
+$$\begin{aligned}
+r(\pi,\delta) & = & \mathbb{E}^{\pi}\left[R(\theta,\delta)\right]\\
+& = & \int_{\Theta} R(\theta,\delta)\pi(\theta)\textrm{ d}\theta\\
+& = & \int_{\Theta}\int_{\mathcal{X}}L(\theta,\delta(x))f(x|\theta)\textrm{d}x\pi(\theta)\textrm{d}\theta\\
+& = & \int_{\Theta}\int_{\mathcal{X}}L(\theta,\delta(x))\pi(\theta|x)f(x)\textrm{d}x\textrm{d}\theta
+\end{aligned}$$
+On définit alors le \textbf{coût a posteriori} $\rho(\pi,\delta(x))$ comme étant la moyenne du coût par rapport à la loi a posteriori :
+$$\rho(\pi,\delta(x)) = \mathbb{E}^{\pi(.|x)}\left[L(\theta,\delta(x))\right] = \int_{\Theta}L\left[\theta,\delta(x)\right]\pi(\theta|x)\textrm{d}\theta$$
+Il s'agit d'une fonction de $x$.\newline
+On a le résultat suivant
+\begin{Pro}
+Le risque de Bayes $r(\pi, \delta)$ est la moyenne du coût a posteriori $\rho(\pi,\delta(x))$ suivant la loi marginale $f(x)$.
+\end{Pro}
+\begin{Pre}
+$$r(\pi,\delta)=\int_{\Theta}\int_{\mathcal{X}}L\left[\theta,\delta(x)\right]f(x|\theta)\pi(\theta)\textrm{d}x\textrm{d}\theta$$
+Or $f(x|\theta)\pi(\theta)=\pi(\theta|x)f(x)$. On a donc : 
+$$r(\pi,\delta)=\int_{\Theta}\int_{\mathcal{X}}L\left[\theta,\delta(x)\right]\pi(\theta|x)\textrm{d}\theta f(x)\textrm{d}x=\int_{\mathcal{X}}\rho(\pi,\delta(x))f(x)\textrm{d}x$$
+\end{Pre}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+
+%%
+
+%\section{Les bases de la statistique bayésienne}
+%\textcolor{white}{.}\newline
+%\textbf{Auteur :} 
+%\begin{itemize}
+%  \item \textbf{Jean-Michel Marin} : I3M, Université Montpellier 2, Montpellier \& CREST, INSEE, Paris
+%  \item \textbf{Christian P. Robert } : Université Paris Dauphine, Paris \& CREST, INSEE, Paris
+%\end{itemize}
+%\subsubsection*{Résumé}
+%Dans ce court texte de présentation de la statistique bayésienne, nous nous attachons à démontrer qu'il s'agit d'une approche cohérente et surtout pratique pour résoudre les problèmes d'inférence statistique. Les fondements historiques de cette discipline, pas plus que ses justifications théoriques et philosophiques, ne seront présentés ici, le lecteur étant renvoyé pour cela aux ouvrages de référence que sont \textit{Bernardo et Smith (1994); Carlin et Louis (2001); Gelman et al. (2001) et Robert (2007) (ou Robert (2006) pour la version française)}. Notre objet est au contraire de démontrer que cette approche de l'inférence statistique est moderne, adaptée aux outils informatiques de simulation et apte à répondre aux problèmes de modélisation les plus avancés dans toutes les disciplines, plutôt que de l'ancrer sur ses querelles du passé. Dans une première partie, nous présentons les fondements de l'inférence bayésienne, en insistant sur les spécificités de la modélisation a priori et de la construction des tests. Puis, nous mettons en oeuvre explicitement les concepts précédemment introduits dans le cas pratique d'un modèle de régression linéaire.\
+%\subsection{Buts et contraintes de l'inférence statistique}
+%\subsubsection*{Formalisme}
+%Avant de mettre en place les éléments nécessaires à la construction d'une machine inférentielle bayésienne, nous considérons tout d'abord quels sont les points essentiels définissant la science statistique. Il nous apparaît qu'une définition concise est de mener, grâce à l'observation d'un phénomène aléatoire, une \textit{inférence} soit donc une démarche déductive logique sur la distribution de probabilité à l'origine de ce phénomène, pour ainsi fournir une analyse (ou une description) d'un phénomène passé, ou bien une prévision d'un phénomène à venir (et de même nature). Il va de soi que les étapes nécessaires au recueil des données comme la construction de plans de sondage ou d'expérience font aussi partie du domaine de la statistique et que l'approche bayésienne peut également apporter un éclairage nouveau sur ces opérations.\newline
+%L'approche statistique est par essence formelle (ou mathématiquement structurée) parce qu'elle repose sur une formalisation poussée de la réalité objective. En particulier, nous insistons ici sur l'interprétation \textit{décisionnelle} de l'inférence statistique parce que, tout d'abord, les analyses et prédictions mentionnées ci-dessus sont la plupart du temps motivées par un but objectif (comme la construction d'un portefeuille boursier ou la validation d'un contrôle de qualité) ayant des conséquences [quantitativement et souvent monétairement] mesurables (résultats financiers, taux de retour des pièces défectives) et que d'autre part, ce degré supplémentaire de formalisme permet en retour la construction d'une machine automatique d'inférence bayésienne. Notons par ailleurs que la statistique doit être considérée comme l'\textit{interprétation} du phénomène observé, plutôt que comme son explication. En effet, l'inférence statistique est précédé d'une modélisation probabiliste et celle-ci implique nécessairement une étape de formalisation réductrice : sans cette base probabiliste, aucune conclusion utile ne pourrait être obtenue. On pourra peut-être regretter cette apposition d'un modèle probabiliste sur un phénomène inexpliqué, comme il est possible que le phénomène observé soit entièrement déterministe ou tout du moins sans rapport direct avec le modèle pré-supposé. Cependant, cette critique de la modélisation probabiliste n'a guère de consistence si nous considérons la statistique sous l'angle de l'interprétation, évoquée ci-dessus. Ces modèles probabilistes formels permettent en effet d'incorporer simultanément les informations disponibles sur le phénomène (facteurs déterminants, fréquence, amplitude, etc.) et les incertitudes inhérentes à ces informations. Ils autorisent donc un discours qualitatif sur le problème en fournissant, à travers la théorie des probabilités, un véritable \textit{calcul de l'incertain} qui permet de dépasser le stade descriptif des modèles déterministes.\newline
+%Évidemment la modélisation probabiliste n'a de sens pour l'analyse que si elle fournit une représentation suffisamment proche du phénomène observé. Dans de nombreux cas, la formalisation statistique est bien réductrice au sens où elle n'est qu'une approximation de la réalité, perdant une partie de la richesse de cette réalité mais gagnant en efficacité. Face à ce possible volant de réduction dans la complexité du phénomène observé, deux approches statistiques s'opposent. La première approche suppose que l'inférence statistique doit prendre en compte cette complexité autant que possible et elle cherche donc à estimer la distribution sous-jacente du phénomène sous des hypothèses minimales, en ayant recours en général à l'estimation fonctionnelle (densité, fonction de régression, etc.). Cette approche est dite \textit{non paramétrique}. Par opposition, l'approche \textit{paramétrique} représente la distribution des observations par une fonction de densité $f(x|\theta)$, où seul le paramètre $\theta$ (de dimension finie) est inconnu. Les deux approches ont leurs avantages respectifs et, bien que dans cet article, nous ne considérions que l'approche paramétrique pour des raisons pratiques, il existe également des résolutions bayésiennes du problème de l'inférence non-paramétrique (\textit{Dey et al., 1997}).
+%\subsubsection*{Notations}
+%Le formalisme fondamental d'une approche statistique est de supposer que les observations $x_{1}, \dots , x_{n}$, sur lesquelles l'analyse statistique se fonde, proviennent d'une loi de probabilité paramétrée, ce qui se traduit par les hypothèses selon lesquelles $x_{1}$ a une distribution de densité $f_{1}(x|\theta_{1})$ sur un espace mesurable comme $\mathbb{R}^{p}$ et $x_{i}$ ($2 \leq i \leq n$) a, conditionnellement aux observations $x_{1}, \dots , x_{i?1}$, une distribution de densité $f_{i}(x_{i}|\theta_{i}, x_{1},\dots, x_{i?1})$ sur le même espace mesurable. Dans ce cas, le paramètre $\theta_{i}$ est inconnu [et constitue un objet d'inférence], mais la fonction générique $f_{i}$ est connue. Ce modèle peut être réécrit plus succinctement par
+%$$\mathbf{x} \sim f(\mathbf{x}|\mathbf{\theta})=f_{1}(x_{1}|\theta_{1})\prod_{i=2}^{n}f_{i}(x_{i}|\theta_{i},x_{1},\dots,x_{i-1})$$
+%où \textbf{$x$} est le vecteur des observations, $\mathbf{x} = (x_{1},\dots,x_{n})$, et $\mathbf{\theta}$ l'ensemble des paramètres, $\theta = (\theta_{1},\dots,\theta_{n})$, les composants étant éventuellement tous égaux. Cette représentation est unificatrice dans le sens où elle recouvre les cas d'une observation isolée, d'observa- tions dépendantes, ou d'observations distribuées de façon indépendante et identiquement distribuées (\textit{iid}), les $x_{1},\dots,x_{n}$ étant tous de même loi, de densité $f(x_{1}|\theta)$. Dans le dernier cas, $\mathbf{?} = ?$ et
+%$$f(\mathbf{x}|\mathbf{\theta})=\prod_{i=1}^{n}f(x_{i}|\theta)$$
+%Les densités $f(x|\theta)$ peuvent ainsi correspondre à des densités binomiales, de Poisson, normales ou gammas, pour citer quelques exemples standard. Une simplification de notation adoptée dans la suite est que les densités des variables aléatoires continues (comme les variables normales) et discrètes (comme les variables de Poisson) sont représentées par les mêmes symboles, la mesure de référence étant fournie naturellement par le contexte. De plus, nous écrirons \textit{"$x$ est distribué selon $f$"} ou \textit{"$x\sim f$"} au lieu de \textit{"$x$ est une observation de la distribution de densité $f$"} par souci de concision.\newline
+%Cette introduction à la statistique bayésienne est séparée en une première partie ($\S 2$), où nous traitons des fondements de l'inférence bayésienne et des outils qui s'y rapportent. Dans une seconde partie ($\S 3$), nous appliquons ces techniques dans le cadre du modèle de régression linéaire standard en insistant sur les solutions apportées au problème de choix de variables explicatives.\newline
+%Notons enfin que la première partie du texte ne comprend que quelques références à des ouvrages que nous considérons comme essentiels pour une compréhension plus poussée des concepts et des méthodes présentés. Ces ouvrages de référence, récents, comprennent eux-mêmes des bibliographies extensives auxquelles le lecteur ou la lectrice peut se rapporter. Nous suggérons en particulier notre livre (\textit{Marin et Robert, 2007}) pour une introduction pratique plus élaborée aux techniques bayésiennes.
+%\subsection{Fondements de la statistique bayésienne}
+%Le message que nous voulons communiquer dans ce rapide survol de la statistique bayésienne est on ne peut plus simple : il est possible, sans expertise préalable, de réaliser une analyse bayésienne de tout problème statistique (défini comme ci-dessus par la donnée d'observations provenant d'une distribution de probabilité paramétrée). (Des exemples réalistes et détaillés sont traités dans \textit{Gelman et al. (2001) et Marin et Robert (2007).}) En particulier, nous insistons sur le fait que ce qui est souvent considéré comme les deux difficultés majeures de l'approche bayésienne, à savoir le choix de l'a priori et le calcul des procédures bayésiennes, peuvent être surmontées en suivant des règles simples.
+%\subsubsection*{Le paradigme bayésien}
+%Étant donné un modèle paramétrique d'observation $\mathbf{x} \sim f(\mathbf{x}|\mathbf{\theta})$, où $\mathbf{\theta}\in \theta$, un espace de dimension finie, l'analyse statistique bayésienne vise à exploiter le plus efficacement possible l'information apportée par $\mathbf{x}$ sur le paramètre $\mathbf{\theta}$, pour ensuite construire des procédures d'\textit{inférence} sur $\mathbf{\theta}$. Bien que $\mathbf{x}$ ne soit qu'une réalisation [aléatoire] d'une loi gou- vernée par $\mathbf{\theta}$, elle apporte une actualisation aux informations préalablement recueillies par l'expérimentateur. Pour des raisons diverses dont certaines apparaitront dans le prochain paragraphe, l'information fournie par l'observation $\mathbf{x}$ est contenue dans la densité $f(\mathbf{x}|\mathbf{\theta})$, que l'on représente classiquement sous la forme inversée de \textit{vraisemblance},
+%$$l(\mathbf{\theta}|\mathbf{x})=f(\mathbf{x}|\mathbf{\theta})$$
+%pour traduire qu'il s'agit d'une fonction de $\mathbf{\theta}$, qui est \textit{inconnu}, dépendant de la valeur observée $\mathbf{x}$. L'inversion des rôles de $\mathbf{x}$ et de $\mathbf{\theta}$ par rapport à la modélisation probabiliste reflète le but premier de la statistique qui est de reconstruire [avec un certain degré de précision] le paramètre $\mathbf{\theta}$ au vu de la réalisation aléatoire x. C'est donc pourquoi elle est naturellement liée au \textit{théorème de Bayes} qui formalise l'inversion des conditionnements dans les probabilités : 
+%\begin{center}
+%\textit{Si $A$ et $E$ sont des événements tels que $\mathbb{P}(E) \neq 0$, $\mathbb{P}(A|E)$ et $\mathbb{P}(E|A)$ sont reliés par :}
+%\end{center}
+%$$
+%\begin{aligned}
+%\mathbb{P}(A|E) &  = &\frac{\mathbb{P}(E|A)\mathbb{P}(A)}{\mathbb{P}(E|A)\mathbb{P}(A)+\mathbb{P}(E|A^{c})\mathbb{P}(A^{c})}\\
+%& = & \frac{\mathbb{P}(E|A)\mathbb{P}(A)}{\mathbb{P}(E)}
+%\end{aligned}
+%$$
+%Une version continue de ce résultat permet d'inverser les densités conditionnelles, à savoir,
+%
+%$$g(y|x) = \frac{f(x|y)g(y)}{\int f(x|y)g(y)\textrm{d}y}$$
+%
+%Le lien entre ces propriétés probabilistes et l'inférence bayésienne (ainsi appelée en référence au théorème ci-dessus\footnote{Historiquement, le théorème de Bayes apparaît dans un exemple d'inférence bayésienne plut?ot que séparément comme une construction probabiliste.
+%} est que, dans le paradigme bayésien, le paramètre inconnu $\mathbf{\theta}$ n'est plus considéré comme inconnu et déterministe, mais comme une variable aléatoire. On considère ainsi que l'incertitude sur le paramètre $\mathbf{\theta}$ d'un modèle peut être décrite par une distribution de probabilité $\pi$ sur $\Theta$, appelée distribution a priori [par opposition à la distribution a posteriori qui inclut l'information contenue dans l'observation $\mathbf{x}$], ce qui revient à supposer que $\mathbf{\theta}$ est distribué suivant $\pi(\mathbf{\theta})$, $\mathbf{\theta} \sim \pi(?)$, "avant" que $\mathbf{x}$ ne soit généré suivant $f(\mathbf{x}|\mathbf{\theta})$, le conditionnement implicite dans cette notation prenant alors tout son sens. Sans vouloir nous engager dans un débat philosophique sur la nature du hasard, notons que le rôle central de la distribution a priori dans l'analyse statistique bayésienne ne réside pas dans le fait que le paramètre d'intérêt $\mathbf{\theta}$ puisse (ou ne puisse pas) être perçu comme étant distribué selon $\pi$, ou même comme étant une variable aléatoire, mais plutôt dans la démonstration que l'utilisation d'une distribution a priori et de l'appareillage probabiliste qui l'accompagne est la manière la plus efficace [au sens de nombreux critères] de résumer l'information disponible (ou le manque d'information) sur ce paramètre ainsi que l'incertitude résiduelle. Un point plus technique est que le seul moyen de construire une approche mathématiquement justifiée opérant conditionnellement aux observations, tout en restant dans un schéma probabiliste, est d'introduire une distribution correspondante pour les paramètres. Des arguments de na- ture différente sur l'optimalité de cet outil sont aussi fournis dans \textit{Bernardo et Smith (1994) et Robert (2007, chapitre 10)}.\newline
+%D'un point de vue pratique, le choix de la loi a priori est souvent perçu comme une difficulté majeure de l'approche bayésienne en ce que l'interprétation de l'information a priori disponible est rarement assez précise pour conduire à la détermination d'une seule et unique loi. D'autre part, il est aisé de constater sur des exemples classiques que des choix contrastés de lois a priori conduisent à des inférences divergentes. Il existe néanmoins des lois calibrées en fonction de la distribution des observations, dites lois \textit{conjuguées}, et des lois à faible contenu informatif, dites \textit{lois non-informatives}, qui permettent d'évaluer l'influence d'une loi a priori donnée. Nous détaillerons cette construction de la loi a priori dans la troisième partie traitant de régression linéaire, mais notons à ce point qu'un choix quasi-automatisé de la loi a priori est réalisable par une modélisation hiérarchique (voir par exemple \textit{Marin et Robert, 2007}). Signalons également que la notion de loi a priori peut être étendue à des mesures de masse infinie tant que la loi a posteriori donnée par l'équation ci-dessous reste définie.
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\subsection*{Conclusion}
+%Nous renvoyons à \textit{Marin et Robert (2007)} pour des exemples convaincants dans le cadre des modèles linéaires généralisés, des modèles de capture-recapture, des modèles de mélange, des séries temporelles\dots Il existe dans chaque cas une modélisation a priori par défaut et une résolution algorithme qui permettent de fournir une solution bayésienne de référence pour le problème considéré. Bien entendu d'autres lois a priori peuvent être considérées, le modèle de référence servant alors à évaluer l'impact de ce choix a priori. Nous voulions simplement communiquer ici l'idée selon laquelle il est possible de mener une inférence bayésienne sur un problème réaliste sans disposer d'une expertise particulière pour la construction de lois a priori.
+%
+%\subsection*{Références}
+%\begin{description}
+%
+%  \item[Bernardo, J. et Smith, A. (1994).] \textit{ Bayesian Theory.} John Wiley, New York.
+%  \item[Brown, P., Vannucci, M. et Fearn, T. (1998).] \textit{Multivariate Bayesian variable selection and prediction.} J. Royal Statist. Society Series B, pages 627-641.
+%  \item[Carlin, B. et Louis, T. (2001).] \textit{Bayes and Empirical Bayes Methods for Data Analysis.} Chapman and Hall, New York, second édition.
+%  \item[Casella, G. et Moreno, E. (2006).] \textit{Objective Bayesian variable selection.} J. American Statist. Assoc. 101(473):157-167.
+%  \item[Celeux, G., Marin, J.-M. et Robert, C. (2006).] \textit{Sélection bayésienne de variables en régression linéaire. } Journal de la Société Française de Statistique, 147(1):59-79.
+%  \item[Chipman, H. (1996).] \textit{Bayesian variable selection with related predictors.}. Canadian Journal of Statistics, 1:17-36.
+%  
+%    \item[Cui, W. et George, E. (2008).] \textit{Empirical Bayes vs. fully Bayes variable selection}. Journal of Statistical Planning and Inference, 138:888-900.
+%
+%  \item[Dawid, A. et Lauritzen, S. (2000).] \textit{Compatible prior distribution. In Bayesian Methods with Application to Science Policy and Official Statistics}.  The sixth world meeting of the ISBA, pages 109-118.
+%
+%  \item[Dey, D., Müller, P. et Sinha, D. (1997).] \textit{Practical Nonparametric and Semiparametric Bayesian Analysis}. volume 133 de Lecture Notes in Statistics. Springer-Verlag, New York.
+%  \item[Fernandez, C., Ley, E. et Steel, M. (2001).] \textit{Benchmark priors for bayesian model averaging}. J. Econometrics, 100:381-427.
+%  \item[Gelman, A., Carlin, J., Stern, H. et Rubin, D. (2001).] \textit{Bayesian Data Analysis}. Chapman and Hall, New York, New York, second  édition.
+%  \item[George, E. (2000).] \textit{The variable selection problem}. J. American Statist. Assoc., 95:1304-1308.
+%  \item[George, E. et McCulloch, R. (1993).] \textit{Variable selection via Gibbbs sampling}. J. American Statist. Assoc., 88:881-889.
+%  \item[George, E. et McCulloch, R. (1997).] \textit{Approaches to Bayesian variable selection}. Statistica Sinica, 7:339-373.
+%  \item[Geweke, J. (1994).] \textit{Variable selection and model comparison in regression} Rapport technique, University of Minnesota.
+%  \item[Ibrahim, G. (1997).] \textit{On properties of predictive priors in linears models}. The American Statistician, 51(4):333-337.
+%  \item[Ibrahim, G. et Laud, P. (1994).] \textit{A predictive approach to the analysis of designed experi- ments}. J. American Statist. Assoc., 89(425):309-319.
+%  \item[Kass, R. et Raftery, A. (1995).] \textit{Bayes factor and model uncertainty}. J. American Statist. Assoc., 90:773-795.
+%  \item[Kohn, R., Smith, M. et Chan, D. (2001).] \textit{Nonparametric regression using linear combina- tions of basis functions}. Statistics and Computing, 11:313-322.
+%  \item[Liang, F., Paulo, R., Molina, G., Clyde, M. et Berger, J. (2008).] \textit{Mixtures of g-priors for Bayesian variable selection}. J. American Statist. Assoc., 103(481):410-423.
+%  \item[Marin, J.-M. et Robert, C. (2007).] \textit{Bayesian Core : A Practical Approach to Computational Bayesian Statistics}. Springer-Verlag, New York.
+%    \item[Miller, A. (1990).] \textit{Subset Selection in Regression}. Chapman and Hall.
+%  \item[Mitchell, T. et Beauchamp, J. (1988).] \textit{Bayesian variable selection in linear regression}. J. American Statist. Assoc., 83:1023-1032.
+%  \item[Philips, R. et Guttman, I. (1998).] \textit{A new criterion for variable selection}. Statist. Prob. Letters, 38:11-19.
+%  \item[Robert, C. (2006).] \textit{Le choix bayésien : Principes et pratique}. Springer-Verlag France, Paris.
+%\item[Robert, C. (2007).] \textit{The Bayesian Choice, From Decision-Theoretic Foundations to Computational Implementation}. Springer-Verlag, New York, 2 édition.
+%  \item[Robert, C. et Casella, G. (2004). ] \textit{Monte Carlo Statistical Methods.} Springer-Verlag, New
+%York, second édition.
+%  \item[Tomassone, R., Audrain, S., Lesquoy, E. et Millier, C. (1992).] \textit{La Régression : nouveaux regards sur une ancienne méthode statistique}. Masson, 2 édition.
+%
+%
+% \item[Zellner, A. (1986).] \textit{On assessing prior distributions and Bayesian regression analysis with g-prior distribution regression using bayesian variable selection.}. In Bayesian inference and decision techniques : Essays in Honor of Bruno De Finetti, pages 233-243. North-Holland / Elsevier.
+%
+%\end{description}
